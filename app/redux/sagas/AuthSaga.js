@@ -256,7 +256,7 @@ const logAttemptLoginGoogleAnalytics = (state) => {
 };
 
 const logAttemptLoginOpenBarbellAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_login_openbarbell', {
+    Analytics.logEventWithAppState('attempt_login_repone', {
     }, state);
 };
 
@@ -290,7 +290,7 @@ const logAttemptReauthenticateGoogleAnalytics = (state) => {
 };
 
 const logAttemptReauthenticateOpenBarbellAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_reauthenticate_openbarbell', {
+    Analytics.logEventWithAppState('attempt_reauthenticate_repone', {
     }, state);
 };
 

@@ -109,7 +109,7 @@ function showSurveyAlert() {
     return new Promise((resolve, reject) => {
         Alert.alert(
             null,
-            "Thanks for using OpenBarbell! We'd love your feedback, would you mind taking a quick survey?",
+            "Thanks for using RepOne! We'd love your feedback, would you mind taking a quick survey?",
             [
                 {
                     text: 'Later',

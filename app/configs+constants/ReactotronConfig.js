@@ -6,7 +6,7 @@ if (__DEV__) {
     // development, enable reactotron
     Reactotron
     .configure({
-        name: 'OpenBarbell',
+        name: 'RepOne',
         host: '192.168.1.142',
     }) // controls connection & communication settings
     .use(sagaPlugin()) // add all built-in react native plugins

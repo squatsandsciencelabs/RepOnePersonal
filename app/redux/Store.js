@@ -101,9 +101,6 @@ export default initializeStore = () => {
         }
     );
 
-    // clear old legacy DB
-    AsyncStorage.removeItem('@OpenBarbellPersistedStore');
-
     return store;
 };
 

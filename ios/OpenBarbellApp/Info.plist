@@ -61,21 +61,21 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>OpenBarbell would like to find and connect to your OpenBarbell device via bluetooth</string>
+	<string>RepOne would like to find and connect to your RepOne device via bluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>OpenBarbell would like to find and connect to your OpenBarbell device via bluetooth</string>
+	<string>RepOne would like to find and connect to your RepOne device via bluetooth</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>OpenBarbell would like to access your calendar</string>
+	<string>RepOne would like to access your calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>OpenBarbell would like to record videos of your lifts</string>
+	<string>RepOne would like to record videos of your lifts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>OpenBarbell would like to access your current location</string>
+	<string>RepOne would like to access your current location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>OpenBarbell would like to record audio when recording videos of your lifts</string>
+	<string>RepOne would like to record audio when recording videos of your lifts</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>OpenBarbell would like to save recorded videos to your Photos library</string>
+	<string>RepOne would like to save recorded videos to your Photos library</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>OpenBarbell would like access to speech recognition</string>
+	<string>RepOne would like access to speech recognition</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

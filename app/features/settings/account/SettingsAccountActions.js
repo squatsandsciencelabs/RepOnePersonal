@@ -59,7 +59,7 @@ export const exportCSV = () => async (dispatch, getState) => {
             dispatch(updateIsExportingCSV(true));
             try {
                 let date = new Date();
-                let name = 'OpenBarbell Data -- Exported on ' + date.toLocaleString() + '.csv';
+                let name = 'RepOne Data -- Exported on ' + date.toLocaleString() + '.csv';
                 // TODO: use a more efficient method of generating the name, perhaps an actual date format
                 name = name.split('/').join('-');
                 name = name.split(',').join('');

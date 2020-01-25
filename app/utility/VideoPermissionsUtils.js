@@ -20,9 +20,9 @@ export const checkWatchVideoPermissions = () => {
                 resolve();
             } else {
                 if (Platform.OS === 'ios') {
-                    var message = 'OpenBarbell needs Photo permissions to play videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+                    var message = 'RepOne needs Photo permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
                 } else {
-                    var message = 'OpenBarbell needs Storage permissions to play videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';                    
+                    var message = 'RepOne needs Storage permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';                    
                 }
                 Alert.alert(
                     'Additional Permissions Required',
@@ -96,33 +96,33 @@ const recordingPermissionsErrorMessage = (isCameraAuthorized, isMicrophoneAuthor
     }
     if (isCameraAuthorized && isMicrophoneAuthorized) {
         if (Platform.OS === 'ios') {
-            return 'OpenBarbell needs Photo permissions to store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Photo permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         } else {
-            return 'OpenBarbell needs Storage permissions to store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Storage permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         }
     }
     if (isMicrophoneAuthorized && isStorageAuthorized) {
-        return 'OpenBarbell needs Camera permissions to record videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+        return 'RepOne needs Camera permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
     }
     if (isCameraAuthorized && isStorageAuthorized) {
-        return 'OpenBarbell needs Microphone permissions to record videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+        return 'RepOne needs Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
     }
     if (isCameraAuthorized) {
         if (Platform.OS === 'ios') {                
-            return 'OpenBarbell needs Microphone and Photos permissions to record and store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Microphone and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         } else {
-            return 'OpenBarbell needs Microphone and Storage permissions to record and store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Microphone and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         }
     }
     if (isMicrophoneAuthorized) {
         if (Platform.OS === 'ios') {                
-            return 'OpenBarbell needs Camera and Photos permissions to record and store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Camera and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         } else {
-            return 'OpenBarbell needs Camera and Storage permissions to record and store videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+            return 'RepOne needs Camera and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
         }
     }
     if (isStorageAuthorized) {
-        return 'OpenBarbell needs Camera and Microphone permissions to record videos on your phone.\n\nPlease enable them for OpenBarbell in your phone Settings';
+        return 'RepOne needs Camera and Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
     }
     return null;
 }
