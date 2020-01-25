@@ -147,13 +147,13 @@ android {
     }
     signingConfigs {
         debug {
-			storeFile file("openbarbell.keystore")
+			storeFile file("repone.keystore")
 			storePassword "openbarbell"
 			keyAlias "openbarbell"
 			keyPassword "openbarbell"
 		}
 		release {
-			storeFile file("openbarbell.keystore")
+			storeFile file("repone.keystore")
 			storePassword "openbarbell"
 			keyAlias "openbarbell"
 			keyPassword "openbarbell"
