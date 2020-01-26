@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.openbarbellapp"
+        applicationId "com.reponestrength.personal.staging"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 35
@@ -148,15 +148,15 @@ android {
     signingConfigs {
         debug {
 			storeFile file("repone.keystore")
-			storePassword "openbarbell"
-			keyAlias "openbarbell"
-			keyPassword "openbarbell"
+			storePassword "repone"
+			keyAlias "repone-alias"
+			keyPassword "repone"
 		}
 		release {
 			storeFile file("repone.keystore")
-			storePassword "openbarbell"
-			keyAlias "openbarbell"
-			keyPassword "openbarbell"
+			storePassword "repone"
+			keyAlias "repone-alias"
+			keyPassword "repone"
 		}
 	}
     buildTypes {

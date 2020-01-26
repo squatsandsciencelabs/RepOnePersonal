@@ -1,4 +1,4 @@
-package com.openbarbellapp;
+package com.reponestrength.personal.staging;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,10 +1,10 @@
 {
-    "storageThrottle" : 1000,
-    "baseURL" : "https://obbstaging.herokuapp.com/v1/",
-    "killSwitchURL" : "https://obbstaging.herokuapp.com/killswitch",
-    "iOSGoogleClientID" : "971870516004-v99k5kfv281dqjla2jvoavuj2grpvec0.apps.googleusercontent.com",
-    "webGoogleClientID" : "971870516004-oge4ph6j8s0a4e5lbimr7dc6e22od5jc.apps.googleusercontent.com",
+	"storageThrottle" : 1000,
+    "baseURL" : "https://repone-personal-staging.herokuapp.com/v1/",
+    "killSwitchURL" : "https://repone-personal-staging.herokuapp.com/killswitch",    
+	"iOSGoogleClientID" : "1095441496199-itb6e2p7lleh0dcc2menosd86hqprgem.apps.googleusercontent.com",
+	"webGoogleClientID" : "1095441496199-oqqb6fdoagjsrvgmp3ns1ps8mn7k8ec2.apps.googleusercontent.com",
     "endWorkoutTimer" : 3600000,
     "obtainTokenTimer": 1800000,
-    "apiWaitTimer": 3600000
+    "apiWaitTimer": 1209600000    
 }

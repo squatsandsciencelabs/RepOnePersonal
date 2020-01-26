@@ -1,4 +1,4 @@
-package com.openbarbellapp;
+package com.reponestrength.personal.staging;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

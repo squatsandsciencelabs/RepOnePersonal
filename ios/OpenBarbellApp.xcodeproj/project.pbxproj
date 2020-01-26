@@ -533,7 +533,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.openbarbellapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength.personal.staging;
 				PRODUCT_NAME = RepOne;
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenBarbellApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -559,7 +559,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.openbarbellapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength.personal.staging;
 				PRODUCT_NAME = RepOne;
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenBarbellApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

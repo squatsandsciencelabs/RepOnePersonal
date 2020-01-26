@@ -1,63 +1,44 @@
 {
   "project_info": {
-    "project_number": "971870516004",
-    "firebase_url": "https://openbarbell-80c31.firebaseio.com",
-    "project_id": "openbarbell-80c31",
-    "storage_bucket": "openbarbell-80c31.appspot.com"
+    "project_number": "1095441496199",
+    "firebase_url": "https://reponepersonal-rn-staging.firebaseio.com",
+    "project_id": "reponepersonal-rn-staging",
+    "storage_bucket": "reponepersonal-rn-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:971870516004:android:3bf7d461cb7e0634",
+        "mobilesdk_app_id": "1:1095441496199:android:59d23f5cbb11f27a5ce022",
         "android_client_info": {
-          "package_name": "com.openbarbellapp"
+          "package_name": "com.reponestrength.personal.staging"
         }
       },
       "oauth_client": [
         {
-          "client_id": "971870516004-el9e6ihhlnv6od4l9n8kgdtsjvgla0je.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "971870516004-7njnplrj7ccc9a0e46ldbppbi74qaqpq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.openbarbellapp",
-            "certificate_hash": "a1d84ab81f89aa0da050fe83d0cfcad2982fb2f2"
-          }
-        },
-        {
-          "client_id": "971870516004-oge4ph6j8s0a4e5lbimr7dc6e22od5jc.apps.googleusercontent.com",
+          "client_id": "1095441496199-mo4mffdb7i1o0odnjt44jh5m1s76hja8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB_HoNOSKYzQVQ_I-G4gpERnteT6XEEx-4"
+          "current_key": "AIzaSyDu4aaZ6qtSW6i6rbWXB2YuKjDIo9-J6rk"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "971870516004-v99k5kfv281dqjla2jvoavuj2grpvec0.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.openbarbellapp"
-              }
+              "client_id": "1095441496199-oqqb6fdoagjsrvgmp3ns1ps8mn7k8ec2.apps.googleusercontent.com",
+              "client_type": 3
             },
             {
-              "client_id": "971870516004-el9e6ihhlnv6od4l9n8kgdtsjvgla0je.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "1095441496199-itb6e2p7lleh0dcc2menosd86hqprgem.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reponestrength.personal.staging"
+              }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

@@ -26,20 +26,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.971870516004-v99k5kfv281dqjla2jvoavuj2grpvec0</string>
+			<string>com.googleusercontent.apps.1095441496199-itb6e2p7lleh0dcc2menosd86hqprgem</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.971870516004-v99k5kfv281dqjla2jvoavuj2grpvec0</string>
+				<string>com.googleusercontent.apps.1095441496199-itb6e2p7lleh0dcc2menosd86hqprgem</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.openbarbellapp</string>
+			<string>com.reponestrength.personal.staging</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.openbarbellapp</string>
+				<string>com.reponestrength.personal.staging</string>
 			</array>
 		</dict>
 	</array>
