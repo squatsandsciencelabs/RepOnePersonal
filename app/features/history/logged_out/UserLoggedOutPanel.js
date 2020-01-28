@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {
     Text,
-    View
+    View,
+    Image,
   } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
@@ -11,6 +12,9 @@ class UserLoggedOutPanel extends Component {
         let subtitle = this.props.subtitle
         return (
             <View style={ { flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 20} }>
+                <View style={{paddingBottom: 40}}>
+                    <Image source={require('app/appearance/images/R1-Logo-DarkGray.png')} />
+                </View>
                 <View>
                     <Text style={ SETTINGS_PANEL_STYLES.headerText }>
                         Sign in Required
