@@ -98,7 +98,8 @@ function *startDownload(action) {
                 path: filePath,
             })
             .fetch('GET', `https://firmware.reponestrength.com/${currentVersion}.zip`);
-        const result = yield call(downloadTask);
+        const result = yield downloadTask;
+
         console.tron.log(`download should be finished to ${result.path()}`);
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
