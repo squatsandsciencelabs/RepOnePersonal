@@ -18,6 +18,7 @@ const defaultState = {
     isReconnecting: false,
     numDisconnects: 0,
     numReconnects: 0,
+    firmwareVersion: null,
 };
 
 const ConnectedDeviceReducer = ( state = defaultState, action) => {
@@ -48,7 +49,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
             return Object.assign({}, state, {
                 status: 'BLUETOOTH_OFF',
                 deviceName: null,
-                deviceIdentifier: null
+                deviceIdentifier: null,
             });
         case DISCONNECTED_FROM_DEVICE:
             return Object.assign({}, state, {
@@ -56,27 +57,29 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 numDisconnects: action.deviceName ? state.numDisconnects + 1 : state.numDisconnects, // TODO: need to test this
+                firmwareVersion: null,
             });
         case STOP_RECONNECT:
             return Object.assign({}, state, {
                 status: 'DISCONNECTED',
                 deviceName: null,
                 deviceIdentifier: null,
-                isReconnecting: false
+                isReconnecting: false,
             });
         case CONNECTING_TO_DEVICE:
             return {
                 ...state,
                 status: 'CONNECTING',
                 deviceName: action.deviceName,
-                deviceIdentifier: action.deviceIdentifier
+                deviceIdentifier: action.deviceIdentifier,
             };
         case CONNECTED_TO_DEVICE:
             return Object.assign({}, state, {
                 status: 'CONNECTED',
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
-                isReconnecting: false
+                isReconnecting: false,
+                firmwareVersion: action.firmwareVersion,
             });
         case RECONNECTING_TO_DEVICE:
             return Object.assign({}, state, {
