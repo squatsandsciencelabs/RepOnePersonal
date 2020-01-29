@@ -9,6 +9,7 @@ import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 const mapStateToProps = (state) => {
     return {
         deviceFirmwareVersion: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+        connectedDevice: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
         firmwareVersion: OTASelectors.getFirmwareVersion(state),
         status: OTASelectors.getStatus(state),
     };
