@@ -107,19 +107,22 @@ function *startDownload(action) {
         const state = yield select();
         logOTAAnalytics(state, 'firmware_download_succeeded');
     } catch (err) {
-        console.tron.log(`Failed to download ${err}`);
-        yield put({
-            type: OTA_DOWNLOAD_FAILED,
-            error: err,
-        });
-        const state = yield select();
-        logOTAAnalytics(state, 'firmware_download_failed');
+        console.tron.log(`Failed to download ${(err)}`);
+        if (err.message !== 'canceled') {
+            yield put({
+                type: OTA_DOWNLOAD_FAILED,
+                error: err,
+            });
+            const state = yield select();
+            logOTAAnalytics(state, 'firmware_download_failed');
+        }
     }
 }
 
 function *cancelDownload(action) {
     try {
         yield apply(downloadTask, downloadTask.cancel);
+        yield apply(RNFetchBlob, RNFetchBlob.fs.unlink, [filePath]);
     } catch (err) {
         console.tron.log(`failed to cancel download ${err}`);
     }
