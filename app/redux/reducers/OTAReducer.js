@@ -70,7 +70,7 @@ const OTAReducer = (state = defaultState, action) => {
         case DELETE_OTA_DOWNLOAD:
             return {
                 ...state,
-                status: null,
+                status: OTAStatus.AVAILABLE,
             };
         case INSTALL_OTA_ATTEMPT:
             return {
