@@ -26,7 +26,7 @@ import {
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 
 let downloadTask = null;
-const filePath = ''; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
+const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 
 const OTASaga = function * OTASaga() {
     yield all([
