@@ -18,3 +18,5 @@ export const getConnectedDeviceIdentifier = (state) => stateRoot(state).deviceId
 export const getNumDisconnects = (state) => stateRoot(state).numDisconnects;
 
 export const getNumReconnects = (state) => stateRoot(state).numReconnects;
+
+export const getFirmwareVersion = (state) => stateRoot(state).firmwareVersion;
