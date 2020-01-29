@@ -27,34 +27,34 @@ export const OTAStatus = {
 // device can be obtained from the deviceReducer
 // what do I do if it becomes available mid install
 const defaultState = {
-    firmwareVersion: null, // this needs to be preserved
-    fileURL: null, // this needs to be preserved
+    firmwareVersion: "1.0.0", // only this should be preserved, other values should start at null
     status: null, // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, INSTALL_FAILED, INSTALL_SUCCEEDED
 };
 
 const OTAReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case OTA_DOWNLOAD_AVAILABLE: // on startup
+        case OTA_DOWNLOAD_AVAILABLE:
             return {
                 ...state,
                 firmwareVersion: action.firmwareVersion,
-                fileURL: null, // assume the saga that calls this action will have deleted it
                 status: OTAStatus.AVAILABLE,
+            };
+        case OTA_DOWNLOAD_READY:
+            return {
+                ...state,
+                status: OTAStatus.READY,
             };
         case OTA_DOWNLOAD_ATTEMPT:
             return {
                 ...state,
-                fileURL: action.fileURL, // should this be on attempt or on success? I lean on attempt so it can delete it later
                 status: OTAStatus.DOWNLOADING,
             };
         case CANCEL_OTA_DOWNLOAD:
             return {
                 ...state,
-                fileURL: null,
                 status: OTAStatus.AVAILABLE,
             };
-        case OTA_DOWNLOAD_READY: // on startup
-        case OTA_DOWNLOAD_SUCCEEDED: // on download
+        case OTA_DOWNLOAD_SUCCEEDED:
             return {
                 ...state,
                 status: OTAStatus.READY,
@@ -62,13 +62,11 @@ const OTAReducer = (state = defaultState, action) => {
         case OTA_DOWNLOAD_FAILED:
             return {
                 ...state,
-                fileURL: null,
                 status: OTAStatus.DOWNLOAD_FAILED,
             };
         case DELETE_OTA_DOWNLOAD:
             return {
                 ...state,
-                fileURL: null,
                 status: null,
             };
         case INSTALL_OTA_ATTEMPT:
