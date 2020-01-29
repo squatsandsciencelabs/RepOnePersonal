@@ -1,6 +1,7 @@
 import { all, call } from 'redux-saga/effects';
 
 import KillSwitchSaga from './KillSwitchSaga';
+import InitConfigSaga from './InitConfigSaga';
 import TokenSaga from './TokenSaga';
 import AuthSaga from './AuthSaga';
 import SuggestionsSaga from './SuggestionsSaga';
@@ -18,6 +19,7 @@ import OTASaga from './OTASaga';
 const Sagas = function* Sagas(dispatch) {
     yield all([
         KillSwitchSaga(),
+        InitConfigSaga(),
         TokenSaga(),
         AuthSaga(),
         SuggestionsSaga(),

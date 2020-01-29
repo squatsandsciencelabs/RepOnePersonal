@@ -9,7 +9,7 @@ import {
 import RNFetchBlob from 'rn-fetch-blob';
 
 import { 
-    STORE_INITIALIZED,
+    CONFIG_READY,
     OTA_DOWNLOAD_READY,
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
@@ -23,14 +23,17 @@ import {
     INSTALL_OTA_SUCCEEDED,
     INSTALL_OTA_FAILED,
 } from 'app/configs+constants/ActionTypes';
+import firebase from 'app/services/Firebase';
+import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
+import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 
 let downloadTask = null;
 const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 
-const OTASaga = function * OTASaga() {
+export default function * OTASaga() {
     yield all([
-        takeEvery(STORE_INITIALIZED, checkOTA),
+        takeEvery(CONFIG_READY, checkOTA),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
@@ -40,19 +43,16 @@ const OTASaga = function * OTASaga() {
 };
 
 function *checkOTA(action) {
-    // fetch instantly on initialization
-    yield apply(fbconfig, fbconfig.fetch, [0]);
-
-    // activate
-    const activated = yield apply(fbconfig, fbconfig.activateFetched);
-    if (!activated) {
+   if (!action.activated) {
         console.tron.log("Fetched data not activated");
         // NOTE: not logging this as it appears to still work regardless of activation?
         // state = yield select();
         // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
+        return;
     }
 
     // get url
+    const fbconfig = firebase.config();
     const snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_version']);
     const firmwareVersion = snapshot.val();
 
@@ -82,7 +82,11 @@ function *checkOTA(action) {
         });
     }
 
-    // shouldn't have to handle empty state
+    // default to available
+    yield put({
+        type: OTA_DOWNLOAD_AVAILABLE,
+        firmwareVersion,
+    });
 }
 
 function *startDownload(action) {
@@ -142,5 +146,3 @@ const logOTAAnalytics = (state, event) => {
         server_firmware_version: OTASelectors.getFirmwareVersion(state),
     }, state);
 };
-
-export default OTASaga;

@@ -9,10 +9,9 @@ import {
 import { Alert } from 'react-native';
 
 import { 
-    STORE_INITIALIZED,
+    CONFIG_READY,
     CHANGE_TAB,
     END_WORKOUT,
-    PRESENT_SURVEY,
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
 import * as Analytics from 'app/services/Analytics';
@@ -21,15 +20,14 @@ import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 
 const SurveySaga = function * SurveySaga() {
     yield all([
-        takeEvery(STORE_INITIALIZED, updateSurveyURL),
-        takeEvery(CHANGE_TAB, updateSurveyURL),
+        takeEvery(CONFIG_READY, updateSurveyURL),
+        takeEvery(CHANGE_TAB, fetchAndUpdateSurveyURL),
         takeEvery(END_WORKOUT, askSurvey),
     ]);
 };
 
-function* updateSurveyURL() {
+function* fetchAndUpdateSurveyURL() {
     const fbconfig = firebase.config();
-    let state = null;
     try {
         // fetch
         // yield apply(fbconfig, fbconfig.fetch, [0]); // USE THIS INSTEAD FOR DEBUGGING AS IT REFRESHES INSTANTLY
@@ -42,12 +40,23 @@ function* updateSurveyURL() {
             // NOTE: not logging this as it appears to still work regardless of activation?
             // state = yield select();
             // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
+            return;
         }
 
+        yield call(updateSurveyURL);
+    } catch (error) {
+        const state = yield select();
+        logUpdateSurveyURLErrorAnalytics(state, error);
+    }
+}
+function* updateSurveyURL() {
+    const fbconfig = firebase.config();
+    let state = null;
+    try {
         // get url
         const snapshot = yield apply(fbconfig, fbconfig.getValue, ['survey_url']);
         const url = snapshot.val();
-
+        
         // analytics
         state = yield select();
         logUpdateSurveyURLAnalytics(state, url);

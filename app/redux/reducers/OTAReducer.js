@@ -26,7 +26,7 @@ export const OTAStatus = {
 
 // device can be obtained from the deviceReducer
 const defaultState = {
-    firmwareVersion: "1.0.0",
+    firmwareVersion: "0.0.1",
 
     // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, INSTALL_FAILED, INSTALL_SUCCEEDED
     // it should always start as null
