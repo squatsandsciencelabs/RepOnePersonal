@@ -201,6 +201,8 @@ export const connectedToDevice = (deviceIdentifier) => (dispatch, getState) => {
     console.tron.log(`got name ${name} and trying to set user prop with it`);
     Analytics.setUserProp('connected_device_id', name);
     checkOBVersion(name);
+
+    // TODO: get firmware and log that here
     logConnectedToDeviceAnalytics(state);
 
     dispatch({

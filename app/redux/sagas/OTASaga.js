@@ -68,6 +68,8 @@ function *checkOTA(action) {
             type: OTA_DOWNLOAD_AVAILABLE,
             firmwareVersion,
         });
+        const state = yield select();
+        logOTAAnalytics(state, 'new_firmware_available');
         return;
     }
 
@@ -97,12 +99,16 @@ function *startDownload(action) {
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
+        const state = yield select();
+        logOTAAnalytics(state, 'firmware_download_succeeded');
     } catch (err) {
         console.tron.log(`Failed to download ${err}`);
         yield put({
             type: OTA_DOWNLOAD_FAILED,
             error: err,
         });
+        const state = yield select();
+        logOTAAnalytics(state, 'firmware_download_failed');
     }
 }
 
@@ -129,5 +135,12 @@ function *startInstall(action) {
 function *cancelInstall(action) {
     // TODO: activate nordic library
 }
+
+const logOTAAnalytics = (state, event) => {
+    Analytics.logEventWithAppState(event, {
+        device_firmware_version: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+        server_firmware_version: OTASelectors.getFirmwareVersion(state),
+    }, state);
+};
 
 export default OTASaga;
