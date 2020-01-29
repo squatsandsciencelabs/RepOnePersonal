@@ -25,10 +25,13 @@ export const OTAStatus = {
 };
 
 // device can be obtained from the deviceReducer
-// what do I do if it becomes available mid install
 const defaultState = {
-    firmwareVersion: "1.0.0", // only this should be preserved, other values should start at null
-    status: null, // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, INSTALL_FAILED, INSTALL_SUCCEEDED
+    firmwareVersion: "1.0.0",
+
+    // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, INSTALL_FAILED, INSTALL_SUCCEEDED
+    // it should always start as null
+    // TODO: test that it starts as null
+    status: null,
 };
 
 const OTAReducer = (state = defaultState, action) => {

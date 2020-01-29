@@ -28,8 +28,6 @@ import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 let downloadTask = null;
 const filePath = ''; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 
-// TODO: preservation of reducer, possibly on initialize default null the status
-
 const OTASaga = function * OTASaga() {
     yield all([
         takeEvery(STORE_INITIALIZED, checkOTA),
