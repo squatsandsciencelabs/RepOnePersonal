@@ -48,7 +48,6 @@ function *checkOTA(action) {
         // NOTE: not logging this as it appears to still work regardless of activation?
         // state = yield select();
         // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
-        return;
     }
 
     // get url
