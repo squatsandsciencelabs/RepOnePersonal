@@ -1,7 +1,7 @@
 // TODO: Refactor this so that the panels are screens rather than passing props manually
 
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
 import { OTAStatus } from 'app/redux/reducers/OTAReducer';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
@@ -83,11 +83,11 @@ class SettingsOTAPanel extends Component {
                         Update Firmware
                     </Text>
                 </View>
-                <View style={ SETTINGS_PANEL_STYLES.content }>
-                    <Text style={ SETTINGS_PANEL_STYLES.subtitleText }>
+                <View style={{paddingTop: 10, paddingBottom: 16}}>
+                    <Text style={ styles.description }>
                         The latest version is {this.props.firmwareVersion}
                     </Text>
-                    <Text style={ SETTINGS_PANEL_STYLES.subtitleText }>
+                    <Text style={ styles.description }>
                         {deviceFirmwareText}
                     </Text>
                 </View>
@@ -96,5 +96,13 @@ class SettingsOTAPanel extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    description: {
+        textAlign: 'left',
+        color: 'rgba(77, 77, 77, 1)',
+        fontSize: 14,
+    },
+});
 
 export default SettingsOTAPanel;
