@@ -20,7 +20,7 @@ export const presentAlgorithm = () => (dispatch, getState) => {
     const state = getState();
     logAlgorithmAnalytics(state);
     
-    Linking.openURL("http://squatsandscience.com/1rmalgorithm/");
+    Linking.openURL("https://www.reponestrength.com/1rmalgorithm/");
     dispatch({ type: PRESENT_ALGORITHM });
 };
 
@@ -28,7 +28,7 @@ export const presentBestResults = () => (dispatch, getState) => {
     const state = getState();
     logBestResultsAnalytics(state);
     
-    Linking.openURL("http://squatsandscience.com/1rmbestresults/");
+    Linking.openURL("https://www.reponestrength.com/1rmbestresults/");
     dispatch({ type: PRESENT_BEST_RESULTS });
 };
 

@@ -16,7 +16,7 @@ class SettingsFeedbackPanel extends Component {
                 </Text>    
                 <TouchableOpacity onPress={() => this.props.tappedFeedback()}>
                     <Text style={ [SETTINGS_PANEL_STYLES.tappableText, { fontSize: 14 }]}>
-                        contact@squatsandscience.com
+                        help@getrepone.com
                     </Text>
                 </TouchableOpacity>         
             </View>

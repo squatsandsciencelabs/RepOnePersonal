@@ -32,7 +32,7 @@ export const presentQuantifier = (rank) => (dispatch, getState) => {
 };
 
 export const presentBigMetricsInfo = () => (dispatch, getState) => {
-    Linking.openURL("http://www.squatsandscience.com/metrics/");    
+    Linking.openURL("https://www.reponestrength.com/metrics/");    
 
     const state = getState();
     logMetricTipsAnalytics(state);

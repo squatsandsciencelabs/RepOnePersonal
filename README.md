@@ -1,7 +1,7 @@
 # INSTALLATION
 
 * install react (https://facebook.github.io/react-native/docs/getting-started.html)
-* git clone https://github.com/squatsandsciencelabs/OpenBarbellApp.git
+* git clone https://github.com/squatsandsciencelabs/RepOnePersonal.git
 * npm install
 * cd ios && carthage bootstrap && pod install
 * create android/local.properties and point it at your Android SDK eg `sdk.dir = /Users/SquatsAndScience/Library/Android/sdk`

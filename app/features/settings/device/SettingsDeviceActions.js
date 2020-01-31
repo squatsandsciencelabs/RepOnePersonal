@@ -38,7 +38,7 @@ export const stopReconnect = () => (dispatch, getState) => {
 }
 
 export const presentTroubleshootingTips = () => (dispatch, getState) => {
-    Linking.openURL("http://www.squatsandscience.com/troubleshoot/");
+    Linking.openURL("https://www.reponestrength.com/troubleshoot/");
 
     const state = getState();
     logTroubleshootingTipsAnalytics(state);
