@@ -14,9 +14,9 @@ class SettingsOTAInstallingPanel extends Component {
                 <Text style={ SETTINGS_PANEL_STYLES.subtitleText }>
                     Installing on RepOne {this.props.connectedDevice}
                 </Text>
-                <Text style={[SETTINGS_PANEL_STYLES.footerCancelText, {fontWeight: 'bold', paddingTop: 25, paddingBottom: 10}]} onPress={this.props.cancelInstall.bind(this)}>
+                {/* <Text style={[SETTINGS_PANEL_STYLES.footerCancelText, {fontWeight: 'bold', paddingTop: 25, paddingBottom: 10}]} onPress={this.props.cancelInstall.bind(this)}>
                     Cancel
-                </Text>
+                </Text> */}
 
             </View>
         );
