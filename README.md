@@ -3,6 +3,7 @@
 * install react (https://facebook.github.io/react-native/docs/getting-started.html)
 * git clone https://github.com/squatsandsciencelabs/RepOnePersonal.git
 * npm install
+* git checkout repone
 * cd ios && carthage bootstrap && pod install
 * create android/local.properties and point it at your Android SDK eg `sdk.dir = /Users/SquatsAndScience/Library/Android/sdk`
 
