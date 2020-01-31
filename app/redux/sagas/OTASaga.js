@@ -7,6 +7,7 @@ import {
     select,
 } from 'redux-saga/effects';
 import RNFetchBlob from 'rn-fetch-blob';
+import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
 
 import { 
     CONFIG_READY,
@@ -136,7 +137,26 @@ function *deleteDownload(action) {
 }
 
 function *startInstall(action) {
-    // TODO: activate nordic library
+    try {
+        const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+
+        yield apply(NordicDFU, NordicDFU.startDFU, [{
+            deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
+            filePath,
+        }]);
+        yield put({
+            type: INSTALL_OTA_SUCCEEDED,
+        });
+        const state = yield select();
+        logOTAAnalytics(state, 'firmware_install_succeeded');
+    } catch (err) {
+        console.tron.log(`failed to install ${err}`);
+        yield put({
+            type: INSTALL_OTA_FAILED,
+        });
+        const state = yield select();
+        logOTAAnalytics(state, 'firmware_install_failed');
+    }
 }
 
 function *cancelInstall(action) {

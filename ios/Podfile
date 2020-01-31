@@ -71,6 +71,7 @@ target 'OpenBarbellApp' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod "react-native-nordic-dfu", path: "../node_modules/react-native-nordic-dfu", :modular_headers => true
 
   pod 'react-native-video', :path => '../node_modules/react-native-video'
 
