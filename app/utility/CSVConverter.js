@@ -66,9 +66,9 @@ export const convert = (sets) => {
             output += escapeDoubleQuote(tags) + ',';
             output += escapeDoubleQuote(workoutStartTime) + ',';
             output += escapeDoubleQuote(rest) + ',';
-            output += rep.averageVelocity + ',';
+            output += (rep.averageVelocity / 1000).toFixed(2) + ',';
             output += rep.rom + ',';
-            output += rep.peakVelocity + ',';
+            output += (rep.peakVelocity / 1000).toFixed(2) + ',';
             output += rep.peakHeight + ',';
             output += (rep.duration / 1000) + '\n';
         });

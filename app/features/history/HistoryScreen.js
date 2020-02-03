@@ -275,12 +275,12 @@ const createRowViewModels = (set, shouldShowRemoved) => {
         if (rep.isValid == true) {
             let avgVel = rep.averageVelocity;
             if (avgVel !== null) {
-                vm.averageVelocity = avgVel;
+                vm.averageVelocity = avgVel / 1000;
             }
 
             let peakVel = rep.peakVelocity;
             if (peakVel !== null) {
-                vm.peakVelocity = peakVel;
+                vm.peakVelocity = peakVel / 1000;
             }
 
             let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);

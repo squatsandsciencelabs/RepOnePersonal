@@ -44,11 +44,11 @@ export const getRPE = (set) => {
 };
 
 export const getAvgVelocities = (set) => {
-    return getMetrics(set, r => r.averageVelocity);
+    return getMetrics(set, r => r.averageVelocity / 1000);
 };
 
 export const getPKVs = (set) => {
-    return getMetrics(set, r => r.peakVelocity);
+    return getMetrics(set, r => r.peakVelocity / 1000);
 };
 
 // TODO: may need to turn it into a %

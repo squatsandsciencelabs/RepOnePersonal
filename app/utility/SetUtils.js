@@ -116,8 +116,8 @@ export const isRepUsable = (rep) => {
     if (!rep.isValid || !rep.data) {
         return false;
     }
-    const velocity = rep.averageVelocity; // this should always return a string
-    const peakVelocity = rep.peakVelocity;
+    const velocity = rep.averageVelocity / 1000; // this should always return a string
+    const peakVelocity = rep.peakVelocity / 1000;
     return isVelocityUsable(velocity) && isVelocityUsable(peakVelocity);
 };
 
@@ -140,7 +140,7 @@ export const getFastestUsableAvgVelocity = (set) => {
         return null;
     }
 
-    return Math.max.apply(Math, reps.map(rep => Number(rep.averageVelocity)));
+    return Math.max.apply(Math, reps.map(rep => Number(rep.averageVelocity / 1000)));
 };
 
 export const markerDisplayValue = (set, metric) => {
