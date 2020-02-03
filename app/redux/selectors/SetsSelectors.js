@@ -3,7 +3,6 @@
 // right now only a few of them use the stateRoot
 import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
-import * as RepDataMap from 'app/utility/RepDataMap';
 import * as OneRMCalculator from 'app/math/OneRMCalculator';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DateUtils from 'app/utility/DateUtils';

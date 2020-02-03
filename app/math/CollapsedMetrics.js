@@ -1,4 +1,3 @@
-import * as RepDataMap from 'app/utility/RepDataMap';
 import {
     EMPTY_METRIC,
     AVG_VELOCITY_METRIC,
@@ -45,23 +44,24 @@ export const getRPE = (set) => {
 };
 
 export const getAvgVelocities = (set) => {
-    return getMetrics(set, RepDataMap.averageVelocity);
+    return getMetrics(set, r => r.averageVelocity);
 };
 
 export const getPKVs = (set) => {
-    return getMetrics(set, RepDataMap.peakVelocity);
+    return getMetrics(set, r => r.peakVelocity);
 };
 
+// TODO: may need to turn it into a %
 export const getPKHs = (set) => {
-    return getMetrics(set, RepDataMap.peakVelocityLocation);
+    return getMetrics(set, r => r.peakHeight);
 };
 
 export const getROMs = (set) => {
-    return getMetrics(set, RepDataMap.rangeOfMotion);
+    return getMetrics(set, r => r.rom);
 };
 
 export const getDurations = (set) => {
-    return getMetrics(set, RepDataMap.durationOfLift);
+    return getMetrics(set, r => r.duration);
 };
 
 // Average Quantifiers

@@ -6,23 +6,12 @@ import {
 } from 'react-native';
 import BleManager  from 'react-native-ble-manager';
 
-import * as RepDataMap from 'app/utility/RepDataMap';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 
 export default function (store) {
     //native bluetooth
     const Emitter = new NativeEventEmitter(NativeModules.BleManager);
-
-    //data
-    var repData = [];
-    var endBulkDataWasReceived = false;
-
-    // reset
-    function resetRep() {
-        repData.length = 0;
-        endBulkDataWasReceived = false;
-    }
 
     // scanning
     Emitter.addListener('BleManagerDiscoverPeripheral', (args) => {
@@ -60,7 +49,7 @@ export default function (store) {
         // observe reps
         try {
             await BleManager.retrieveServices(args.peripheral);
-            await BleManager.startNotification(args.peripheral, '2220', '2221');
+            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral));
         } catch (err) {
             // TODO: add error logging here
@@ -70,34 +59,21 @@ export default function (store) {
 
     // data
     Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', (args) => {
-        const data = new Float32Array(new Uint8Array(args.value).buffer)[0];
+        const data = new Uint16Array(args.value).buffer;
         console.tron.log("REACT NATIVE LAYER -> RECEIVED DATA " + data);
 
-        // invalid rep data
-        if (data == -1234 || data == -2345 || data == -3456) {
-            if (queuedDataIsCorrupted(repData)) {
-                console.tron.log("FOUND BAD DATA B4 START FLAG, logging it as an invalid rep now!");
-                console.tron.log(JSON.stringify(repData));
-                store.dispatch(DeviceActionCreators.receivedLiftData(RepDataMap.isValidData(repData), repData));
-            }
-            resetRep();
-        }
-        repData.push(data);
+        // TODO: store firmware version somewhere, and use that to determine the format of the lift data
 
-        // if last data entry was the end bulk data flag
-        // then this data entry is the battery value
-        // and therefore the last data for this rep
-        // dispatch it to the rest of the system
-        if (endBulkDataWasReceived) {
-            //dispatch
-            store.dispatch(DeviceActionCreators.receivedLiftData(RepDataMap.isValidData(repData), repData));
-
-            //reset
-            resetRep();
-        } else {
-            // end bulk data flag check
-            endBulkDataWasReceived = (data == -6789);
-        }
+        // not sending valid until methods to determine invalid are determined
+        store.dispatch(DeviceActionCreators.receivedLiftData({
+            // TODO: rep number
+            isValid: true, // TODO: should actually calculate when data could be valid
+            averageVelocity: data[0],
+            rom: data[1],
+            peakVelocity: data[2],
+            peakHeight: data[3],
+            duration: data[4],
+        }));
     });
 
     try {
@@ -113,26 +89,3 @@ export default function (store) {
     }
 }
 
-const queuedDataIsCorrupted = (repData) => {
-    // more than 1, definitely corrupted
-    if (repData.length > 1) {
-        return true;
-    }
-
-    // only 1, corrupted if it's NOT a start flag
-    if (repData.length == 1) {
-        if (repData[0] == -3456) {
-            return false;
-        }
-        if (repData[0] == -2345) {
-            return false;
-        }
-        if (repData[0] == -1234) {
-            return false;
-        }
-        return true;
-    }
-
-    // less than 0...defaulting to false
-    return false;
-};

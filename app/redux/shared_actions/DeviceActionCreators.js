@@ -223,19 +223,18 @@ export const reconnectingToDevice = (name) => {
 
 // DATA
 
-export const receivedLiftData = (isValid, data, time=new Date()) => (dispatch, getState) => {
+export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) => {
     const state = getState();
 
     logAddRepAnalytics(state);
 
     dispatch(TimerActionCreators.sanityCheckTimer());
     dispatch({
+        ...data,
         type: ADD_REP_DATA,
-        isValid: isValid,
-        data: data,
         deviceName: state.connectedDevice.deviceName,
         deviceIdentifier: state.connectedDevice.deviceIdentifier,
-        time: time
+        time: time,
     });
     dispatch(TimerActionCreators.startEndSetTimer());
 

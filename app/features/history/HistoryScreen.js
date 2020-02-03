@@ -9,7 +9,6 @@ import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
-import * as RepDataMap from 'app/utility/RepDataMap';
 import * as SetUtils from 'app/utility/SetUtils';
 import * as Actions from './HistoryActions';
 import HistoryList from './HistoryList';
@@ -274,34 +273,32 @@ const createRowViewModels = (set, shouldShowRemoved) => {
 
         // update data if valid
         if (rep.isValid == true) {
-            let repData = rep.data;
-
-            let avgVel = RepDataMap.averageVelocity(repData);
+            let avgVel = rep.averageVelocity;
             if (avgVel !== null) {
                 vm.averageVelocity = avgVel;
             }
 
-            let peakVel = RepDataMap.peakVelocity(repData);
+            let peakVel = rep.peakVelocity;
             if (peakVel !== null) {
                 vm.peakVelocity = peakVel;
             }
 
-            let peakVelLoc = RepDataMap.peakVelocityLocation(repData);
+            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
             if (peakVelLoc !== null) {
                 vm.peakVelocityLocation = peakVelLoc;
             }
 
-            let rom = RepDataMap.rangeOfMotion(repData);
+            let rom = rep.rom;
             if (rom !== null) {
                 vm.rangeOfMotion = rom;
             }
 
             // obv2 properties
-            let duration = RepDataMap.durationOfLift(repData)
+            let duration = rep.duration;
             if (duration !== null) {
                 vm.duration = DurationCalculator.displayDuration(duration);
             } else {
-                vm.duration = "obv2 only";
+                vm.duration = "-";
             }
         }
 

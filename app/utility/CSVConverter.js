@@ -2,7 +2,6 @@
 // TODO: prime candidate for unit testing
 
 import * as DateUtils from 'app/utility/DateUtils';
-import * as RepDataMap from 'app/utility/RepDataMap';
 import * as SetUtils from 'app/utility/SetUtils';
 
 // pass this the history sets as a sorted array
@@ -67,11 +66,11 @@ export const convert = (sets) => {
             output += escapeDoubleQuote(tags) + ',';
             output += escapeDoubleQuote(workoutStartTime) + ',';
             output += escapeDoubleQuote(rest) + ',';
-            output += RepDataMap.averageVelocity(rep.data) + ',';
-            output += RepDataMap.rangeOfMotion(rep.data) + ',';
-            output += RepDataMap.peakVelocity(rep.data) + ',';
-            output += RepDataMap.peakVelocityLocation(rep.data) + ',';
-            output += (RepDataMap.durationOfLift(rep.data) / 1000000) + '\n';
+            output += rep.averageVelocity + ',';
+            output += rep.rom + ',';
+            output += rep.peakVelocity + ',';
+            output += rep.peakHeight + ',';
+            output += (rep.duration / 1000) + '\n';
         });
     }
     return output;

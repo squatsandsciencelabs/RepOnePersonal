@@ -1,4 +1,3 @@
-import * as RepDataMap from 'app/utility/RepDataMap';
 import * as WeightConversion from 'app/utility/WeightConversion';
 import * as DateUtils from 'app/utility/DateUtils';
 
@@ -117,8 +116,8 @@ export const isRepUsable = (rep) => {
     if (!rep.isValid || !rep.data) {
         return false;
     }
-    const velocity = RepDataMap.averageVelocity(rep.data); // this should always return a string
-    const peakVelocity = RepDataMap.peakVelocity(rep.data);
+    const velocity = rep.averageVelocity; // this should always return a string
+    const peakVelocity = rep.peakVelocity;
     return isVelocityUsable(velocity) && isVelocityUsable(peakVelocity);
 };
 
@@ -141,7 +140,7 @@ export const getFastestUsableAvgVelocity = (set) => {
         return null;
     }
 
-    return Math.max.apply(Math, reps.map(rep => Number(RepDataMap.averageVelocity(rep.data))));
+    return Math.max.apply(Math, reps.map(rep => Number(rep.averageVelocity)));
 };
 
 export const markerDisplayValue = (set, metric) => {

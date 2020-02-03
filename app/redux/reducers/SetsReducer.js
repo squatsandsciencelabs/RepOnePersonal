@@ -339,11 +339,16 @@ const addRepData = (state, action) => {
         isValid: action.isValid,
         removed: false,
         hardware: Platform.OS,
-        appVersion: getVersion(),
+        appVersion: getVersion(), // TODO: also firmware version
         deviceName: action.deviceName,
         deviceIdentifier: action.deviceIdentifier,
         time: action.time,
-        data: [...action.data]
+        // TODO: rep number
+        averageVelocity: action.averageVelocity,
+        rom: action.rom,
+        peakVelocity: action.peakVelocity,
+        peakHeight: action.peakHeight,
+        duration: action.duration,
     };
 
     let setChanges = {

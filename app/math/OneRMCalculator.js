@@ -5,7 +5,6 @@ import * as DateUtils from 'app/utility/DateUtils';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
-import * as RepDataMap from 'app/utility/RepDataMap';
 
 // TODO: make this formula work with metric types as it currently assumes it's just a number
 
@@ -196,7 +195,7 @@ const romCheck = (pool) => {
         var hasFailedROM = false;
 
         SetUtils.validUnremovedReps(set).forEach((rep) => {
-            const rom = Number(RepDataMap.rangeOfMotion(rep.data));
+            const rom = Number(rep.rom);
             if (rom !== null && isFinite(rom) && rom > 0) {
                 roms.push(rom);
             } else {
@@ -228,7 +227,7 @@ const romCheck = (pool) => {
     // remove sets with roms below min or above max
     passed0Check.forEach((set) => {
         const hasBadROM = SetUtils.validUnremovedReps(set).some((rep) => {
-            const rom = RepDataMap.rangeOfMotion(rep.data);
+            const rom = rep.rom;
             return rom < minValidROM || rom > maxValidROM;
         });
         if (hasBadROM) {
