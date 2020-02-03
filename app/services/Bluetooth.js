@@ -49,7 +49,7 @@ export default function (store) {
         // observe reps
         try {
             await BleManager.retrieveServices(args.peripheral);
-            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
+            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F2026E');
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral));
         } catch (err) {
             // TODO: add error logging here
