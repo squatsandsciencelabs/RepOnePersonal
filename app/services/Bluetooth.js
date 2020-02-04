@@ -59,8 +59,8 @@ export default function (store) {
 
     // data
     Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', (args) => {
-        const data = new Uint16Array(args.value);
-        console.tron.log("REACT NATIVE LAYER -> RECEIVED DATA " + data);
+        const typedArray = new Uint8Array(args.value);
+        const data = new Uint16Array(typedArray.buffer);
 
         // TODO: store firmware version somewhere, and use that to determine the format of the lift data
 
