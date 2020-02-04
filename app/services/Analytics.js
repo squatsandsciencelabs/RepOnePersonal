@@ -110,7 +110,7 @@ export const logEventWithAppState = (event, params, state) => {
     const isWorkoutEmpty = SetsSelectors.getIsWorkoutEmpty(state);
     const isSurveyVisible = SurveySelectors.getSurveyAvailable(state);
 
-    const scanned_devices = devices.join().replace(/\s|OB|,/g, '');
+    const scanned_devices = devices.join().replace(/\s|RepOne|,/g, '');
     params.scanned_devices = scanned_devices;
         
     params.num_scanned_devices = devices.length;  

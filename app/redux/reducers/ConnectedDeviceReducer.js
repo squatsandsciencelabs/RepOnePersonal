@@ -18,6 +18,7 @@ const defaultState = {
     isReconnecting: false,
     numDisconnects: 0,
     numReconnects: 0,
+    apiFormatVersion: null,
     firmwareVersion: null,
 };
 
@@ -57,6 +58,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 numDisconnects: action.deviceName ? state.numDisconnects + 1 : state.numDisconnects, // TODO: need to test this
+                apiFormatVersion: null,
                 firmwareVersion: null,
             });
         case STOP_RECONNECT:
@@ -79,6 +81,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
                 isReconnecting: false,
+                apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,
             });
         case RECONNECTING_TO_DEVICE:

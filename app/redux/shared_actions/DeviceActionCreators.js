@@ -41,7 +41,7 @@ const clearTimers = () => {
 
 // SCANNING
 export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
-    BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D'], 99999, false);
+    BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
 
     const state = getState();
     logAttemptScanAnalytics(state, isManualScan);
@@ -191,7 +191,7 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 });
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
-export const connectedToDevice = (deviceIdentifier) => (dispatch, getState) => {
+export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVersion) => (dispatch, getState) => {
     clearTimers();
 
     // analytics
@@ -199,7 +199,9 @@ export const connectedToDevice = (deviceIdentifier) => (dispatch, getState) => {
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting" 
     console.tron.log(`got name ${name} and trying to set user prop with it`);
     Analytics.setUserProp('connected_device_id', name);
-    checkOBVersion(name);
+    Analytics.setUserProp('firmware_version', firmwareVersion);
+    // Analytics.setUserProp('device_family', '');
+    // Analytics.setUserProp('unit_number', '');
 
     // TODO: get firmware and log that here
     logConnectedToDeviceAnalytics(state);
@@ -207,13 +209,13 @@ export const connectedToDevice = (deviceIdentifier) => (dispatch, getState) => {
     dispatch({
         type: CONNECTED_TO_DEVICE,
         deviceName: name,
-        deviceIdentifier, 
+        deviceIdentifier,
+        apiFormatVersion,
+        firmwareVersion,
     });
 };
 
 export const reconnectingToDevice = (name) => {
-    checkOBVersion(name);
-
     return {
         type: RECONNECTING_TO_DEVICE,
         deviceName: name,
@@ -264,16 +266,6 @@ const logAddRepAnalytics = (state) => {
         has_reps: has_reps,
         end_set_time_left: end_set_time_left,
     }, state);
-};
-
-function checkOBVersion(name) {
-    if (name.charAt(3) === '1') {
-        Analytics.setUserProp('device_version', 'v1')
-    } else if (name.charAt(3) === '2') {
-        Analytics.setUserProp('device_version', 'v2');
-    } else if (name.charAt(3) === '3') {
-        Analytics.setUserProp('device_version', 'v3');
-    }    
 };
 
 const logAttemptScanAnalytics = (state, isManualScan) => {
