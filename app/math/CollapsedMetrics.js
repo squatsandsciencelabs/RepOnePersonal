@@ -29,8 +29,7 @@ const getMetrics = (set, metricFunction) => {
     if (!SetUtils.isDeleted(set)) {
         set.reps.forEach((rep) => {                
             if (rep.isValid === true && rep.removed === false) {
-                const repData = rep.data;
-                const metric = Number(metricFunction(repData));
+                const metric = Number(metricFunction(rep));
                 metrics.push(metric);
             }
         });
