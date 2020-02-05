@@ -8,6 +8,7 @@ import {
 } from 'redux-saga/effects';
 import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
+import BleManager  from 'react-native-ble-manager';
 
 import { 
     CONFIG_READY,
@@ -149,6 +150,17 @@ function *startInstall(action) {
         });
         const state = yield select();
         logOTAAnalytics(state, 'firmware_install_succeeded');
+
+        // check if software can handle it
+        // TODO: ideally this should be handled by a saga, but unfortunately the bluetooth layer is not saga based
+        const response = yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E']);
+        const typedArray = new Uint8Array(response);
+        const data16 = new Uint16Array(typedArray.buffer);
+        if (data16[0] > 1) {
+            console.tron.log(`api version mismatch`);
+            Alert.alert(`Please update your RepOne app to connect with this device.`);
+            yield apply(BleManager, BleManager.disconnect, [deviceIdentifier]);
+        }
     } catch (err) {
         console.tron.log(`failed to install ${err}`);
         yield put({
