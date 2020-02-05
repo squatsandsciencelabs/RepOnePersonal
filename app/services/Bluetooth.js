@@ -53,7 +53,13 @@ export default function (store) {
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E');
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
-            store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, data16[0], `${data16[1]}.${data16[2]}.${data16[3]}`));
+            if (data16[0] > 1) {
+                console.tron.log(`api version mismatch`);
+                Alert.alert(`Please update your RepOne app to connect with this device.`);
+                await BleManager.disconnect(args.peripheral);
+            } else {
+                store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, data16[0], `${data16[1]}.${data16[2]}.${data16[3]}`));
+            }
         } catch (err) {
             // TODO: add error logging here
             console.tron.log(`Error setting up service after connecting to peripheral ${err}`);
@@ -65,7 +71,7 @@ export default function (store) {
         const typedArray = new Uint8Array(args.value);
         const data = new Uint16Array(typedArray.buffer);
 
-        // TODO: store firmware version somewhere, and use that to determine the format of the lift data
+        // TODO: check against api version, and use that to determine the format of the lift data
 
         // not sending valid until methods to determine invalid are determined
         store.dispatch(DeviceActionCreators.receivedLiftData({
