@@ -8,7 +8,6 @@ import {
 } from 'redux-saga/effects';
 import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
-import BleManager  from 'react-native-ble-manager';
 
 import { 
     CONFIG_READY,
@@ -145,9 +144,6 @@ function *startInstall(action) {
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
             filePath,
         }]);
-        yield put({
-            type: INSTALL_OTA_SUCCEEDED,
-        });
         const state = yield select();
         logOTAAnalytics(state, 'firmware_install_succeeded');
 
@@ -158,9 +154,13 @@ function *startInstall(action) {
         const data16 = new Uint16Array(typedArray.buffer);
         if (data16[0] > 1) {
             console.tron.log(`api version mismatch`);
-            Alert.alert(`Please update your RepOne app to connect with this device.`);
-            yield apply(BleManager, BleManager.disconnect, [deviceIdentifier]);
+            Alert.alert(`Please update your RepOne app to use this device.`);
         }
+        yield put({
+            type: INSTALL_OTA_SUCCEEDED,
+            apiFormatVersion: data16[0],
+            firmwareVersion: `${data16[1]}.${data16[2]}.${data16[3]}`,
+        });
     } catch (err) {
         console.tron.log(`failed to install ${err}`);
         yield put({
