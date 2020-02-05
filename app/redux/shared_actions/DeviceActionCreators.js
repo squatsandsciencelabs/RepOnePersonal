@@ -233,8 +233,9 @@ export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) 
     dispatch({
         ...data,
         type: ADD_REP_DATA,
-        deviceName: state.connectedDevice.deviceName,
-        deviceIdentifier: state.connectedDevice.deviceIdentifier,
+        deviceName: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
+        deviceIdentifier: ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state),
+        firmwareVersion: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
         time: time,
     });
     dispatch(TimerActionCreators.startEndSetTimer());
