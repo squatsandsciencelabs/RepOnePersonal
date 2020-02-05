@@ -55,11 +55,9 @@ export default function (store) {
             const data16 = new Uint16Array(typedArray.buffer);
             if (data16[0] > 1) {
                 console.tron.log(`api version mismatch`);
-                Alert.alert(`Please update your RepOne app to connect with this device.`);
-                await BleManager.disconnect(args.peripheral);
-            } else {
-                store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, data16[0], `${data16[1]}.${data16[2]}.${data16[3]}`));
+                Alert.alert(`Please update your RepOne app to use this device.`);
             }
+            store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, data16[0], `${data16[1]}.${data16[2]}.${data16[3]}`));
         } catch (err) {
             // TODO: add error logging here
             console.tron.log(`Error setting up service after connecting to peripheral ${err}`);
@@ -68,10 +66,15 @@ export default function (store) {
 
     // data
     Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', (args) => {
+        // api version check
+        const state = store.getState();
+        const formatVersion = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
+        if (formatVersion > 1) {
+            return;
+        }
+
         const typedArray = new Uint8Array(args.value);
         const data = new Uint16Array(typedArray.buffer);
-
-        // TODO: check against api version, and use that to determine the format of the lift data
 
         // not sending valid until methods to determine invalid are determined
         store.dispatch(DeviceActionCreators.receivedLiftData({
