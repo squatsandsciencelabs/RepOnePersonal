@@ -198,10 +198,9 @@ export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVe
     const state = getState();
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting" 
     console.tron.log(`got name ${name} and trying to set user prop with it`);
-    Analytics.setUserProp('connected_device_id', name);
+    Analytics.setUserProp('connected_device_name', name);
+    Analytics.setUserProp('connected_device_id', deviceIdentifier);
     Analytics.setUserProp('firmware_version', firmwareVersion);
-    // Analytics.setUserProp('device_family', '');
-    // Analytics.setUserProp('unit_number', '');
 
     // TODO: get firmware and log that here
     logConnectedToDeviceAnalytics(state);

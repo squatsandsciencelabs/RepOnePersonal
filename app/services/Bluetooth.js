@@ -78,13 +78,14 @@ export default function (store) {
 
         // not sending valid until methods to determine invalid are determined
         store.dispatch(DeviceActionCreators.receivedLiftData({
-            // TODO: rep number
             isValid: true, // TODO: should actually calculate when data could be valid
-            averageVelocity: data[0],
-            rom: data[1],
-            peakVelocity: data[2],
-            peakHeight: data[3],
-            duration: data[4],
+            deviceRepId: data[0],
+            repNumber: data[1],
+            averageVelocity: data[2],
+            rom: data[3],
+            peakVelocity: data[4],
+            peakHeight: data[5],
+            duration: data[6],
         }));
     });
 
