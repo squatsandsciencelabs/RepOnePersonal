@@ -80,6 +80,7 @@ function *checkOTA(action) {
         yield put({
             type: OTA_DOWNLOAD_READY,
         });
+        return;
     }
 
     // default to available
