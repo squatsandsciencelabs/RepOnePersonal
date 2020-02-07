@@ -190,7 +190,7 @@ function *reboot(action) {
         logOTAAnalytics(state, 'firmware_install_reboot');
 
         // alert
-        Alert.alert(`Firmware uploaded, rebooting device`);
+        Alert.alert(`Firmware uploaded, attempting to reboot device`);
 
         // TODO: problem, a disconnect is going to happen, this may cause a double alert because the reconnect checks for installing state, not download ready
         // change action

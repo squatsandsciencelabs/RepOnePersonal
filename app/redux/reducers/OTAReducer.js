@@ -8,9 +8,12 @@ import {
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
+
     INSTALL_OTA_ATTEMPT,
     CANCEL_INSTALL_OTA,
     INSTALL_OTA_PROGRESS,
+
+    CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
@@ -85,6 +88,11 @@ const OTAReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 progress: action.progress,
+            };
+        case CONNECTED_TO_DEVICE:
+            return {
+                ...state,
+                progress: 0,
             };
         default:
             return state;
