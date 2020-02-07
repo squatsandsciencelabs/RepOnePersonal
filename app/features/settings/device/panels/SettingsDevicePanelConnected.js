@@ -11,6 +11,14 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 class SettingsDevicePanelConnected extends Component {
 
     render() {
+        // hide disconnect mid install to prevent the weird bugs
+        const disconnectOption = this.props.isInstalling ? null : <View style={ SETTINGS_PANEL_STYLES.footer }>
+            <Text style={ SETTINGS_PANEL_STYLES.footerCancelText }
+                onPress={ () => this.props.disconnectDevice() }>
+                DISCONNECT
+            </Text>
+        </View>;
+
         return (
             <View style={ [SETTINGS_PANEL_STYLES.panel, { flex: 1 }] }>
                 <View style={ SETTINGS_PANEL_STYLES.header }>
@@ -21,12 +29,7 @@ class SettingsDevicePanelConnected extends Component {
                 <View style={ SETTINGS_PANEL_STYLES.content }>
                     <Image source={require('app/appearance/images/icon_bluetooth_connected.png')} />
                 </View>
-                <View style={ SETTINGS_PANEL_STYLES.footer }>
-                    <Text style={ SETTINGS_PANEL_STYLES.footerCancelText }
-                          onPress={ () => this.props.disconnectDevice() }>
-                        DISCONNECT
-                    </Text>
-                </View>
+                {disconnectOption}
             </View>
         );
     }

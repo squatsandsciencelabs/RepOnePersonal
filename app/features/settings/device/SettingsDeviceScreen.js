@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import SettingsDevicePanel from './SettingsDevicePanel';
 import * as Actions from './SettingsDeviceActions';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 
 const mapStateToProps = (state) => {
     return {
         deviceStatus: ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state),
         deviceName: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
         scannedDevices: state.scannedDevices,
+        isInstalling: OTASelectors.getIsInstalling(state),
     };
 };
 

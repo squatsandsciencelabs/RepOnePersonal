@@ -29,7 +29,8 @@ class SettingsDevicePanel extends Component {
             case 'CONNECTED':
                 return <SettingsDevicePanelConnected
                     device={ this.props.deviceName }
-                    disconnectDevice={ this.props.disconnectDevice }/>;
+                    disconnectDevice={ this.props.disconnectDevice }
+                    isInstalling={ this.props.isInstalling } />;
             case 'DISCONNECTING':
                 return <SettingsDevicePanelDisconnecting
                     device={ this.props.deviceName }/>;
