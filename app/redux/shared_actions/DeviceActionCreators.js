@@ -41,7 +41,8 @@ const clearTimers = () => {
 
 // SCANNING
 export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
-    BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
+    // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
+    BleManager.scan([], 99999, false);
 
     const state = getState();
     logAttemptScanAnalytics(state, isManualScan);
