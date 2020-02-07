@@ -14,7 +14,6 @@ if (__DEV__) {
     .connect() // let's connect!
 
     console.tron = Reactotron
-    console.tron.log(123.4567.toFixed(2))
 } else {
     // production, remove tron logs
     console.tron = {};
