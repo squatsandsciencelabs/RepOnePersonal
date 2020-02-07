@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
         connectedDevice: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
         firmwareVersion: OTASelectors.getFirmwareVersion(state),
         status: OTASelectors.getStatus(state),
+        progress: OTASelectors.getProgress(state) / 100.0,
     };
 };
 

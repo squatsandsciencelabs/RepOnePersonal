@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator } from 'react-native';
+import { Text, View } from 'react-native';
+import * as Progress from 'react-native-progress';
+
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAInstallingPanel extends Component {
@@ -10,7 +12,7 @@ class SettingsOTAInstallingPanel extends Component {
                 <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, { fontWeight: 'bold' }] }>
                     Version {this.props.firmwareVersion} files downloaded
                 </Text>
-                <ActivityIndicator color="#4F4F4F" size="large" style={{paddingTop: 10, paddingBottom: 10}} />
+                <Progress.Circle style={{marginTop: 10, marginBottom: 10}} size={50} progress={this.props.progress} showsText={true} borderWidth={0} unfilledColor={'#D4D4D4'} />
                 <Text style={ SETTINGS_PANEL_STYLES.subtitleText }>
                     Installing on RepOne {this.props.connectedDevice}
                 </Text>

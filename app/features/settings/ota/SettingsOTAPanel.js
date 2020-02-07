@@ -49,6 +49,7 @@ class SettingsOTAPanel extends Component {
                         connectedDevice={this.props.connectedDevice}
                         deleteDownload={this.props.deleteDownload}
                         cancelInstall={this.props.cancelInstall}
+                        progress={this.props.progress}
                         />
             default:
                 return null;
