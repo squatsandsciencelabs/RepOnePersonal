@@ -10,8 +10,7 @@ import {
     DELETE_OTA_DOWNLOAD,
     INSTALL_OTA_ATTEMPT,
     CANCEL_INSTALL_OTA,
-    INSTALL_OTA_SUCCEEDED,
-    INSTALL_OTA_FAILED,
+    INSTALL_OTA_PROGRESS,
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
@@ -20,15 +19,14 @@ export const OTAStatus = {
     DOWNLOAD_FAILED: 'DOWNLOAD_FAILED',
     READY: 'READY',
     INSTALLING: 'INSTALLING',
-    INSTALL_FAILED: 'INSTALL_FAILED',
-    INSTALL_SUCCEEDED: 'INSTALL_SUCCEEDED',
 };
 
 // device can be obtained from the deviceReducer
 const defaultState = {
     firmwareVersion: "0.0.1",
+    progress: 0, // 0-100
 
-    // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, INSTALL_FAILED, INSTALL_SUCCEEDED
+    // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING,
     // it should always start as null
     // TODO: test that it starts as null
     status: null,
@@ -76,21 +74,17 @@ const OTAReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 status: OTAStatus.INSTALLING,
+                progress: 0,
             };
         case CANCEL_INSTALL_OTA:
             return {
                 ...state,
                 status: OTAStatus.READY,
             };
-        case INSTALL_OTA_SUCCEEDED:
+        case INSTALL_OTA_PROGRESS:
             return {
                 ...state,
-                status: OTAStatus.INSTALL_SUCCEEDED,
-            };
-        case INSTALL_OTA_FAILED:
-            return {
-                ...state,
-                status: OTAStatus.INSTALL_FAILED,
+                progress: action.progress,
             };
         default:
             return state;

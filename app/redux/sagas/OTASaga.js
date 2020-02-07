@@ -8,6 +8,7 @@ import {
 } from 'redux-saga/effects';
 import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
+import { Alert } from 'react-native';
 
 import { 
     CONFIG_READY,
@@ -19,10 +20,10 @@ import {
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
 
+    INSTALL_OTA_PROGRESS,
     INSTALL_OTA_ATTEMPT,
+    INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
-    INSTALL_OTA_SUCCEEDED,
-    INSTALL_OTA_FAILED,
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
 import * as Analytics from 'app/services/Analytics';
@@ -32,18 +33,33 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 let downloadTask = null;
 const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 
-export default function * OTASaga() {
+export default function * OTASaga(dispatch) {
     yield all([
-        takeEvery(CONFIG_READY, checkOTA),
+        takeEvery(CONFIG_READY, dispatch, checkOTA),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
         takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
+        takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);
 };
 
-function *checkOTA(action) {
+function *checkOTA(dispatch, action) {
+    DFUEmitter.addListener("DFUProgress", ({ percent }) => {
+        dispatch({
+            type: INSTALL_OTA_PROGRESS,
+            progress: percent,
+        });
+    });
+    DFUEmitter.addListener("DFUStateChanged", ({ state }) => {
+        console.tron.log("DFU state:", state);
+        dispatch({
+            type: INSTALL_OTA_DFU_STATE_CHANGED,
+            state,
+        });
+    });
+
    if (!action.activated) {
         console.tron.log("Fetched data not activated");
         // NOTE: not logging this as it appears to still work regardless of activation?
@@ -138,37 +154,53 @@ function *deleteDownload(action) {
 }
 
 function *startInstall(action) {
-    try {
-        const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+    const state = yield select();
+    const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+    const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
 
+    try {
         yield apply(NordicDFU, NordicDFU.startDFU, [{
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
             filePath,
         }]);
-        const state = yield select();
-        logOTAAnalytics(state, 'firmware_install_succeeded');
-
-        // check if software can handle it
-        // TODO: ideally this should be handled by a saga, but unfortunately the bluetooth layer is not saga based
-        const response = yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E']);
-        const typedArray = new Uint8Array(response);
-        const data16 = new Uint16Array(typedArray.buffer);
-        if (data16[0] > 1) {
-            console.tron.log(`api version mismatch`);
-            Alert.alert(`Please update your RepOne app to use this device.`);
-        }
-        yield put({
-            type: INSTALL_OTA_SUCCEEDED,
-            apiFormatVersion: data16[0],
-            firmwareVersion: `${data16[1]}.${data16[2]}.${data16[3]}`,
-        });
     } catch (err) {
-        console.tron.log(`failed to install ${err}`);
-        yield put({
-            type: INSTALL_OTA_FAILED,
-        });
         const state = yield select();
-        logOTAAnalytics(state, 'firmware_install_failed');
+        if (OTASelectors.getProgress(state) !== 100) {
+            // TODO: does this run before or after the reconnect saga hears from the disconnect?
+            // if this runs before, it can technically set it to ready too quick and cause a double alert with reconnecting as it checks for installing state, not download ready
+            console.tron.log(`failed to install ${err}`);
+            Alert.alert(`Error installing firmware on ${name}`);
+            logOTAAnalytics(state, 'firmware_install_failed');
+            yield put({
+                type: OTA_DOWNLOAD_READY,
+            });
+        } else {
+            console.tron.log(`ignore installation failure as this is a reboot`);
+        }
+    }
+}
+
+function *reboot(action) {
+    const state = yield select();
+    const progress = OTASelectors.getProgress(state);
+    if (progress === 100 && action.state === 'DEVICE_DISCONNECTING') {
+        // success
+
+        // analytics
+        logOTAAnalytics(state, 'firmware_install_reboot');
+
+        // alert
+        Alert.alert(`Firmware uploaded, rebooting device`);
+
+        // TODO: problem, a disconnect is going to happen, this may cause a double alert because the reconnect checks for installing state, not download ready
+        // change action
+        yield put({
+            type: OTA_DOWNLOAD_READY,
+        });
+    } else if (action.state === 'DFU_COMPLETED') {
+        console.tron.log(`Firmware install success`);
+        Alert.alert(`Firmware successfully installed`);
+        logOTAAnalytics(state, 'firmware_install_succeeded');
     }
 }
 

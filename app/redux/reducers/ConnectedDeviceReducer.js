@@ -8,7 +8,6 @@ import {
     CONNECTING_TO_DEVICE,
     CONNECTED_TO_DEVICE,
     RECONNECTING_TO_DEVICE,
-    INSTALL_OTA_SUCCEEDED,
     END_WORKOUT,
 } from 'app/configs+constants/ActionTypes';
 
@@ -89,12 +88,6 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
             return Object.assign({}, state, {
                 isReconnecting: true,
             });
-        case INSTALL_OTA_SUCCEEDED:
-            return {
-                ...state,
-                apiFormatVersion: action.apiFormatVersion,
-                firmwareVersion: action.firmwareVersion,
-            };
         case END_WORKOUT:
             return Object.assign({}, state, {
                 numReconnects: 0,

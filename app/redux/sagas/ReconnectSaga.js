@@ -7,6 +7,7 @@ import {
     STOP_RECONNECT
 } from 'app/configs+constants/ActionTypes';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
+import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as Analytics from 'app/services/Analytics';
 
 const ReconnectSaga = function * ReconnectSaga() {
@@ -31,12 +32,14 @@ function* executeReconnect() {
             reconnectDevice = action.deviceName;
         }
 
-        // alert
-        Alert.alert("Reconnecting!", "It looks like you disconnected, make sure your phone is within range and reduce interference from other bluetooth devices.");
-
         // analytics
         const state = yield select();
         logAttemptReconnectAnalytics(state);
+
+        // alert
+        if (!OTASelectors.getIsInstalling(state)) {
+            Alert.alert("Reconnecting!", "It looks like you disconnected, make sure your phone is within range and reduce interference from other bluetooth devices.");
+        }
 
         // set reconnect mode and scan
         yield put(DeviceActionCreators.reconnectingToDevice(reconnectDevice));

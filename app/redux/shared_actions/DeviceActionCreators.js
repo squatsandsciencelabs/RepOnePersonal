@@ -132,7 +132,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
     });
 };
 
-export const disconnectDevice = (performAction=true) => (dispatch, getState) => {
+export const disconnectDevice = (performAction=true) => async (dispatch, getState) => {
     const state = getState();
     const deviceId = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
     if (!deviceId) {
@@ -147,13 +147,17 @@ export const disconnectDevice = (performAction=true) => (dispatch, getState) => 
         return;
     }
 
-    BleManager.disconnect(deviceId);
+    try {
+        await BleManager.disconnect(deviceId);
 
-    if (performAction) {
-        dispatch({
-            type: DISCONNECT_DEVICE,
-            deviceId,
-        });
+        if (performAction) {
+            dispatch({
+                type: DISCONNECT_DEVICE,
+                deviceId,
+            });
+        }
+    } catch (err) {
+        console.tron.log(`Error disconnected device? ${err}`);
     }
 };
 

@@ -31,8 +31,8 @@ const Sagas = function* Sagas(dispatch) {
         SurveySaga(),
         InitializedAnalyticsSaga(),
         OneRMAnalyticsSaga(),
-        OTASaga(),
-        // VelocityThresholdSaga()),
+        OTASaga(dispatch),
+        // VelocityThresholdSaga(),
     ]);
 };
 
