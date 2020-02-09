@@ -67,10 +67,12 @@ function *checkOTA(dispatch, action) {
         // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
     }
 
-    // get url
+    // get url and description
     const fbconfig = firebase.config();
-    const snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_version']);
+    let snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_version']);
     const firmwareVersion = snapshot.val();
+    snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_description']);
+    const firmwareDescription = snapshot.val();
 
     // check version against disk
     const currentVersion = yield select(OTASelectors.getFirmwareVersion);
@@ -83,6 +85,7 @@ function *checkOTA(dispatch, action) {
         yield put({
             type: OTA_DOWNLOAD_AVAILABLE,
             firmwareVersion,
+            firmwareDescription,
         });
         const state = yield select();
         logOTAAnalytics(state, 'new_firmware_available');

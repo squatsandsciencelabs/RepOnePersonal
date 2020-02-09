@@ -72,7 +72,7 @@ class SettingsOTAPanel extends Component {
                 </View>
                 <View style={{paddingTop: 10, paddingBottom: 16}}>
                     <Text style={ styles.description }>
-                        The latest version is <Text style={{fontWeight: "bold"}}>{this.props.firmwareVersion}</Text>
+                        The latest version is <Text style={{fontWeight: "bold"}}>{this.props.firmwareVersion}</Text>. {this.props.firmwareDescription}
                     </Text>
                     {deviceFirmwareText}
                 </View>

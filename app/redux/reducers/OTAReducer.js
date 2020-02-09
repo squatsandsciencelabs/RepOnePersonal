@@ -27,6 +27,7 @@ export const OTAStatus = {
 // device can be obtained from the deviceReducer
 const defaultState = {
     firmwareVersion: "0.0.1",
+    firmwareDescription: '',
     progress: 0, // 0-100
 
     // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING,
@@ -41,6 +42,7 @@ const OTAReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 firmwareVersion: action.firmwareVersion,
+                firmwareDescription: action.firmwareDescription,
                 status: OTAStatus.AVAILABLE,
             };
         case OTA_DOWNLOAD_READY:
