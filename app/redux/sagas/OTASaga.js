@@ -199,7 +199,7 @@ function *reboot(action) {
         });
     } else if (action.state === 'DFU_COMPLETED') {
         console.tron.log(`Firmware install success`);
-        Alert.alert(`Firmware successfully installed`);
+        // Alert.alert(`Firmware successfully installed`);
         logOTAAnalytics(state, 'firmware_install_succeeded');
     }
 }
