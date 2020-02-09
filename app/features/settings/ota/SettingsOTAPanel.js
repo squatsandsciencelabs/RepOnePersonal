@@ -58,7 +58,11 @@ class SettingsOTAPanel extends Component {
 
     // TODO: bold the version numbers
     render() {
-        const deviceFirmwareText = this.props.deviceFirmwareVersion ? `The connected RepOne unit is version ${this.props.deviceFirmwareVersion}` : 'Connect a device to compare versions';
+        let deviceFirmwareText = <Text style={ styles.description }>Connect a device to compare versions</Text>;
+        if (this.props.deviceFirmwareVersion) {
+            deviceFirmwareText = <Text style={ styles.description }>The connected RepOne unit is version <Text style={{fontWeight: "bold"}}>${this.props.deviceFirmwareVersion}</Text></Text>
+        }
+
         return (
             <View style={ [SETTINGS_PANEL_STYLES.panel, { flex: 1 }] }>
                 <View style={ SETTINGS_PANEL_STYLES.header }>
@@ -68,11 +72,9 @@ class SettingsOTAPanel extends Component {
                 </View>
                 <View style={{paddingTop: 10, paddingBottom: 16}}>
                     <Text style={ styles.description }>
-                        The latest version is {this.props.firmwareVersion}
+                        The latest version is <Text style={{fontWeight: "bold"}}>{this.props.firmwareVersion}</Text>
                     </Text>
-                    <Text style={ styles.description }>
-                        {deviceFirmwareText}
-                    </Text>
+                    {deviceFirmwareText}
                 </View>
                 {this._renderContents()}
             </View>
