@@ -5,7 +5,7 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 class SettingsOTAReadyPanel extends Component {
 
     render() {
-        const install = this.props.connectedDevice ? (<View>
+        const install = this.props.connectedDevice && this.props.deviceFirmwareVersion ? (<View>
             <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50, marginTop: 12, marginBottom: 16 }]}
                 onPress={this.props.install.bind(this)}>
                 <Text style={SETTINGS_PANEL_STYLES.buttonText}>Install on RepOne #{this.props.connectedDevice}</Text>
