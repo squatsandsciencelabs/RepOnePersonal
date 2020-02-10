@@ -1,7 +1,7 @@
 // TODO: Refactor this so that the panels are screens rather than passing props manually
 
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { OTAStatus } from 'app/redux/reducers/OTAReducer';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
@@ -19,6 +19,7 @@ class SettingsOTAPanel extends Component {
                 return <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
+                        firmwareDescription={this.props.firmwareDescription}
                         download={this.props.download}
                         />;
             case OTAStatus.DOWNLOADING:
@@ -58,11 +59,6 @@ class SettingsOTAPanel extends Component {
 
     // TODO: bold the version numbers
     render() {
-        let deviceFirmwareText = <Text style={ styles.description }>Connect a device to compare versions</Text>;
-        if (this.props.deviceFirmwareVersion) {
-            deviceFirmwareText = <Text style={ styles.description }>The connected RepOne unit is version <Text style={{fontWeight: "bold"}}>${this.props.deviceFirmwareVersion}</Text></Text>
-        }
-
         return (
             <View style={ [SETTINGS_PANEL_STYLES.panel, { flex: 1 }] }>
                 <View style={ SETTINGS_PANEL_STYLES.header }>
@@ -70,24 +66,10 @@ class SettingsOTAPanel extends Component {
                         Update Firmware
                     </Text>
                 </View>
-                <View style={{paddingTop: 10, paddingBottom: 16}}>
-                    <Text style={ styles.description }>
-                        The latest version is <Text style={{fontWeight: "bold"}}>{this.props.firmwareVersion}</Text>. {this.props.firmwareDescription}
-                    </Text>
-                    {deviceFirmwareText}
-                </View>
                 {this._renderContents()}
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    description: {
-        textAlign: 'left',
-        color: 'rgba(77, 77, 77, 1)',
-        fontSize: 14,
-    },
-});
 
 export default SettingsOTAPanel;
