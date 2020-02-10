@@ -9,6 +9,7 @@ import {
 import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
 import { Alert } from 'react-native';
+import BleManager from 'react-native-ble-manager';
 
 import { 
     CONFIG_READY,
@@ -162,6 +163,7 @@ function *startInstall(action) {
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
 
     try {
+        await BleManager.stopNotification(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
         yield apply(NordicDFU, NordicDFU.startDFU, [{
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
             filePath,
@@ -177,6 +179,11 @@ function *startInstall(action) {
             yield put({
                 type: OTA_DOWNLOAD_READY,
             });
+            try {
+                await BleManager.startNotification(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
+            } catch(err) {
+                console.tron.log(`Error attempting to restart rep notifications after failed dfu ${err}`);
+            }
         } else {
             console.tron.log(`ignore installation failure as this is a reboot`);
         }
