@@ -3,6 +3,7 @@
 import {
     NativeModules,
     NativeEventEmitter,
+    Alert,
 } from 'react-native';
 import BleManager  from 'react-native-ble-manager';
 
