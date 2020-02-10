@@ -113,7 +113,7 @@ export const numUsableReps = (set) => usableReps(set).length;
 
 // NOTE: this considers infinity / 0 invalid
 export const isRepUsable = (rep) => {
-    if (!rep.isValid || !rep.data) {
+    if (!rep.isValid) {
         return false;
     }
     const velocity = rep.averageVelocity / 1000; // this should always return a string
