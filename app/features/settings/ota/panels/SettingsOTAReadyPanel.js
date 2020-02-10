@@ -11,13 +11,13 @@ class SettingsOTAReadyPanel extends Component {
                 <Text style={SETTINGS_PANEL_STYLES.buttonText}>Install on RepOne #{this.props.connectedDevice}</Text>
             </TouchableOpacity>
             <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, {textAlign: 'left'}] }>
-                The connected RepOne unit is <Text style={{fontWeight: "bold"}}>Version 2.0</Text>
+                The connected RepOne unit is <Text style={{fontWeight: "bold", fontSize: 13}}>Version {this.props.deviceFirmwareVersion}</Text>
             </Text>
-            <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, {textAlign: 'left'}] }>
+            <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, {textAlign: 'left', color: 'gray', fontSize: 13, marginTop: 3}] }>
                 To install on another RepOne unit, connect to it below.
             </Text>
         </View>) : (
-            <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, {textAlign: 'left', paddingTop: 10, paddingBottom: 15 }] }>
+            <Text style={ [SETTINGS_PANEL_STYLES.subtitleText, {textAlign: 'left', color: 'gray', fontSize: 13, paddingTop: 10, paddingBottom: 15 }] }>
                 To install on a RepOne unit, connect to it below.
             </Text>
         );
