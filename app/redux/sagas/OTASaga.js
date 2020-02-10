@@ -163,7 +163,7 @@ function *startInstall(action) {
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
 
     try {
-        await BleManager.stopNotification(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
+        yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273'])
         yield apply(NordicDFU, NordicDFU.startDFU, [{
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
             filePath,
@@ -180,7 +180,7 @@ function *startInstall(action) {
                 type: OTA_DOWNLOAD_READY,
             });
             try {
-                await BleManager.startNotification(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
+                yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273'])
             } catch(err) {
                 console.tron.log(`Error attempting to restart rep notifications after failed dfu ${err}`);
             }
