@@ -424,7 +424,6 @@ const setWithUpdatedRep = (set, repIndex, removed) => {
     let rep = set.reps[repIndex];
     let newRep = Object.assign({}, rep, {
         removed: removed,
-        data: [...rep.data]
     });
 
     // reps
