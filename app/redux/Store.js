@@ -72,7 +72,7 @@ export default initializeStore = () => {
             createFilter('appState', ['multiTaskCounter', 'lockedCounter']),
             createFilter('connectedDevice', ['numDisconnects', 'numReconnects']),
             createFilter('survey', ['surveyURL', 'completedSurveyURLs', 'optedOutEndWorkoutPromptSurveyURLs']),
-            createFilter('ota', ['firmwareVersion']),
+            createFilter('ota', ['firmwareVersion, firmwareDescription']),
         ]}, async (fsError, fsResult) => {
             // Android filesystem migration
             // See https://github.com/rt2zz/redux-persist/issues/679 for details
