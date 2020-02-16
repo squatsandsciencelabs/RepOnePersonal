@@ -44,18 +44,14 @@ const AuthSaga = function * AuthSaga() {
         yield cancel(reauthenticateTask);
         try {
             // reset and logout
-            console.tron.log(`reset analytics userid`);
             Analytics.setUserID();
-            console.tron.log(`checking is signed in for logout`);
             const isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
             if (isSignedIn) {
-                console.tron.log(`is signed in, now attempting to revoke access and sign out`);
                 yield apply(GoogleSignin, GoogleSignin.revokeAccess);
                 yield apply(GoogleSignin, GoogleSignin.signOut);
             }
 
             // analytics
-            console.tron.log(`attempt logLogoutAnalytics`);
             const state = yield select();
             logLogoutAnalytics(state);
         } catch(error) {
@@ -116,51 +112,35 @@ function* executeLogin() {
         yield take(LOGIN_REQUEST);
 
         // sign into google
-        console.tron.log(`yield selecting state`);
         let state = yield select();
-        console.tron.log(`log attempt login goole analytics`);
         logAttemptLoginGoogleAnalytics(state);
-        console.tron.log(`check googlesignin has play services`);
-        const hasPlayServices = yield apply(GoogleSignin, GoogleSignin.hasPlayServices);
-        console.tron.log(`result googlesignin has play services ${hasPlayServices}, now trying to sign in`);
+        yield apply(GoogleSignin, GoogleSignin.hasPlayServices);
         const userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
-        console.tron.log(`successful google sign in, setting user info to analytics`);
 
         // sign into our servers
         Analytics.setUserID(userInfo.user.id);
-        console.tron.log(`yield selecting state`);
         state = yield select();
-        console.tron.log(`logAttemptLoginOpenBarbellAnalytics`);
         logAttemptLoginOpenBarbellAnalytics(state);
-        console.tron.log(`attempt to log into the API`);
         let json = yield call(API.login, userInfo.idToken);
 
         // success
-        console.tron.log(`about to put action for login succeeded`);
         yield put(AuthActionCreators.loginSucceeded(json.accessToken, json.refreshToken, userInfo.user.email, new Date(), json.revision, json.sets));
-        console.tron.log(`yield selecting state`);
         state = yield select();
-        console.tron.log(`logLoginAnalytics`);
         logLoginAnalytics(state);
     } catch(error) {
         console.tron.log("ERROR CODE " + error.code + " ERROR " + error);
         let state = yield select();
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // previously -5 is iOS cancel and 12501 is Android cancel
-            console.tron.log(`logCancelLoginAnalytics`);
             logCancelLoginAnalytics(state);
         } else {
-            console.tron.log(`alert and logLoginErrorAnalytics`);
             showSignInErrorAlert();
             logLoginErrorAnalytics(state, error);
         }
         // TODO: consider adding "in progress" error and play services not available specific error
-        console.tron.log(`error now causes logout action`);
         yield put(AuthActionCreators.logout());
     } finally {
-        console.tron.log(`finally check`);
         if (yield cancelled()) {
-            console.tron.log(`it was canceled, put the logout action`);
             // TODO: Fix double logout on errors
             // Login Error causes a logout, which will cause a cancel of login, which then causes a second logout
             // not a big deal as it's an edge case, but would be nice to fix
