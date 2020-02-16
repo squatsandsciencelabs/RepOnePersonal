@@ -2,7 +2,7 @@ import Reactotron from 'reactotron-react-native';
 import { reactotronRedux } from 'reactotron-redux';
 import sagaPlugin from 'reactotron-redux-saga';
 
-if (__DEV__) {
+// if (__DEV__) {
     // development, enable reactotron
     Reactotron
     .configure({
@@ -14,9 +14,9 @@ if (__DEV__) {
     .connect() // let's connect!
 
     console.tron = Reactotron
-} else {
-    // production, remove tron logs
-    console.tron = {};
-    console.tron.log = () => {};
-    console.tron.display = () => {};
-}
+// } else {
+//     // production, remove tron logs
+//     console.tron = {};
+//     console.tron.log = () => {};
+//     console.tron.display = () => {};
+// }

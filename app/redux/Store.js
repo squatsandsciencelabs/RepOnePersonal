@@ -21,7 +21,7 @@ import * as Analytics from 'app/services/Analytics';
 
 export default initializeStore = () => {
     // create the store
-    if (__DEV__) {
+    // if (__DEV__) {
         // reactotron development mode
         const sagaMonitor = Reactotron.createSagaMonitor();
         var sagaMiddleware = createSagaMiddleware({sagaMonitor});
@@ -32,16 +32,16 @@ export default initializeStore = () => {
         const enhancers = compose(middlewares, Reactotron.createEnhancer(), autoRehydrate());
         var store = createStore(reducers, enhancers);
         Reactotron.setReduxStore(store);
-    } else {
-        // release mode
-        var sagaMiddleware = createSagaMiddleware();
-        const middlewares = applyMiddleware(
-            thunk,
-            sagaMiddleware
-        );
-        const enhancers = compose(middlewares, autoRehydrate());        
-        var store = createStore(reducers, enhancers);
-    }
+    // } else {
+    //     // release mode
+    //     var sagaMiddleware = createSagaMiddleware();
+    //     const middlewares = applyMiddleware(
+    //         thunk,
+    //         sagaMiddleware
+    //     );
+    //     const enhancers = compose(middlewares, autoRehydrate());        
+    //     var store = createStore(reducers, enhancers);
+    // }
 
     // run sagas
     sagaMiddleware.run(Sagas, store.dispatch);
