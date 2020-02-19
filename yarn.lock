@@ -7250,6 +7250,11 @@ react-native-safe-area-context@^5.6.2:
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.6.2.tgz#283e006f5b434fb247fcb4be0971ad7473d5c560"
   integrity sha512-4XGqMNj5qjUTYywJqpdWZ9IG8jgkS3h06sfVjfw5yZQZfWnRFXczi0GnYyFyCc2EBps/qFmoCH8fez//WumdVg==
 
+react-native-share@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-11.1.0.tgz#cd24b1f2de0bb701aa7e1a4ff81e68308f0a42b2"
+  integrity sha512-kcpBR90d5//xc8H84HnX6YFeOk4A34mtHz4UEpb7Twbu049KafJwsp4KVVr/SrJwy8W0/Rbe880En9Hq0REamw==
+
 react-native-sound@^0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.13.0.tgz#ec8a5436ea748c5888dfbef6e39d8a27e97e8aac"
