@@ -15,6 +15,7 @@ import ReconnectSaga from './ReconnectSaga';
 // import OneRMAnalyticsSaga from './OneRMAnalyticsSaga';
 import VelocityThresholdSaga from './VelocityThresholdSaga';
 import OTASaga from './OTASaga';
+import ExportCSVSaga from './ExportCSVSaga';
 
 const Sagas = function* Sagas(dispatch) {
     yield all([
@@ -33,6 +34,7 @@ const Sagas = function* Sagas(dispatch) {
         // OneRMAnalyticsSaga(),
         OTASaga(dispatch),
         // VelocityThresholdSaga(),
+        ExportCSVSaga(),
     ]);
 };
 

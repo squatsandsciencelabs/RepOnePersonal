@@ -406,6 +406,7 @@ const mapDispatchToProps = (dispatch) => {
         restoreSet: Actions.restoreSet,
         finishLoading: Actions.finishLoading,
         presentHistoryFilter: Actions.presentHistoryFilter,
+        exportCSV: Actions.exportCSV,
     }, dispatch);
 };
 
