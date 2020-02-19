@@ -22,6 +22,8 @@ export const convert = (sets) => {
     var rest = null;
 
     for (set of sets) {
+        const exercise = replaceNonLatinChars(set.exercise);
+
         // calculate workoutstarttime
         if (lastWorkout === null || lastWorkout !== set.workoutID) {
             lastWorkout = set.workoutID;
@@ -32,12 +34,12 @@ export const convert = (sets) => {
         }
 
         // calculate setcount
-        if (lastExercise !== null && lastExercise === set.exercise) {
+        if (lastExercise !== null && lastExercise === exercise) {
             setCount += 1;
         } else {
             setCount = 1;
         }
-        lastExercise = set.exercise;
+        lastExercise = exercise;
 
         // calculate rest time
         if (lastSetEndTime !== null) {
@@ -51,13 +53,13 @@ export const convert = (sets) => {
         // reps
         let reps = SetUtils.validUnremovedReps(set);
         if (set.tags) {
-            var tags = set.tags.join();
+            var tags = replaceNonLatinChars(set.tags.join());
         } else {
             var tags = '';
         }
 
         reps.forEach((rep, index, array) => {
-            output += escapeDoubleQuote(set.exercise) + ',';
+            output += escapeDoubleQuote(exercise) + ',';
             output += setCount + ',';
             output += (index + 1) + ',';
             output += escapeDoubleQuote(set.weight) + ',';
@@ -75,6 +77,13 @@ export const convert = (sets) => {
     }
     return output;
 };
+
+const replaceNonLatinChars = (value) => {
+    if (typeof(value) === 'string' || value instanceof String) {
+        return value.replace(/[^\0-\xFF]/g, "");
+    }
+    return value;
+}
 
 const escapeDoubleQuote = (value) => {
     if (typeof(value) === 'string' || value instanceof String) {
