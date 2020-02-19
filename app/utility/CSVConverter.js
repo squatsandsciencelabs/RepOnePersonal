@@ -36,6 +36,8 @@ export const convert = data => {
     let rest = null;
 
     for (const set of sets) {
+        const exercise = replaceNonLatinChars(set.exercise);
+
         // calculate workoutstarttime
         if (lastWorkout === null || lastWorkout !== set.workoutID) {
             lastWorkout = set.workoutID;
@@ -48,12 +50,12 @@ export const convert = data => {
         }
 
         // calculate setcount
-        if (lastExercise !== null && lastExercise === set.exercise) {
+        if (lastExercise !== null && lastExercise === exercise) {
             setCount += 1;
         } else {
             setCount = 1;
         }
-        lastExercise = set.exercise;
+        lastExercise = exercise;
 
         // calculate rest time
         if (lastSetEndTime !== null) {
@@ -72,13 +74,14 @@ export const convert = data => {
         let tags = '';
 
         if (set.tags) {
-            tags = set.tags.join();
+            tags = replaceNonLatinChars(set.tags.join());
         }
 
         if (isKratosEnabled) {
             reps.forEach((rep, index) => {
                 output += getCommonData(
                     set,
+                    exercise,
                     index,
                     setCount,
                     tags,
@@ -118,6 +121,7 @@ export const convert = data => {
             reps.forEach((rep, index) => {
                 output += getCommonData(
                     set,
+                    exercise,
                     index,
                     setCount,
                     tags,
@@ -136,10 +140,10 @@ export const convert = data => {
     return output;
 };
 
-const getCommonData = (set, index, setCount, tags, workoutStartTime, rest) => {
+const getCommonData = (set, exercise, index, setCount, tags, workoutStartTime, rest) => {
     let output = '';
 
-    output += escapeDoubleQuote(set.exercise) + ',';
+    output += escapeDoubleQuote(exercise) + ',';
     output += setCount + ',';
     output += index + 1 + ',';
     output += escapeDoubleQuote(set.weight) + ',';
@@ -151,6 +155,13 @@ const getCommonData = (set, index, setCount, tags, workoutStartTime, rest) => {
 
     return output;
 };
+
+const replaceNonLatinChars = (value) => {
+    if (typeof(value) === 'string' || value instanceof String) {
+        return value.replace(/[^\0-\xFF]/g, "");
+    }
+    return value;
+}
 
 const escapeDoubleQuote = value => {
     if (typeof value === 'string' || value instanceof String) {

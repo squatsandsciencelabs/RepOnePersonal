@@ -161,6 +161,17 @@ class HistoryList extends Component {
         const filterTitle = this.props.isFiltering ? 'Edit Filters' : 'Add Filters';
 
         return (
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#959595', }}>
+                <TouchableOpacity onPress={ () => this.props.presentHistoryFilter() }>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', fontSize: 18, color: 'rgba(47, 128, 237, 1)', paddingTop: 15, paddingBottom: 15, paddingLeft: 10 }}>{filterTitle}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={ () => this.props.exportCSV() }>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', fontSize: 18, color: 'rgba(47, 128, 237, 1)', paddingTop: 15, paddingBottom: 15, paddingRight: 10 }}>Export Data</Text>
+                </TouchableOpacity>
+            </View>
+        );
+
+        return (
             <TouchableOpacity onPress={ () => this.props.presentHistoryFilter() }>
                 <View style={{borderBottomWidth: 1, borderBottomColor: '#959595'}}>
                     <Text style={{ textAlign: 'center', paddingTop: 10, paddingBottom: 10, fontSize: 15, fontWeight: 'bold', fontSize: 18, color: 'rgba(47, 128, 237, 1)' }}>{filterTitle}</Text>

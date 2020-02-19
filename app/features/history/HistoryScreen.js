@@ -357,6 +357,7 @@ const mapDispatchToProps = (dispatch) => {
         open3D: Actions.open3D,
         finishLoading: Actions.finishLoading,
         presentHistoryFilter: Actions.presentHistoryFilter,
+        exportCSV: Actions.exportCSV,
     }, dispatch);
 };
 

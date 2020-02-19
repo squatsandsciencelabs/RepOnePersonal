@@ -41,6 +41,7 @@
     "react-native-permissions": "^3.3.1",
     "react-native-progress": "^5.0.0",
     "react-native-root-toast": "^3.3.1",
+    "react-native-share": "^7.3.7",
     "react-native-sound": "^0.11.2",
     "react-native-svg": "^12.3.0",
     "react-native-tab-view": "^3.3.4",

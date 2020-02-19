@@ -7754,6 +7754,11 @@ react-native-root-toast@^3.3.1:
     prop-types "^15.5.10"
     react-native-root-siblings "^4.0.0"
 
+react-native-share@^7.3.7:
+  version "7.9.1"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-7.9.1.tgz#36d1cb9786c58ba14ae31cc72f10b3179a045953"
+  integrity sha512-v4b6lD4YsiCJB14kjXons+d5cvvxgLv8OdBF0aP58X8Qqbcj81QNv1icAxiNmhxFx5OFYsu/E6v+o8S0GSaneQ==
+
 react-native-sound@^0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.11.2.tgz#e542dc5b9e16ab4b3ac7e6eaddb1fc8d98da9038"
