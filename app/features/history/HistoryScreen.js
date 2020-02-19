@@ -469,6 +469,7 @@ const mapDispatchToProps = dispatch => {
             presentHistoryFilter: Actions.presentHistoryFilter,
             selectRow: Actions.selectRow,
             deselectRow: Actions.deselectRow,
+            exportCSV: Actions.exportCSV,
         },
         dispatch,
     );
