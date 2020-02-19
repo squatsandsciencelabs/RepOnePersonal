@@ -29,7 +29,7 @@ import SetSummary from 'app/shared_features/set_card/collapsed/SetSummary';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
 import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
-import WorkoutLoginBannerView from './login_banner/WorkoutLoginBannerView';
+// import WorkoutLoginBannerView from './login_banner/WorkoutLoginBannerView';
 
 class WorkoutList extends Component {
 
@@ -62,7 +62,8 @@ class WorkoutList extends Component {
         const sets = this.props.sets;
         const currentSetIndex = (this.props.sets.length) - 1;
         const set = sets[currentSetIndex];
-        const marginTop = this.props.isLoggedIn ? 0 : 40;
+        // const marginTop = this.props.isLoggedIn ? 0 : 40;
+        const marginTop = 0;
 
         // if there is no set data show disabled add set button
         if (section.key === 0) {
@@ -223,7 +224,7 @@ class WorkoutList extends Component {
                     {list}
                 </View>
 
-                {this._renderLoginBanner()}
+                {/* {this._renderLoginBanner()} */}
 
                 <View style={{height: 50}}>
                     <WorkoutBottomBarScreen />

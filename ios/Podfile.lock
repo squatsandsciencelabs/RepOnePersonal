@@ -1,17 +1,9 @@
 PODS:
-  - AppAuth (1.3.0):
-    - AppAuth/Core (= 1.3.0)
-    - AppAuth/ExternalUserAgent (= 1.3.0)
-  - AppAuth/Core (1.3.0)
-  - AppAuth/ExternalUserAgent (1.3.0)
   - boost-for-react-native (1.63.0)
   - Charts (3.3.0):
     - Charts/Core (= 3.3.0)
   - Charts/Core (3.3.0)
-  - Crashlytics (3.14.0):
-    - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.6)
-  - Fabric (1.10.2)
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
     - Folly (= 2018.10.22.00)
@@ -20,55 +12,6 @@ PODS:
     - React-Core (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/turbomodule/core (= 0.61.5)
-  - Firebase/Analytics (6.3.0):
-    - Firebase/Core
-  - Firebase/Core (6.3.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (= 6.0.2)
-  - Firebase/CoreOnly (6.3.0):
-    - FirebaseCore (= 6.0.3)
-  - Firebase/Messaging (6.3.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (~> 4.1.0)
-  - Firebase/RemoteConfig (6.3.0):
-    - Firebase/CoreOnly
-    - FirebaseRemoteConfig (~> 4.1.0)
-  - FirebaseABTesting (3.0.0):
-    - FirebaseCore (~> 6.0)
-    - Protobuf (~> 3.5)
-  - FirebaseAnalytics (6.0.2):
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.2)
-    - GoogleAppMeasurement (= 6.0.2)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 0.3)
-  - FirebaseAnalyticsInterop (1.5.0)
-  - FirebaseCore (6.0.3):
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/Logger (~> 6.0)
-  - FirebaseInstanceID (4.2.7):
-    - FirebaseCore (~> 6.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/UserDefaults (~> 6.0)
-  - FirebaseMessaging (4.1.1):
-    - FirebaseAnalyticsInterop (~> 1.1)
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
-    - GoogleUtilities/Environment (~> 6.2)
-    - GoogleUtilities/Reachability (~> 6.2)
-    - GoogleUtilities/UserDefaults (~> 6.2)
-    - Protobuf (~> 3.1)
-  - FirebaseRemoteConfig (4.1.0):
-    - FirebaseABTesting (~> 3.0)
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.2)
-    - GoogleUtilities/Environment (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - Protobuf (~> 3.5)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -79,50 +22,8 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - GoogleAppMeasurement (6.0.2):
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 0.3)
-  - GoogleIDFASupport (3.14.0)
-  - GoogleSignIn (5.0.2):
-    - AppAuth (~> 1.2)
-    - GTMAppAuth (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (6.5.1):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.5.1)
-  - GoogleUtilities/Logger (6.5.1):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.5.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.5.1):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.5.1)"
-  - GoogleUtilities/Reachability (6.5.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.5.1):
-    - GoogleUtilities/Logger
-  - GTMAppAuth (1.0.0):
-    - AppAuth/Core (~> 1.0)
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.3.1):
-    - GTMSessionFetcher/Full (= 1.3.1)
-  - GTMSessionFetcher/Core (1.3.1)
-  - GTMSessionFetcher/Full (1.3.1):
-    - GTMSessionFetcher/Core (= 1.3.1)
   - iOSDFULibrary (4.6.1):
     - ZIPFoundation (= 0.9.9)
-  - nanopb (0.3.9011):
-    - nanopb/decode (= 0.3.9011)
-    - nanopb/encode (= 0.3.9011)
-  - nanopb/decode (0.3.9011)
-  - nanopb/encode (0.3.9011)
   - Permission-BluetoothPeripheral (2.0.8):
     - RNPermissions
   - Permission-Camera (2.0.8):
@@ -133,7 +34,6 @@ PODS:
     - RNPermissions
   - Permission-PhotoLibrary (2.0.8):
     - RNPermissions
-  - Protobuf (3.11.4)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -326,8 +226,6 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (8.0.2):
-    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -373,19 +271,7 @@ PODS:
     - SwiftyJSON (= 5.0)
   - RNDeviceInfo (5.4.0):
     - React
-  - RNFirebase (5.6.0):
-    - Firebase/Core
-    - React
-    - RNFirebase/Crashlytics (= 5.6.0)
-  - RNFirebase/Crashlytics (5.6.0):
-    - Crashlytics
-    - Fabric
-    - Firebase/Core
-    - React
   - RNGestureHandler (1.5.2):
-    - React
-  - RNGoogleSignin (3.0.3):
-    - GoogleSignIn (~> 5.0.0)
     - React
   - RNPermissions (2.0.8):
     - React
@@ -406,13 +292,8 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
-  - Firebase/Analytics (~> 6.3.0)
-  - Firebase/Core (~> 6.3.0)
-  - Firebase/Messaging (~> 6.3.0)
-  - Firebase/RemoteConfig (~> 6.3.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - GoogleIDFASupport
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
@@ -438,7 +319,6 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-video (from `../node_modules/react-native-video`)
-  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -454,10 +334,7 @@ DEPENDENCIES:
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNCharts (from `../node_modules/react-native-charts-wrapper`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
-  - RNFirebase (from `../node_modules/react-native-firebase/ios`)
-  - RNFirebase/Crashlytics (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNSound (from `../node_modules/react-native-sound`)
@@ -465,30 +342,12 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
-    - AppAuth
+  https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
     - Charts
-    - Crashlytics
-    - Fabric
-    - Firebase
-    - FirebaseABTesting
-    - FirebaseAnalytics
-    - FirebaseAnalyticsInterop
-    - FirebaseCore
-    - FirebaseInstanceID
-    - FirebaseMessaging
-    - FirebaseRemoteConfig
-    - GoogleAppMeasurement
-    - GoogleIDFASupport
-    - GoogleSignIn
-    - GoogleUtilities
-    - GTMAppAuth
-    - GTMSessionFetcher
-    - iOSDFULibrary
-    - nanopb
-    - Protobuf
     - SwiftyJSON
+  trunk:
+    - iOSDFULibrary
     - ZIPFoundation
 
 EXTERNAL SOURCES:
@@ -548,8 +407,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-version-check"
   react-native-video:
     :path: "../node_modules/react-native-video"
-  react-native-webview:
-    :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -578,12 +435,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-charts-wrapper"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
-  RNFirebase:
-    :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNGoogleSignin:
-    :path: "../node_modules/@react-native-community/google-signin"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -596,38 +449,19 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
-  Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
-  FirebaseABTesting: a32c488eb75089a61eb3d86db061dfb909d765db
-  FirebaseAnalytics: 470ddab7253b21ad5a40bebd4a9903d7ae19386a
-  FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
-  FirebaseCore: 68f8a7f50cdae542715d4e86afa37c4067217dcb
-  FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
-  FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
-  FirebaseRemoteConfig: 7c64ecec5ca63d7c6b304509c3a6f9a036d403d4
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  GoogleAppMeasurement: a35a645835bae31b6bdc0576396bc23908f12a22
-  GoogleIDFASupport: aaf8c10bd429abb1c15349d5252244f5eda8ead1
-  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GoogleUtilities: 06eb53bb579efe7099152735900dd04bf09e7275
-  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
-  GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   iOSDFULibrary: 3053cf01eaabec37dc7372fb77ae4a218b577c55
-  nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Permission-BluetoothPeripheral: 425fda0e17a4bf5e28aee8c1f195c45a024e81ad
   Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
   Permission-Microphone: 49c91ea622029b8c36a6ecfb65482cf4c513b53c
   Permission-Notifications: 0722c1cd783b86d2ae77a1a0c925d525f9170e7d
   Permission-PhotoLibrary: c15c7245aeb74aff3ad5edf70ce34adbcf02541b
-  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -646,7 +480,6 @@ SPEC CHECKSUMS:
   react-native-slider: 3a1cfd00c9c31068251b536822f7192e8d1d6b6f
   react-native-version-check: 1a4db2e0240e4df8c4543b1a54aff44a01f9a8c7
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: 99bdfd6c189772b0f15494f728430c23b18b93e4
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -661,9 +494,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
   RNDeviceInfo: c7b1dc457611b9231bb780a882102e2c93edc7af
-  RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
-  RNGoogleSignin: a10b849c165088c737d4465de6c2062f24d06002
   RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
@@ -672,6 +503,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZIPFoundation: 89df685c971926b0323087952320bdfee9f0b6ef
 
-PODFILE CHECKSUM: f2b481f29bd599ef188965e679b08defb82f7600
+PODFILE CHECKSUM: 176512224ad7808081da8e42aba427659d525e15
 
 COCOAPODS: 1.9.3

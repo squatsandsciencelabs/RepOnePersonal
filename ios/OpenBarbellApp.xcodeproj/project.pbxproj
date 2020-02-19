@@ -12,7 +12,6 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		162503D723B33C11008BE9B7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 162503D623B33C11008BE9B7 /* GoogleService-Info.plist */; };
 		162503DA23B34056008BE9B7 /* foobar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162503D923B34056008BE9B7 /* foobar.swift */; };
 		2A363487B766075EEF8B9B6F /* libPods-OpenBarbellApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 105F2A39D5E27F9385756061 /* libPods-OpenBarbellApp.a */; };
 		887BA632099972AC9A5F3DE2 /* libPods-OpenBarbellAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4560145FE23F7804C986C1F8 /* libPods-OpenBarbellAppTests.a */; };
@@ -42,7 +41,6 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = OpenBarbellApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = OpenBarbellApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OpenBarbellApp/main.m; sourceTree = "<group>"; };
-		162503D623B33C11008BE9B7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		162503D823B34055008BE9B7 /* OpenBarbellApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenBarbellApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		162503D923B34056008BE9B7 /* foobar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = foobar.swift; sourceTree = "<group>"; };
 		16A66D0323B42E4400774BC4 /* OpenBarbellApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = OpenBarbellApp.entitlements; path = OpenBarbellApp/OpenBarbellApp.entitlements; sourceTree = "<group>"; };
@@ -96,7 +94,6 @@
 			children = (
 				16A66D0323B42E4400774BC4 /* OpenBarbellApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				162503D623B33C11008BE9B7 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -203,7 +200,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				2FD10FD679EDC0EC3EBA8472 /* [CP] Copy Pods Resources */,
-				1629338A23C43B31007C0403 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -275,7 +271,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				162503D723B33C11008BE9B7 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,23 +291,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		1629338A23C43B31007C0403 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
-		};
 		2FD10FD679EDC0EC3EBA8472 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,7 +298,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OpenBarbellApp/Pods-OpenBarbellApp-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -340,7 +317,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",

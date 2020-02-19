@@ -11,8 +11,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import <RNGoogleSignin/RNGoogleSignin.h>
-#import <Firebase.h>
+// #import <RNGoogleSignin/RNGoogleSignin.h>
+// #import <Firebase.h>
 #import "RNNordicDfu.h"
 
 #import "DeviceUID.h"
@@ -25,7 +25,7 @@
   NSLog(@"%@", [DeviceUID uid]);
   
   // config firebase
-  [FIRApp configure];
+  // [FIRApp configure];
   
   // config dfu
   [RNNordicDfu setCentralManagerGetter:^() {
