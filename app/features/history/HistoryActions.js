@@ -6,6 +6,7 @@ import {
     SHOW_VISUALIZATION_MODAL,
     SELECT_HISTORY_REP_ROW,
     DESELECT_HISTORY_REP_ROW,
+    EXPORTING_CSV,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
@@ -79,6 +80,13 @@ export const open3D = setID => {
     return {
         type: SHOW_VISUALIZATION_MODAL,
         setID,
+    };
+};
+
+export const exportCSV = () => {
+    return {
+        type: EXPORTING_CSV,
+        isExportingCSV: true,
     };
 };
 
