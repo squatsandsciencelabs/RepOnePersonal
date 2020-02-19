@@ -3,6 +3,7 @@ import {
     COLLAPSE_HISTORY_SET,
     EXPAND_HISTORY_SET,
     PRESENT_HISTORY_FILTER,
+    EXPORTING_CSV,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
@@ -39,5 +40,12 @@ export const presentHistoryFilter = () => {
 
     return {
         type: PRESENT_HISTORY_FILTER,
+    };
+};
+
+export const exportCSV = () => {
+    return {
+        type: EXPORTING_CSV,
+        isExportingCSV: true,
     };
 };
