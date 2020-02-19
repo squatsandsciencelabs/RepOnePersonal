@@ -17,7 +17,7 @@ import {
 import { TabView, TabBar } from 'react-native-tab-view';
 import * as Device from 'app/utility/Device';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
-import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
+// import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
 
 class ApplicationView extends Component {
@@ -114,7 +114,7 @@ class ApplicationView extends Component {
                     onIndexChange={(index) => this.props.changeTab(index) }
                 />
 
-                <SurveyModalScreen />
+                {/* <SurveyModalScreen /> */}
 
             </View>
         );

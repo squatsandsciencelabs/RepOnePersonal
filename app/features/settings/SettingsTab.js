@@ -8,10 +8,10 @@ import {
     ListView
 } from 'react-native';
 import SettingsHelpScreen from './help/SettingsHelpScreen';
-import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
+// import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
 import SettingsOTAScreen from './ota/SettingsOTAScreen';
 import SettingsDeviceScreen from './device/SettingsDeviceScreen';
-import SettingsAccountScreen from './account/SettingsAccountScreen';
+// import SettingsAccountScreen from './account/SettingsAccountScreen';
 import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
 import SettingsMetricsScreen from './metrics/SettingsMetricsScreen';
@@ -23,10 +23,10 @@ class SettingsTab extends Component {
             <ScrollView style={{flex: 1}}>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent:'flex-start' }}>
                     <SettingsHelpScreen />
-                    <SettingsSurveyScreen />
+                    {/* <SettingsSurveyScreen /> */}
                     <SettingsOTAScreen />
                     <SettingsDeviceScreen />
-                    <SettingsAccountScreen />
+                    {/* <SettingsAccountScreen /> */}
                     <SettingsMetricsScreen />
                     <SettingsApplicationScreen />
                     <SettingsFeedbackScreen />

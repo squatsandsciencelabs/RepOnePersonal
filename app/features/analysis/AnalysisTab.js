@@ -42,7 +42,7 @@ class AnalysisTab extends Component {
     }
 
     render() {
-        if (this.props.isLoggedIn) {
+        // if (this.props.isLoggedIn) {
             // TODO: test the hack still works on Android
             return (
                 <ScrollView
@@ -59,9 +59,9 @@ class AnalysisTab extends Component {
                     <OneRMProtocolView />
                 </ScrollView>
             );
-        } else {
-            return <OneRMLoggedOutView />;
-        }
+        // } else {
+        //     return <OneRMLoggedOutView />;
+        // }
     }
 }
 

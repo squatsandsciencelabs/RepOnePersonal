@@ -7,10 +7,10 @@ import com.facebook.react.ReactApplication;
 import com.pilloxa.dfu.RNNordicDfuPackage;
 import io.xogus.reactnative.versioncheck.RNVersionCheckPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
-import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
-import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
-import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
+// import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+// import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+// import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
@@ -31,10 +31,10 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // non autolinked packages
-          packages.add(new RNFirebaseAnalyticsPackage());
-          packages.add(new RNFirebaseMessagingPackage());
-          packages.add(new RNFirebaseCrashlyticsPackage());
-          packages.add(new RNFirebaseRemoteConfigPackage());
+          // packages.add(new RNFirebaseAnalyticsPackage());
+          // packages.add(new RNFirebaseMessagingPackage());
+          // packages.add(new RNFirebaseCrashlyticsPackage());
+          // packages.add(new RNFirebaseRemoteConfigPackage());
           return packages;
         }
 

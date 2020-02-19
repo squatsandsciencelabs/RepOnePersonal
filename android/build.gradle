@@ -6,19 +6,19 @@ buildscript {
         compileSdkVersion = 29 // default but react-native-device-info wants 28 and react-native-charts-wrapper wants >= 28
         targetSdkVersion = 29 // default but react-native-device-info wants 28
         firebaseIidVersion = "19.0.1" // react-native-device-info
-        googlePlayServicesAuthVersion = "16.0.1" // react-native-google-signin
+        // googlePlayServicesAuthVersion = "16.0.1" // react-native-google-signin
     }
     repositories {
         google() // required by react-native-firebase, must be above jcenter
         jcenter()
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
+        // maven {
+        //     url 'https://maven.fabric.io/public'
+        // }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:3.4.2") // default from install, react-native-google-signin needs >=3.1.2, react-native-firebase needs >=3.4.1
-        classpath('com.google.gms:google-services:4.2.0') // react-native-google-signin needed 4.1, react-native-firebase needed 4.2
-        classpath('io.fabric.tools:gradle:1.28.1')
+        // classpath('com.google.gms:google-services:4.2.0') // react-native-google-signin needed 4.1, react-native-firebase needed 4.2
+        // classpath('io.fabric.tools:gradle:1.28.1')
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

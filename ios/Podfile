@@ -2,18 +2,6 @@ platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'OpenBarbellApp' do
-  # Firebase Pods
- pod 'Firebase/Core', '~> 6.3.0'
- pod 'Firebase/Messaging', '~> 6.3.0'
- pod 'Firebase/Analytics', '~> 6.3.0'
- pod 'Firebase/RemoteConfig', '~> 6.3.0'
-
-  # Somehow these are automatically installed already, unlike the above ones, I don't know why
-  # pod 'Firebase/Crash', '~> 6.3.0' # not sure if still needed, does it fight crashlytics or fabric or work with it? also can't find it when i run it
-  # pod 'Fabric', '1.9.0' # used to be 1.7.2, not sure if still needed
-  # pod 'Crashlytics', '3.14.0' # used to be 3.9.3, not sure if still needed
-
-  pod 'GoogleIDFASupport' # for firebase analytics audience
 
   # Permissions
   permissions_path = '../node_modules/react-native-permissions/ios'
@@ -61,10 +49,6 @@ target 'OpenBarbellApp' do
 
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
-
-  pod 'RNFirebase/Crashlytics', :path => '../node_modules/react-native-firebase/ios'
-
   pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
 
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
@@ -81,18 +65,13 @@ target 'OpenBarbellApp' do
 
   pod 'react-native-ble-manager', :path => '../node_modules/react-native-ble-manager'
 
-  pod 'RNGoogleSignin', :path => '../node_modules/@react-native-community/google-signin'
-
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
-
-  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
   pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
 
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
-
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
