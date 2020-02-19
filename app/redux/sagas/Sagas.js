@@ -21,6 +21,7 @@ import CalibrationSaga from './CalibrationSaga';
 import ScalarSaga from './ScalarSaga';
 // import KratosSaga from './KratosSaga';
 import WorkingSetDeviceSaga from './WorkingSetDeviceSaga';
+import ExportCSVSaga from './ExportCSVSaga';
 
 const Sagas = function* Sagas(dispatch) {
     yield all([
@@ -45,6 +46,7 @@ const Sagas = function* Sagas(dispatch) {
         // KratosSaga(), // this just checks if it is enabled, so disable
         WorkingSetDeviceSaga(),
         // VelocityThresholdSaga(),
+        ExportCSVSaga(),
     ]);
 };
 
