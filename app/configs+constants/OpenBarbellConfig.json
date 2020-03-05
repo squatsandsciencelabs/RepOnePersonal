@@ -1,6 +1,7 @@
 {
 	"storageThrottle" : 1000,
     "baseURL" : "https://repone-personal-staging.herokuapp.com/v1/",
+    "firmwareURL": "https://firmware.reponestrength.com/current.json",
     "killSwitchURL" : "https://repone-personal-staging.herokuapp.com/killswitch",    
 	"iOSGoogleClientID" : "1095441496199-itb6e2p7lleh0dcc2menosd86hqprgem.apps.googleusercontent.com",
 	"webGoogleClientID" : "1095441496199-oqqb6fdoagjsrvgmp3ns1ps8mn7k8ec2.apps.googleusercontent.com",

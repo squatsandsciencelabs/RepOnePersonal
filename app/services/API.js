@@ -2,10 +2,6 @@
 
 // IMPORTANT NOTE: All errors returned are actually Redux actions
 
-import {
-    LOGOUT,
-    
-} from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators';
 

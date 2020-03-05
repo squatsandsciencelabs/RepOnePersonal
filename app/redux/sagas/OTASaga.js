@@ -12,7 +12,7 @@ import { Alert } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
 import { 
-    CONFIG_READY,
+    STORE_INITIALIZED,
     OTA_DOWNLOAD_READY,
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
@@ -27,6 +27,7 @@ import {
     CANCEL_INSTALL_OTA,
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
@@ -36,7 +37,7 @@ const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set
 
 export default function * OTASaga(dispatch) {
     yield all([
-        takeEvery(CONFIG_READY, dispatch, checkOTA),
+        takeEvery(STORE_INITIALIZED, dispatch, checkOTA),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
@@ -69,11 +70,21 @@ function *checkOTA(dispatch, action) {
     }
 
     // get url and description
-    const fbconfig = firebase.config();
-    let snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_version']);
-    const firmwareVersion = snapshot.val();
-    snapshot = yield apply(fbconfig, fbconfig.getValue, ['firmware_description']);
-    const firmwareDescription = snapshot.val();
+    let json = null;
+    try {
+        const response = yield fetch(OpenBarbellConfig.firmwareURL);
+        json = yield response.json();
+        console.tron.log(`firmware url json ${JSON.stringify(json)}`);
+    } catch (err) {
+        console.tron.log(`DFU check failed ${err}`);
+        return;
+    }
+    if (!json) {
+        console.tron.log(`DFU check had null json`);
+        return;
+    }
+    const firmwareVersion = json.version; 
+    const firmwareDescription = json.description;
 
     // check version against disk
     const currentVersion = yield select(OTASelectors.getFirmwareVersion);
