@@ -26,7 +26,6 @@ import {
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
 } from 'app/configs+constants/ActionTypes';
-import firebase from 'app/services/Firebase';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
