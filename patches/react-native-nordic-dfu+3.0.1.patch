@@ -1,0 +1,11 @@
+diff --git a/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec b/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
+index 75e14d3..bcf7485 100644
+--- a/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
++++ b/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
+@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
+ 
+   s.dependency 'React'
+   s.dependency 'ZIPFoundation', '~> 0.9.8'
+-  s.dependency 'iOSDFULibrary', '~> 4.5.1'
++  s.dependency 'iOSDFULibrary', '~> 4.6.1'
+ end
