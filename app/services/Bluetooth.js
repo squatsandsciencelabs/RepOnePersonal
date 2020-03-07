@@ -75,20 +75,38 @@ export default function (store) {
             return;
         }
 
-        const typedArray = new Uint8Array(args.value);
-        const data = new Uint16Array(typedArray.buffer);
+        // 
+        if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273') {
+            // reps
+            const typedArray = new Uint8Array(args.value);
+            const data = new Uint16Array(typedArray.buffer);
 
-        // not sending valid until methods to determine invalid are determined
-        store.dispatch(DeviceActionCreators.receivedLiftData({
-            isValid: true, // TODO: should actually calculate when data could be valid
-            deviceRepId: data[0],
-            repNumber: data[1],
-            averageVelocity: data[2],
-            rom: data[3],
-            peakVelocity: data[4],
-            peakHeight: data[5],
-            duration: data[6],
-        }));
+            // not sending valid until methods to determine invalid are determined
+            store.dispatch(DeviceActionCreators.receivedLiftData({
+                isValid: true, // TODO: should actually calculate when data could be valid
+                deviceRepID: data[0],
+                repNumber: data[1],
+                averageVelocity: data[2],
+                rom: data[3],
+                peakVelocity: data[4],
+                peakHeight: data[5],
+                duration: data[6],
+            }));
+        } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
+            // bulk data
+            const typedArray = new Uint8Array(args.value);
+            const data = new Uint16Array(typedArray.buffer);
+
+            store.dispatch({
+                type: ADD_BULK_DATA,
+                deviceRepID: data[0],
+                sampleID: data[1],
+                time: data[2],
+                x: data[3],
+                y: data[4],
+                z: data[5],
+            });
+        }
     });
 
     try {
