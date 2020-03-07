@@ -171,14 +171,16 @@ const WorkoutReducer = (state = defaultState, action) => {
                 timerStatus: 'paused'
             });
         case SAVE_WORKOUT_REP:
-            if (action.removed) {
+            if (action.removed === true) {
                 return Object.assign({}, state, {
                     removedCounter: state.removedCounter + 1
                 });
-            } else {
+            } else if (action.removed === false) {
                 return Object.assign({}, state, {
                     restoredCounter: state.restoredCounter + 1
                 });
+            } else {
+                return state;
             }
         case END_WORKOUT: 
             return Object.assign({}, state, {

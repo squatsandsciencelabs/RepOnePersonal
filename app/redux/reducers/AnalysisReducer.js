@@ -314,9 +314,13 @@ const AnalysisReducer = (state = defaultState, action) => {
         // analytics
         case SAVE_WORKOUT_REP:
         case SAVE_HISTORY_REP:
-            return Object.assign({}, state, {
-                didUpdateReps: true,
-            });
+            if (action.removed !== undefined) {
+                return Object.assign({}, state, {
+                    didUpdateReps: true,
+                });
+            } else {
+                return state;
+            }
         case EDIT_1RM_SET_WEIGHT:
             return Object.assign({}, state, {
                 currentWeight: action.weight,
