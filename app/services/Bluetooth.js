@@ -5,7 +5,7 @@ import {
     NativeEventEmitter,
     Alert,
 } from 'react-native';
-import BleManager  from 'react-native-ble-manager';
+import BleManager from 'react-native-ble-manager';
 
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
@@ -50,7 +50,8 @@ export default function (store) {
         // observe reps
         try {
             await BleManager.retrieveServices(args.peripheral);
-            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273');
+            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273'); // reps
+            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274'); // bulk data
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E');
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
