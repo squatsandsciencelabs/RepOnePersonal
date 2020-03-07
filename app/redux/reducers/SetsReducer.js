@@ -343,7 +343,9 @@ const addRepData = (state, action) => {
         deviceName: action.deviceName,
         deviceIdentifier: action.deviceIdentifier,
         time: action.time,
-        // TODO: rep number
+        deviceRepID: action.deviceRepID,
+        firmwareVersion: action.firmwareVersion,
+        repNumber: action.repNumber,
         averageVelocity: action.averageVelocity,
         rom: action.rom,
         peakVelocity: action.peakVelocity,
@@ -379,11 +381,15 @@ const saveWorkoutRep = (state, action) => {
 
     // get set
     let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    if (setIndex === -1) {
+        return state;
+    }
+
     let set = newWorkoutData[setIndex];
     var setID = set.setID;
 
     // update set and its rep
-    newWorkoutData[setIndex] = setWithUpdatedRep(set, action.repIndex, action.removed);
+    newWorkoutData[setIndex] = setWithUpdatedRep(set, action.repIndex, action.removed, action.bulkData);
 
     // state
     let stateChanges = {
@@ -399,7 +405,7 @@ const saveHistoryRep = (state, action) => {
     // define vars
     let setID = action.setID;
     let historyData = state.historyData;
-    let newSet = setWithUpdatedRep(historyData[setID], action.repIndex, action.removed);
+    let newSet = setWithUpdatedRep(historyData[setID], action.repIndex, action.removed, action.bulkData);
 
     // history
     let historyChanges = {};
@@ -419,13 +425,21 @@ const saveHistoryRep = (state, action) => {
 
 // Update rep helper function
 
-const setWithUpdatedRep = (set, repIndex, removed) => {
+const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     // rep
     let rep = set.reps[repIndex];
-    let newRep = Object.assign({}, rep, {
-        removed: removed,
-    });
+    let newRep = { ...rep };
 
+    // update removed
+    if (removed !== undefined && removed !== null) {
+        newRep.removed = removed;
+    }
+
+    // update bulk
+    if (bulkData !== undefined && bulkData !== null) {
+        newRep.bulkData = {...bulkData};
+    }
+    
     // reps
     let newReps = [
         ...set.reps.slice(0, repIndex),
@@ -433,7 +447,7 @@ const setWithUpdatedRep = (set, repIndex, removed) => {
         ...set.reps.slice(repIndex+1)
     ];
 
-    // set removed check
+    // set 0 reps = removed check
     let activeRep = newReps.find((rep) => { return !rep.removed; });
     let setWasRemoved = activeRep === undefined;
 
