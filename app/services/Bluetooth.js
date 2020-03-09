@@ -5,6 +5,7 @@ import {
     NativeEventEmitter,
     Alert,
 } from 'react-native';
+import { ADD_BULK_DATA } from 'app/configs+constants/ActionTypes';
 import BleManager from 'react-native-ble-manager';
 
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
