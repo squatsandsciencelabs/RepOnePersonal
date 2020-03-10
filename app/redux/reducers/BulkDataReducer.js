@@ -25,7 +25,7 @@ const BulkDataReducer = (state = defaultState, action) => {
         }
         case ADD_BULK_DATA: {
             if (!state[action.deviceRepID]) {
-                console.tron.log(`bulk data reducer ignoring add bulk data when it hasn't been mapped yet`);
+                // console.tron.log(`bulk data reducer ignoring add bulk data when it hasn't been mapped yet`);
                 return state;
             }
             if (state[action.deviceRepID].bulk[action.sampleID] === undefined) {
