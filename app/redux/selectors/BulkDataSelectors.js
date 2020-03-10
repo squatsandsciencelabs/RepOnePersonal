@@ -5,7 +5,7 @@ export const getTotalSampleCount = (state, deviceRepID) => {
 };
 
 export const areAllSamplesReceived = (state, deviceRepID) => {
-    if (!stateRoot(state)[deviceRepID] || stateRoot(state)[deviceRepID].totalSampleCount === null || stateRoot(state)[deviceRepID].totalSampleCount < stateRoot(state)[deviceRepID].receivedSampleCount) {
+    if (!stateRoot(state)[deviceRepID] || stateRoot(state)[deviceRepID].totalSampleCount === null || stateRoot(state)[deviceRepID].totalSampleCount > stateRoot(state)[deviceRepID].receivedSampleCount) {
         return false;
     }
     return true;
