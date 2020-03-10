@@ -1,4 +1,4 @@
-import { takeEvery, select, put, call, all, spawn } from 'redux-saga/effects';
+import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
 import BleManager  from 'react-native-ble-manager';
 
 import {
@@ -26,6 +26,7 @@ export default function *BulkDataSaga() {
 
 function *updateBulkReducer(action) {
     if (!action.deviceRepID) {
+        console.tron.log(`not updating reducing because action lacks deviceRepID ${JSON.stringify(action)}`);
         return;
     }
     
@@ -90,7 +91,10 @@ function *addBulkData(action) {
         console.tron.log(`Unable to add bulk sample count as no device connected`);
         return;
     }
-    yield apply(BleManager, BleManager.write, deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', [action.deviceRepID], 2);
+    const data16 = new Uint16Array([action.deviceRepID]);
+    const data8 = new Uint8Array(data16.buffer);
+    const data = Array.from(data8);
+    yield apply(BleManager, BleManager.writeWithoutResponse, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
 }
 
 // TODO: consider what happens if sensors are disconnected, switched, and so on
@@ -104,7 +108,7 @@ function *updateBulkSampleCount() {
         }
 
         try {
-            const response = yield apply(BleManager, BleManager.read, deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274');
+            const response = yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
             const deviceRepID = data16[0];
