@@ -5,7 +5,7 @@ import {
     NativeEventEmitter,
     Alert,
 } from 'react-native';
-import { ADD_BULK_DATA } from 'app/configs+constants/ActionTypes';
+import { ADD_BULK_DATA, UPDATE_BULK_SAMPLE_COUNT } from 'app/configs+constants/ActionTypes';
 import BleManager from 'react-native-ble-manager';
 
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
@@ -96,17 +96,35 @@ export default function (store) {
         } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
             // bulk data
             const typedArray = new Uint8Array(args.value);
-            const data = new Uint16Array(typedArray.buffer);
-
-            store.dispatch({
-                type: ADD_BULK_DATA,
-                deviceRepID: data[0],
-                sampleID: data[1],
-                time: data[2],
-                x: data[3],
-                y: data[4],
-                z: data[5],
-            });
+            // console.tron.log(`${args.value} length as uint8 array is ${typedArray.length}`);
+            const data = new DataView(typedArray.buffer);
+            try {
+                if (typedArray.length === 4) {
+                    // this is sample count
+                    const deviceRepID = data.getUint16(0, true);
+                    const totalSampleCount = data.getUint16(2, true);
+                    store.dispatch({
+                        type: UPDATE_BULK_SAMPLE_COUNT,
+                        deviceRepID,
+                        totalSampleCount,
+                    });
+                } else {
+                    // this is the bulk data itself
+                    // TODO: don't dispatch this shit, just call the saga directly and give it the data
+                    store.dispatch({
+                        type: ADD_BULK_DATA,
+                        deviceRepID: data.getUint16(0, true),
+                        sampleID: data.getUint16(2, true),
+                        time: data.getUint32(4, true),
+                        x: data.getUint16(8, true),
+                        y: data.getUint16(10, true),
+                        z: data.getUint16(12, true),
+                    });
+                }
+            } catch (err) {
+                console.tron.log(`Error dispatching add bulk data ${err}`);
+                console.error(`BOOM ${err}`);
+            }
         }
     });
 

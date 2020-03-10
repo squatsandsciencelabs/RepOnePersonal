@@ -45,7 +45,13 @@ function *updateBulkReducer(action) {
     });
 
     // bluetooth attempt
-    yield call(updateBulkSampleCount);
+    let deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+    if (!deviceIdentifier) {
+        console.tron.log(`Unable to update bulk sample count as no device connected, trying again once connected to a device`);
+        yield take(CONNECTED_TO_DEVICE);
+        deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+    }
+    yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
 }
 
 function *addBulkData(action) {
@@ -97,6 +103,8 @@ function *addBulkData(action) {
     yield apply(BleManager, BleManager.writeWithoutResponse, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
 }
 
+// commented out as the read on characteristic also runs for the actual bulk data right now
+/*
 // TODO: consider what happens if sensors are disconnected, switched, and so on
 function *updateBulkSampleCount() {
     while (true) {
@@ -113,6 +121,7 @@ function *updateBulkSampleCount() {
             const data16 = new Uint16Array(typedArray.buffer);
             const deviceRepID = data16[0];
             const totalSampleCount = data16[1];
+            console.tron.log(`reading bulk sample count, length in bytes of the thing is ${typedArray.length}`);
             yield put({
                 type: UPDATE_BULK_SAMPLE_COUNT,
                 deviceRepID,
@@ -124,3 +133,4 @@ function *updateBulkSampleCount() {
         }
     }
 }
+*/
