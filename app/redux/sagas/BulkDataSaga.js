@@ -33,7 +33,7 @@ function *updateBulkReducer(action) {
     const workoutData = yield select(SetsSelectors.getWorkoutSets);
     const set = workoutData[workoutData.length-1];
     const setID = set.setID;
-    const repIndex = sets.reps ? set.reps.length-1 : 0;
+    const repIndex = set.reps ? set.reps.length-1 : 0;
 
     // map it
     yield put({
