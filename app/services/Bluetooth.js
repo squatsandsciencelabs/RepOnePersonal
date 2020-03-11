@@ -115,7 +115,6 @@ export default function (store) {
                     const deviceRepID = data.getUint16(0, true);
                     const totalSampleCount = data.getUint16(2, true);
                     updateBulkSampleCount(deviceRepID, totalSampleCount);
-                    console.tron.log(`updated bulk sample count of ${deviceRepID} to ${totalSampleCount}`);
                 } else {
                     const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
                     const deviceRepID = data.getUint16(0, true);
@@ -130,32 +129,35 @@ export default function (store) {
                         addBulkData(deviceRepID, sampleID, time, x, y, z);
 
                         // request sample count if needed
-                        requestSampleCount(deviceIdentifier);
+                        requestSampleCount(deviceIdentifier, deviceRepID);
                     }
 
                     const completedData = getBulkData(deviceRepID);
                     if (completedData !== false) {
-                        const repIndex = completedData.repIndex;
-                        const setID = completedData.setID;
-                        const bulkData = completedData.bulkData;
-                        if (SetsSelectors.getHistorySet(state, setID)) {
-                            // history has it
-                            store.dispatch({
-                                type: SAVE_HISTORY_REP,
-                                setID,
-                                repIndex,
-                                bulkData,
-                            });
-                        } else if (SetsSelectors.getWorkoutSet(state, setID)) {
-                            // workout has it
-                            store.dispatch({
-                                type: SAVE_WORKOUT_REP,
-                                setID,
-                                repIndex,
-                                bulkData,
-                            });
-                        } else {
-                            console.tron.log(`No set found for rep with device id ${deviceRepID}`);
+                        if (completedData !== true) {
+                            // has real object, save it
+                            const repIndex = completedData.repIndex;
+                            const setID = completedData.setID;
+                            const bulkData = completedData.bulkData;
+                            if (SetsSelectors.getHistorySet(state, setID)) {
+                                // history has it
+                                store.dispatch({
+                                    type: SAVE_HISTORY_REP,
+                                    setID,
+                                    repIndex,
+                                    bulkData,
+                                });
+                            } else if (SetsSelectors.getWorkoutSet(state, setID)) {
+                                // workout has it
+                                store.dispatch({
+                                    type: SAVE_WORKOUT_REP,
+                                    setID,
+                                    repIndex,
+                                    bulkData,
+                                });
+                            } else {
+                                console.tron.log(`No set found for rep with device id ${deviceRepID}`);
+                            }
                         }
                     
                         // tell the sensor it's okay

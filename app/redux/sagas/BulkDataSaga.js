@@ -86,8 +86,14 @@ export function areAllSamplesReceived(deviceRepID) {
 export function notifyBulkDataReceived(deviceIdentifier, deviceRepID) {
     return new Promise(async (resolve, reject) => {
         try {
+            // flag it as complete
+            if (map[deviceRepID]) {
+                map[deviceRepID].completed = true;
+            }
+
             // ignore if 5 seconds hasn't passed
-            if (moment().diff(lastWritten) < 5000) {
+            const diff = moment().diff(lastWritten);
+            if (diff < 5000) {
                 resolve();
                 return;
             }
@@ -115,6 +121,7 @@ export function notifyBulkDataReceived(deviceIdentifier, deviceRepID) {
 export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     // clear map
     if (currentDeviceRepID !== null && currentDeviceRepID !== deviceRepID && map[currentDeviceRepID]) {
+        console.tron.log(`clearing map for ${currentDeviceRepID} and switching to ${deviceRepID}`);
         delete map[currentDeviceRepID];
     }
     currentDeviceRepID = deviceRepID;
@@ -135,10 +142,15 @@ export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     }
 }
 
-export async function requestSampleCount(deviceIdentifier) {
+export async function requestSampleCount(deviceIdentifier, deviceRepID) {
     // device identifier check
     if (!deviceIdentifier) {
         console.tron.log(`unable to request sample count as no device identifier exists`);
+        return;
+    }
+
+    // if already has total sample count, not needed
+    if (map[deviceRepID] && map[deviceRepID].totalSampleCount !== null) {
         return;
     }
 
@@ -159,13 +171,20 @@ export function updateBulkSampleCount(deviceRepID, totalSampleCount) {
         return;
     }
 
-    map[deviceRepID].totalSampleCount = totalSampleCount; 
+    map[deviceRepID].totalSampleCount = totalSampleCount;
+    console.tron.log(`updated bulk sample count of ${deviceRepID} to ${totalSampleCount}`);
 }
 
 export function getBulkData(deviceRepID) {
     // completed check
     if(!areAllSamplesReceived(deviceRepID)) {
         return false;
+    }
+
+    // return true is already done
+    // this is pretty hacky, but just trying to make it work right now
+    if (map[deviceRepID].completed === true) {
+        return true;
     }
 
     // return the items
