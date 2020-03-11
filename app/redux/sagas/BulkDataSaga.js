@@ -4,6 +4,7 @@ import BleManager  from 'react-native-ble-manager';
 import {
     ADD_REP_DATA,
     CONNECTED_TO_DEVICE,
+    DISCONNECTED,
     LOGOUT,
 } from 'app/configs+constants/ActionTypes';
 
@@ -16,6 +17,7 @@ var ignoredRepIDs = new Set();
 export default function *BulkDataSaga() {
     yield all([
         takeEvery(ADD_REP_DATA, mapBulkData),
+        takeEvery(DISCONNECTED, clearAll),
         takeEvery(LOGOUT, clearAll),
     ]);
 };
@@ -77,6 +79,7 @@ function *mapBulkData(action) {
 // clear
 function *clearAll() {
     map = {};
+    // note: not sure if should clear ignored rep ids
 }
 
 // add bulk data, called by bluetooth.js
