@@ -5,7 +5,7 @@ import moment from 'moment';
 import {
     ADD_REP_DATA,
     CONNECTED_TO_DEVICE,
-    DISCONNECTED,
+    DISCONNECTED_FROM_DEVICE,
     LOGOUT,
 } from 'app/configs+constants/ActionTypes';
 
@@ -21,7 +21,7 @@ var lastReadRequest = moment();
 export default function *BulkDataSaga() {
     yield all([
         takeEvery(ADD_REP_DATA, mapBulkData),
-        takeEvery(DISCONNECTED, clearAll),
+        takeEvery(DISCONNECTED_FROM_DEVICE, clearAll),
         takeEvery(LOGOUT, clearAll),
     ]);
 };
@@ -66,7 +66,7 @@ function *mapBulkData(action) {
     yield call(requestSampleCount, deviceIdentifier);
 }
 
-function *clearAll() {
+function *clearAll(action) {
     console.tron.log(`CLEARING bulk data mapping`);
     map = {};
     // note: not sure if should clear ignored rep ids
