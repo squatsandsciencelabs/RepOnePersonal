@@ -153,6 +153,7 @@ export default function (store) {
                         const data16 = new Uint16Array([deviceRepID]);
                         const data8 = new Uint8Array(data16.buffer);
                         const data = Array.from(data8);
+                        console.tron.log(`Finishing rep ${deviceRepID}`);
                         BleManager.writeWithoutResponse(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data);
                     }
                  }

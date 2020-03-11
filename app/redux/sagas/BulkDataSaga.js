@@ -11,6 +11,7 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
 var map = {};
+var ignoredRepIDs = new Set();
 
 export default function *BulkDataSaga() {
     yield all([
@@ -28,6 +29,8 @@ function areAllSamplesReceived(deviceRepID) {
     return true;
 }
 
+function ignoredValues = 
+
 // map saga function
 
 function *mapBulkData(action) {
@@ -35,7 +38,7 @@ function *mapBulkData(action) {
         console.tron.log(`not updating reducing because action lacks deviceRepID ${JSON.stringify(action)}`);
         return;
     }
-    
+
     // get vars
     const workoutData = yield select(SetsSelectors.getWorkoutSets);
     const set = workoutData[workoutData.length-1];
@@ -58,6 +61,18 @@ function *mapBulkData(action) {
         yield take(CONNECTED_TO_DEVICE);
         deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
     }
+
+    // finish ignored
+    for (let ignoredID of ignoredRepIDs) {
+        const data16 = new Uint16Array([ignoredID]);
+        const data8 = new Uint8Array(data16.buffer);
+        const data = Array.from(data8);
+        console.tron.log(`Finishing ignored rep ${ignoredID}`);
+        yield apply(BleManager, BleManager.writeWithoutResponse, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
+    }
+    ignoredRepIDs.clear();
+
+    // read sample count
     yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
 }
 
@@ -71,7 +86,7 @@ function *clearAll() {
 export function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     // valid check
     if (!map[deviceRepID]) {
-        console.tron.log(`ignoring bulk data as map hasn't been generated yet ${deviceRepID} ${sampleID}, ${z}`);
+        ignoredRepIDs.add(deviceRepID);
         return false;
     }
 
