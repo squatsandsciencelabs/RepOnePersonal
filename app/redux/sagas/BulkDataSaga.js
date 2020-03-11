@@ -29,8 +29,6 @@ function areAllSamplesReceived(deviceRepID) {
     return true;
 }
 
-function ignoredValues = 
-
 // map saga function
 
 function *mapBulkData(action) {
