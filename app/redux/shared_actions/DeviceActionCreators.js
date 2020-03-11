@@ -3,7 +3,7 @@
 
 import { NativeModules } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
-import BleManager  from 'react-native-ble-manager';
+import BleManager from 'react-native-ble-manager';
 
 import {
     START_DEVICE_SCAN,

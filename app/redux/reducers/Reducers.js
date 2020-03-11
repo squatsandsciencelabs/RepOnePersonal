@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 import SetsReducer from './SetsReducer';
-import BulkDataReducer from './BulkDataReducer';
 import ScannedDevicesReducer from './ScannedDevicesReducer';
 import ConnectedDeviceReducer from './ConnectedDeviceReducer';
 import WorkoutReducer from './WorkoutReducer';
@@ -20,7 +19,6 @@ import OTAReducer from './OTAReducer';
 
 export default reducers = combineReducers({
     sets: SetsReducer,
-    bulkData: BulkDataReducer,
     scannedDevices: ScannedDevicesReducer,
     connectedDevice: ConnectedDeviceReducer,
     workout: WorkoutReducer,

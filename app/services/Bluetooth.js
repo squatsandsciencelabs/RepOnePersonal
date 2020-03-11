@@ -1,15 +1,20 @@
 // TODO: saga-fy this up
+import BleManager from 'react-native-ble-manager';
 
 import {
     NativeModules,
     NativeEventEmitter,
     Alert,
 } from 'react-native';
-import { ADD_BULK_DATA, UPDATE_BULK_SAMPLE_COUNT } from 'app/configs+constants/ActionTypes';
-import BleManager from 'react-native-ble-manager';
+import {
+    SAVE_WORKOUT_REP,
+    SAVE_HISTORY_REP,
+} from 'app/configs+constants/ActionTypes';
 
+import { addBulkData, updateBulkSampleCount } from 'app/redux/sagas/BulkDataSaga';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
 export default function (store) {
     //native bluetooth
@@ -68,7 +73,7 @@ export default function (store) {
     });
 
     // data
-    Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', (args) => {
+    Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', async (args) => {
         // api version check
         const state = store.getState();
         const formatVersion = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
@@ -96,34 +101,63 @@ export default function (store) {
         } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
             // bulk data
             const typedArray = new Uint8Array(args.value);
-            // console.tron.log(`${args.value} length as uint8 array is ${typedArray.length}`);
             const data = new DataView(typedArray.buffer);
             try {
                 if (typedArray.length === 4) {
                     // this is sample count
                     const deviceRepID = data.getUint16(0, true);
                     const totalSampleCount = data.getUint16(2, true);
-                    store.dispatch({
-                        type: UPDATE_BULK_SAMPLE_COUNT,
-                        deviceRepID,
-                        totalSampleCount,
-                    });
+                    updateBulkSampleCount(deviceRepID, totalSampleCount);
+                    console.tron.log(`updated bulk sample count of ${deviceRepID} to ${totalSampleCount}`);
                 } else {
-                    // this is the bulk data itself
-                    // TODO: don't dispatch this shit, just call the saga directly and give it the data
-                    store.dispatch({
-                        type: ADD_BULK_DATA,
-                        deviceRepID: data.getUint16(0, true),
-                        sampleID: data.getUint16(2, true),
-                        time: data.getUint32(4, true),
-                        x: data.getUint16(8, true),
-                        y: data.getUint16(10, true),
-                        z: data.getUint16(12, true),
-                    });
-                }
+                    const deviceRepID = data.getUint16(0, true);
+                    const sampleID = data.getUint16(2, true);
+                    const time = data.getUint32(4, true);
+                    const x = data.getUint16(8, true);
+                    const y = data.getUint16(10, true);
+                    const z = data.getUint16(12, true);
+
+                    // save
+                    const completedData = addBulkData(deviceRepID, sampleID, time, x, y, z);
+
+                    if (completedData !== false) {
+                        const repIndex = completedData.repIndex;
+                        const setID = completedData.setID;
+                        const bulkData = completedData.bulkData;
+                        if (SetsSelectors.getHistorySet(state, setID)) {
+                            // history has it
+                            store.dispatch({
+                                type: SAVE_HISTORY_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else if (SetsSelectors.getWorkoutSet(state, setID)) {
+                            // workout has it
+                            store.dispatch({
+                                type: SAVE_WORKOUT_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else {
+                            console.tron.log(`No set found for rep with device id ${deviceRepID}`);
+                        }
+                    
+                        // tell the sensor it's okay
+                        const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+                        if (!deviceIdentifier) {
+                            console.tron.log(`Unable to write success message to device as no device identifier found`);
+                            return;
+                        }
+                        const data16 = new Uint16Array([deviceRepID]);
+                        const data8 = new Uint8Array(data16.buffer);
+                        const data = Array.from(data8);
+                        BleManager.writeWithoutResponse(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data);
+                    }
+                 }
             } catch (err) {
                 console.tron.log(`Error dispatching add bulk data ${err}`);
-                console.error(`BOOM ${err}`);
             }
         }
     });
