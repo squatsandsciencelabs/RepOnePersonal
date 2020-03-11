@@ -78,6 +78,7 @@ function *mapBulkData(action) {
 
 // clear
 function *clearAll() {
+    console.tron.log(`CLEARING bulk data mapping`);
     map = {};
     // note: not sure if should clear ignored rep ids
 }
