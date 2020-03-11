@@ -57,8 +57,10 @@ function *mapBulkData(action) {
 
     // finish ignored
     for (let ignoredID of ignoredRepIDs) {
-        console.tron.log(`Notifying receive for ignored rep ${ignoredID}`);
-        yield call(notifyBulkDataReceived, deviceIdentifier, ignoredID);
+        if (ignoredID !== action.deviceRepID) {
+            console.tron.log(`Notifying receive for ignored rep ${ignoredID}`);
+            yield call(notifyBulkDataReceived, deviceIdentifier, ignoredID);
+        }
     }
     ignoredRepIDs.clear();
 
