@@ -33,7 +33,7 @@ const Sagas = function* Sagas(dispatch) {
         InitializedAnalyticsSaga(),
         OneRMAnalyticsSaga(),
         OTASaga(dispatch),
-        BulkDataSaga(),
+        // BulkDataSaga(),
         // VelocityThresholdSaga(),
     ]);
 };
