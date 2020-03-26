@@ -1,4 +1,6 @@
 {
+    "appStoreId": 1496454046,
+    "playStorePackageName": "com.reponestrength.personal",
 	"storageThrottle" : 1000,
     "baseURL" : "https://repone-personal-staging.herokuapp.com/v1/",
     "firmwareURL": "https://firmware.reponestrength.com/staging.json",
