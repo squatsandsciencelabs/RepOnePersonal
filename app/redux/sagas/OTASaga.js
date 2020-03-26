@@ -8,11 +8,13 @@ import {
 } from 'redux-saga/effects';
 import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import DeviceInfo from 'react-native-device-info';
 
 import { 
     STORE_INITIALIZED,
+    OTA_UPDATE_APP_REQUIRED,
     OTA_DOWNLOAD_READY,
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
@@ -47,6 +49,7 @@ export default function * OTASaga(dispatch) {
 };
 
 function *checkOTA(dispatch, action) {
+    // listen for dfu
     DFUEmitter.addListener("DFUProgress", ({ percent }) => {
         dispatch({
             type: INSTALL_OTA_PROGRESS,
@@ -61,14 +64,7 @@ function *checkOTA(dispatch, action) {
         });
     });
 
-   if (!action.activated) {
-        console.tron.log("Fetched data not activated");
-        // NOTE: not logging this as it appears to still work regardless of activation?
-        // state = yield select();
-        // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
-    }
-
-    // get url and description
+    // get json from server 
     let json = null;
     try {
         const response = yield fetch(OpenBarbellConfig.firmwareURL);
@@ -82,42 +78,74 @@ function *checkOTA(dispatch, action) {
         console.tron.log(`DFU check had null json`);
         return;
     }
-    const firmwareVersion = json.version; 
-    const firmwareDescription = json.description;
 
-    // check version against disk
-    const currentVersion = yield select(OTASelectors.getFirmwareVersion);
-    if (currentVersion !== firmwareVersion) {
-        try {
-            yield apply(RNFetchBlob, RNFetchBlob.fs.unlink, [filePath]);
-        } catch (err) {
-            console.tron.log(`failed to delete download ${err}`);
+    // get firmware version / description
+    let needsUpgrade = false;
+    let firmwareVersion = null;
+    let firmwareDescription = null;
+    try {
+        const appVersion = DeviceInfo.getVersion();
+        const osVersion = DeviceInfo.getSystemVersion();
+        const result = checkFirmwareUpdates(appVersion, osVersion, json);
+        if (result === null) {
+            console.tron.log(`Firmware version checked failed, result was null`);
+            return;
+        } else {
+            needsUpgrade = result.updateApp;
+            firmwareVersion = result.firmwareVersion;
+            firmwareDescription = json.firmware_descriptions[firmwareVersion];
+            console.tron.log(`Received firmware check for app ${appVersion} os ${osVersion} as ${firmwareVersion} with description ${firmwareDescription} and upgrade ${needsUpgrade}`);
         }
+    } catch (err) {
+        console.tron.log(`Firmware version check failed, ${err}`);
+        return;
+    }
+
+    // handle result
+    if (needsUpgrade) {
+        // demand upgrade
         yield put({
-            type: OTA_DOWNLOAD_AVAILABLE,
+            type: OTA_UPDATE_APP_REQUIRED,
             firmwareVersion,
             firmwareDescription,
         });
-        const state = yield select();
-        logOTAAnalytics(state, 'new_firmware_available');
-        return;
-    }
+    } else {
+        // show firmware version
 
-    // TODO: confirm it works on iOS as this failed for the temp camera cache directory
-    // check against disk
-    const exists = yield apply(RNFetchBlob, RNFetchBlob.fs.exists, [filePath]);
-    if (exists) {
+        // check version against disk
+        const currentVersion = yield select(OTASelectors.getFirmwareVersion);
+        if (currentVersion !== firmwareVersion) {
+            try {
+                yield apply(RNFetchBlob, RNFetchBlob.fs.unlink, [filePath]);
+            } catch (err) {
+                console.tron.log(`failed to delete download ${err}`);
+            }
+            yield put({
+                type: OTA_DOWNLOAD_AVAILABLE,
+                firmwareVersion,
+                firmwareDescription,
+            });
+            const state = yield select();
+            logOTAAnalytics(state, 'new_firmware_available');
+            return;
+        }
+
+        // TODO: confirm it works on iOS as this failed for the temp camera cache directory
+        // check against disk
+        const exists = yield apply(RNFetchBlob, RNFetchBlob.fs.exists, [filePath]);
+        if (exists) {
+            yield put({
+                type: OTA_DOWNLOAD_READY,
+            });
+            return;
+        }
+
+        // default to available
         yield put({
-            type: OTA_DOWNLOAD_READY,
+            type: OTA_DOWNLOAD_AVAILABLE,
+            firmwareVersion,
         });
-        return;
     }
-
-    // default to available
-    yield put({
-        type: OTA_DOWNLOAD_AVAILABLE,
-        firmwareVersion,
-    });
 }
 
 function *startDownload(action) {
@@ -233,4 +261,141 @@ const logOTAAnalytics = (state, event) => {
         device_firmware_version: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
         server_firmware_version: OTASelectors.getFirmwareVersion(state),
     }, state);
+};
+
+// version helpers
+
+const versionArrayFromString = (version) => {
+    const array = version.split('.');
+    while (array.length < 3) {
+        array.push(0);
+    }
+    return array;
+};
+
+const isVersionLessThanOrEqual = (version, compare) => {
+    version = versionArrayFromString(version);
+    compare = versionArrayFromString(compare);
+    if (version[0] > compare[0]) {
+        return false;
+    }
+    if (version[1] > compare[1]) {
+        return false;
+    }
+    if (version[2] > compare[2]) {
+        return false;
+    }
+    return true;
+};
+
+const isVersionGreaterThanOrEqual = (version, compare) => {
+    version = versionArrayFromString(version);
+    compare = versionArrayFromString(compare);
+    if (version[0] < compare[0]) {
+        return false;
+    }
+    if (version[1] < compare[1]) {
+        return false;
+    }
+    if (version[2] < compare[2]) {
+        return false;
+    }
+    return true;
+};
+
+const compareFirmwareVersions = (appVersion, json) => {
+    let index = 0;
+    for (let firmware_config of json.firmware_updates) {
+        if (!firmware_config.min_app_version && !firmware_config.max_app_version) {
+            console.tron.log(`check firmware updates error, cannot process lack of min or max app version`);
+            return null;
+        }
+
+        if (firmware_config.min_app_version) {
+            if (!isVersionGreaterThanOrEqual(appVersion, firmware_config.min_app_version)) {
+                // no good
+                index++;
+                continue;
+            }
+        }
+        if (firmware_config.max_app_version) {
+            if (!isVersionLessThanOrEqual(appVersion, firmware_config.max_app_version)) {
+                // no good
+                index++;
+                continue;
+            }
+        }
+
+        // passed
+        return {
+            firmwareVersion: firmware_config.firmware_version,
+            index,
+        };
+    }
+};
+
+// returns any of the following
+// - firmware version to display, so the string
+// - app update, so "true"
+// - nothing because there was an issue, null
+const checkFirmwareUpdates = (appVersion, osVersion, json) => {
+    // basic check
+    let result = compareFirmwareVersions(appVersion, json);
+    if (result === null) {
+        return null;
+    }
+    const firmwareVersion = result.firmwareVersion;
+    const index = result.index;
+
+    if (index === 0) {
+        // you are latest, bueno
+        return {
+            firmwareVersion,
+            updateApp: false,
+        };
+    } else {
+        // you are not latest, see if upgrading the app is possible
+        const nextAppVersion = null;
+        const appUpdateArray = Platform.OS === 'ios' ? json.app_updates.ios : json.app_updates.android;
+        for (let app_config of appUpdateArray) {
+            if (!app_config.min_os_version && !app_config.max_os_version) {
+                console.tron.log(`check firmware updates error, cannot process lack of min and max os`);
+                return null;
+            }
+    
+            if (app_config.min_os_version) {
+                if (!isVersionGreaterThanOrEqual(osVersion, app_config.min_os_version)) {
+                    // no good
+                    continue;
+                }
+            }
+            if (app_config.max_os_version) {
+                if (!isVersionLessThanOrEqual(osVersion, app_config.max_os_version)) {
+                    // no good
+                    continue;
+                }
+            }
+    
+            // passed
+            nextAppVersion = app_config.app_version;
+            break;
+        }
+
+        result = compareFirmwareVersions(nextAppVersion, json);
+        if (result === null) {
+            return null;
+        } else if (result.firmwareVersion !== firmwareVersion) {
+            // upgrade app
+            return {
+                firmwareVersion,
+                updateApp: true,
+            };
+        } else {
+            // same firmware version, just spit that one out
+            return {
+                firmwareVersion,
+                updateApp: false,
+            };
+        }
+    }
 };
