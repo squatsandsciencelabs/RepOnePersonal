@@ -1,6 +1,7 @@
 // note: for now not considering this tied to logging in or out, more about the app itself
 
 import {
+    OTA_UPDATE_APP_REQUIRED,
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
     CANCEL_OTA_DOWNLOAD,
@@ -17,6 +18,7 @@ import {
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
+    UPDATE_APP: 'UPDATE_APP',
     AVAILABLE: 'AVAILABLE',
     DOWNLOADING: 'DOWNLOADING',
     DOWNLOAD_FAILED: 'DOWNLOAD_FAILED',
@@ -38,6 +40,13 @@ const defaultState = {
 
 const OTAReducer = (state = defaultState, action) => {
     switch (action.type) {
+        case OTA_UPDATE_APP_REQUIRED:
+            return {
+                ...state,
+                firmwareVersion: action.firmwareVersion,
+                firmwareDescription: action.firmwareDescription,
+                status: OTAStatus.UPDATE_APP,
+            };
         case OTA_DOWNLOAD_AVAILABLE:
             return {
                 ...state,

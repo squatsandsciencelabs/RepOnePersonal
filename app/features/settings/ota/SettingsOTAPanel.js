@@ -5,6 +5,7 @@ import { Text, View } from 'react-native';
 
 import { OTAStatus } from 'app/redux/reducers/OTAReducer';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import SettingsOTAUpdateAppPanel from './panels/SettingsOTAUpdateAppPanel';
 import SettingsOTAAvailablePanel from './panels/SettingsOTAAvailablePanel';
 import SettingsOTADownloadFailedPanel from './panels/SettingsOTADownloadFailedPanel';
 import SettingsOTADownloadingPanel from './panels/SettingsOTADownloadingPanel';
@@ -15,6 +16,12 @@ class SettingsOTAPanel extends Component {
 
     _renderContents() {
         switch ( this.props.status ) {
+            case OTAStatus.UPDATE_APP:
+                return <SettingsOTAUpdateAppPanel
+                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
+                        firmwareVersion={this.props.firmwareVersion}
+                        firmwareDescription={this.props.firmwareDescription}
+                        />
             case OTAStatus.AVAILABLE:
                 return <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
