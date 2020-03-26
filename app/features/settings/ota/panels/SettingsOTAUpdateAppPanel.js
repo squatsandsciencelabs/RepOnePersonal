@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import VersionCheck from 'react-native-version-check';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 // "itms-apps://itunes.apple.com/us/app/repone-station/id1455246807?mt=8"
 
 class SettingsOTAUpdateAppPanel extends Component {
 
-    openAppStore() {
-        Linking.openURL(OpenBarbellConfig.appStoreURL);
+    async openAppStore() {
+        const url = await VersionCheck.getStoreUrl({
+            appID: OpenBarbellConfig.appStoreId,
+            packageName: OpenBarbellConfig.playStorePackageName,
+        });
+        Linking.openURL(url);
     }
 
     render() {
