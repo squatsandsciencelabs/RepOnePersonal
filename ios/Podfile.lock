@@ -319,6 +319,8 @@ PODS:
     - ZIPFoundation (~> 0.9.8)
   - react-native-slider (2.0.8):
     - React
+  - react-native-version-check (3.4.0):
+    - React
   - react-native-video (5.0.2):
     - React
     - react-native-video/Video (= 5.0.2)
@@ -434,6 +436,7 @@ DEPENDENCIES:
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-nordic-dfu (from `../node_modules/react-native-nordic-dfu`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -541,6 +544,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-nordic-dfu"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-version-check:
+    :path: "../node_modules/react-native-version-check"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -639,6 +644,7 @@ SPEC CHECKSUMS:
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
   react-native-nordic-dfu: 93a3601acfd23357373d04d5534f8092b687945e
   react-native-slider: 3a1cfd00c9c31068251b536822f7192e8d1d6b6f
+  react-native-version-check: 1a4db2e0240e4df8c4543b1a54aff44a01f9a8c7
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
   react-native-webview: 99bdfd6c189772b0f15494f728430c23b18b93e4
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76

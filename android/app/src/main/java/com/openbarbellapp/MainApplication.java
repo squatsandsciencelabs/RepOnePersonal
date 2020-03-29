@@ -5,6 +5,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.pilloxa.dfu.RNNordicDfuPackage;
+import io.xogus.reactnative.versioncheck.RNVersionCheckPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
