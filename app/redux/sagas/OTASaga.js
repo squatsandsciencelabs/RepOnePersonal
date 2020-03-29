@@ -283,12 +283,18 @@ const isVersionLessThanOrEqual = (version, compare) => {
     compare = versionArrayFromString(compare);
     if (version[0] > compare[0]) {
         return false;
+    } else if (version[0] < compare[0]) {
+        return true;
     }
     if (version[1] > compare[1]) {
         return false;
+    } else if (version[1] < compare[1]) {
+        return true;
     }
     if (version[2] > compare[2]) {
         return false;
+    } else if (version[2] < compare[2]) {
+        return true;
     }
     return true;
 };
@@ -298,12 +304,18 @@ const isVersionGreaterThanOrEqual = (version, compare) => {
     compare = versionArrayFromString(compare);
     if (version[0] < compare[0]) {
         return false;
+    } else if (version[0] > compare[0]) {
+        return true;
     }
     if (version[1] < compare[1]) {
         return false;
+    } else if (version[1] > compare[1]) {
+        return true;
     }
     if (version[2] < compare[2]) {
         return false;
+    } else if (version[2] > compare[2]) {
+        return true;
     }
     return true;
 };
@@ -337,6 +349,9 @@ const compareFirmwareVersions = (appVersion, json) => {
             index,
         };
     }
+
+    // safety check, should never happen
+    return null;
 };
 
 // returns any of the following
@@ -360,7 +375,7 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
         };
     } else {
         // you are not latest, see if upgrading the app is possible
-        const nextAppVersion = null;
+        let nextAppVersion = null;
         const appUpdateArray = Platform.OS === 'ios' ? json.app_updates.ios : json.app_updates.android;
         for (let app_config of appUpdateArray) {
             if (!app_config.min_os_version && !app_config.max_os_version) {
