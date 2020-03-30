@@ -33,6 +33,18 @@ class ApplicationView extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.isUpgradeAvailable && this.state.routes[3].title === 'SETTINGS') {
+            this.setState({
+                routes: NavigationConfig.routesWithUpdate,
+            });
+        } else if (!this.props.isUpgradeAvailable && this.state.routes[3].title === '•SETTINGS') {
+            this.setState({
+                routes: NavigationConfig.routes,
+            });
+        }
+    }
+
     componentDidMount() {
         this._checkIfOutdated();
     }

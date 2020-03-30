@@ -15,6 +15,13 @@ export const routes = [
     { key: '3', title: 'SETTINGS' },       
 ];
 
+export const routesWithUpdate = [
+    { key: '0', title: 'WORKOUT' },
+    { key: '1', title: 'HISTORY' },
+    { key: '2', title: 'ANALYSIS'},
+    { key: '3', title: '•SETTINGS' },       
+];
+
 export const sceneMap = SceneMap({
     '0': () => <WorkoutScreen />,
     '1': () => <HistoryScreen />,
