@@ -32,9 +32,7 @@ const defaultState = {
     firmwareDescription: '',
     progress: 0, // 0-100
 
-    // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING,
-    // it should always start as null
-    // TODO: test that it starts as null
+    // null, AVAILABLE, DOWNLOADING, DOWNLOAD_FAILED, READY, INSTALLING, UPGRADE_APP
     status: null,
 };
 

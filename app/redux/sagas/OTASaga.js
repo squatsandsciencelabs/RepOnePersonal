@@ -32,6 +32,7 @@ import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/VersionComparison';
 
 let downloadTask = null;
 const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
@@ -269,56 +270,6 @@ const logOTAAnalytics = (state, event) => {
 };
 
 // version helpers
-
-const versionArrayFromString = (version) => {
-    const array = version.split('.');
-    while (array.length < 3) {
-        array.push(0);
-    }
-    return array;
-};
-
-const isVersionLessThanOrEqual = (version, compare) => {
-    version = versionArrayFromString(version);
-    compare = versionArrayFromString(compare);
-    if (version[0] > compare[0]) {
-        return false;
-    } else if (version[0] < compare[0]) {
-        return true;
-    }
-    if (version[1] > compare[1]) {
-        return false;
-    } else if (version[1] < compare[1]) {
-        return true;
-    }
-    if (version[2] > compare[2]) {
-        return false;
-    } else if (version[2] < compare[2]) {
-        return true;
-    }
-    return true;
-};
-
-const isVersionGreaterThanOrEqual = (version, compare) => {
-    version = versionArrayFromString(version);
-    compare = versionArrayFromString(compare);
-    if (version[0] < compare[0]) {
-        return false;
-    } else if (version[0] > compare[0]) {
-        return true;
-    }
-    if (version[1] < compare[1]) {
-        return false;
-    } else if (version[1] > compare[1]) {
-        return true;
-    }
-    if (version[2] < compare[2]) {
-        return false;
-    } else if (version[2] > compare[2]) {
-        return true;
-    }
-    return true;
-};
 
 const compareFirmwareVersions = (appVersion, json) => {
     let index = 0;
