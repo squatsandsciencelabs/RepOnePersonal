@@ -213,7 +213,8 @@ const createRowViewModels = (set) => {
             setID: set.setID,
             averageVelocity: "Invalid",
             peakVelocity: "Invalid",
-            peakVelocityLocation: "Invalid",
+            // peakVelocityLocation: "Invalid",
+            linear3DAverageVelocity: "Invalid",
             rangeOfMotion: "Invalid",
             duration: "Invalid",
             removed: rep.removed,
@@ -232,9 +233,13 @@ const createRowViewModels = (set) => {
                 vm.peakVelocity = peakVel / 1000;
             }
 
-            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-            if (peakVelLoc !== null) {
-                vm.peakVelocityLocation = peakVelLoc;
+            // let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
+            // if (peakVelLoc !== null) {
+            //     vm.peakVelocityLocation = peakVelLoc;
+            // }
+
+            if (rep.linear3DAverageVelocity !== null) {
+                vm.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
             }
 
             let rom = rep.rom;
