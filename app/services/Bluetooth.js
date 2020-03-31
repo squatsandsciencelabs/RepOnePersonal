@@ -23,6 +23,8 @@ import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCrea
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
+const maxFormatVersion = 2;
+
 export default function (store) {
     //native bluetooth
     const Emitter = new NativeEventEmitter(NativeModules.BleManager);
@@ -68,7 +70,7 @@ export default function (store) {
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E'); // get version info
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
-            if (data16[0] > 1) {
+            if (data16[0] > maxFormatVersion) {
                 console.tron.log(`api version mismatch`);
                 Alert.alert(`Please update your RepOne app to use this device.`);
             }
@@ -84,7 +86,7 @@ export default function (store) {
         // api version check
         const state = store.getState();
         const formatVersion = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
-        if (formatVersion > 1) {
+        if (formatVersion > maxFormatVersion) {
             return;
         }
 
@@ -104,6 +106,8 @@ export default function (store) {
                 peakVelocity: data[4],
                 peakHeight: data[5],
                 duration: data[6],
+                linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
+                linear3DROM: formatVersion === 1 ? null : data[9],
             }));
         } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
             // bulk data
