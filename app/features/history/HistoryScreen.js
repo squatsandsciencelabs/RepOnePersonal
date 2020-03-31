@@ -289,7 +289,7 @@ const createRowViewModels = (set, shouldShowRemoved) => {
             //     vm.peakVelocityLocation = peakVelLoc;
             // }
 
-            if (rep.linear3DAverageVelocity !== null) {
+            if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
                 vm.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
             }
 

@@ -351,6 +351,8 @@ const addRepData = (state, action) => {
         peakVelocity: action.peakVelocity,
         peakHeight: action.peakHeight,
         duration: action.duration,
+        linear3DAverageVelocity: action.linear3DAverageVelocity,
+        linear3DROM: action.linear3DROM,
     };
 
     let setChanges = {
