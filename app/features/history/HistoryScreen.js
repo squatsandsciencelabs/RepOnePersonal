@@ -298,6 +298,10 @@ const createRowViewModels = (set, shouldShowRemoved) => {
                 vm.rangeOfMotion = rom;
             }
 
+            if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
+                vm.linear3DROM = rep.linear3DROM;
+            }
+
             // obv2 properties
             let duration = rep.duration;
             if (duration !== null) {
