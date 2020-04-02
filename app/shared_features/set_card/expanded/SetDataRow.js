@@ -38,9 +38,9 @@ class SetDataRow extends PureComponent {
                     <View style={styles.bar}>
                         <Text style={dataStyle}> { this.props.item.repDisplay } </Text>
                         <Text style={dataStyle}> { this.props.item.averageVelocity } </Text>
+                        <Text style={dataStyle}> { this.props.item.linear3DAverageVelocity } </Text>
                         <Text style={dataStyle}> { this.props.item.peakVelocity } </Text>
                         {/* <Text style={dataStyle}> { this.props.item.peakVelocityLocation } </Text> */}
-                        <Text style={dataStyle}> { this.props.item.linear3DAverageVelocity } </Text>
                         <Text style={dataStyle}> { this.props.item.rangeOfMotion } </Text>
                         <Text style={dataStyle}> { this.props.item.duration } </Text>
                         {button}

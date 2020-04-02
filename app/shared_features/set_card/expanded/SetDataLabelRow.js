@@ -13,9 +13,9 @@ class SetDataLabelRow extends PureComponent {
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={styles.headerLabel}><Text style={styles.text}>REP</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>AVG</Text></View>
+                    <View style={styles.headerLabel}><Text style={styles.text}>L3DAVG</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>PKV</Text></View>
                     {/* <View style={styles.headerLabel}><Text style={styles.text}>PKH</Text></View> */}
-                    <View style={styles.headerLabel}><Text style={styles.text}>L3DAVG</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>ROM</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>DUR</Text></View>
                 </View>
@@ -23,8 +23,8 @@ class SetDataLabelRow extends PureComponent {
                     <View style={styles.headerLabel}><Text style={styles.text}>#</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>m/s</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>m/s</Text></View>
-                    {/* <View style={styles.headerLabel}><Text style={styles.text}>%</Text></View> */}
                     <View style={styles.headerLabel}><Text style={styles.text}>m/s</Text></View>
+                    {/* <View style={styles.headerLabel}><Text style={styles.text}>%</Text></View> */}
                     <View style={styles.headerLabel}><Text style={styles.text}>mm</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>sec</Text></View>
                 </View>
