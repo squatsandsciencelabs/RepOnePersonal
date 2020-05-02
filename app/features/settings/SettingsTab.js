@@ -14,6 +14,7 @@ import SettingsAccountScreen from './account/SettingsAccountScreen';
 import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
 import SettingsMetricsScreen from './metrics/SettingsMetricsScreen';
+import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 
 class SettingsTab extends Component {
             
@@ -28,6 +29,7 @@ class SettingsTab extends Component {
                     <SettingsMetricsScreen />
                     <SettingsApplicationScreen />
                     <SettingsFeedbackScreen />
+                    <SettingsCalibrationScreen />
                 </View>
             </ScrollView>
         );

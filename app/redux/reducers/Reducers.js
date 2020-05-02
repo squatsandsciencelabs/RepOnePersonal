@@ -16,6 +16,7 @@ import DurationsReducer from './DurationsReducer';
 import AnalysisReducer from './AnalysisReducer';
 import SurveyReducer from './SurveyReducer';
 import OTAReducer from './OTAReducer';
+import CalibrationReducer from './CalibrationReducer';
 
 export default reducers = combineReducers({
     sets: SetsReducer,
@@ -35,4 +36,5 @@ export default reducers = combineReducers({
     analysis: AnalysisReducer,
     survey: SurveyReducer,
     ota: OTAReducer,
+    calibration: CalibrationReducer,
 });
