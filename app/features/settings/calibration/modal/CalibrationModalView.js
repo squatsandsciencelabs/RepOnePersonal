@@ -8,8 +8,11 @@ import {
     Alert,
     Platform,
     StatusBar,
+    ScrollView,
+    Image,
 }  from 'react-native';
 import * as Device from 'app/utility/Device';
+import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 export default function (props) {
     return (
@@ -18,6 +21,10 @@ export default function (props) {
             transparent={false}
             visible={props.isModalShowing} >
                 {renderNavigation(props)}
+                <ScrollView style={{flex: 1, backgroundColor: 'rgba(229, 229, 229, 1)'}}>
+                    {renderStep1(props)}
+                    {renderStep2(props)}
+                </ScrollView>
         </Modal>
     );
 }
@@ -40,7 +47,7 @@ const renderNavigation = (props) => {
 
     if (props.isCancelEnabled) {
         var cancel = (
-            <View style={{position: 'absolute', left: 0, top: 12}}>
+            <View style={{position: 'absolute', left: 0, top: 3 }}>
                 <TouchableOpacity onPress={() => props.cancelCalibration()}>
                     <View style={styles.nav}>
                         <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>Cancel</Text>
@@ -50,7 +57,7 @@ const renderNavigation = (props) => {
         )
     } else {
         var cancel = (
-            <View style={{position: 'absolute', left: 0, top: 12}}>
+            <View style={{position: 'absolute', left: 0, top: 3 }}>
                 <View style={styles.nav}>
                     <Text style={[{color: 'rgba(130, 130, 130, 1)'}]}>Cancel</Text>
                 </View>
@@ -65,12 +72,39 @@ const renderNavigation = (props) => {
             { cancel }
 
             <View style={styles.navTitle}>
-                <Text style={styles.titleText}>3D Calibration</Text>
+                <Text style={styles.navTitleText}>3D Calibration</Text>
             </View>
 
         </View>
     )
 }
+
+const renderStep1 = props => {
+    if (props.step !== 1) {
+        return null;
+    }
+
+    return (<View>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 20, flexDirection: 'column' }] }>
+            <Text style={styles.titleText}>Step 1</Text>
+            <Text style={styles.text}>
+                Pull the tether out at least one foot, and make sure no objects (including your hand) are near the nozzle <Text style={styles.boldText}>before you begin calibration</Text>.
+            </Text>
+            <Image style={styles.imageStyle} source={require('app/appearance/images/calibration_step_1.png')} />
+            <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50, marginTop: 10, marginBottom: 10}]}
+                onPress={props.startCalibration.bind(this)}>
+                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>I’m holding the tether, start calibration</Text>
+            </TouchableOpacity>
+        </View>
+    </View>);
+};
+
+const renderStep2 = props => {
+    if (props.step !== 2) {
+        return null;
+    }
+};
+
 
 const styles = StyleSheet.create({
     container: {
@@ -84,13 +118,32 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     navTitle: {
-        paddingTop: 15,
+        paddingTop: 7,
     },
-    titleText: {
+    navTitleText: {
         color: 'rgba(77, 77, 77, 1)',
         textAlign: 'center',
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 10,
     },
+    imageStyle: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    titleText: {
+        color: 'rgba(51, 51, 51, 1)',
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    text: {
+        color: 'rgba(51, 51, 51, 1)',
+        fontSize: 14,
+    },
+    boldText: {
+        fontWeight: 'bold',
+    }
 });
