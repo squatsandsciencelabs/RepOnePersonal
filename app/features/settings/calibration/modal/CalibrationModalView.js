@@ -90,7 +90,7 @@ const renderStep1 = props => {
             <Text style={styles.text}>
                 Pull the tether out at least one foot, and make sure no objects (including your hand) are near the nozzle <Text style={styles.boldText}>before you begin calibration</Text>.
             </Text>
-            <Image style={styles.imageStyle} source={require('app/appearance/images/calibration_step_1.png')} />
+            <Image style={styles.singleImageStyle} source={require('app/appearance/images/calibration_step_1.png')} />
             <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50, marginTop: 10, marginBottom: 10}]}
                 onPress={props.startCalibration.bind(this)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>I’m holding the tether, start calibration</Text>
@@ -103,6 +103,26 @@ const renderStep2 = props => {
     if (props.step !== 2) {
         return null;
     }
+
+    return (<View>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 20, flexDirection: 'column' }] }>
+            <Text style={styles.titleText}>Step 2</Text>
+            <Text style={styles.text}>
+                Pull the tether to a sharp angle and move it in circles around the perimeter of the nozzle.
+            </Text>
+            <View style={styles.doubleImageStyle}>
+                <Image source={require('app/appearance/images/calibration_step_2a.png')} />
+                <Image source={require('app/appearance/images/calibration_step_2b.png')} />
+            </View>
+            <Text style={styles.text}>
+                Continue to circle the nozzle until you no longer see the numbers on the device’s screen changing.
+            </Text>
+            <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50, marginTop: 10, marginBottom: 10}]}
+                onPress={props.finishCalibration.bind(this)}>
+                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>Done</Text>
+            </TouchableOpacity>
+        </View>
+    </View>);
 };
 
 
@@ -127,11 +147,24 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 10,
     },
-    imageStyle: {
+    singleImageStyle: {
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 30,
+        marginBottom: 30,
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    doubleImageStyle: {
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 30,
+        marginBottom: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     titleText: {
         color: 'rgba(51, 51, 51, 1)',
