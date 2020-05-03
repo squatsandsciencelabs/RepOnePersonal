@@ -12,6 +12,10 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import CalibrationModalScreen from './modal/CalibrationModalScreen';
 
 export default function (props) {
+    if (!props.isVisible) {
+        return null;
+    }
+
     return (<View>
         <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 0, flexDirection: 'column' }] }>
             <TouchableOpacity style={{padding: 20}} onPress={ () => props.tappedCalibrate() }>
