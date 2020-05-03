@@ -1,6 +1,7 @@
 import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import Toast from 'react-native-root-toast';
+import { stringToBytes } from 'convert-string';
 
 import {
     START_CALIBRATION,
@@ -29,7 +30,8 @@ function *startCalibration(action) {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
             if (formatVersion && formatVersion >= 2) {
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'startcal']);
+                const writeData = stringToBytes('startcal');
+                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
             } else {
                 console.tron.log(`skipping start calibration as format version ${formatVersion} is not >= 2`);
             }
@@ -47,7 +49,8 @@ function *finishCalibration(action) {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
             if (formatVersion && formatVersion >= 2) {
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal']);
+                const writeData = stringToBytes('endcal');
+                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
             } else {
                 console.tron.log(`skipping finish calibration as format version ${formatVersion} is not >= 2`);
             }

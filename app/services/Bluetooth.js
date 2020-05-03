@@ -1,5 +1,6 @@
 // TODO: saga-fy this up
 import BleManager from 'react-native-ble-manager';
+import { stringToBytes } from 'convert-string';
 
 import {
     NativeModules,
@@ -79,7 +80,8 @@ export default function (store) {
             if (apiFormatVersion >= 2) {
                 while (true) {
                     try {
-                        await BleManager.write(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal');
+                        const writeData = stringToBytes('endcal');
+                        await BleManager.write(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData);
                         break;
                     } catch (err) {
                         console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
