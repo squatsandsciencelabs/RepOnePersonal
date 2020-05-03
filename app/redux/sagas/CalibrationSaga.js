@@ -5,12 +5,13 @@ import Toast from 'react-native-root-toast';
 import {
     START_CALIBRATION,
     FINISH_CALIBRATION,
-
+    CANCEL_CALIBRATION,
     DISCONNECTED_FROM_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import * as CalibrationSelectors from 'app/redux/selectors/CalibrationSelectors';
 
-var calibration = false;
+var calibrating = false;
 
 export default function *CalibrationSaga() {
     yield all([
@@ -60,8 +61,14 @@ function *finishCalibration(action) {
 }
 
 function *forceEndCalibration(action) {
+    const isModalShowing = yield select(CalibrationSelectors.getIsModalShowing);
+    if (!isModalShowing) {
+        return;
+    }
+
     calibrating = false;
-    toast('Your disconnected from your sensor, please reconnect and try calibrating again');
+    toast("You disconnected from your sensor, please reconnect and try calibrating again");
+    yield put({ type: CANCEL_CALIBRATION });
 }
 
 function toast(msg) {
