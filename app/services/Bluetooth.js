@@ -70,15 +70,16 @@ export default function (store) {
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E'); // get version info
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
-            if (data16[0] > maxFormatVersion) {
+            const apiFormatVersion = data16[0];
+            if (apiFormatVersion > maxFormatVersion) {
                 console.tron.log(`api version mismatch`);
                 Alert.alert(`Please update your RepOne app to use this device.`);
             }
-            if (data16[0] >= 2) {
+            if (apiFormatVersion >= 2) {
                 // end cal on startup if it's format 2
                 await BleManager.writeWithoutResponse(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal');
             }
-            store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, data16[0], `${data16[1]}.${data16[2]}.${data16[3]}`));
+            store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, apiFormatVersion, `${data16[1]}.${data16[2]}.${data16[3]}`));
         } catch (err) {
             // TODO: add error logging here
             console.tron.log(`Error setting up service after connecting to peripheral ${err}`);
