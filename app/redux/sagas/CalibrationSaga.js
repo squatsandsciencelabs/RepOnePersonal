@@ -28,7 +28,7 @@ function *startCalibration(action) {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
             if (formatVersion && formatVersion >= 2) {
-                yield apply(BleManager, BleManager.writeWithoutResponse, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'startcal']);
+                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'startcal']);
             } else {
                 console.tron.log(`skipping start calibration as format version ${formatVersion} is not >= 2`);
             }
@@ -46,7 +46,7 @@ function *finishCalibration(action) {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
             if (formatVersion && formatVersion >= 2) {
-                yield apply(BleManager, BleManager.writeWithoutResponse, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal']);
+                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal']);
             } else {
                 console.tron.log(`skipping finish calibration as format version ${formatVersion} is not >= 2`);
             }

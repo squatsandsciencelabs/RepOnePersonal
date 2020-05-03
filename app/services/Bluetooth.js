@@ -75,9 +75,16 @@ export default function (store) {
                 console.tron.log(`api version mismatch`);
                 Alert.alert(`Please update your RepOne app to use this device.`);
             }
+            // end cal on startup if it's format 2
             if (apiFormatVersion >= 2) {
-                // end cal on startup if it's format 2
-                await BleManager.writeWithoutResponse(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal');
+                while (true) {
+                    try {
+                        await BleManager.write(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', 'endcal');
+                        break;
+                    } catch (err) {
+                        console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
+                    }
+                }
             }
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, apiFormatVersion, `${data16[1]}.${data16[2]}.${data16[3]}`));
         } catch (err) {
