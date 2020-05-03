@@ -8,7 +8,7 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 const mapStateToProps = (state) => {
     const format = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
     return {
-        isVisible: format !== null && format >= 2, // NOTE: can theoretically also allow api format 1
+        isVisible: format !== null && format >= 1, // NOTE: set this to api format 2 later, using 1 for testing purposes
     };
 };
 
@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const SettingsCalibrationScreen = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(SettingsCalibrationPanel);
 

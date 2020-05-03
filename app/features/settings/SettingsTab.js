@@ -21,7 +21,7 @@ class SettingsTab extends Component {
     render() {
         return (
             <ScrollView style={{flex: 1}}>
-                <View style={{ flex: 1, flexDirection: 'column', justifyContent:'flex-start' }}>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent:'flex-start', marginBottom: 20 }}>
                     <SettingsSurveyScreen />
                     <SettingsOTAScreen />
                     <SettingsDeviceScreen />

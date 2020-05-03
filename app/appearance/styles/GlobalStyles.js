@@ -16,9 +16,6 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         borderColor: '#e0e0e0',
         borderWidth: 1,
     },
-    lastPanel: {
-        marginBottom: 30
-    },
     header: {
         flex: 1,
         justifyContent: 'center',

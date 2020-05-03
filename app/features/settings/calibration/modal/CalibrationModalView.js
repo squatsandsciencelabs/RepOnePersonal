@@ -85,7 +85,7 @@ const renderStep1 = props => {
     }
 
     return (<View>
-        <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 20, flexDirection: 'column' }] }>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, { padding: 20, flexDirection: 'column' }] }>
             <Text style={styles.titleText}>Step 1</Text>
             <Text style={styles.text}>
                 Pull the tether out at least one foot, and make sure no objects (including your hand) are near the nozzle <Text style={styles.boldText}>before you begin calibration</Text>.
@@ -105,7 +105,7 @@ const renderStep2 = props => {
     }
 
     return (<View>
-        <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 20, flexDirection: 'column' }] }>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, { padding: 20, flexDirection: 'column' }] }>
             <Text style={styles.titleText}>Step 2</Text>
             <Text style={styles.text}>
                 Pull the tether to a sharp angle and move it in circles around the perimeter of the nozzle.

@@ -17,7 +17,7 @@ export default function (props) {
     }
 
     return (<View>
-        <View style={ [SETTINGS_PANEL_STYLES.panel, SETTINGS_PANEL_STYLES.lastPanel, { padding: 0, flexDirection: 'column' }] }>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, { padding: 0, flexDirection: 'column' }] }>
             <TouchableOpacity style={{padding: 20}} onPress={ () => props.tappedCalibrate() }>
                 <Text style={styles.titleText}>Calibrate 3D sensing</Text>
                 <Text style={styles.text}>Caution: do not use this option unless directed by RepOne support.</Text>
