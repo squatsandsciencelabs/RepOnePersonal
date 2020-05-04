@@ -17,11 +17,17 @@ export default function (props) {
     }
 
     return (<View>
-        <View style={ [SETTINGS_PANEL_STYLES.panel, { padding: 0, flexDirection: 'column' }] }>
-            <TouchableOpacity style={{padding: 20}} onPress={ () => props.tappedCalibrate() }>
-                <Text style={styles.titleText}>Calibrate 3D sensing</Text>
-                <Text style={styles.text}>Caution: do not use this option unless directed by RepOne support.</Text>
-            </TouchableOpacity>
+        <View style={ [SETTINGS_PANEL_STYLES.panel, { padding: 20, flexDirection: 'column' }] }>
+            <Text style={styles.titleText}>3D Calibration</Text>
+            <Text style={styles.text}>Caution: these functions can impair RepOne’s accuracy, do not use unless directed by support.</Text>
+            <View style={{flexDirection: 'row', marginTop: 10}}>
+                <TouchableOpacity onPress={ () => props.tappedCalibrate() }>
+                    <Text style={styles.option}>CALIBRATE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={ () => props.tappedReset() }>
+                    <Text style={styles.option}>RESET</Text>
+                </TouchableOpacity>
+            </View>
         </View>
         <CalibrationModalScreen />
     </View>);
@@ -38,4 +44,10 @@ const styles = StyleSheet.create({
         color: 'rgba(130, 130, 130, 1)',
         fontSize: 13,
     },
+    option: {
+        color: 'rgba(130, 130, 130, 1)',
+        fontSize: 13,
+        fontWeight: 'bold',
+        paddingRight: 20
+    }
 });

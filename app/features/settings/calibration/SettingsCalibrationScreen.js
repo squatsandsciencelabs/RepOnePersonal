@@ -15,6 +15,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         tappedCalibrate: Actions.tappedCalibrate,
+        tappedReset: Actions.tappedReset,
     }, dispatch);
 };
 

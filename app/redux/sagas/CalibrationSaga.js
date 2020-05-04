@@ -8,6 +8,7 @@ import {
     FINISH_CALIBRATION,
     CANCEL_CALIBRATION,
     DISCONNECTED_FROM_DEVICE,
+    RESET_CALIBRATION,
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as CalibrationSelectors from 'app/redux/selectors/CalibrationSelectors';
@@ -19,6 +20,7 @@ export default function *CalibrationSaga() {
         takeEvery(START_CALIBRATION, startCalibration),
         takeEvery(FINISH_CALIBRATION, finishCalibration),
         takeEvery(DISCONNECTED_FROM_DEVICE, forceEndCalibration),
+        takeEvery(RESET_CALIBRATION, resetCalibration),
         // note: shoulnd't need cancel calibration as cancel is disabled once you tap start
     ]);
 };
@@ -29,7 +31,7 @@ function *startCalibration(action) {
         try {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
-            if (formatVersion && formatVersion >= 2) {
+            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('startcal');
                 yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
             } else {
@@ -48,15 +50,15 @@ function *finishCalibration(action) {
         try {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
             const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
-            if (formatVersion && formatVersion >= 2) {
+            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('endcal');
                 yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
+                toast('Your RepOne device is now calibrated for accurate 3D readings.');
             } else {
                 console.tron.log(`skipping finish calibration as format version ${formatVersion} is not >= 2`);
             }
             calibrating = false;
-            toast('Your RepOne device is now calibrated for accurate 3D readings.');
-            break; // exit the loop due tosuccess
+            break; // exit the loop due to success
         } catch (err) {
             console.tron.log(`failed to end calibration ${err.toString()}, trying again`);
         }
@@ -72,6 +74,26 @@ function *forceEndCalibration(action) {
     calibrating = false;
     toast("You disconnected from your sensor, please reconnect and try calibrating again");
     yield put({ type: CANCEL_CALIBRATION });
+}
+
+function *resetCalibration(action) {
+    while (true) {
+        try {
+            const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+            const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
+                const writeData = stringToBytes('reset');
+                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
+                toast('Your RepOne device has reset its calibration for 3D readings.');
+            } else {
+                console.tron.log(`skipping reset calibration as format version ${formatVersion} is not >= 2`);
+            }
+            calibrating = false;
+            break; // exit the loop due to success
+        } catch (err) {
+            console.tron.log(`failed to end calibration ${err.toString()}, trying again`);
+        }
+    } 
 }
 
 function toast(msg) {
