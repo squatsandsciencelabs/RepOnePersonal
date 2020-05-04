@@ -115,11 +115,11 @@ const renderStep2 = props => {
                 <Image source={require('app/appearance/images/calibration_step_2b.png')} />
             </View>
             <Text style={styles.text}>
-                Continue to circle the nozzle until you no longer see the numbers on the device’s screen changing.
+                Continue to circle the nozzle until you <Text style={styles.boldText}>no longer see the numbers on the device’s screen changing.</Text>
             </Text>
             <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50, marginTop: 10, marginBottom: 10}]}
                 onPress={props.finishCalibration.bind(this)}>
-                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>Done</Text>
+                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>The numbers are no longer changing</Text>
             </TouchableOpacity>
         </View>
     </View>);
