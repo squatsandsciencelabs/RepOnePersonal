@@ -4,6 +4,7 @@ import KillSwitchSaga from './KillSwitchSaga';
 import InitConfigSaga from './InitConfigSaga';
 import TokenSaga from './TokenSaga';
 import AuthSaga from './AuthSaga';
+import BluetoothSaga from './BluetoothSaga';
 import SuggestionsSaga from './SuggestionsSaga';
 import SyncSaga from './SyncSaga';
 import TimerSaga from './TimerSaga';
@@ -24,6 +25,7 @@ const Sagas = function* Sagas(dispatch) {
         InitConfigSaga(),
         TokenSaga(),
         AuthSaga(),
+        BluetoothSaga(),
         SuggestionsSaga(),
         SyncSaga(),
         TimerSaga(),
@@ -34,7 +36,7 @@ const Sagas = function* Sagas(dispatch) {
         InitializedAnalyticsSaga(),
         OneRMAnalyticsSaga(),
         OTASaga(dispatch),
-        // BulkDataSaga(),
+        BulkDataSaga(),
         CalibrationSaga(),
         // VelocityThresholdSaga(),
     ]);

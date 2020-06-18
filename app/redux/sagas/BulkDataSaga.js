@@ -1,10 +1,10 @@
-import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
+import { take, takeEvery, select, put, call, all, apply, spawn } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
-import moment from 'moment';
 
 import {
     ADD_REP_DATA,
-    CONNECTED_TO_DEVICE,
+    SAVE_WORKOUT_REP,
+    SAVE_HISTORY_REP,
     DISCONNECTED_FROM_DEVICE,
     LOGOUT,
 } from 'app/configs+constants/ActionTypes';
@@ -14,13 +14,12 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
 var currentDeviceRepID = null;
 var map = {};
-var ignoredRepIDs = new Set();
-var lastWritten = moment();
-var lastReadRequest = moment();
 
 export default function *BulkDataSaga() {
     yield all([
         takeEvery(ADD_REP_DATA, mapBulkData),
+        takeEvery(SAVE_WORKOUT_REP, completeCheck),
+        takeEvery(SAVE_HISTORY_REP, completeCheck),
         takeEvery(DISCONNECTED_FROM_DEVICE, clearAll),
         takeEvery(LOGOUT, clearAll),
     ]);
@@ -28,7 +27,12 @@ export default function *BulkDataSaga() {
 
 function *mapBulkData(action) {
     if (!action.deviceRepID) {
-        console.tron.log(`not updating reducing because action lacks deviceRepID ${JSON.stringify(action)}`);
+        console.tron.log(`not updating bulk data logic as action lacks deviceRepID ${JSON.stringify(action)}`);
+        return;
+    }
+
+    if (action.totalSampleCount === null) {
+        console.tron.log(`not updating bulk data logic as action lacks total sample count ${JSON.stringify(action)}`);
         return;
     }
 
@@ -42,82 +46,85 @@ function *mapBulkData(action) {
     map[action.deviceRepID] = {
         setID,
         repIndex,
-        totalSampleCount: null,
+        totalSampleCount: action.totalSampleCount,
         receivedSampleCount: 0,
         bulk: {},
     };
 
-    // bluetooth attempt
-    let deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-    if (!deviceIdentifier) {
-        console.tron.log(`Unable to update bulk sample count as no device connected, trying again once connected to a device`);
-        yield take(CONNECTED_TO_DEVICE);
-        deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+    // force notify if the current is not working
+    if (currentDeviceRepID !== null && !map[currentDeviceRepID]) {
+        console.tron.log(`Cannot find map for ${currentDeviceRepID}, tell sensor to finish`);
+        yield spawn(notifyBulkDataReceived, currentDeviceRepID);
+    }
+}
+
+function *completeCheck(action) {
+    // should complete check
+    if (!action.bulkData) {
+        return;
     }
 
-    // finish ignored
-    for (let ignoredID of ignoredRepIDs) {
-        if (ignoredID !== action.deviceRepID) {
-            console.tron.log(`Notifying receive for ignored rep ${ignoredID}`);
-            yield call(notifyBulkDataReceived, deviceIdentifier, ignoredID);
-        }
+    // get set
+    const set = yield select(SetsSelectors.getSet);
+    if (!set) {
+        console.tron.log(`Unable to send complete message for bulk data, set not found for action ${JSON.stringify(action)}`);
+        return;
     }
-    ignoredRepIDs.clear();
 
-    // read sample count
-    yield call(requestSampleCount, deviceIdentifier);
+    // get rep
+    const rep = set.reps[repIndex];
+    if (!rep) {
+        console.tron.log(`Unable to send complete message for bulk data, rep not found for action ${JSON.stringify(action)}`);
+        return;
+    }
+
+    // get device rep id
+    if (!rep.deviceRepID) {
+        console.tron.log(`Unable to send complete message for bulk data, deviceRepID not found for rep ${JSON.stringify(rep)} action ${JSON.stringify(action)}`);
+        return;
+    }
+
+    // force notify completion
+    yield spawn(notifyBulkDataReceived, rep.deviceRepID);
 }
 
 function *clearAll(action) {
     console.tron.log(`CLEARING bulk data mapping`);
     map = {};
-    // note: not sure if should clear ignored rep ids
+    currentDeviceRepID = null;
+}
+
+// note, spawn this thing
+function *notifyBulkDataReceived(deviceRepID) {
+    // generate byte array
+    const data16 = new Uint16Array([deviceRepID]);
+    const data8 = new Uint8Array(data16.buffer);
+    const data = Array.from(data8);
+    
+    while (true) {
+        // fail out upon disconnect 
+        let deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+        if (!deviceIdentifier) {
+            console.tron.log(`not connected, ignoring notifying bulk data received`);
+            return;
+        }
+
+        try {
+            // write to sensor
+            console.tron.log(`Attempt notify bulk data received for ${deviceRepID}`);
+            yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
+            console.tron.log(`Succeeded notify bulk data received for ${deviceRepID}`);
+            
+            // success, bail
+            return;
+        } catch (err) {
+            console.tron.log(`Error notifying bulk data received for ${deviceRepID}`);
+        }
+    }
 }
 
 // EXPORTED FUNCTIONS
 
-export function areAllSamplesReceived(deviceRepID) {
-    if (!map[deviceRepID] || map[deviceRepID].totalSampleCount === null || map[deviceRepID].totalSampleCount > map[deviceRepID].receivedSampleCount) {
-        return false;
-    }
-    return true;
-}
-
-export function notifyBulkDataReceived(deviceIdentifier, deviceRepID) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // flag it as complete
-            if (map[deviceRepID]) {
-                map[deviceRepID].completed = true;
-            }
-
-            // ignore if 5 seconds hasn't passed
-            const diff = moment().diff(lastWritten);
-            if (diff < 5000) {
-                resolve();
-                return;
-            }
-            lastWritten = moment();
-
-            // generate byte array
-            const data16 = new Uint16Array([deviceRepID]);
-            const data8 = new Uint8Array(data16.buffer);
-            const data = Array.from(data8);
-
-            // write to sensor
-            console.tron.log(`Notify bulk data received for ${deviceRepID}`);
-            await BleManager.writeWithoutResponse(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data);
-
-            // resolve
-            resolve();
-        } catch(err) {
-            console.tron.log(`Error notifying bulk data received for ${deviceRepID}`);
-            reject(err);
-        }
-    });
-}
-
-// add bulk data, called by bluetooth.js
 export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     // clear map
     if (currentDeviceRepID !== null && currentDeviceRepID !== deviceRepID && map[currentDeviceRepID]) {
@@ -126,12 +133,9 @@ export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     }
     currentDeviceRepID = deviceRepID;
 
-    if (!map[deviceRepID]) {
-        // ignored
-        ignoredRepIDs.add(deviceRepID);
-    } else {
-        // add it
-        map[deviceRepID].receivedSampleCount += 1;
+    // add if able
+    if (map[deviceRepID] && !map[deviceRepID].bulk[sampleID]) {
+        // add
         map[deviceRepID].bulk[sampleID] = {
             sampleID,
             time,
@@ -139,45 +143,18 @@ export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
             y,
             z,
         };
+
+        // increment
+        map[deviceRepID].receivedSampleCount += 1;
+
+        // debug logging
+        console.tron.log(`rep:${deviceRepID} values are sample_id:${sampleID} time:${time} x:${x} y:${y} z:${z} having received ${map[deviceRepID].receivedSampleCount} of ${map[deviceRepID].totalSampleCount}`);
     }
-}
-
-export async function requestSampleCount(deviceIdentifier, deviceRepID) {
-    // device identifier check
-    if (!deviceIdentifier) {
-        console.tron.log(`unable to request sample count as no device identifier exists`);
-        return;
-    }
-
-    // if already has total sample count, not needed
-    if (map[deviceRepID] && map[deviceRepID].totalSampleCount !== null) {
-        return;
-    }
-
-    // timing check
-    if (moment().diff(lastReadRequest) < 5000) {
-        return;
-    }
-
-    // request read check again
-    lastReadRequest = moment();
-    await BleManager.read(deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274');
-}
-
-export function updateBulkSampleCount(deviceRepID, totalSampleCount) {
-    if (!map[deviceRepID]) {
-        console.tron.log(`Cannot update bulk sample count, map does not exist for ${deviceRepID}`);
-        ignoredRepIDs.add(deviceRepID);
-        return;
-    }
-
-    map[deviceRepID].totalSampleCount = totalSampleCount;
-    console.tron.log(`updated bulk sample count of ${deviceRepID} to ${totalSampleCount}`);
 }
 
 export function getBulkData(deviceRepID) {
-    // completed check
-    if(!areAllSamplesReceived(deviceRepID)) {
+    // map exists
+    if (!map[deviceRepID]) {
         return false;
     }
 
@@ -186,6 +163,14 @@ export function getBulkData(deviceRepID) {
     if (map[deviceRepID].completed === true) {
         return true;
     }
+
+    // completed check
+    if (map[deviceRepID].receivedSampleCount < map[deviceRepID].totalSampleCount) {
+        return false;
+    }
+
+    // flag complete
+    map[deviceRepID].completed = true;
 
     // return the items
     return {

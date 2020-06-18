@@ -1,6 +1,6 @@
-// TODO: saga-fy this up
+// TODO: can move this into a saga and pass it the dispatch function as well
+// leaving this here for dev speed purposes
 import BleManager from 'react-native-ble-manager';
-import { stringToBytes } from 'convert-string';
 
 import {
     NativeModules,
@@ -13,12 +13,8 @@ import {
 } from 'app/configs+constants/ActionTypes';
 
 import {
-    areAllSamplesReceived,
     getBulkData,
     addBulkData,
-    updateBulkSampleCount,
-    notifyBulkDataReceived,
-    requestSampleCount,
 } from 'app/redux/sagas/BulkDataSaga';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
@@ -65,9 +61,8 @@ export default function (store) {
     Emitter.addListener('BleManagerConnectPeripheral', async (args) => {
         // observe reps
         try {
+            // get version info
             await BleManager.retrieveServices(args.peripheral);
-            await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273'); // reps
-            // await BleManager.startNotification(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274'); // bulk data
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E'); // get version info
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
@@ -76,18 +71,8 @@ export default function (store) {
                 console.tron.log(`api version mismatch`);
                 Alert.alert(`Please update your RepOne app to use this device.`);
             }
-            // end cal on startup if it's format 2
-            if (apiFormatVersion >= 2) {
-                while (true) {
-                    try {
-                        const writeData = stringToBytes('endcal');
-                        await BleManager.write(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData);
-                        break;
-                    } catch (err) {
-                        console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
-                    }
-                }
-            }
+
+            // connected
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, apiFormatVersion, `${data16[1]}.${data16[2]}.${data16[3]}`));
         } catch (err) {
             // TODO: add error logging here
@@ -104,9 +89,13 @@ export default function (store) {
             return;
         }
 
-        // 
+        // process it
+        // done here instead of actions to a saga to save on number of actions
+        // especially important for bulk data as it gets spammed
         if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273') {
             // reps
+
+            // variables
             const typedArray = new Uint8Array(args.value);
             const data = new Uint16Array(typedArray.buffer);
 
@@ -120,72 +109,56 @@ export default function (store) {
                 peakVelocity: data[4],
                 peakHeight: data[5],
                 duration: data[6],
+                totalSampleCount: format === 1 ? null : data[7],
                 linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
                 linear3DROM: formatVersion === 1 ? null : data[9],
             }));
         } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
             // bulk data
-            const typedArray = new Uint8Array(args.value);
-            const data = new DataView(typedArray.buffer);
+
             try {
-                if (typedArray.length === 4) {
-                    // this is sample count
-                    const deviceRepID = data.getUint16(0, true);
-                    const totalSampleCount = data.getUint16(2, true);
-                    updateBulkSampleCount(deviceRepID, totalSampleCount);
-                } else {
-                    const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
-                    const deviceRepID = data.getUint16(0, true);
-                    if (!areAllSamplesReceived(deviceRepID)) {
-                        const sampleID = data.getUint16(2, true);
-                        const time = data.getUint32(4, true);
-                        const x = data.getUint16(8, true);
-                        const y = data.getUint16(10, true);
-                        const z = data.getUint16(12, true);
+                // parse data
+                const typedArray = new Uint8Array(args.value);
+                const data = new DataView(typedArray.buffer);    
+                const deviceRepID = data.getUint16(0, true);
+                const sampleID = data.getUint16(2, true);
+                const time = data.getUint32(4, true);
+                const x = data.getUint16(8, true);
+                const y = data.getUint16(10, true);
+                const z = data.getUint16(12, true);
 
-                        // save
-                        addBulkData(deviceRepID, sampleID, time, x, y, z);
+                // add bulk data
+                addBulkData(deviceRepID, sampleID, time, x, y, z);
 
-                        // request sample count if needed
-                        requestSampleCount(deviceIdentifier, deviceRepID);
+                // complete check
+                const completedData = getBulkData(deviceRepID);
+                if (completedData !== false && completedData !== true) {
+                    // has real object, save it
+                    const repIndex = completedData.repIndex;
+                    const setID = completedData.setID;
+                    const bulkData = completedData.bulkData;
+
+                    // save to store
+                    if (SetsSelectors.getHistorySet(state, setID)) {
+                        // history has it
+                        store.dispatch({
+                            type: SAVE_HISTORY_REP,
+                            setID,
+                            repIndex,
+                            bulkData,
+                        });
+                    } else if (SetsSelectors.getWorkoutSet(state, setID)) {
+                        // workout has it
+                        store.dispatch({
+                            type: SAVE_WORKOUT_REP,
+                            setID,
+                            repIndex,
+                            bulkData,
+                        });
+                    } else {
+                        console.tron.log(`No set found for rep with device id ${deviceRepID}`);
                     }
-
-                    const completedData = getBulkData(deviceRepID);
-                    if (completedData !== false) {
-                        if (completedData !== true) {
-                            // has real object, save it
-                            const repIndex = completedData.repIndex;
-                            const setID = completedData.setID;
-                            const bulkData = completedData.bulkData;
-                            if (SetsSelectors.getHistorySet(state, setID)) {
-                                // history has it
-                                store.dispatch({
-                                    type: SAVE_HISTORY_REP,
-                                    setID,
-                                    repIndex,
-                                    bulkData,
-                                });
-                            } else if (SetsSelectors.getWorkoutSet(state, setID)) {
-                                // workout has it
-                                store.dispatch({
-                                    type: SAVE_WORKOUT_REP,
-                                    setID,
-                                    repIndex,
-                                    bulkData,
-                                });
-                            } else {
-                                console.tron.log(`No set found for rep with device id ${deviceRepID}`);
-                            }
-                        }
-                    
-                        // tell the sensor it's okay
-                        if (!deviceIdentifier) {
-                            console.tron.log(`Unable to write success message to device as no device identifier found`);
-                            return;
-                        }
-                        await notifyBulkDataReceived(deviceIdentifier, deviceRepID);
-                   }
-                 }
+               }
             } catch (err) {
                 console.tron.log(`Error dispatching add bulk data ${err}`);
             }
