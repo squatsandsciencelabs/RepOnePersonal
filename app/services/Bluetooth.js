@@ -109,7 +109,7 @@ export default function (store) {
                 peakVelocity: data[4],
                 peakHeight: data[5],
                 duration: data[6],
-                totalSampleCount: format === 1 ? null : data[7],
+                totalSampleCount: formatVersion === 1 ? null : data[7],
                 linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
                 linear3DROM: formatVersion === 1 ? null : data[9],
             }));
