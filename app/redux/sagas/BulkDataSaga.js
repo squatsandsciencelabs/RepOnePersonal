@@ -65,14 +65,15 @@ function *completeCheck(action) {
     }
 
     // get set
-    const set = yield select(SetsSelectors.getSet);
+    const state = yield select();
+    const set = SetsSelectors.getSet(state, action.setID);
     if (!set) {
         console.tron.log(`Unable to send complete message for bulk data, set not found for action ${JSON.stringify(action)}`);
         return;
     }
 
     // get rep
-    const rep = set.reps[repIndex];
+    const rep = set.reps[action.repIndex];
     if (!rep) {
         console.tron.log(`Unable to send complete message for bulk data, rep not found for action ${JSON.stringify(action)}`);
         return;
@@ -118,7 +119,7 @@ function *notifyBulkDataReceived(deviceRepID) {
             // success, bail
             return;
         } catch (err) {
-            console.tron.log(`Error notifying bulk data received for ${deviceRepID}`);
+            console.tron.log(`Error notifying bulk data received for ${deviceRepID} ${err.toString()}`);
         }
     }
 }
