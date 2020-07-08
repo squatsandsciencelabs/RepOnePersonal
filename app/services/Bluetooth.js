@@ -82,86 +82,91 @@ export default function (store) {
 
     // data
     Emitter.addListener('BleManagerDidUpdateValueForCharacteristic', async (args) => {
-        // api version check
-        const state = store.getState();
-        const formatVersion = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
-        if (formatVersion > maxFormatVersion) {
-            return;
-        }
-
-        // process it
-        // done here instead of actions to a saga to save on number of actions
-        // especially important for bulk data as it gets spammed
-        if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273') {
-            // reps
-
-            // variables
-            const typedArray = new Uint8Array(args.value);
-            const data = new Uint16Array(typedArray.buffer);
-
-            // not sending valid until methods to determine invalid are determined
-            store.dispatch(DeviceActionCreators.receivedLiftData({
-                isValid: true, // TODO: should actually calculate when data could be valid
-                deviceRepID: data[0],
-                repNumber: data[1],
-                averageVelocity: data[2],
-                rom: data[3],
-                peakVelocity: data[4],
-                peakHeight: data[5],
-                duration: data[6],
-                totalSampleCount: formatVersion === 1 ? null : data[7],
-                linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
-                linear3DROM: formatVersion === 1 ? null : data[9],
-            }));
-        } else if (args.characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
-            // bulk data
-
-            try {
-                // parse data
-                const typedArray = new Uint8Array(args.value);
-                const data = new DataView(typedArray.buffer);    
-                const deviceRepID = data.getUint16(0, true);
-                const sampleID = data.getUint16(2, true);
-                const time = data.getUint32(4, true);
-                const x = data.getUint16(8, true);
-                const y = data.getUint16(10, true);
-                const z = data.getUint16(12, true);
-
-                // add bulk data
-                addBulkData(deviceRepID, sampleID, time, x, y, z);
-
-                // complete check
-                const completedData = getBulkData(deviceRepID);
-                if (completedData !== false && completedData !== true) {
-                    // has real object, save it
-                    const repIndex = completedData.repIndex;
-                    const setID = completedData.setID;
-                    const bulkData = completedData.bulkData;
-
-                    // save to store
-                    if (SetsSelectors.getHistorySet(state, setID)) {
-                        // history has it
-                        store.dispatch({
-                            type: SAVE_HISTORY_REP,
-                            setID,
-                            repIndex,
-                            bulkData,
-                        });
-                    } else if (SetsSelectors.getWorkoutSet(state, setID)) {
-                        // workout has it
-                        store.dispatch({
-                            type: SAVE_WORKOUT_REP,
-                            setID,
-                            repIndex,
-                            bulkData,
-                        });
-                    } else {
-                        console.tron.log(`No set found for rep with device id ${deviceRepID}`);
-                    }
-               }
-            } catch (err) {
-                console.tron.log(`Error dispatching add bulk data ${err}`);
+        try {
+            // api version check
+            const state = store.getState();
+            const formatVersion = ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
+            if (formatVersion > maxFormatVersion) {
+                return;
             }
+            const characteristic = args.characteristic.toUpperCase();
+
+            // process it
+            // done here instead of actions to a saga to save on number of actions
+            // especially important for bulk data as it gets spammed
+            if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273') {
+                // reps
+
+                // variables
+                const typedArray = new Uint8Array(args.value);
+                const data = new Uint16Array(typedArray.buffer);
+
+                // not sending valid until methods to determine invalid are determined
+                store.dispatch(DeviceActionCreators.receivedLiftData({
+                    isValid: true, // TODO: should actually calculate when data could be valid
+                    deviceRepID: data[0],
+                    repNumber: data[1],
+                    averageVelocity: data[2],
+                    rom: data[3],
+                    peakVelocity: data[4],
+                    peakHeight: data[5],
+                    duration: data[6],
+                    totalSampleCount: formatVersion === 1 ? null : data[7],
+                    linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
+                    linear3DROM: formatVersion === 1 ? null : data[9],
+                }));
+            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
+                // bulk data
+
+                try {
+                    // parse data
+                    const typedArray = new Uint8Array(args.value);
+                    const data = new DataView(typedArray.buffer);
+                    const deviceRepID = data.getUint16(0, true);
+                    const sampleID = data.getUint16(2, true);
+                    const time = data.getUint32(4, true);
+                    const x = data.getInt16(8, true);
+                    const y = data.getInt16(10, true);
+                    const z = data.getInt16(12, true);
+
+                    // add bulk data
+                    addBulkData(typedArray, deviceRepID, sampleID, time, x, y, z);
+
+                    // complete check
+                    const completedData = getBulkData(deviceRepID);
+                    if (completedData !== false && completedData !== true) {
+                        // has real object, save it
+                        const repIndex = completedData.repIndex;
+                        const setID = completedData.setID;
+                        const bulkData = completedData.bulkData;
+
+                        // save to store
+                        if (SetsSelectors.getHistorySet(state, setID)) {
+                            // history has it
+                            store.dispatch({
+                                type: SAVE_HISTORY_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else if (SetsSelectors.getWorkoutSet(state, setID)) {
+                            // workout has it
+                            store.dispatch({
+                                type: SAVE_WORKOUT_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else {
+                            console.tron.log(`No set found for rep with device id ${deviceRepID}`);
+                        }
+                    }
+                } catch (err) {
+                    console.tron.log(`Error dispatching add bulk data ${err}`);
+                }
+            }
+        } catch (err) {
+            console.tron.log(`Error processing stuff from bluetooth ${err}`);
         }
     });
 
