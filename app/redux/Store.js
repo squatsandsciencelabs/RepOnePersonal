@@ -60,6 +60,7 @@ export default initializeStore = () => {
             'suggestions',
             'durations',
             'calibration',
+            'scalar',
         ],
         // note, everything in sets is to be persisted so not blacklisting or transforming them
         // note, everything in workoutCollapsed and historyCollapsed are to be persisted so not blacklisting or transforming

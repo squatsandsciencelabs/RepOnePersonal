@@ -18,6 +18,7 @@ import VelocityThresholdSaga from './VelocityThresholdSaga';
 import OTASaga from './OTASaga';
 import BulkDataSaga from './BulkDataSaga';
 import CalibrationSaga from './CalibrationSaga';
+import ScalarSaga from './ScalarSaga';
 
 const Sagas = function* Sagas(dispatch) {
     yield all([
@@ -38,6 +39,7 @@ const Sagas = function* Sagas(dispatch) {
         OTASaga(dispatch),
         BulkDataSaga(),
         CalibrationSaga(),
+        ScalarSaga(),
         // VelocityThresholdSaga(),
     ]);
 };
