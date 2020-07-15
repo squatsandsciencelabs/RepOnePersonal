@@ -70,7 +70,7 @@ function* setupServices(action) {
                 console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
             }
         }
-    } catch (error) {
+    } catch (err) {
         console.tron.log(`Error setting up service after connecting to peripheral ${err}`);
     }
 }
