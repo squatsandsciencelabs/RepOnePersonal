@@ -126,7 +126,7 @@ function *notifyBulkDataReceived(deviceRepID) {
 
 // EXPORTED FUNCTIONS
 
-export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
+export async function addBulkData(raw, deviceRepID, sampleID, time, x, y, z) {
     // clear map
     if (currentDeviceRepID !== null && currentDeviceRepID !== deviceRepID && map[currentDeviceRepID]) {
         console.tron.log(`clearing map for ${currentDeviceRepID} and switching to ${deviceRepID}`);
@@ -138,6 +138,7 @@ export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
     if (map[deviceRepID] && !map[deviceRepID].bulk[sampleID]) {
         // add
         map[deviceRepID].bulk[sampleID] = {
+            raw: raw.toString(),
             sampleID,
             time,
             x,
@@ -149,7 +150,7 @@ export async function addBulkData(deviceRepID, sampleID, time, x, y, z) {
         map[deviceRepID].receivedSampleCount += 1;
 
         // debug logging
-        console.tron.log(`rep:${deviceRepID} values are sample_id:${sampleID} time:${time} x:${x} y:${y} z:${z} having received ${map[deviceRepID].receivedSampleCount} of ${map[deviceRepID].totalSampleCount}`);
+        console.tron.log(`rep:${deviceRepID} ${raw} values are sample_id:${sampleID} time:${time} x:${x} y:${y} z:${z} having received ${map[deviceRepID].receivedSampleCount} of ${map[deviceRepID].totalSampleCount}`);
     }
 }
 
