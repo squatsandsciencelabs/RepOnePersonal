@@ -25,6 +25,7 @@ import {
     DELETE_HISTORY_SET,
     RESTORE_HISTORY_SET,
     TEST_1RM,
+    ADD_3D_POSITIONS_TO_REP,
 } from 'app/configs+constants/ActionTypes';
 import uuidV4 from 'uuid/v4';
 import { getVersion } from 'react-native-device-info';
@@ -86,6 +87,8 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return finishUploadingSets(state, action);
         case TEST_1RM:
             return overrideWithTestData(state, action);
+        case ADD_3D_POSITIONS_TO_REP:
+            return add3DPositionsToRep(state, action);
         default:
             return state;
     }
@@ -726,6 +729,39 @@ const overrideWithTestData = (state, action) => {
 
 const addTime = (origDate, dateDifference) => {
     return new Date(Date.parse(origDate) + dateDifference);
+};
+
+// scalar positions
+
+const add3DPositionsToRep = (state, action) => {
+    // get latest set in workout
+    let set = state.workoutData[state.workoutData.length-1];
+
+    // get latest rep in workout
+    let rep = set.reps[set.reps.length-1];
+
+    // add data to rep
+    rep = {
+        ...rep,
+        start: action.start,
+        end: action.end,
+    };
+
+    // add reps to set object
+    const reps = set.reps.slice(0, set.reps.length-1); // copy all but the last element
+    reps.push(rep); // add the updated rep
+    set = {
+        ...set,
+        reps,
+    };
+
+    // add set object to workout data
+    const workoutData = state.workoutData.slice(0, state.workoutData.length-1); // copy all but the last element
+    workoutData.push(set); // add the updated set
+    return {
+        ...state,
+        workoutData,
+    }
 };
 
 export default SetsReducer;
