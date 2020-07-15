@@ -16,7 +16,7 @@ class SetDataLabelRow extends PureComponent {
                     <View style={styles.headerLabel}><Text style={styles.text}>L3DAVG</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>PKV</Text></View>
                     {/* <View style={styles.headerLabel}><Text style={styles.text}>PKH</Text></View> */}
-                    <View style={styles.headerLabel}><Text style={styles.text}>ROM</Text></View>
+                    <View style={styles.headerLabel}><Text style={styles.text}>3DROM</Text></View>
                     <View style={styles.headerLabel}><Text style={styles.text}>DUR</Text></View>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
