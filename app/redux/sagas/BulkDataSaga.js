@@ -1,5 +1,6 @@
 import { take, takeEvery, select, put, call, all, apply, spawn } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
+import Toast from 'react-native-root-toast';
 
 import {
     ADD_REP_DATA,
@@ -86,7 +87,7 @@ function *completeCheck(action) {
     }
 
     // force notify completion
-    yield spawn(notifyBulkDataReceived, rep.deviceRepID);
+    yield spawn(notifyBulkDataReceived, rep.deviceRepID, true);
 }
 
 function *clearAll(action) {
@@ -96,7 +97,7 @@ function *clearAll(action) {
 }
 
 // note, spawn this thing
-function *notifyBulkDataReceived(deviceRepID) {
+function *notifyBulkDataReceived(deviceRepID, completed=false) {
     // generate byte array
     const data16 = new Uint16Array([deviceRepID]);
     const data8 = new Uint8Array(data16.buffer);
@@ -117,6 +118,15 @@ function *notifyBulkDataReceived(deviceRepID) {
             console.tron.log(`Succeeded notify bulk data received for ${deviceRepID}`);
             
             // success, bail
+            const msg = completed ? `Bulk Data Received For ${deviceRepID}` : `Ignored bulk data for ${deviceRepID}`;
+            Toast.show(msg, {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+            });
             return;
         } catch (err) {
             console.tron.log(`Error notifying bulk data received for ${deviceRepID} ${err.toString()}`);
