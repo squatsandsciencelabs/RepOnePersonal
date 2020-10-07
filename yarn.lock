@@ -5521,10 +5521,10 @@ react-native-background-timer@^2.1.1:
   resolved "https://registry.yarnpkg.com/react-native-background-timer/-/react-native-background-timer-2.1.1.tgz#9a2489681ab2f8033c213c73272e9d4c47572cd5"
   integrity sha512-cuXIIv+dcG8a8qkTD8pMzeqOEZCO+UGKglZWIe1osve+yJslmCowYQff+bI9xa7NOt2w+Vtd4L3d9JonlSqODg==
 
-react-native-ble-manager@^6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-6.7.0.tgz#74e1288ae061be7d267389509ed3f7fcd67d9a6f"
-  integrity sha512-hJuij3nWKBp4Ba7GaT8CzTGOp5i33czvU53Emvf6kBxCXNc2tBR55NogTtTC4DbTfrxNQHjr6Ppws7pDcH088w==
+react-native-ble-manager@^7.4.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-7.4.1.tgz#062c13614e0e627a4d2648075716e02938d44a13"
+  integrity sha512-d9VS9y11SKxU6eUBIlUYrGo3kJKtGfuLJ4eDV7corETARz8JRWd5a/lXO5uqvyNP2lV5w3SiuycOJXEZdX7sow==
 
 react-native-camera@^3.15.0:
   version "3.15.0"
