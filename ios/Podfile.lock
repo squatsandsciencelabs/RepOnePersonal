@@ -299,7 +299,7 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-background-timer (2.1.1):
     - React
-  - react-native-ble-manager (6.7.0):
+  - react-native-ble-manager (7.4.1):
     - React
   - react-native-camera (3.15.0):
     - React
@@ -633,7 +633,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-background-timer: 1b6e6b4e10f1b74c367a1fdc3c72b67c619b222b
-  react-native-ble-manager: c61d563acabfc675d26ce55d3b6e2e84df950203
+  react-native-ble-manager: a0d0ee16185d281d55dfeb76dab387541eed201e
   react-native-camera: 52114c432860b89986c9ee4919d00a48a6ba7abb
   react-native-cameraroll: 463aff54e37cff27ea76eb792e6f1fa43b876320
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
@@ -668,4 +668,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f2b481f29bd599ef188965e679b08defb82f7600
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3
