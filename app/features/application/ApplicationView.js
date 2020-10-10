@@ -18,13 +18,13 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import * as Device from 'app/utility/Device';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
+import Badge from './Badge';
 
 class ApplicationView extends Component {
     state = {
         index: NavigationConfig.initialIndex,
         routes: NavigationConfig.routes,
     };
-    badge = <Text style={{ color: 'red' }}>•</Text>;
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.tabIndex !== this.state.index) {
@@ -86,18 +86,20 @@ class ApplicationView extends Component {
         this.props.changeTab(index);
     }
 
+    _renderLabel({ route, focused, color }) {
+        const dot = route.badge ? <Badge /> : null;
+        return (
+            <Text style={{ color, fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}>
+                {dot}{route.title}
+            </Text>
+        );
+    }
+
     _renderHeader = props => <TabBar
         indicatorStyle={{backgroundColor: '#eb5757', height: 2}}
         style={{backgroundColor: '#333333'}}
         // labelStyle={{fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}
-        renderLabel={({ route, focused, color }) => {
-            const dot = route.badge ? this.badge : null;
-            return (
-                <Text style={{ color, fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}>
-                    {dot}{route.title}
-                </Text>
-            );
-        }}
+        renderLabel={this._renderLabel}
         {...props} />;
 
     _renderApplication() {
