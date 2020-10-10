@@ -32,18 +32,6 @@ class ApplicationView extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.isUpgradeAvailable && this.state.routes[3].title === 'SETTINGS') {
-            this.setState({
-                routes: NavigationConfig.routesWithUpdate,
-            });
-        } else if (!this.props.isUpgradeAvailable && this.state.routes[3].title === '•SETTINGS') {
-            this.setState({
-                routes: NavigationConfig.routes,
-            });
-        }
-    }
-
     componentDidMount() {
         this._checkIfOutdated();
     }
@@ -87,7 +75,7 @@ class ApplicationView extends Component {
     }
 
     _renderLabel({ route, focused, color }) {
-        const dot = route.badge ? <Badge /> : null;
+        const dot = route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
         return (
             <Text style={{ color, fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}>
                 {dot}{route.title}
@@ -98,8 +86,8 @@ class ApplicationView extends Component {
     _renderHeader = props => <TabBar
         indicatorStyle={{backgroundColor: '#eb5757', height: 2}}
         style={{backgroundColor: '#333333'}}
-        // labelStyle={{fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}
-        renderLabel={this._renderLabel}
+        labelStyle={{fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}
+        renderLabel={this._renderLabel.bind(this)}
         {...props} />;
 
     _renderApplication() {
