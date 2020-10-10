@@ -129,7 +129,10 @@ const executeRequest = (method, endpoint, body, accessToken=null) => {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             },
             body: JSON.stringify(body)
         };

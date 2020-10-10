@@ -68,7 +68,15 @@ function *checkOTA(dispatch, action) {
     // get json from server 
     let json = null;
     try {
-        const response = yield fetch(OpenBarbellConfig.firmwareURL);
+        const response = yield fetch(OpenBarbellConfig.firmwareURL, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+            },
+        });
         json = yield response.json();
         console.tron.log(`firmware url json ${JSON.stringify(json)}`);
     } catch (err) {
