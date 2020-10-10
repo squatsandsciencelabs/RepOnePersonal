@@ -6,15 +6,13 @@
 
 import React, {Component} from 'react';
 import {
-    TouchableHighlight,
     Text,
     StatusBar,
     StyleSheet,
     View,
-    ListView,
     Dimensions,
     Alert,
-    Platform
+    Platform,
 } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import * as Device from 'app/utility/Device';
@@ -26,6 +24,7 @@ class ApplicationView extends Component {
         index: NavigationConfig.initialIndex,
         routes: NavigationConfig.routes,
     };
+    badge = <Text style={{ color: 'red' }}>•</Text>;
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.tabIndex !== this.state.index) {
@@ -91,6 +90,14 @@ class ApplicationView extends Component {
         indicatorStyle={{backgroundColor: '#eb5757', height: 2}}
         style={{backgroundColor: '#333333'}}
         labelStyle={{fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}
+        renderLabel={({ route, focused, color }) => {
+            const dot = route.badge ? this.badge : null;
+            return (
+                <Text style={{ color }}>
+                    {dot}{route.title}
+                </Text>
+            );
+        }}
         {...props} />;
 
     _renderApplication() {

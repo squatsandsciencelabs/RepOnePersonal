@@ -11,15 +11,15 @@ export const initialIndex = 3;
 export const routes = [
     { key: '0', title: 'WORKOUT' },
     { key: '1', title: 'HISTORY' },
-    { key: '2', title: 'ANALYSIS'},
-    { key: '3', title: 'SETTINGS' },       
+    { key: '2', title: 'ANALYSIS' },
+    { key: '3', title: 'SETTINGS' },
 ];
 
 export const routesWithUpdate = [
     { key: '0', title: 'WORKOUT' },
     { key: '1', title: 'HISTORY' },
     { key: '2', title: 'ANALYSIS'},
-    { key: '3', title: '•SETTINGS' },       
+    { key: '3', title: 'SETTINGS', badge: true },
 ];
 
 export const sceneMap = SceneMap({
