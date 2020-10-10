@@ -131,6 +131,8 @@ const executeRequest = (method, endpoint, body, accessToken=null) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Cache-Control': 'no-store, no-cache, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             },
             body: JSON.stringify(body)
         };
