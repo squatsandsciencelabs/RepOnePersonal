@@ -35,9 +35,9 @@ const isUpgradeAvailable = (state) => {
 };
 
 const mapStateToProps = (state) => ({
-        tabIndex: AppStateSelectors.getTabIndex(state),
-        killSwitch: state.killSwitch,
-        isUpgradeAvailable: isUpgradeAvailable(state),
+    tabIndex: AppStateSelectors.getTabIndex(state),
+    killSwitch: state.killSwitch,
+    isUpgradeAvailable: isUpgradeAvailable(state),
 });
 
 const mapDispatchToProps = (dispatch) => {

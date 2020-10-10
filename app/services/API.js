@@ -167,7 +167,7 @@ const executeRequest = (method, endpoint, body, accessToken=null) => {
                     }
                     break;
                 default:
-                    console.tron.log("Not 401 or in the 200s, blah");
+                    console.tron.log(`Not 401 or in the 200s, blah. ${endpoint}`);
                     reject({type:"Oops, something went wrong it's not 200 it's " + status});
             }
         } catch (err) {
