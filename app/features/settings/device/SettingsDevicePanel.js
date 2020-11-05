@@ -12,6 +12,7 @@ import SettingsDevicePanelReconnecting from './panels/SettingsDevicePanelReconne
 class SettingsDevicePanel extends Component {
 
     render() {
+        console.tron.log(`render device panel`);
         switch ( this.props.deviceStatus ) {
             case 'BLUETOOTH_OFF':
                 return <SettingsDevicePanelBluetoothOff />;

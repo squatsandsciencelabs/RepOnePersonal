@@ -13,32 +13,32 @@
 
 // #import <RNGoogleSignin/RNGoogleSignin.h>
 // #import <Firebase.h>
-#import "RNNordicDfu.h"
+//#import "RNNordicDfu.h"
 
-#import "DeviceUID.h"
+//#import "DeviceUID.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   // test device id
-  NSLog(@"%@", [DeviceUID uid]);
+//  NSLog(@"%@", [DeviceUID uid]);
   
   // config firebase
   // [FIRApp configure];
   
   // config dfu
-  [RNNordicDfu setCentralManagerGetter:^() {
-    return [[CBCentralManager alloc] initWithDelegate:nil queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)];
-  }];
+//  [RNNordicDfu setCentralManagerGetter:^() {
+//    return [[CBCentralManager alloc] initWithDelegate:nil queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)];
+//  }];
   
   // Reset manager delegate since the Nordic DFU lib "steals" control over it
-  [RNNordicDfu setOnDFUComplete:^() {
-    NSLog(@"onDFUComplete");
-  }];
-  [RNNordicDfu setOnDFUError:^() {
-    NSLog(@"onDFUError");
-  }];
+//  [RNNordicDfu setOnDFUComplete:^() {
+//    NSLog(@"onDFUComplete");
+//  }];
+//  [RNNordicDfu setOnDFUError:^() {
+//    NSLog(@"onDFUError");
+//  }];
   
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge

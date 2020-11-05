@@ -43,37 +43,37 @@ target 'OpenBarbellApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  # pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
-  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+  # pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
-  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
+  # pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
-  pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
+  # pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
 
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
 
-  pod 'RNSound', :path => '../node_modules/react-native-sound'
+  # pod 'RNSound', :path => '../node_modules/react-native-sound'
 
-  pod "react-native-nordic-dfu", path: "../node_modules/react-native-nordic-dfu", :modular_headers => true
+  # pod "react-native-nordic-dfu", path: "../node_modules/react-native-nordic-dfu", :modular_headers => true
 
-  pod 'react-native-video', :path => '../node_modules/react-native-video'
+  # pod 'react-native-video', :path => '../node_modules/react-native-video'
 
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  # pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   pod 'react-native-ble-manager', :path => '../node_modules/react-native-ble-manager'
 
-  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+  # pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
-  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+  # pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
-  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+  # pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
 
-  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+  # pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  # pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'OpenBarbellAppTests' do
     inherit! :search_paths

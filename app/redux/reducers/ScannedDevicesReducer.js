@@ -28,6 +28,7 @@ const ScannedDevicesReducer = ( state = defaultState, action) => {
                 isManualScan: false,
             });
         case FOUND_DEVICE:
+            console.log(`found device reducer... ${!action.deviceName} ${state.devices.includes(action.deviceName)} ${action.deviceName ? !action.deviceName.startsWith("RepOne") : 'no device nme sent'}`);
             if(!action.deviceName || state.devices.includes(action.deviceName) || !action.deviceName.startsWith("RepOne")) {
                 //duplicate entry
                 return state;

@@ -15,6 +15,7 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#e0e0e0',
         borderWidth: 1,
+        height: 200,// hack
     },
     lastPanel: {
         marginBottom: 30

@@ -1,8 +1,5 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - Charts (3.3.0):
-    - Charts/Core (= 3.3.0)
-  - Charts/Core (3.3.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
@@ -22,8 +19,6 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - iOSDFULibrary (4.6.1):
-    - ZIPFoundation (= 0.9.9)
   - Permission-BluetoothPeripheral (2.0.8):
     - RNPermissions
   - Permission-Camera (2.0.8):
@@ -197,34 +192,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-background-timer (2.1.1):
-    - React
   - react-native-ble-manager (7.4.1):
-    - React
-  - react-native-camera (3.15.0):
-    - React
-    - react-native-camera/RCT (= 3.15.0)
-    - react-native-camera/RN (= 3.15.0)
-  - react-native-camera/RCT (3.15.0):
-    - React
-  - react-native-camera/RN (3.15.0):
-    - React
-  - react-native-cameraroll (1.3.0):
-    - React
-  - react-native-keep-awake (4.0.0):
-    - React
-  - react-native-nordic-dfu (3.0.1):
-    - iOSDFULibrary (~> 4.6.1)
-    - React
-    - ZIPFoundation (~> 0.9.8)
-  - react-native-slider (2.0.8):
-    - React
-  - react-native-version-check (3.4.0):
-    - React
-  - react-native-video (5.0.2):
-    - React
-    - react-native-video/Video (= 5.0.2)
-  - react-native-video/Video (5.0.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -261,34 +229,11 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - ReactNativeART (1.1.2):
-    - React
-  - rn-fetch-blob (0.12.0):
-    - React-Core
-  - RNCharts (0.5.7):
-    - Charts (= 3.3.0)
-    - React
-    - SwiftyJSON (= 5.0)
-  - RNDeviceInfo (5.4.0):
-    - React
-  - RNGestureHandler (1.5.2):
+  - RNGestureHandler (1.8.0):
     - React
   - RNPermissions (2.0.8):
     - React
-  - RNReanimated (1.4.0):
-    - React
-  - RNShare (3.0.0):
-    - React
-  - RNSound (0.11.0):
-    - React
-    - RNSound/Core (= 0.11.0)
-  - RNSound/Core (0.11.0):
-    - React
-  - RNVectorIcons (6.6.0):
-    - React
-  - SwiftyJSON (5.0.0)
   - Yoga (1.14.0)
-  - ZIPFoundation (0.9.9)
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -312,15 +257,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-ble-manager (from `../node_modules/react-native-ble-manager`)
-  - react-native-camera (from `../node_modules/react-native-camera`)
-  - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
-  - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
-  - react-native-nordic-dfu (from `../node_modules/react-native-nordic-dfu`)
-  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
-  - react-native-version-check (from `../node_modules/react-native-version-check`)
-  - react-native-video (from `../node_modules/react-native-video`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -332,26 +269,13 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
-  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
-  - RNCharts (from `../node_modules/react-native-charts-wrapper`)
-  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
-  - RNShare (from `../node_modules/react-native-share`)
-  - RNSound (from `../node_modules/react-native-sound`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - boost-for-react-native
-    - Charts
-    - SwiftyJSON
   trunk:
-    - iOSDFULibrary
-    - ZIPFoundation
+    - boost-for-react-native
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -392,24 +316,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-background-timer:
-    :path: "../node_modules/react-native-background-timer"
   react-native-ble-manager:
     :path: "../node_modules/react-native-ble-manager"
-  react-native-camera:
-    :path: "../node_modules/react-native-camera"
-  react-native-cameraroll:
-    :path: "../node_modules/@react-native-community/cameraroll"
-  react-native-keep-awake:
-    :path: "../node_modules/react-native-keep-awake"
-  react-native-nordic-dfu:
-    :path: "../node_modules/react-native-nordic-dfu"
-  react-native-slider:
-    :path: "../node_modules/@react-native-community/slider"
-  react-native-version-check:
-    :path: "../node_modules/react-native-version-check"
-  react-native-video:
-    :path: "../node_modules/react-native-video"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -430,38 +338,20 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeART:
-    :path: "../node_modules/@react-native-community/art"
-  rn-fetch-blob:
-    :path: "../node_modules/rn-fetch-blob"
-  RNCharts:
-    :path: "../node_modules/react-native-charts-wrapper"
-  RNDeviceInfo:
-    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
-  RNShare:
-    :path: "../node_modules/react-native-share"
-  RNSound:
-    :path: "../node_modules/react-native-sound"
-  RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  iOSDFULibrary: 3053cf01eaabec37dc7372fb77ae4a218b577c55
   Permission-BluetoothPeripheral: 425fda0e17a4bf5e28aee8c1f195c45a024e81ad
   Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
   Permission-Microphone: 49c91ea622029b8c36a6ecfb65482cf4c513b53c
@@ -476,15 +366,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-background-timer: 1b6e6b4e10f1b74c367a1fdc3c72b67c619b222b
   react-native-ble-manager: a0d0ee16185d281d55dfeb76dab387541eed201e
-  react-native-camera: 52114c432860b89986c9ee4919d00a48a6ba7abb
-  react-native-cameraroll: 463aff54e37cff27ea76eb792e6f1fa43b876320
-  react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
-  react-native-nordic-dfu: 93a3601acfd23357373d04d5534f8092b687945e
-  react-native-slider: 3a1cfd00c9c31068251b536822f7192e8d1d6b6f
-  react-native-version-check: 1a4db2e0240e4df8c4543b1a54aff44a01f9a8c7
-  react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -495,20 +377,10 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  ReactNativeART: c580fba2f7d188d8fa4418ce78db8130654ed10f
-  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
-  RNDeviceInfo: c7b1dc457611b9231bb780a882102e2c93edc7af
-  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
-  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
-  RNShare: 0e19ddb0bf338b62702ce1d9e001ee14effa68a8
-  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
-  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
-  ZIPFoundation: 89df685c971926b0323087952320bdfee9f0b6ef
 
-PODFILE CHECKSUM: 176512224ad7808081da8e42aba427659d525e15
+PODFILE CHECKSUM: e2dc88fe581010140fcdc0de156bb1d00e86399d
 
 COCOAPODS: 1.9.3

@@ -2,7 +2,7 @@
 // Services do not have "Actions" they're directly associated with, so they use the shared creator
 
 import { NativeModules } from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
+// import BackgroundTimer from 'react-native-background-timer';
 import BleManager  from 'react-native-ble-manager';
 
 import {
@@ -20,13 +20,14 @@ import {
     RECONNECT_DEVICE,
     VELOCITY_DROPPED,
 } from 'app/configs+constants/ActionTypes';
-import * as TimerActionCreators from './TimerActionCreators';
+// import * as TimerActionCreators from './TimerActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
-import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
-import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
-import * as Analytics from 'app/services/Analytics';
-import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
+// import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
+// import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
+// import * as Analytics from 'app/services/Analytics';
+// import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
 
+/*
 var connectTimeoutTimer = null;
 var reconnectTimeoutTimer = null;
 var reconnectTimer = null;
@@ -38,14 +39,15 @@ const clearTimers = () => {
     reconnectTimeoutTimer = null;
     reconnectTimer = null;
 };
+*/
 
 // SCANNING
 export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
     // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
     BleManager.scan([], 99999, false);
 
-    const state = getState();
-    logAttemptScanAnalytics(state, isManualScan);
+    // const state = getState();
+    // logAttemptScanAnalytics(state, isManualScan);
 
     dispatch({
         type: START_DEVICE_SCAN,
@@ -56,8 +58,8 @@ export const startDeviceScan = (isManualScan = false) => (dispatch, getState) =>
 export const stopDeviceScan = () => (dispatch, getState) => {
     BleManager.stopScan();
 
-    const state = getState();
-    logCompletedScanAnalytics(state);
+    // const state = getState();
+    // logCompletedScanAnalytics(state);
 
     dispatch({
         type: STOP_DEVICE_SCAN
@@ -74,10 +76,10 @@ export const foundDevice = (deviceName, deviceIdentifier) => ({
 
 export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getState) => {
     BleManager.connect(deviceIdentifier); // TODO: should this be device?
-    const state = getState();
-    logAttemptConnectDeviceAnalytics(false, state);
+    // const state = getState();
+    // logAttemptConnectDeviceAnalytics(false, state);
     dispatch(connectingToDevice(deviceName, deviceIdentifier));
-
+/*
     // HACK: ideally this is a connect timeout saga
     // but it requires both background timer and access to actions
     // therefore putting it here
@@ -87,22 +89,22 @@ export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getSta
         const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
         if (status === 'CONNECTING') {
             // disconnect
-            logConnectedToDeviceTimedOutAnalytics(false, state);            
+            // logConnectedToDeviceTimedOutAnalytics(false, state);            
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
             dispatch(disconnectedFromDevice()); // in case it can never find it, visually update
         }
     }, 5000);
-
+*/
     dispatch({
         type: CONNECT_DEVICE,
         deviceName,
         deviceIdentifier,
     });
 };
-
+/*
 export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getState) => {
     const state = getState();
-    logAttemptConnectDeviceAnalytics(true, state);
+    // logAttemptConnectDeviceAnalytics(true, state);
 
     // reconnect after a second as V2s have issues
     reconnectTimer = BackgroundTimer.setTimeout(() => {
@@ -122,7 +124,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
             // disconnect
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
             dispatch(disconnectedFromDevice(deviceName, deviceIdentifier)); // in case it can never find it, visually update and trigger another reconnect
-            logConnectedToDeviceTimedOutAnalytics(true, state);
+            // logConnectedToDeviceTimedOutAnalytics(true, state);
         }
     }, 7000);
 
@@ -132,7 +134,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
         deviceIdentifier,
     });
 };
-
+*/
 export const disconnectDevice = (performAction=true) => (dispatch, getState) => {
     const state = getState();
     const deviceId = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
@@ -165,17 +167,17 @@ export const bluetoothIsOff = () => ({
 });
 
 export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dispatch, getState) => {
-    clearTimers();
+    // clearTimers();
 
-    Analytics.setUserProp('connected_device_id', null);
-    Analytics.setUserProp('device_version', null);
+    // Analytics.setUserProp('connected_device_id', null);
+    // Analytics.setUserProp('device_version', null);
 
-    const state = getState();
-    const deviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-    if (deviceStatus === 'CONNECTED' || deviceStatus === 'DISCONNECTING') {
-        const isIntentional = deviceStatus === 'DISCONNECTING';
-        logDisconnectedFromDeviceAnalytics(isIntentional, state);
-    }
+    // const state = getState();
+    // const deviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
+    // if (deviceStatus === 'CONNECTED' || deviceStatus === 'DISCONNECTING') {
+    //     const isIntentional = deviceStatus === 'DISCONNECTING';
+    //     logDisconnectedFromDeviceAnalytics(isIntentional, state);
+    // }
 
     dispatch({
         type: DISCONNECTED_FROM_DEVICE,
@@ -193,18 +195,18 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
 export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVersion) => (dispatch, getState) => {
-    clearTimers();
+    // clearTimers();
 
     // analytics
     const state = getState();
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting" 
-    console.tron.log(`got name ${name} and trying to set user prop with it`);
-    Analytics.setUserProp('connected_device_name', name);
-    Analytics.setUserProp('connected_device_id', deviceIdentifier);
-    Analytics.setUserProp('firmware_version', firmwareVersion);
+    // console.tron.log(`got name ${name} and trying to set user prop with it`);
+    // Analytics.setUserProp('connected_device_name', name);
+    // Analytics.setUserProp('connected_device_id', deviceIdentifier);
+    // Analytics.setUserProp('firmware_version', firmwareVersion);
 
     // TODO: get firmware and log that here
-    logConnectedToDeviceAnalytics(state);
+    // logConnectedToDeviceAnalytics(state);
 
     dispatch({
         type: CONNECTED_TO_DEVICE,
@@ -227,9 +229,9 @@ export const reconnectingToDevice = (name) => {
 export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) => {
     const state = getState();
 
-    logAddRepAnalytics(state);
+    // logAddRepAnalytics(state);
 
-    dispatch(TimerActionCreators.sanityCheckTimer());
+    // dispatch(TimerActionCreators.sanityCheckTimer());
     dispatch({
         ...data,
         type: ADD_REP_DATA,
@@ -238,12 +240,13 @@ export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) 
         firmwareVersion: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
         time: time,
     });
-    dispatch(TimerActionCreators.startEndSetTimer());
+    // dispatch(TimerActionCreators.startEndSetTimer());
 
 };
 
 // ANALYTICS
 
+/*
 const logAddRepAnalytics = (state) => {
     const currentSet = SetsSelectors.getWorkingSet(state);
     let set_id = currentSet.setID;
@@ -307,3 +310,4 @@ const logDisconnectedFromDeviceAnalytics = (isIntentional, state) => {
         is_intentional: isIntentional
     }, state);
 };
+*/

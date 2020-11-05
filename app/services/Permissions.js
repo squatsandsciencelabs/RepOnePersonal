@@ -12,10 +12,10 @@ export default async function() {
     if (Platform.OS !== 'ios') {
         PermissionsAndroid.requestMultiple([
             PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            // PermissionsAndroid.PERMISSIONS.CAMERA,
+            // PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+            // PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            // PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ]);
     } else {
         // TODO: analytics as a user prop
@@ -23,8 +23,8 @@ export default async function() {
         // see https://rnfirebase.io/docs/v3.2.x/messaging/reference/messaging
         // await firebase.messaging().requestPermission();
         // await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL); // seems to cause illegal callback invocations, so just do bluetooth separately
-        await request(PERMISSIONS.IOS.CAMERA);
-        await request(PERMISSIONS.IOS.MICROPHONE);
-        await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+        // await request(PERMISSIONS.IOS.CAMERA);
+        // await request(PERMISSIONS.IOS.MICROPHONE);
+        // await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
     }
 };

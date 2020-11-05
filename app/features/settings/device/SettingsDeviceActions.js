@@ -8,7 +8,7 @@ import {
     TROUBLESHOOTING_TIPS,
 } from 'app/configs+constants/ActionTypes';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
-import * as Analytics from 'app/services/Analytics';
+// import * as Analytics from 'app/services/Analytics';
 
 export const startDeviceScan = (isManual=false) => {
     return DeviceActionCreators.startDeviceScan(isManual);
@@ -23,14 +23,14 @@ export const connectDevice = (device, deviceIdentifier) => {
 };
 
 export const disconnectDevice = () => (dispatch, getState) => {
-    const state = getState();
-    logAttemptDisconnectDeviceAnalytics(state);
+    // const state = getState();
+    // logAttemptDisconnectDeviceAnalytics(state);
     dispatch(DeviceActionCreators.disconnectDevice());
 };
 
 export const stopReconnect = () => (dispatch, getState) => {
-    const state = getState();
-    logCancelReconnectAnalytics(state);
+    // const state = getState();
+    // logCancelReconnectAnalytics(state);
 
     dispatch({
         type: STOP_RECONNECT
@@ -40,14 +40,14 @@ export const stopReconnect = () => (dispatch, getState) => {
 export const presentTroubleshootingTips = () => (dispatch, getState) => {
     Linking.openURL("https://www.reponestrength.com/troubleshoot/");
 
-    const state = getState();
-    logTroubleshootingTipsAnalytics(state);
+    // const state = getState();
+    // logTroubleshootingTipsAnalytics(state);
 
     dispatch({
         type: TROUBLESHOOTING_TIPS
     });
 };
-
+/*
 const logAttemptDisconnectDeviceAnalytics = (state) => {
     Analytics.logEventWithAppState('attempt_disconnect_device', {
     }, state);
@@ -63,3 +63,4 @@ const logTroubleshootingTipsAnalytics = (state) => {
     Analytics.logEventWithAppState('troubleshooting_tips', {
     }, state);
 };
+*/

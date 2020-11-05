@@ -1,11 +1,11 @@
 import { AsyncStorage, Platform } from 'react-native';
-import {persistStore, autoRehydrate, getStoredState} from 'redux-persist';
+// import {persistStore, autoRehydrate, getStoredState} from 'redux-persist';
 import Reactotron from 'reactotron-react-native';
-import { createFilter } from 'redux-persist-transform-filter';
-import _ from 'lodash';
+// import { createFilter } from 'redux-persist-transform-filter';
+// import _ from 'lodash';
 
 // store imports
-import FilesystemStorage from 'redux-persist-filesystem-storage';
+// import FilesystemStorage from 'redux-persist-filesystem-storage';
 import { compose, createStore, applyMiddleware }  from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
@@ -13,15 +13,14 @@ import Sagas from 'app/redux/sagas/Sagas';
 import reducers from 'app/redux/reducers/Reducers';
 
 // startup imports
-import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
-import * as KillSwitchActionCreators from 'app/redux/shared_actions/KillSwitchActionCreators';
-import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators';
+// import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
+// import * as KillSwitchActionCreators from 'app/redux/shared_actions/KillSwitchActionCreators';
+// import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators';
 import * as StoreActionCreators from 'app/redux/shared_actions/StoreActionCreators';
-import * as Analytics from 'app/services/Analytics';
 
 export default initializeStore = () => {
     // create the store
-    if (__DEV__) {
+    // if (__DEV__) {
         // reactotron development mode
         const sagaMonitor = Reactotron.createSagaMonitor();
         var sagaMiddleware = createSagaMiddleware({sagaMonitor});
@@ -29,29 +28,31 @@ export default initializeStore = () => {
             thunk,
             sagaMiddleware
         );
-        const enhancers = compose(middlewares, Reactotron.createEnhancer(), autoRehydrate());
+        // const enhancers = compose(middlewares, Reactotron.createEnhancer(), autoRehydrate());
+        const enhancers = compose(middlewares, Reactotron.createEnhancer());
         var store = createStore(reducers, enhancers);
         Reactotron.setReduxStore(store);
-    } else {
-        // release mode
-        var sagaMiddleware = createSagaMiddleware();
-        const middlewares = applyMiddleware(
-            thunk,
-            sagaMiddleware
-        );
-        const enhancers = compose(middlewares, autoRehydrate());        
-        var store = createStore(reducers, enhancers);
-    }
+    // } else {
+    //     // release mode
+    //     var sagaMiddleware = createSagaMiddleware();
+    //     const middlewares = applyMiddleware(
+    //         thunk,
+    //         sagaMiddleware
+    //     );
+    //     const enhancers = compose(middlewares, autoRehydrate());        
+    //     var store = createStore(reducers, enhancers);
+    // }
 
     // run sagas
     sagaMiddleware.run(Sagas, store.dispatch);
-    
+/*    
     // load previous
     if (Platform.OS === 'ios') {
         var storageMechanism = AsyncStorage;
     } else {
         var storageMechanism = FilesystemStorage;
     }
+
     const fsPersistor = persistStore(store, {
         storage: storageMechanism,
         blacklist: [
@@ -101,6 +102,9 @@ export default initializeStore = () => {
             store.dispatch(StoreActionCreators.storeInitialized());
         }
     );
+*/
+
+    store.dispatch(StoreActionCreators.storeInitialized());
 
     return store;
 };
