@@ -14,7 +14,7 @@ import { all, call } from 'redux-saga/effects';
 // import InitializedAnalyticsSaga from './InitializedAnalyticsSaga';
 // import OneRMAnalyticsSaga from './OneRMAnalyticsSaga';
 // import VelocityThresholdSaga from './VelocityThresholdSaga';
-// import OTASaga from './OTASaga';
+import OTASaga from './OTASaga';
 // import ExportCSVSaga from './ExportCSVSaga';
 
 const Sagas = function* Sagas(dispatch) {
@@ -32,7 +32,7 @@ const Sagas = function* Sagas(dispatch) {
         // SurveySaga(),
         // InitializedAnalyticsSaga(),
         // OneRMAnalyticsSaga(),
-        // OTASaga(dispatch),
+        OTASaga(dispatch),
         // VelocityThresholdSaga(),
         // ExportCSVSaga(),
     ]);

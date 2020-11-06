@@ -10,7 +10,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
 import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import DeviceInfo from 'react-native-device-info';
+// import DeviceInfo from 'react-native-device-info';
 
 import { 
     STORE_INITIALIZED,
@@ -29,7 +29,7 @@ import {
     CANCEL_INSTALL_OTA,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
-import * as Analytics from 'app/services/Analytics';
+// import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/VersionComparison';
@@ -64,6 +64,12 @@ function *checkOTA(dispatch, action) {
             state,
         });
     });
+
+    yield put({
+        type: OTA_DOWNLOAD_AVAILABLE,
+        firmwareVersion: '0.5.12',
+    });
+    return;
 
     // get json from server 
     let json = null;
@@ -134,8 +140,8 @@ function *checkOTA(dispatch, action) {
                 firmwareVersion,
                 firmwareDescription,
             });
-            const state = yield select();
-            logOTAAnalytics(state, 'new_firmware_available');
+            // const state = yield select();
+            // logOTAAnalytics(state, 'new_firmware_available');
             return;
         }
 
@@ -172,8 +178,8 @@ function *startDownload(action) {
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
-        const state = yield select();
-        logOTAAnalytics(state, 'firmware_download_succeeded');
+        // const state = yield select();
+        // logOTAAnalytics(state, 'firmware_download_succeeded');
     } catch (err) {
         console.tron.log(`Failed to download ${(err)}`);
         if (err.message !== 'canceled') {
@@ -181,8 +187,8 @@ function *startDownload(action) {
                 type: OTA_DOWNLOAD_FAILED,
                 error: err,
             });
-            const state = yield select();
-            logOTAAnalytics(state, 'firmware_download_failed');
+            // const state = yield select();
+            // logOTAAnalytics(state, 'firmware_download_failed');
         }
     }
 }
@@ -222,7 +228,7 @@ function *startInstall(action) {
             // if this runs before, it can technically set it to ready too quick and cause a double alert with reconnecting as it checks for installing state, not download ready
             console.tron.log(`failed to install ${err}`);
             Alert.alert(`Error installing firmware on ${name}`);
-            logOTAAnalytics(state, 'firmware_install_failed');
+            // logOTAAnalytics(state, 'firmware_install_failed');
             yield put({
                 type: OTA_DOWNLOAD_READY,
             });
@@ -244,7 +250,7 @@ function *reboot(action) {
         // success
 
         // analytics
-        logOTAAnalytics(state, 'firmware_install_reboot');
+        // logOTAAnalytics(state, 'firmware_install_reboot');
 
         // alert
         Alert.alert(`Firmware uploaded, attempting to reboot device`);
@@ -257,7 +263,7 @@ function *reboot(action) {
     } else if (action.state === 'DFU_COMPLETED') {
         console.tron.log(`Firmware install success`);
         // Alert.alert(`Firmware successfully installed`);
-        logOTAAnalytics(state, 'firmware_install_succeeded');
+        // logOTAAnalytics(state, 'firmware_install_succeeded');
     }
 }
 
@@ -265,12 +271,12 @@ function *cancelInstall(action) {
     // TODO: activate nordic library
 }
 
-const logOTAAnalytics = (state, event) => {
-    Analytics.logEventWithAppState(event, {
-        device_firmware_version: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
-        server_firmware_version: OTASelectors.getFirmwareVersion(state),
-    }, state);
-};
+// const logOTAAnalytics = (state, event) => {
+//     Analytics.logEventWithAppState(event, {
+//         device_firmware_version: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+//         server_firmware_version: OTASelectors.getFirmwareVersion(state),
+//     }, state);
+// };
 
 // version helpers
 

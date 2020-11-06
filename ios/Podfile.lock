@@ -19,6 +19,8 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - iOSDFULibrary (4.6.1):
+    - ZIPFoundation (= 0.9.9)
   - Permission-BluetoothPeripheral (2.0.8):
     - RNPermissions
   - Permission-Camera (2.0.8):
@@ -194,6 +196,10 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-ble-manager (7.4.1):
     - React
+  - react-native-nordic-dfu (3.0.1):
+    - iOSDFULibrary (~> 4.6.1)
+    - React
+    - ZIPFoundation (~> 0.9.8)
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -229,11 +235,16 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+  - ReactNativeART (1.2.0):
+    - React
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNGestureHandler (1.8.0):
     - React
   - RNPermissions (2.0.8):
     - React
   - Yoga (1.14.0)
+  - ZIPFoundation (0.9.9)
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -258,6 +269,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-ble-manager (from `../node_modules/react-native-ble-manager`)
+  - react-native-nordic-dfu (from `../node_modules/react-native-nordic-dfu`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -269,6 +281,8 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -276,6 +290,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - iOSDFULibrary
+    - ZIPFoundation
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -318,6 +334,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-ble-manager:
     :path: "../node_modules/react-native-ble-manager"
+  react-native-nordic-dfu:
+    :path: "../node_modules/react-native-nordic-dfu"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -338,6 +356,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeART:
+    :path: "../node_modules/@react-native-community/art"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -352,6 +374,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  iOSDFULibrary: 3053cf01eaabec37dc7372fb77ae4a218b577c55
   Permission-BluetoothPeripheral: 425fda0e17a4bf5e28aee8c1f195c45a024e81ad
   Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
   Permission-Microphone: 49c91ea622029b8c36a6ecfb65482cf4c513b53c
@@ -367,6 +390,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-ble-manager: a0d0ee16185d281d55dfeb76dab387541eed201e
+  react-native-nordic-dfu: 93a3601acfd23357373d04d5534f8092b687945e
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -377,10 +401,13 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+  ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
+  ZIPFoundation: 89df685c971926b0323087952320bdfee9f0b6ef
 
-PODFILE CHECKSUM: e2dc88fe581010140fcdc0de156bb1d00e86399d
+PODFILE CHECKSUM: a80006ec0a1e81eee57f295ef2af371bbb6a463c
 
 COCOAPODS: 1.9.3

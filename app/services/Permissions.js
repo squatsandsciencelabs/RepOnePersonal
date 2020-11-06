@@ -14,8 +14,8 @@ export default async function() {
             PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
             // PermissionsAndroid.PERMISSIONS.CAMERA,
             // PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-            // PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            // PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ]);
     } else {
         // TODO: analytics as a user prop
@@ -25,6 +25,6 @@ export default async function() {
         // await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL); // seems to cause illegal callback invocations, so just do bluetooth separately
         // await request(PERMISSIONS.IOS.CAMERA);
         // await request(PERMISSIONS.IOS.MICROPHONE);
-        // await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+        await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
     }
 };

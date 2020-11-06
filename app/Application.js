@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, TextInput, View } from 'react-native';
+import { AppRegistry, Text, TextInput, View, ScrollView} from 'react-native';
 import { Provider } from 'react-redux';
 
 import 'app/configs+constants/ReactotronConfig';
 import Store from 'app/redux/Store';
 // import ApplicationScreen from 'app/features/application/ApplicationScreen';
 import SettingsDeviceScreen from 'app/features/settings/device/SettingsDeviceScreen';
+import SettingsOTAScreen from 'app/features/settings/ota/SettingsOTAScreen';
 // import * as GoogleSignInSetup from 'app/services/GoogleSignInSetup';
 // import * as Firebase from 'app/services/Firebase';
 import Bluetooth from 'app/services/Bluetooth';
@@ -47,8 +48,11 @@ class OpenBarbellApp extends Component {
         console.tron.log(`render base comp`);
         return (
             <Provider store={store}>
-                {/* <ApplicationScreen /> */}
-                <SettingsDeviceScreen />
+                <ScrollView>
+                    {/* <ApplicationScreen /> */}
+                    <SettingsDeviceScreen />
+                    <SettingsOTAScreen />
+                </ScrollView>
             </Provider>
         );
     }
