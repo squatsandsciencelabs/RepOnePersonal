@@ -299,7 +299,7 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-background-timer (2.1.1):
     - React
-  - react-native-ble-manager (6.7.0):
+  - react-native-ble-manager (7.3.0):
     - React
   - react-native-camera (3.15.0):
     - React
@@ -363,7 +363,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - ReactNativeART (1.1.2):
+  - ReactNativeART (1.2.0):
     - React
   - rn-fetch-blob (0.12.0):
     - React-Core
@@ -599,9 +599,9 @@ SPEC CHECKSUMS:
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
@@ -638,7 +638,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-background-timer: 1b6e6b4e10f1b74c367a1fdc3c72b67c619b222b
-  react-native-ble-manager: c61d563acabfc675d26ce55d3b6e2e84df950203
+  react-native-ble-manager: 30803381a43a806eb5e871f4d0d4681280015c63
   react-native-camera: 52114c432860b89986c9ee4919d00a48a6ba7abb
   react-native-cameraroll: 463aff54e37cff27ea76eb792e6f1fa43b876320
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
@@ -657,7 +657,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  ReactNativeART: c580fba2f7d188d8fa4418ce78db8130654ed10f
+  ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
   RNDeviceInfo: c7b1dc457611b9231bb780a882102e2c93edc7af
@@ -674,4 +674,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f2b481f29bd599ef188965e679b08defb82f7600
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3
