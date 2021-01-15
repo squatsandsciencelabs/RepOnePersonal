@@ -1969,7 +1969,7 @@ describe('SetsSelectors', () => {
                 expect(result).toBe(20);
             });
 
-            test('slowest duration found in workout', () => {
+            test.only('slowest duration found in workout', () => {
                 const result = sut.getSlowestDurationEver(state, setAnswerWorkout);
         
                 expect(result).toBe(36);
@@ -2104,7 +2104,6 @@ describe('SetsSelectors', () => {
         var invalidRemoved = { isValid: false, removed: true }; // unacceptable
 
         var state = null;
-        var historyData = null;
         
         beforeEach(() => {
             state = {
@@ -2385,8 +2384,6 @@ describe('SetsSelectors', () => {
                     endingDate: '2018-03-20',
                 }
             };
-
-            historyData = sut.getHistorySets(state);
         });
 
         // testing with invalidUnremoved, validUnremoved, invalidRemoved, etc.
@@ -2394,7 +2391,7 @@ describe('SetsSelectors', () => {
         // TODO: Tests with no RPE's
 
         test('return filtered history list', () => {
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -2479,7 +2476,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             }
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Bench",
@@ -2633,7 +2630,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -2768,7 +2765,7 @@ describe('SetsSelectors', () => {
                 endingDate: '2018-03-14',
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -3229,7 +3226,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -3356,7 +3353,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -3669,7 +3666,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
@@ -3917,7 +3914,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "SSB Squat",
@@ -4055,7 +4052,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([]);
         });
@@ -4077,7 +4074,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat", 
@@ -4117,7 +4114,7 @@ describe('SetsSelectors', () => {
                 endingDate: null,
             };
 
-            const result = sut.getFilteredHistorySets(historyData, state);
+            const result = sut.getFilteredHistorySets(state);
 
             expect(result).toEqual([{
                 "exercise": "Squat",
