@@ -71,3 +71,7 @@ android/keystores/debug.keystore
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# build scripts
+build_scripts/
+build_scripts/*
