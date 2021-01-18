@@ -3,8 +3,8 @@ buildscript {
     ext {
         buildToolsVersion = "28.0.3"
         minSdkVersion = 19 // react-native-ble-manager
-        compileSdkVersion = 28 // default but react-native-device-info wants 28 and react-native-charts-wrapper wants >= 28
-        targetSdkVersion = 28 // default but react-native-device-info wants 28
+        compileSdkVersion = 29 // default but react-native-device-info wants 28 and react-native-charts-wrapper wants >= 28
+        targetSdkVersion = 29 // default but react-native-device-info wants 28
         firebaseIidVersion = "19.0.1" // react-native-device-info
         googlePlayServicesAuthVersion = "16.0.1" // react-native-google-signin
     }
