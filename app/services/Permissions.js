@@ -5,18 +5,18 @@
 // TODO: Permissions alert wrapper so don't lose the first iOS permission request
 
 import firebase from 'app/services/Firebase';
-import {request, PERMISSIONS} from 'react-native-permissions';
-import { Platform, PermissionsAndroid } from 'react-native';
+import {request, requestMultiple, PERMISSIONS} from 'react-native-permissions';
+import { Platform } from 'react-native';
 
 export default async function() {
     if (Platform.OS !== 'ios') {
-        PermissionsAndroid.requestMultiple([
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        await requestMultiple([
+            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+            PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+            PERMISSIONS.ANDROID.CAMERA,
+            PERMISSIONS.ANDROID.RECORD_AUDIO,
+            PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+            PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
         ]);
     } else {
         // TODO: analytics as a user prop
