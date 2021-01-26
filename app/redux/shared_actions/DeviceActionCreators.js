@@ -91,7 +91,7 @@ export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getSta
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
             dispatch(disconnectedFromDevice()); // in case it can never find it, visually update
         }
-    }, 5000);
+    }, 10000);
 
     dispatch({
         type: CONNECT_DEVICE,
