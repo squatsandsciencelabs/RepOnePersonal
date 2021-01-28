@@ -40,7 +40,7 @@ Bluetooth(store);
 AppState(store);
 
 // render
-class OpenBarbellApp extends Component {
+class RepOnePersonal extends Component {
 
     render() {
         return (
@@ -53,5 +53,5 @@ class OpenBarbellApp extends Component {
 
 // begin application
 export default function () {
-    AppRegistry.registerComponent('OpenBarbellApp', () => OpenBarbellApp);
+    AppRegistry.registerComponent('RepOnePersonal', () => RepOnePersonal);
 }

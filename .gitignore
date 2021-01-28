@@ -22,20 +22,13 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
-# Pods
-Pods/
-
-# Carthage
-# Note that the ios label in front is needed
-ios/Carthage/Builds
-ios/Carthage/Checkouts
-
-# Android/IJ
+# Android/IntelliJ
 #
-*.iml
+build/
 .idea
 .gradle
 local.properties
+*.iml
 
 # node.js
 #
@@ -47,7 +40,26 @@ yarn-error.log
 buck-out/
 \.buckd/
 android/app/libs
-android/keystores/debug.keystore
+*.keystore
+!debug.keystore
+!repone.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/
 
 # VSCode
 .vscode/*
@@ -61,16 +73,10 @@ android/keystores/debug.keystore
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
-
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
+# Carthage
+# Note that the ios label in front is needed
+ios/Carthage/Builds
+ios/Carthage/Checkout
 
 # build scripts
 build_scripts/

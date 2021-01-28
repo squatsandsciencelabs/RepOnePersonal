@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>RepOne</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -60,6 +60,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>RepOne would like to access your current location</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>RepOne would like to find and connect to your RepOne device via bluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
@@ -68,8 +70,6 @@
 	<string>RepOne would like to access your calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string>RepOne would like to record videos of your lifts</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>RepOne would like to access your current location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>RepOne would like to record audio when recording videos of your lifts</string>
 	<key>NSPhotoLibraryUsageDescription</key>

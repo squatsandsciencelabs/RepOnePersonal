@@ -1,9 +1,8 @@
 //
-//  foobar.swift
-//  RepOneApp
+//  Foobar.swift
+//  RepOnePersonal
 //
-//  Created by John Lin on 12/25/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by John Lin on 1/27/21.
 //
 
 import Foundation
