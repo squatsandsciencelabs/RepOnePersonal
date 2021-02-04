@@ -370,19 +370,19 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-background-timer (2.1.1):
+  - react-native-background-timer (2.4.1):
+    - React-Core
+  - react-native-ble-manager (7.4.2):
     - React
-  - react-native-ble-manager (7.3.0):
-    - React
-  - react-native-camera (3.15.0):
-    - React
-    - react-native-camera/RCT (= 3.15.0)
-    - react-native-camera/RN (= 3.15.0)
-  - react-native-camera/RCT (3.15.0):
-    - React
-  - react-native-camera/RN (3.15.0):
-    - React
-  - react-native-cameraroll (1.3.0):
+  - react-native-camera (3.42.0):
+    - React-Core
+    - react-native-camera/RCT (= 3.42.0)
+    - react-native-camera/RN (= 3.42.0)
+  - react-native-camera/RCT (3.42.0):
+    - React-Core
+  - react-native-camera/RN (3.42.0):
+    - React-Core
+  - react-native-cameraroll (1.8.1):
     - React
   - react-native-keep-awake (4.0.0):
     - React
@@ -390,16 +390,16 @@ PODS:
     - iOSDFULibrary (~> 4.6.1)
     - React
     - ZIPFoundation (~> 0.9.8)
-  - react-native-slider (2.0.8):
+  - react-native-slider (2.0.9):
     - React
-  - react-native-version-check (3.4.0):
+  - react-native-version-check (3.4.2):
     - React
-  - react-native-video (5.0.2):
-    - React
-    - react-native-video/Video (= 5.0.2)
-  - react-native-video/Video (5.0.2):
-    - React
-  - react-native-webview (8.0.2):
+  - react-native-video (5.1.1):
+    - React-Core
+    - react-native-video/Video (= 5.1.1)
+  - react-native-video/Video (5.1.1):
+    - React-Core
+  - react-native-webview (8.2.1):
     - React
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -465,7 +465,7 @@ PODS:
     - React
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNDeviceInfo (5.4.0):
+  - RNDeviceInfo (5.6.5):
     - React
   - RNFirebase (5.6.0):
     - Firebase/Core
@@ -478,7 +478,7 @@ PODS:
     - React
   - RNGestureHandler (1.9.0):
     - React-Core
-  - RNGoogleSignin (3.0.3):
+  - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
     - React
   - RNPermissions (2.2.2):
@@ -490,7 +490,7 @@ PODS:
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
     - React
   - UMAppLoader (1.4.0)
   - UMBarCodeScannerInterface (5.4.0)
@@ -850,16 +850,16 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-background-timer: 1b6e6b4e10f1b74c367a1fdc3c72b67c619b222b
-  react-native-ble-manager: 30803381a43a806eb5e871f4d0d4681280015c63
-  react-native-camera: 52114c432860b89986c9ee4919d00a48a6ba7abb
-  react-native-cameraroll: 463aff54e37cff27ea76eb792e6f1fa43b876320
+  react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
+  react-native-ble-manager: dfac830e02b29de0147b103a4ed21ad2c618ee71
+  react-native-camera: cf8a153d33138dcc457172fc3c33fdf4e5d288d2
+  react-native-cameraroll: e2917a5e62da9f10c3d525e157e25e694d2d6dfa
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
   react-native-nordic-dfu: 93a3601acfd23357373d04d5534f8092b687945e
-  react-native-slider: 3a1cfd00c9c31068251b536822f7192e8d1d6b6f
-  react-native-version-check: 1a4db2e0240e4df8c4543b1a54aff44a01f9a8c7
-  react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: 99bdfd6c189772b0f15494f728430c23b18b93e4
+  react-native-slider: e51492f1264d882a8815b71c5870f8978e52887d
+  react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
+  react-native-video: 0bb76b6d6b77da3009611586c7dbf817b947f30e
+  react-native-webview: 160ac8d6bb974e2933f2de6bb7464a8e934ff31d
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -872,14 +872,14 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNDeviceInfo: c7b1dc457611b9231bb780a882102e2c93edc7af
+  RNDeviceInfo: c5f8f3a456adcbba405ace475254b08febc4c095
   RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  RNGoogleSignin: a10b849c165088c737d4465de6c2062f24d06002
+  RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   UMAppLoader: 92d044af52626af3d81a69796ad666fc7a9a7d78
   UMBarCodeScannerInterface: 3f6c1b09ef4b867ce752b8c0b3893bcf9cd85f32
   UMCameraInterface: d516032121192fee9a6c93bdfff0bb2cc7282796
