@@ -1,0 +1,46 @@
+diff --git a/node_modules/expo-three-orbit-controls/build/OrbitControls.js b/node_modules/expo-three-orbit-controls/build/OrbitControls.js
+index 5540eb2..2c7b122 100644
+--- a/node_modules/expo-three-orbit-controls/build/OrbitControls.js
++++ b/node_modules/expo-three-orbit-controls/build/OrbitControls.js
+@@ -64,7 +64,7 @@ export class OrbitControls extends EventDispatcher {
+         this.enableRotate = true;
+         this.rotateSpeed = 1.0;
+         // Set to false to disable panning
+-        this.enablePan = true;
++        this.enablePan = false;
+         this.panSpeed = 1.0;
+         this.screenSpacePanning = false; // if true, pan in screen-space
+         this.keyPanSpeed = 7.0; // pixels moved per arrow key push
+diff --git a/node_modules/expo-three-orbit-controls/build/OrbitControlsView.js b/node_modules/expo-three-orbit-controls/build/OrbitControlsView.js
+index c1c0d43..93d8a3f 100644
+--- a/node_modules/expo-three-orbit-controls/build/OrbitControlsView.js
++++ b/node_modules/expo-three-orbit-controls/build/OrbitControlsView.js
+@@ -30,6 +30,7 @@ const OrbitControlsView = React.forwardRef(({ camera, ...props }, ref) => {
+         },
+     }), [controls]);
+     const responder = React.useMemo(() => {
++        let touchesLng;
+         function onTouchEnded(nativeEvent) {
+             var _a;
+             const polyfill = polyfillEventTouches(nativeEvent);
+@@ -52,6 +53,11 @@ const OrbitControlsView = React.forwardRef(({ camera, ...props }, ref) => {
+             },
+             onPanResponderMove({ nativeEvent }) {
+                 var _a;
++                if (touchesLng !== nativeEvent.touches.length) {
++                    touchesLng = nativeEvent.touches.length;
++                    onTouchEnded(nativeEvent);
++                    return (_a = controls) === null || _a === void 0 ? void 0 : _a.onTouchStart(nativeEvent);
++                }
+                 return (_a = controls) === null || _a === void 0 ? void 0 : _a.onTouchMove(nativeEvent);
+             },
+             onPanResponderRelease({ nativeEvent }) {
+@@ -60,6 +66,8 @@ const OrbitControlsView = React.forwardRef(({ camera, ...props }, ref) => {
+             onPanResponderTerminate({ nativeEvent }) {
+                 return onTouchEnded(nativeEvent);
+             },
++            onPanResponderTerminationRequest: () => false,
++            onShouldBlockNativeResponder: (evt, gestureState) => true,    
+         });
+     }, [controls]);
+     React.useEffect(() => {
