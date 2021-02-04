@@ -1,5 +1,8 @@
 package com.reponestrength.personal.staging;
 
+// com.myapp should be your package name
+import com.reponestrength.personal.staging.generated.BasePackageList;
+
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -10,6 +13,11 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Arrays;
+
+import org.unimodules.adapters.react.ModuleRegistryAdapter;
+import org.unimodules.adapters.react.ReactModuleRegistryProvider;
+import org.unimodules.core.interfaces.SingletonModule;
 
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
@@ -17,6 +25,7 @@ import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
 
 public class MainApplication extends Application implements ReactApplication {
+  private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(new BasePackageList().getPackageList(), null);
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -35,6 +44,13 @@ public class MainApplication extends Application implements ReactApplication {
           packages.add(new RNFirebaseMessagingPackage());
           packages.add(new RNFirebaseCrashlyticsPackage());
           packages.add(new RNFirebaseRemoteConfigPackage());
+
+          // Add unimodules
+          List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(
+            new ModuleRegistryAdapter(mModuleRegistryProvider)
+          );
+          packages.addAll(unimodules);
+
           return packages;
         }
 
