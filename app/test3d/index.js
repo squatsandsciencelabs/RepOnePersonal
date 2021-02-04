@@ -422,7 +422,7 @@ export default function App() {
       <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitShit}>
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
       </OrbitControlsView>
-      <TouchableHighlight style={{ padding: 20 }} onPress={()=> {
+      <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
         const newIndex = currentIndex+3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
@@ -440,6 +440,24 @@ export default function App() {
         setCurrentIndex(newIndex);
         console.log(`new index ${newIndex}`);
       }}><Text>NEXT</Text></TouchableHighlight>
+      <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
+        const newIndex = currentIndex-3;
+        const target = orbitShit.current.getControls().target;
+        const from = { x: target.x, y: target.y, z: target.z };
+        const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
+        new TWEEN.Tween(from)
+          .to(to, 1000)
+          .easing(TWEEN.Easing.Quadratic.InOut)
+          .onUpdate(() => {
+            // camera.position.set(coords.x, coords.y, coords.z); // animate the thing
+            orbitShit.current.getControls().target.set( from.x, from.y, from.z ); // set it logically but don't update visually
+            orbitShit.current.getControls().update();
+          })
+          .start();
+        console.log(`current index ${currentIndex} prev index ${prevIndex}`);
+        setCurrentIndex(newIndex);
+        console.log(`new index ${newIndex}`);
+      }}><Text>PREV</Text></TouchableHighlight>
     </Modal>
   );
 }
