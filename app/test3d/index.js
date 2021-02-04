@@ -19,7 +19,7 @@ import {
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 
-const points = [
+const data = [
   1, 1, 1,
   0,	-3219,	4398,
   0,	-3021,	4566,
@@ -245,12 +245,27 @@ const points = [
   0,	-2323,	10753,
   0,	-2318,	10779,
 ];
-const vertices = points.map(x => x / 100);
+const vertices = data.map(x => x / 100);
 const midpointIndex = parseInt(vertices.length/2);
 let loaded = false;
 
+let prevIndex = midpointIndex;
+const setPrevIndex = (i) => prevIndex = i;
+
+let currentIndex = midpointIndex;
+const setCurrentIndex = i => currentIndex = i;
+
+let selectedPoint = null;
+const setSelectedPoint = p => selectedPoint = p;
+
+let points = [];
+const setPoints = pts => points = pts;
+
 export default function App() {
   const [camera, setCamera] = React.useState(null);
+  // const [selectedPoint, setSelectedPoint] = React.useState(null);
+  // const [prevIndex, setPrevIndex] = React.useState(midpointIndex);
+  // const [currentIndex, setCurrentIndex] = React.useState(midpointIndex);
   const orbitShit = React.useRef();
 
   let timeout;
@@ -304,7 +319,9 @@ export default function App() {
 
     // POINTS EXAMPLE
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+    let cloneVertices = vertices.slice();
+    cloneVertices.splice(currentIndex, 3);
+    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( cloneVertices, 3 ) );
     // material from https://stackoverflow.com/a/54361382
     // const material = new THREE.ShaderMaterial({
     //   transparent: true,
@@ -329,12 +346,54 @@ export default function App() {
     const material = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: true, alphaTest: 0.5, sizeAttenuation: true } );
     // material.color.setHSL( 1.0, 0.3, 0.7 );
     material.color.setColorName('red');
-    const points = new THREE.Points( geometry, material );
+    const pts = new THREE.Points( geometry, material );
     // const spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
     // const points = new THREE.Sprite( spriteMaterial );
-    scene.add( points );
+    scene.add( pts );
+    setPoints(pts);
     // END POINTS EXAMPLE
 
+    const sphereGeometry = new THREE.SphereBufferGeometry( 0.1 );
+    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 'blue' } );
+    let selected = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    selected.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
+    scene.add( selected );
+    setSelectedPoint(selected);
+
+    // const selectedMaterial = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: false, sizeAttenuation: true } );
+    // selectedMaterial.color.setColorName('blue');
+    // const selectedGeometry = new THREE.BufferGeometry();
+    // selectedGeometry.setAttribute('position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
+    // const selected = new THREE.Points( selectedGeometry, selectedMaterial );
+    // scene.add( selected );
+    // setSelectedPoint(selected);
+
+    const update = () => {
+      // console.log(`update called ${prevIndex} vs ${currentIndex} loaded ${loaded}`)
+      if (prevIndex !== currentIndex) {
+
+        scene.remove(points);
+        scene.remove(selectedPoint);
+
+        cloneVertices = vertices.slice();
+        cloneVertices.splice(currentIndex, 3);
+        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( cloneVertices, 3 ) );
+        const pts = new THREE.Points( geometry, material );
+        scene.add( pts );
+        setPoints(pts);
+
+        // selectedGeometry.setAttribute('position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
+        // const selected = new THREE.Points( selectedGeometry, selectedMaterial );
+        // scene.add( selected );
+        // setSelectedPoint(selected);
+        selected = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        selected.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
+        scene.add( selected );
+        setSelectedPoint(selected);
+
+        setPrevIndex(currentIndex);
+      }
+    };
 
     // Setup an animation loop
     const render = (time) => {
@@ -348,6 +407,7 @@ export default function App() {
       }
 
       TWEEN.update(time);
+      update();
       timeout = requestAnimationFrame(render);
       renderer.render(scene, camera);
       gl.endFrameEXP();
@@ -362,10 +422,11 @@ export default function App() {
       <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitShit}>
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
       </OrbitControlsView>
-      <TouchableHighlight onPress={()=> {
+      <TouchableHighlight style={{ padding: 20 }} onPress={()=> {
+        const newIndex = currentIndex+3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
-        const to = { x: 1, y: 1, z: 1 };
+        const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
         new TWEEN.Tween(from)
           .to(to, 1000)
           .easing(TWEEN.Easing.Quadratic.InOut)
@@ -375,8 +436,10 @@ export default function App() {
             orbitShit.current.getControls().update();
           })
           .start();
-  
-      }}><Text>Get Controls set target</Text></TouchableHighlight>
+        console.log(`current index ${currentIndex} prev index ${prevIndex}`);
+        setCurrentIndex(newIndex);
+        console.log(`new index ${newIndex}`);
+      }}><Text>NEXT</Text></TouchableHighlight>
     </Modal>
   );
 }
