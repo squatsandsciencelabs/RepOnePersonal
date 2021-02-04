@@ -20,7 +20,7 @@ import {
 import * as TWEEN from "@tweenjs/tween.js";
 
 const data = [
-  1, 1, 1,
+  0, 0, 0, // TODO: why is this fucking needed
   0,	-3219,	4398,
   0,	-3021,	4566,
   0,	-3002,	4608,
@@ -245,30 +245,18 @@ const data = [
   0,	-2323,	10753,
   0,	-2318,	10779,
 ];
+let timeout;
 const vertices = data.map(x => x / 100);
 const midpointIndex = parseInt(vertices.length/2);
 let loaded = false;
-
 let prevIndex = midpointIndex;
-const setPrevIndex = (i) => prevIndex = i;
-
 let currentIndex = midpointIndex;
-const setCurrentIndex = i => currentIndex = i;
-
-let selectedPoint = null;
-const setSelectedPoint = p => selectedPoint = p;
-
-let points = [];
-const setPoints = pts => points = pts;
+console.log(currentIndex)
+const spheres = {};
 
 export default function App() {
   const [camera, setCamera] = React.useState(null);
-  // const [selectedPoint, setSelectedPoint] = React.useState(null);
-  // const [prevIndex, setPrevIndex] = React.useState(midpointIndex);
-  // const [currentIndex, setCurrentIndex] = React.useState(midpointIndex);
   const orbitShit = React.useRef();
-
-  let timeout;
 
   React.useEffect(() => {
     // Clear the animation loop when the component unmounts
@@ -277,121 +265,41 @@ export default function App() {
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    // const sceneColor = 0x6ad6f0;
 
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
-    // renderer.setClearColor(sceneColor);
     renderer.setClearColor('white');
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
     camera.position.set(vertices[midpointIndex]+10, vertices[midpointIndex+1]+10, vertices[midpointIndex+2]+10);
-
     setCamera(camera);
 
     const scene = new Scene();
-    // scene.fog = new Fog(sceneColor, 1, 10000);
     scene.add(new GridHelper(10, 10));
 
-    // const ambientLight = new AmbientLight(0x101010);
-    // scene.add(ambientLight);
-
-    // const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    // pointLight.position.set(0, 200, 200);
-    // scene.add(pointLight);
-
-    // const spotLight = new SpotLight(0xffffff, 0.5);
-    // spotLight.position.set(0, 500, 100);
-    // spotLight.lookAt(scene.position);
-    // scene.add(spotLight);
-
-    // const cube = new IconMesh();
-
-    // cube.on( 'click',function(ev){
-    //   orbitShit.current.getControls().target = new Vector3(0, 0, 1);
-    //   orbitShit.current.getControls().update(); 
-    // });
-    // scene.add(cube);
-
-    // camera.lookAt(cube.position);
-    // camera.lookAt(vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2]);
-
-    // POINTS EXAMPLE
-    const geometry = new THREE.BufferGeometry();
-    let cloneVertices = vertices.slice();
-    cloneVertices.splice(currentIndex, 3);
-    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( cloneVertices, 3 ) );
-    // material from https://stackoverflow.com/a/54361382
-    // const material = new THREE.ShaderMaterial({
-    //   transparent: true,
-    //   uniforms: {
-    //       depthWrite: false,
-    //       size: {value: 10},
-    //       scale: {value: 1},
-    //       color: {value: new THREE.Color('red')},
-    //   },
-    //   vertexShader: THREE.ShaderLib.points.vertexShader,
-    //   fragmentShader: `
-    //   uniform vec3 color;
-    //   void main() {
-    //       vec2 xy = gl_PointCoord.xy - vec2(0.5);
-    //       float ll = length(xy);
-    //       gl_FragColor = vec4(color, step(ll, 0.5));
-    //   }
-    //   `
-    // });
-    // const material = new THREE.PointsMaterial( { color: 'red' } );
-    const tex = new TextureLoader().load(require("app/appearance/images/barpath-dot.png"));
-    const material = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: true, alphaTest: 0.5, sizeAttenuation: true } );
-    // material.color.setHSL( 1.0, 0.3, 0.7 );
-    material.color.setColorName('red');
-    const pts = new THREE.Points( geometry, material );
-    // const spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
-    // const points = new THREE.Sprite( spriteMaterial );
-    scene.add( pts );
-    setPoints(pts);
-    // END POINTS EXAMPLE
-
-    const sphereGeometry = new THREE.SphereBufferGeometry( 0.1 );
-    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 'blue' } );
-    let selected = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    selected.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
-    scene.add( selected );
-    setSelectedPoint(selected);
-
-    // const selectedMaterial = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: false, sizeAttenuation: true } );
-    // selectedMaterial.color.setColorName('blue');
-    // const selectedGeometry = new THREE.BufferGeometry();
-    // selectedGeometry.setAttribute('position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
-    // const selected = new THREE.Points( selectedGeometry, selectedMaterial );
-    // scene.add( selected );
-    // setSelectedPoint(selected);
+    const sphereGeometry = new THREE.SphereBufferGeometry( 0.1, 16, 16 );
+    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 'red' } );
+    const sphereSelectedMaterial = new THREE.MeshBasicMaterial( { color: 'blue' } );
+    for (let i=0; i<data.length; i+=3) {
+      if (i !== currentIndex) {
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
+        scene.add(sphere);
+        spheres[i] = sphere;
+      } else {
+        const sphere = new THREE.Mesh( sphereGeometry, sphereSelectedMaterial );
+        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
+        scene.add(sphere);
+        spheres[i] = sphere;
+      }
+    }
 
     const update = () => {
-      // console.log(`update called ${prevIndex} vs ${currentIndex} loaded ${loaded}`)
       if (prevIndex !== currentIndex) {
-
-        scene.remove(points);
-        scene.remove(selectedPoint);
-
-        cloneVertices = vertices.slice();
-        cloneVertices.splice(currentIndex, 3);
-        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( cloneVertices, 3 ) );
-        const pts = new THREE.Points( geometry, material );
-        scene.add( pts );
-        setPoints(pts);
-
-        // selectedGeometry.setAttribute('position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
-        // const selected = new THREE.Points( selectedGeometry, selectedMaterial );
-        // scene.add( selected );
-        // setSelectedPoint(selected);
-        selected = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        selected.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
-        scene.add( selected );
-        setSelectedPoint(selected);
-
-        setPrevIndex(currentIndex);
+        spheres[prevIndex].material = sphereMaterial;
+        spheres[currentIndex].material = sphereSelectedMaterial;
+        prevIndex = currentIndex;
       }
     };
 
@@ -436,9 +344,7 @@ export default function App() {
             orbitShit.current.getControls().update();
           })
           .start();
-        console.log(`current index ${currentIndex} prev index ${prevIndex}`);
-        setCurrentIndex(newIndex);
-        console.log(`new index ${newIndex}`);
+        currentIndex = newIndex;
       }}><Text>NEXT</Text></TouchableHighlight>
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
         const newIndex = currentIndex-3;
@@ -454,9 +360,7 @@ export default function App() {
             orbitShit.current.getControls().update();
           })
           .start();
-        console.log(`current index ${currentIndex} prev index ${prevIndex}`);
-        setCurrentIndex(newIndex);
-        console.log(`new index ${newIndex}`);
+        currentIndex = newIndex;
       }}><Text>PREV</Text></TouchableHighlight>
     </Modal>
   );
