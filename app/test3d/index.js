@@ -1,21 +1,12 @@
-import { ExpoWebGLRenderingContext, GLView } from 'expo-gl';
-import { Renderer, TextureLoader } from 'expo-three';
+import { GLView } from 'expo-gl';
+import { Renderer } from 'expo-three';
 import OrbitControlsView from 'expo-three-orbit-controls';
 import * as React from 'react';
 import { Modal, TouchableHighlight, Text, View } from 'react-native';
 import {
-  AmbientLight,
-  BoxBufferGeometry,
-  Fog,
   GridHelper,
-  Mesh,
-  MeshStandardMaterial,
   PerspectiveCamera,
-  PointLight,
   Scene,
-  SpotLight,
-  Vector3,
-  Camera,
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 
@@ -305,16 +296,38 @@ export default function App() {
     const points = new THREE.Points( geometry, material );
     scene.add( points );
 
-    const sphereGeometry = new THREE.SphereBufferGeometry( 0.15, 32, 32 );
-    const sphereMaterial = new THREE.MeshBasicMaterial( { color: new THREE.Color(colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]) } );
-    selectedPoint = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    selectedPoint.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
+    const selectedGeometry = new THREE.BufferGeometry();
+    selectedGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
+    selectedGeometry.setAttribute( 'color', new THREE.Float32BufferAttribute( [colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]], 3 ) );
+    const selectedMaterial = new THREE.ShaderMaterial({
+      vertexColors: THREE.VertexColors,
+      depthTest: false,
+      uniforms: {
+          size: {value: 40},
+          scale: {value: 10},
+      },
+      defines: {
+        // USE_MAP: "",
+        // USE_SIZEATTENUATION: ""
+      },
+      vertexShader: THREE.ShaderLib.points.vertexShader,
+      fragmentShader: `
+      in vec3 vColor;
+      void main() {
+          vec2 xy = gl_PointCoord.xy - vec2(0.5);
+          float ll = length(xy);
+          if (ll > 0.5) discard;
+          gl_FragColor = vec4(vColor, step(ll, 0.5));
+      }
+      `
+    });
+    selectedPoint = new THREE.Points( selectedGeometry, selectedMaterial );
     scene.add( selectedPoint );
 
     const update = () => {
       if (prevIndex !== currentIndex) {
-        selectedPoint.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
-        selectedPoint.material.color = new THREE.Color(colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]);
+        selectedPoint.geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
+        selectedPoint.geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( [colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]], 3 ) );
         prevIndex = currentIndex;
       }
     };
