@@ -332,13 +332,15 @@ export default function App() {
         const newIndex = currentIndex+3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
+        const coords = { x: target.x, y: target.y, z: target.z };
         const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
-        new TWEEN.Tween(from)
-          .to(to, 1000)
-          .easing(TWEEN.Easing.Quadratic.InOut)
+        const cameraOrig = camera.position.clone();
+        new TWEEN.Tween(coords)
+          .to(to, 500)
+          .easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(() => {
-            // camera.position.set(coords.x, coords.y, coords.z); // animate the thing
-            orbitShit.current.getControls().target.set( from.x, from.y, from.z ); // set it logically but don't update visually
+            camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
+            orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
             orbitShit.current.getControls().update();
           })
           .start();
@@ -348,13 +350,15 @@ export default function App() {
         const newIndex = currentIndex-3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
+        const coords = { x: target.x, y: target.y, z: target.z };
         const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
-        new TWEEN.Tween(from)
-          .to(to, 1000)
-          .easing(TWEEN.Easing.Quadratic.InOut)
+        const cameraOrig = camera.position.clone();
+        new TWEEN.Tween(coords)
+          .to(to, 500)
+          .easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(() => {
-            // camera.position.set(coords.x, coords.y, coords.z); // animate the thing
-            orbitShit.current.getControls().target.set( from.x, from.y, from.z ); // set it logically but don't update visually
+            camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
+            orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
             orbitShit.current.getControls().update();
           })
           .start();
