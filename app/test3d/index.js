@@ -247,12 +247,13 @@ const data = [
 ];
 let timeout;
 const vertices = data.map(x => x / 100);
+const colors = vertices.map(v => THREE.MathUtils.randFloat(0, 1));
 const midpointIndex = parseInt(vertices.length/2);
 let loaded = false;
 let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
-console.log(currentIndex)
-const spheres = {};
+let selectedPoint = null;
+let points = [];
 
 export default function App() {
   const [camera, setCamera] = React.useState(null);
@@ -278,27 +279,24 @@ export default function App() {
     const scene = new Scene();
     scene.add(new GridHelper(10, 10));
 
-    const sphereGeometry = new THREE.SphereBufferGeometry( 0.1, 16, 16 );
-    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 'red' } );
-    const sphereSelectedMaterial = new THREE.MeshBasicMaterial( { color: 'blue' } );
-    for (let i=0; i<data.length; i+=3) {
-      if (i !== currentIndex) {
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
-        scene.add(sphere);
-        spheres[i] = sphere;
-      } else {
-        const sphere = new THREE.Mesh( sphereGeometry, sphereSelectedMaterial );
-        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
-        scene.add(sphere);
-        spheres[i] = sphere;
-      }
-    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+    geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+    const tex = new TextureLoader().load(require("app/appearance/images/barpath-dot.png"));
+    const material = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: true, alphaTest: 0.5, vertexColors: THREE.VertexColors, sizeAttenuation: true } );
+    points = new THREE.Points( geometry, material );
+    scene.add( points );
+
+    const sphereGeometry = new THREE.SphereBufferGeometry( 0.15, 32, 32 );
+    const sphereMaterial = new THREE.MeshBasicMaterial( { color: new THREE.Color(colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]) } );
+    selectedPoint = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    selectedPoint.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
+    scene.add( selectedPoint );
 
     const update = () => {
       if (prevIndex !== currentIndex) {
-        spheres[prevIndex].material = sphereMaterial;
-        spheres[currentIndex].material = sphereSelectedMaterial;
+        selectedPoint.position.set(vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]);
+        selectedPoint.material.color = new THREE.Color(colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]);
         prevIndex = currentIndex;
       }
     };
