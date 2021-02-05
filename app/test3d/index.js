@@ -288,8 +288,8 @@ export default function App() {
           scale: {value: 10},
       },
       defines: {
-        USE_MAP: "",
-        USE_SIZEATTENUATION: ""
+        // USE_MAP: "",
+        // USE_SIZEATTENUATION: ""
       },
       vertexShader: THREE.ShaderLib.points.vertexShader,
       fragmentShader: `
