@@ -282,7 +282,7 @@ export default function App() {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
     geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-    const tex = new TextureLoader().load(require("app/appearance/images/barpath-dot.png"));
+    const tex = new TextureLoader().load(require("../appearance/images/barpath-dot.png"));
     const material = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: true, alphaTest: 0.5, vertexColors: THREE.VertexColors, sizeAttenuation: true } );
     points = new THREE.Points( geometry, material );
     scene.add( points );
