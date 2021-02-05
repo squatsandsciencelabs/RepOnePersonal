@@ -253,7 +253,6 @@ let loaded = false;
 let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let selectedPoint = null;
-let points = [];
 
 export default function App() {
   const [camera, setCamera] = React.useState(null);
@@ -282,9 +281,28 @@ export default function App() {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
     geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-    const tex = new TextureLoader().load(require("../appearance/images/barpath-dot.png"));
-    const material = new THREE.PointsMaterial( { size: 0.25, map: tex, transparent: true, alphaTest: 0.5, vertexColors: THREE.VertexColors, sizeAttenuation: true } );
-    points = new THREE.Points( geometry, material );
+    const material = new THREE.ShaderMaterial({
+      vertexColors: THREE.VertexColors,
+      uniforms: {
+          size: {value: 20},
+          scale: {value: 10},
+      },
+      defines: {
+        USE_MAP: "",
+        USE_SIZEATTENUATION: ""
+      },
+      vertexShader: THREE.ShaderLib.points.vertexShader,
+      fragmentShader: `
+      in vec3 vColor;
+      void main() {
+          vec2 xy = gl_PointCoord.xy - vec2(0.5);
+          float ll = length(xy);
+          if (ll > 0.5) discard;
+          gl_FragColor = vec4(vColor, step(ll, 0.5));
+      }
+      `
+    });
+    const points = new THREE.Points( geometry, material );
     scene.add( points );
 
     const sphereGeometry = new THREE.SphereBufferGeometry( 0.15, 32, 32 );
@@ -303,7 +321,6 @@ export default function App() {
 
     // Setup an animation loop
     const render = (time) => {
-
       // hack just set initial point
       // TODO: figure out right way to do this
       if (!loaded && orbitShit.current.getControls()) {
