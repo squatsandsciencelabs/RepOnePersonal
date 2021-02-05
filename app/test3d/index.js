@@ -247,6 +247,7 @@ const data = [
 ];
 let timeout;
 const vertices = data.map(x => x / 100);
+const colors = vertices.map(v => THREE.MathUtils.randFloat(0, 1));
 const midpointIndex = parseInt(vertices.length/2);
 let loaded = false;
 let prevIndex = midpointIndex;
@@ -267,38 +268,60 @@ export default function App() {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
 
     // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
+    const renderer = new Renderer({ gl, alpha: true });
     renderer.setSize(width, height);
-    renderer.setClearColor('white');
+    renderer.setClearColor('blue', 0);
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
     camera.position.set(vertices[midpointIndex]+10, vertices[midpointIndex+1]+10, vertices[midpointIndex+2]+10);
+    // camera.position.set(2, 5, 5);
     setCamera(camera);
 
     const scene = new Scene();
     scene.add(new GridHelper(10, 10));
 
-    const sphereGeometry = new THREE.SphereBufferGeometry( 0.1, 16, 16 );
-    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 'red' } );
-    const sphereSelectedMaterial = new THREE.MeshBasicMaterial( { color: 'blue' } );
-    for (let i=0; i<data.length; i+=3) {
-      if (i !== currentIndex) {
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
-        scene.add(sphere);
-        spheres[i] = sphere;
-      } else {
-        const sphere = new THREE.Mesh( sphereGeometry, sphereSelectedMaterial );
-        sphere.position.set(vertices[i], vertices[i+1], vertices[i+2]);
-        scene.add(sphere);
-        spheres[i] = sphere;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+    geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+    // material from https://stackoverflow.com/a/54361382 and modified for attenuation due to https://stackoverflow.com/questions/41246878/how-to-get-the-same-result-as-with-using-pointsmaterial-but-with-using-shadermat
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      alphaTest: 1,
+      vertexColors: THREE.VertexColors,
+      // side: THREE.DoubleSide,
+      // depthFunc: THREE.NotEqualDepth,
+      blending: THREE.CustomBlending,
+      // depthTest: false,
+      // depthWrite: false,
+      // blendSrcAlpha: 0,
+      blendEquation: THREE.AddEquation,
+      blendSrc: THREE.SrcAlphaFactor,
+      blendDst: THREE.OneMinusSrcAlphaFactor,
+      uniforms: {
+          size: {value: 20},
+          scale: {value: 10}, //idk
+      },
+      defines: {
+        USE_MAP: "",
+        USE_SIZEATTENUATION: ""
+      },
+      vertexShader: THREE.ShaderLib.points.vertexShader,
+      fragmentShader: `
+      in vec3 vColor;
+      void main() {
+          vec2 xy = gl_PointCoord.xy - vec2(0.5);
+          float ll = length(xy);
+          gl_FragColor = vec4(vColor, step(ll, 0.5));
       }
-    }
+      `
+    });
+    const points = new THREE.Points( geometry, material );
+    scene.add( points );
+
 
     const update = () => {
       if (prevIndex !== currentIndex) {
-        spheres[prevIndex].material = sphereMaterial;
-        spheres[currentIndex].material = sphereSelectedMaterial;
+        // TODO: some selection option
         prevIndex = currentIndex;
       }
     };
