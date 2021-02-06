@@ -486,9 +486,6 @@ let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let points;
 
-const maxDistance = 20;
-let attenuated = false;
-
 export default function App() {
   const [camera, setCamera] = React.useState(null);
   const orbitShit = React.useRef();
@@ -556,7 +553,10 @@ export default function App() {
         }
         #ifdef USE_SIZEATTENUATION
           bool isPerspective = isPerspectiveMatrix( projectionMatrix );
-          if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
+          if ( isPerspective ) {
+            gl_PointSize *= ( scale / - mvPosition.z );
+            gl_PointSize = max(gl_PointSize, 10.0);
+          }
         #endif
         #include <logdepthbuf_vertex>
         #include <clipping_planes_vertex>
@@ -608,27 +608,6 @@ export default function App() {
         }
         points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
         prevIndex = currentIndex;
-      }
-
-      // update size attenuation
-      if (orbitShit.current.getControls()) {
-        if (attenuated) {
-          if (orbitShit.current.getControls().target.distanceTo(camera.position) > maxDistance) {
-            points.material.uniforms.size.value = 10;
-            points.material.defines.USE_SIZEATTENUATION = false;
-            points.material.defines.USE_MAP = false;
-            points.material.needsUpdate = true;
-            attenuated = false;
-          }
-        } else {
-          if (orbitShit.current.getControls().target.distanceTo(camera.position) <= maxDistance) {
-            points.material.uniforms.size.value = 20;
-            points.material.defines.USE_SIZEATTENUATION = "";
-            points.material.defines.USE_MAP = "";
-            points.material.needsUpdate = true;
-            attenuated = true;
-          }
-        }
       }
 
       timeout = requestAnimationFrame(render);
