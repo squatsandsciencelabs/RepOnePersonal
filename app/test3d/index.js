@@ -302,6 +302,7 @@ export default function App() {
     const selectedMaterial = new THREE.ShaderMaterial({
       vertexColors: THREE.VertexColors,
       depthTest: false,
+      // transparent: true,
       uniforms: {
           size: {value: 40},
           scale: {value: 10},
@@ -317,11 +318,14 @@ export default function App() {
           vec2 xy = gl_PointCoord.xy - vec2(0.5);
           float ll = length(xy);
           if (ll > 0.5) discard;
+          if (ll < 0.4) discard;
           gl_FragColor = vec4(vColor, step(ll, 0.5));
+          // gl_FragColor.a = 0.8;
       }
       `
     });
     selectedPoint = new THREE.Points( selectedGeometry, selectedMaterial );
+    selectedPoint.renderOrder = 999;
     scene.add( selectedPoint );
 
     const update = () => {
