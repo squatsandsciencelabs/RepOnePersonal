@@ -486,6 +486,9 @@ let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let points;
 
+const maxDistance = 20;
+let attenuated = false;
+
 export default function App() {
   const [camera, setCamera] = React.useState(null);
   const orbitShit = React.useRef();
@@ -526,8 +529,8 @@ export default function App() {
           scale: {value: 10},
       },
       defines: {
-        // USE_MAP: "",
-        // USE_SIZEATTENUATION: ""
+        USE_MAP: "",
+        USE_SIZEATTENUATION: ""
       },
       vertexShader: `
       uniform float size;
@@ -583,18 +586,6 @@ export default function App() {
     points = new THREE.Points( geometry, material );
     scene.add( points );
 
-    const update = () => {
-      if (prevIndex !== currentIndex) {
-        // recreate selected as somehow just modify it isn't enough
-        selected.length = 0;
-        for (let i=0; i<data.length; i+=3) {
-          selected.push(i === currentIndex ? 1.0 : 0.0);
-        }
-        points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
-        prevIndex = currentIndex;
-      }
-    };
-
     // Setup an animation loop
     const render = (time) => {
       // hack just set initial point
@@ -605,8 +596,41 @@ export default function App() {
         orbitShit.current.getControls().update();
       }
 
+      // update animations
       TWEEN.update(time);
-      update();
+
+      // update target
+      if (prevIndex !== currentIndex) {
+        // recreate selected as somehow just modify it isn't enough
+        selected.length = 0;
+        for (let i=0; i<data.length; i+=3) {
+          selected.push(i === currentIndex ? 1.0 : 0.0);
+        }
+        points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
+        prevIndex = currentIndex;
+      }
+
+      // update size attenuation
+      if (orbitShit.current.getControls()) {
+        if (attenuated) {
+          if (orbitShit.current.getControls().target.distanceTo(camera.position) > maxDistance) {
+            points.material.uniforms.size.value = 10;
+            points.material.defines.USE_SIZEATTENUATION = false;
+            points.material.defines.USE_MAP = false;
+            points.material.needsUpdate = true;
+            attenuated = false;
+          }
+        } else {
+          if (orbitShit.current.getControls().target.distanceTo(camera.position) <= maxDistance) {
+            points.material.uniforms.size.value = 20;
+            points.material.defines.USE_SIZEATTENUATION = "";
+            points.material.defines.USE_MAP = "";
+            points.material.needsUpdate = true;
+            attenuated = true;
+          }
+        }
+      }
+
       timeout = requestAnimationFrame(render);
       renderer.render(scene, camera);
       gl.endFrameEXP();
