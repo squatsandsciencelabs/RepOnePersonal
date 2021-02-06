@@ -555,7 +555,7 @@ export default function App() {
           bool isPerspective = isPerspectiveMatrix( projectionMatrix );
           if ( isPerspective ) {
             gl_PointSize *= ( scale / - mvPosition.z );
-            gl_PointSize = max(gl_PointSize, 10.0);
+            gl_PointSize = max(gl_PointSize, vSelected > 0.0 ? 30.0 : 10.0);
           }
         #endif
         #include <logdepthbuf_vertex>
