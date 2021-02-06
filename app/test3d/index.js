@@ -301,7 +301,7 @@ export default function App() {
     selectedGeometry.setAttribute( 'color', new THREE.Float32BufferAttribute( [colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]], 3 ) );
     const selectedMaterial = new THREE.ShaderMaterial({
       vertexColors: THREE.VertexColors,
-      depthTest: false,
+      // depthTest: false,
       // transparent: true,
       uniforms: {
           size: {value: 40},
