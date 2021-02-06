@@ -243,7 +243,7 @@ const midpointIndex = parseInt(vertices.length/2);
 let loaded = false;
 let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
-let selectedPoint = null;
+let points;
 
 export default function App() {
   const [camera, setCamera] = React.useState(null);
@@ -269,9 +269,16 @@ export default function App() {
     const scene = new Scene();
     scene.add(new GridHelper(10, 10));
 
+    const selected = [];
+    for (let i=0; i<data.length; i+=3) {
+      console.log(`${i === currentIndex}`);
+      selected.push(i === currentIndex ? 1.0 : 0.0);
+    }
+
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
     geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+    geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
     const material = new THREE.ShaderMaterial({
       vertexColors: THREE.VertexColors,
       uniforms: {
@@ -282,56 +289,69 @@ export default function App() {
         // USE_MAP: "",
         // USE_SIZEATTENUATION: ""
       },
-      vertexShader: THREE.ShaderLib.points.vertexShader,
+      vertexShader: `
+      uniform float size;
+      uniform float scale;
+      in float selected;
+      out float vSelected;
+      #include <common>
+      #include <color_pars_vertex>
+      #include <fog_pars_vertex>
+      #include <morphtarget_pars_vertex>
+      #include <logdepthbuf_pars_vertex>
+      #include <clipping_planes_pars_vertex>
+      void main() {
+        #include <color_vertex>
+        #include <begin_vertex>
+        #include <morphtarget_vertex>
+        #include <project_vertex>
+        vSelected = selected;
+        if (vSelected > 0.0) {
+          gl_PointSize = size * 3.0;
+        } else {
+          gl_PointSize = size;
+        }
+        #ifdef USE_SIZEATTENUATION
+          bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+          if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
+        #endif
+        #include <logdepthbuf_vertex>
+        #include <clipping_planes_vertex>
+        #include <worldpos_vertex>
+        #include <fog_vertex>
+      }
+      `,
       fragmentShader: `
       in vec3 vColor;
+      in float vSelected;
       void main() {
-          vec2 xy = gl_PointCoord.xy - vec2(0.5);
-          float ll = length(xy);
-          if (ll > 0.5) discard;
-          gl_FragColor = vec4(vColor, step(ll, 0.5));
+          if (vSelected > 0.0) {
+            vec2 xy = gl_PointCoord.xy - vec2(0.5);
+            float ll = length(xy);
+            if (ll > 0.5) discard;
+            if (ll > 0.25 && ll < 0.4) discard;
+            gl_FragColor = vec4(vColor, step(ll, 0.5));
+          } else {
+            vec2 xy = gl_PointCoord.xy - vec2(0.5);
+            float ll = length(xy);
+            if (ll > 0.5) discard;
+            gl_FragColor = vec4(vColor, step(ll, 0.5));
+          }
       }
       `
     });
-    const points = new THREE.Points( geometry, material );
+    points = new THREE.Points( geometry, material );
     scene.add( points );
-
-    const selectedGeometry = new THREE.BufferGeometry();
-    selectedGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
-    selectedGeometry.setAttribute( 'color', new THREE.Float32BufferAttribute( [colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]], 3 ) );
-    const selectedMaterial = new THREE.ShaderMaterial({
-      vertexColors: THREE.VertexColors,
-      // depthTest: false,
-      // transparent: true,
-      uniforms: {
-          size: {value: 40},
-          scale: {value: 10},
-      },
-      defines: {
-        // USE_MAP: "",
-        // USE_SIZEATTENUATION: ""
-      },
-      vertexShader: THREE.ShaderLib.points.vertexShader,
-      fragmentShader: `
-      in vec3 vColor;
-      void main() {
-          vec2 xy = gl_PointCoord.xy - vec2(0.5);
-          float ll = length(xy);
-          if (ll > 0.5) discard;
-          if (ll < 0.4) discard;
-          gl_FragColor = vec4(vColor, step(ll, 0.5));
-          // gl_FragColor.a = 0.8;
-      }
-      `
-    });
-    selectedPoint = new THREE.Points( selectedGeometry, selectedMaterial );
-    selectedPoint.renderOrder = 999;
-    scene.add( selectedPoint );
 
     const update = () => {
       if (prevIndex !== currentIndex) {
-        selectedPoint.geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [vertices[currentIndex], vertices[currentIndex+1], vertices[currentIndex+2]], 3 ) );
-        selectedPoint.geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( [colors[currentIndex], colors[currentIndex+1], colors[currentIndex+2]], 3 ) );
+        // recreate selected as somehow just modify it isn't enough
+        selected.length = 0;
+        for (let i=0; i<data.length; i+=3) {
+          console.log(`${i === currentIndex}`);
+          selected.push(i === currentIndex ? 1.0 : 0.0);
+        }
+        points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
         prevIndex = currentIndex;
       }
     };
