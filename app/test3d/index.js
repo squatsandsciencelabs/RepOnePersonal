@@ -510,7 +510,8 @@ export default function App() {
     renderer.setClearColor(0xffffff);
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-    camera.position.set(vertices[midpointIndex]+10, vertices[midpointIndex+1]+10, vertices[midpointIndex+2]+10);
+    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
+    camera.up.set( 0, 0, 1 );
     setCamera(camera);
 
     const scene = new Scene();
