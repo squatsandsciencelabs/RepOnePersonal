@@ -508,6 +508,7 @@ if (Platform.OS === 'ios') {
 
 export default function App() {
   const [camera, setCamera] = React.useState(null);
+  const [foobar, setFoobar] = React.useState(false);
   const orbitShit = React.useRef();
 
   React.useEffect(() => {
@@ -719,15 +720,16 @@ export default function App() {
             cameraTween = null;
           })
           .start();
-        currentIndex = newIndex;
+          currentIndex = newIndex;
+          setFoobar(!foobar)
       }}><Text>NEXT</Text></TouchableHighlight>
 
       <View style={styles.sliderContainer}>
         <View style={styles.sliderRotateContainer}>
           <Slider
-              value={currentIndex} 
+              value={currentIndex / 3} 
               style={styles.slider}
-              // onValueChange={(value) => this.setState({ slidingDays: true, days: Number(value.toFixed(2)) })}
+              onValueChange={(value) => currentIndex = value * 3 }
               // onSlidingComplete={(value) => this._changeDaysSlider(value)}
               minimumValue={0}
               maximumValue={speeds.length}
@@ -761,6 +763,7 @@ export default function App() {
           })
           .start();
         currentIndex = newIndex;
+        setFoobar(!foobar)
       }}><Text>PREV</Text></TouchableHighlight>
     </Modal>
   );
