@@ -631,16 +631,16 @@ export default function App() {
 
       // update sphere
       if (controls) {
-        if (controls.state === -1) {
-          if (sphereVisible) {
-            sphereVisible = false;
+        if (controls.state === 3) {
+          if (!sphereVisible) {
+            sphereVisible = true;
 
             if (sphereTween) { sphereTween.stop() }
 
             const opacity = {value: sphere.material.opacity};
             sphereTween = new TWEEN.Tween(opacity)
-            .to({value: 0.0}, 300)
-            .easing(TWEEN.Easing.Quadratic.Out)
+            .to({value: 1.0}, 300)
+            .easing(TWEEN.Easing.Quadratic.In)
             .onUpdate(() => {
               sphere.material.opacity = opacity.value;
             })
@@ -649,15 +649,15 @@ export default function App() {
             })
             .start();
           }
-        } else if (!sphereVisible) {
-          sphereVisible = true;
+        } else if (sphereVisible) {
+          sphereVisible = false;
 
           if (sphereTween) { sphereTween.stop() }
 
           const opacity = {value: sphere.material.opacity};
           sphereTween = new TWEEN.Tween(opacity)
-          .to({value: 1.0}, 300)
-          .easing(TWEEN.Easing.Quadratic.In)
+          .to({value: 0.0}, 300)
+          .easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(() => {
             sphere.material.opacity = opacity.value;
           })
