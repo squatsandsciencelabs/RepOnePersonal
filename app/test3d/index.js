@@ -734,7 +734,7 @@ export default function App() {
               style={styles.slider}
               onValueChange={(value) => zoomTo(value * 3) }
               minimumValue={0}
-              maximumValue={speeds.length}
+              maximumValue={speeds.length-1}
               step={1}
               thumbTintColor={thumbTintColor}
               minimumTrackTintColor={'#368fff'}
