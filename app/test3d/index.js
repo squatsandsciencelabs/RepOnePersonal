@@ -486,6 +486,11 @@ let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let points;
 
+// animations
+let sphereVisible = false;
+let cameraTween = null;
+let sphereTween = null;
+
 export default function App() {
   const [camera, setCamera] = React.useState(null);
   const orbitShit = React.useRef();
@@ -501,20 +506,33 @@ export default function App() {
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
-    renderer.setClearColor('white');
+    // renderer.setClearColor(new THREE.Color(0.97, 0.97, 0.97));
+    renderer.setClearColor(0xffffff);
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
     camera.position.set(vertices[midpointIndex]+10, vertices[midpointIndex+1]+10, vertices[midpointIndex+2]+10);
     setCamera(camera);
 
     const scene = new Scene();
-    scene.add(new GridHelper(10, 10));
 
+    const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(0.8, 0.8, 0.8),
+        side: THREE.BackSide,
+        wireframe: true,
+        opacity: 0,
+        transparent: true,
+    });
+    const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    scene.add(sphere);
+
+    // recalcualte selected
     const selected = [];
     for (let i=0; i<data.length; i+=3) {
       selected.push(i === currentIndex ? 1.0 : 0.0);
     }
 
+    // draw
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
     geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
@@ -588,12 +606,13 @@ export default function App() {
 
     // Setup an animation loop
     const render = (time) => {
+      const controls = orbitShit.current.getControls();
       // hack just set initial point
       // TODO: figure out right way to do this
-      if (!loaded && orbitShit.current.getControls()) {
+      if (!loaded && controls) {
         loaded = true;
-        orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
-        orbitShit.current.getControls().update();
+        controls.target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+        controls.update();
       }
 
       // update animations
@@ -608,6 +627,45 @@ export default function App() {
         }
         points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
         prevIndex = currentIndex;
+      }
+
+      // update sphere
+      if (controls) {
+        if (controls.state === -1) {
+          if (sphereVisible) {
+            sphereVisible = false;
+
+            if (sphereTween) { sphereTween.stop() }
+
+            const opacity = {value: sphere.material.opacity};
+            sphereTween = new TWEEN.Tween(opacity)
+            .to({value: 0.0}, 300)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(() => {
+              sphere.material.opacity = opacity.value;
+            })
+            .onComplete(() => {
+              sphereTween = null;
+            })
+            .start();
+          }
+        } else if (!sphereVisible) {
+          sphereVisible = true;
+
+          if (sphereTween) { sphereTween.stop() }
+
+          const opacity = {value: sphere.material.opacity};
+          sphereTween = new TWEEN.Tween(opacity)
+          .to({value: 1.0}, 300)
+          .easing(TWEEN.Easing.Quadratic.In)
+          .onUpdate(() => {
+            sphere.material.opacity = opacity.value;
+          })
+          .onComplete(() => {
+            sphereTween = null;
+          })
+          .start();
+        }
       }
 
       timeout = requestAnimationFrame(render);
@@ -625,13 +683,15 @@ export default function App() {
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
       </OrbitControlsView>
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
+        if (cameraTween) { cameraTween.stop(); }
+
         const newIndex = currentIndex+3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
         const coords = { x: target.x, y: target.y, z: target.z };
         const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
         const cameraOrig = camera.position.clone();
-        new TWEEN.Tween(coords)
+        cameraTween = new TWEEN.Tween(coords)
           .to(to, 500)
           .easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(() => {
@@ -639,23 +699,31 @@ export default function App() {
             orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
             orbitShit.current.getControls().update();
           })
+          .onComplete(() => {
+            cameraTween = null;
+          })
           .start();
         currentIndex = newIndex;
       }}><Text>NEXT</Text></TouchableHighlight>
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
+        if (cameraTween) { cameraTween.stop(); }
+
         const newIndex = currentIndex-3;
         const target = orbitShit.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
         const coords = { x: target.x, y: target.y, z: target.z };
         const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
         const cameraOrig = camera.position.clone();
-        new TWEEN.Tween(coords)
+        cameraTween = new TWEEN.Tween(coords)
           .to(to, 500)
           .easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(() => {
             camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
             orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
             orbitShit.current.getControls().update();
+          })
+          .onComplete(() => {
+            cameraTween = null;
           })
           .start();
         currentIndex = newIndex;
