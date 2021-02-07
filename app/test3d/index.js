@@ -2,9 +2,17 @@ import { GLView } from 'expo-gl';
 import { Renderer } from 'expo-three';
 import OrbitControlsView from 'expo-three-orbit-controls';
 import * as React from 'react';
-import { Modal, TouchableHighlight, Text, View } from 'react-native';
 import {
-  GridHelper,
+  Modal,
+  TouchableHighlight,
+  Text,
+  StyleSheet,
+  View,
+  Platform,
+  Dimensions,
+} from 'react-native';
+import Slider from '@react-native-community/slider';
+import {
   PerspectiveCamera,
   Scene,
 } from 'three';
@@ -491,6 +499,13 @@ let sphereVisible = false;
 let cameraTween = null;
 let sphereTween = null;
 
+// visuals
+if (Platform.OS === 'ios') {
+  var thumbTintColor = '#ffffff';
+} else {
+  var thumbTintColor = '#368fff';
+}
+
 export default function App() {
   const [camera, setCamera] = React.useState(null);
   const orbitShit = React.useRef();
@@ -706,6 +721,24 @@ export default function App() {
           .start();
         currentIndex = newIndex;
       }}><Text>NEXT</Text></TouchableHighlight>
+
+      <View style={styles.sliderContainer}>
+        <View style={styles.sliderRotateContainer}>
+          <Slider
+              value={currentIndex} 
+              style={styles.slider}
+              // onValueChange={(value) => this.setState({ slidingDays: true, days: Number(value.toFixed(2)) })}
+              // onSlidingComplete={(value) => this._changeDaysSlider(value)}
+              minimumValue={0}
+              maximumValue={speeds.length}
+              step={1}
+              thumbTintColor={thumbTintColor}
+              minimumTrackTintColor={'#368fff'}
+              animateTransitions={true}
+          />
+        </View>
+      </View>
+
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
         if (cameraTween) { cameraTween.stop(); }
 
@@ -733,17 +766,29 @@ export default function App() {
   );
 }
 
-/*
-class IconMesh extends Mesh {
-  constructor() {
-    super(
-      new BoxBufferGeometry(1.0, 1.0, 1.0),
-      new MeshStandardMaterial({
-        map: new TextureLoader().load(
-          'https://pbs.twimg.com/profile_images/1203624639538302976/h-rvrjWy_400x400.jpg'
-        ),
-      })
-    );
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const styles = StyleSheet.create({
+  sliderContainer: {
+    position: 'absolute',
+    top: 100,
+    bottom: 100,
+    right: 0,
+    width: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+
+  },
+  sliderRotateContainer: {
+    transform: [{ rotate: '-90deg' }],
+    flexDirection: 'column-reverse',
+    height: windowWidth,
+  },
+  slider: {
+    marginBottom: (windowWidth * 0.5) - 10,
+    width: windowHeight * 0.65,
   }
-}
-*/
+});
