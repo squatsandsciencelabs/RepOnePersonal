@@ -517,6 +517,10 @@ export default function App() {
   }, []);
 
   const zoomTo = (newIndex) => {
+    if (newIndex < 0 || newIndex >= data.length) {
+      return;
+    }
+
     if (cameraTween) { cameraTween.stop(); }
 
     const target = orbitShit.current.getControls().target;
