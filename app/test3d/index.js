@@ -516,6 +516,30 @@ export default function App() {
     return () => clearTimeout(timeout);
   }, []);
 
+  const zoomTo = (newIndex) => {
+    if (cameraTween) { cameraTween.stop(); }
+
+    const target = orbitShit.current.getControls().target;
+    const from = { x: target.x, y: target.y, z: target.z };
+    const coords = { x: target.x, y: target.y, z: target.z };
+    const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
+    const cameraOrig = camera.position.clone();
+    cameraTween = new TWEEN.Tween(coords)
+      .to(to, 500)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(() => {
+        camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
+        orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
+        orbitShit.current.getControls().update();
+      })
+      .onComplete(() => {
+        cameraTween = null;
+      })
+      .start();
+      currentIndex = newIndex;
+      setFoobar(!foobar)
+  };
+
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
 
@@ -700,28 +724,7 @@ export default function App() {
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
       </OrbitControlsView>
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
-        if (cameraTween) { cameraTween.stop(); }
-
-        const newIndex = currentIndex+3;
-        const target = orbitShit.current.getControls().target;
-        const from = { x: target.x, y: target.y, z: target.z };
-        const coords = { x: target.x, y: target.y, z: target.z };
-        const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
-        const cameraOrig = camera.position.clone();
-        cameraTween = new TWEEN.Tween(coords)
-          .to(to, 500)
-          .easing(TWEEN.Easing.Quadratic.Out)
-          .onUpdate(() => {
-            camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
-            orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
-            orbitShit.current.getControls().update();
-          })
-          .onComplete(() => {
-            cameraTween = null;
-          })
-          .start();
-          currentIndex = newIndex;
-          setFoobar(!foobar)
+        zoomTo(currentIndex+3);
       }}><Text>NEXT</Text></TouchableHighlight>
 
       <View style={styles.sliderContainer}>
@@ -729,8 +732,7 @@ export default function App() {
           <Slider
               value={currentIndex / 3} 
               style={styles.slider}
-              onValueChange={(value) => currentIndex = value * 3 }
-              // onSlidingComplete={(value) => this._changeDaysSlider(value)}
+              onValueChange={(value) => zoomTo(value * 3) }
               minimumValue={0}
               maximumValue={speeds.length}
               step={1}
@@ -742,28 +744,7 @@ export default function App() {
       </View>
 
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
-        if (cameraTween) { cameraTween.stop(); }
-
-        const newIndex = currentIndex-3;
-        const target = orbitShit.current.getControls().target;
-        const from = { x: target.x, y: target.y, z: target.z };
-        const coords = { x: target.x, y: target.y, z: target.z };
-        const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
-        const cameraOrig = camera.position.clone();
-        cameraTween = new TWEEN.Tween(coords)
-          .to(to, 500)
-          .easing(TWEEN.Easing.Quadratic.Out)
-          .onUpdate(() => {
-            camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
-            orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
-            orbitShit.current.getControls().update();
-          })
-          .onComplete(() => {
-            cameraTween = null;
-          })
-          .start();
-        currentIndex = newIndex;
-        setFoobar(!foobar)
+        zoomTo(currentIndex-3);
       }}><Text>PREV</Text></TouchableHighlight>
     </Modal>
   );
