@@ -506,7 +506,6 @@ export default function App() {
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
-    // renderer.setClearColor(new THREE.Color(0.97, 0.97, 0.97));
     renderer.setClearColor(0xffffff);
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
@@ -525,6 +524,7 @@ export default function App() {
         transparent: true,
     });
     const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    // sphere.rotateX(Math.PI * 0.5); // if want the top and bottom to have the circles
     scene.add(sphere);
 
     // recalcualte selected
