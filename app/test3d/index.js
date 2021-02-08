@@ -1,5 +1,5 @@
 import { GLView } from 'expo-gl';
-import { Renderer } from 'expo-three';
+import { Renderer, loadAsync } from 'expo-three';
 import OrbitControlsView from 'expo-three-orbit-controls';
 import * as React from 'react';
 import {
@@ -15,6 +15,7 @@ import Slider from '@react-native-community/slider';
 import {
   PerspectiveCamera,
   Scene,
+  AmbientLight,
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 
@@ -516,6 +517,9 @@ export default function App() {
     return () => clearTimeout(timeout);
   }, []);
 
+  // do this early
+  THREE.Object3D.DefaultUp.set(0, 0, 1);
+
   const zoomTo = (newIndex) => {
     if (newIndex < 0 || newIndex >= data.length) {
       return;
@@ -552,13 +556,20 @@ export default function App() {
     renderer.setSize(width, height);
     renderer.setClearColor(0xffffff);
 
+    // camera
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
     camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
-    camera.up.set( 0, 0, 1 );
     setCamera(camera);
 
+    // scene
     const scene = new Scene();
+    scene.scale.set(-1, 1, 1);
 
+    // light
+    const ambientLight = new AmbientLight( 0xffffff, 1, 100);
+    scene.add( ambientLight );
+
+    // skysphere
     const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
     const sphereMaterial = new THREE.MeshBasicMaterial({
         color: new THREE.Color(0.8, 0.8, 0.8),
@@ -571,7 +582,19 @@ export default function App() {
     // sphere.rotateX(Math.PI * 0.5); // if want the top and bottom to have the circles
     scene.add(sphere);
 
-    // recalcualte selected
+    // sensor
+    const model = await loadAsync(require('../appearance/models/sensor.obj'));
+    const texture = await loadAsync(require('../appearance/images/adam.png'));
+    model.traverse((o) => {
+      if (o.isMesh) {
+        o.material.map = texture;
+      }
+    });
+    model.position.set(vertices[0], vertices[1], vertices[2]-10);
+    model.rotateX(Math.PI * 0.5); // TODO: not sure if this rotated it properly, could be facing wrong way, could be upside down
+    scene.add(model);
+
+    // recalculate selected
     const selected = [];
     for (let i=0; i<data.length; i+=3) {
       selected.push(i === currentIndex ? 1.0 : 0.0);
