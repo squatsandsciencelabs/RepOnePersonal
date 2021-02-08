@@ -560,6 +560,7 @@
 				DEVELOPMENT_TEAM = NXXWS4F4KW;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RepOnePersonal/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.8;
 				OTHER_LDFLAGS = (
@@ -586,6 +587,7 @@
 				DEVELOPMENT_TEAM = NXXWS4F4KW;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = RepOnePersonal/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.8;
 				OTHER_LDFLAGS = (
