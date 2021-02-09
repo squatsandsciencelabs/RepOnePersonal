@@ -469,6 +469,8 @@ const times = [
   1693460,
   1844083
 ];
+
+// speeds and colors
 const speeds = [0];
 for (let i=3, j=1; i<data.length; i+=3, j++) {
   const deltaT = times[j]-times[j-1];
@@ -487,20 +489,28 @@ speeds.forEach(s => {
   colors.push(r, g, 0);
 });
 
-let timeout;
+// data
 const vertices = data.map(x => x / 100);
-const midpointIndex = Math.floor(times.length/2) * 3;
+
+// helpers
+let timeout;
 let loaded = false;
+const midpointIndex = Math.floor(times.length/2) * 3;
 let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let points;
+
+// camera presets
+const frontCameraPosition = [vertices[midpointIndex]+100, vertices[midpointIndex+1], vertices[midpointIndex+2]];
+const sideCameraPosition = [vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]];
+const topCameraPosition = [vertices[vertices.length-4], vertices[vertices.length-3], vertices[vertices.length-2]+100];
 
 // animations
 let sphereVisible = false;
 let cameraTween = null;
 let sphereTween = null;
 
-// visuals
+// slider visuals
 if (Platform.OS === 'ios') {
   var thumbTintColor = '#ffffff';
 } else {
@@ -517,7 +527,7 @@ export default function App() {
     return () => clearTimeout(timeout);
   }, []);
 
-  // do this early
+  // default up
   THREE.Object3D.DefaultUp.set(0, 0, 1);
 
   const zoomTo = (newIndex) => {
@@ -558,12 +568,12 @@ export default function App() {
 
     // camera
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
+    camera.position.set(...sideCameraPosition);
     setCamera(camera);
 
     // scene
     const scene = new Scene();
-    scene.scale.set(-1, 1, 1);
+    // scene.scale.set(-1, 1, 1); // depends on coordinate plane
 
     // light
     const ambientLight = new AmbientLight( 0xffffff, 1, 100);
@@ -579,7 +589,6 @@ export default function App() {
         transparent: true,
     });
     const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    // sphere.rotateX(Math.PI * 0.5); // if want the top and bottom to have the circles
     scene.add(sphere);
 
     // sensor
@@ -591,7 +600,8 @@ export default function App() {
       }
     });
     model.position.set(vertices[0], vertices[1], vertices[2]-10);
-    model.rotateX(Math.PI * 0.5); // TODO: not sure if this rotated it properly, could be facing wrong way, could be upside down
+    model.rotateX(Math.PI * 0.5);
+    model.rotateY(Math.PI * 0.5);
     scene.add(model);
 
     // recalculate selected
