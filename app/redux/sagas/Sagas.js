@@ -14,7 +14,7 @@ import ReconnectSaga from './ReconnectSaga';
 import SurveySaga from './SurveySaga';
 import InitializedAnalyticsSaga from './InitializedAnalyticsSaga';
 import OneRMAnalyticsSaga from './OneRMAnalyticsSaga';
-import VelocityThresholdSaga from './VelocityThresholdSaga';
+// import VelocityThresholdSaga from './VelocityThresholdSaga';
 import OTASaga from './OTASaga';
 import BulkDataSaga from './BulkDataSaga';
 import CalibrationSaga from './CalibrationSaga';
