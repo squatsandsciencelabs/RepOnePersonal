@@ -500,11 +500,6 @@ let prevIndex = midpointIndex;
 let currentIndex = midpointIndex;
 let points;
 
-// camera presets
-const frontCameraPosition = [vertices[midpointIndex]+100, vertices[midpointIndex+1], vertices[midpointIndex+2]];
-const sideCameraPosition = [vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]];
-const topCameraPosition = [vertices[vertices.length-4], vertices[vertices.length-3], vertices[vertices.length-2]+100];
-
 // animations
 let sphereVisible = false;
 let cameraTween = null;
@@ -542,6 +537,7 @@ export default function App() {
     const coords = { x: target.x, y: target.y, z: target.z };
     const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
     const cameraOrig = camera.position.clone();
+
     cameraTween = new TWEEN.Tween(coords)
       .to(to, 500)
       .easing(TWEEN.Easing.Quadratic.Out)
@@ -558,6 +554,30 @@ export default function App() {
       setFoobar(!foobar)
   };
 
+  const lookTop = () => {
+    camera.position.set(vertices[vertices.length-3]+.0000001, vertices[vertices.length-2], vertices[vertices.length-1]+100);
+    orbitShit.current.getControls().target.set( vertices[vertices.length-3], vertices[vertices.length-2], vertices[vertices.length-1] );
+    orbitShit.current.getControls().update();
+    currentIndex = vertices.length-3;
+    setFoobar(!foobar)
+  };
+
+  const lookFront = () => {
+    camera.position.set(vertices[midpointIndex]+100, vertices[midpointIndex+1], vertices[midpointIndex+2]);
+    orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+    orbitShit.current.getControls().update();
+    currentIndex = midpointIndex;
+    setFoobar(!foobar)
+  };
+
+  const lookSide = () => {
+    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
+    orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+    orbitShit.current.getControls().update();
+    currentIndex = midpointIndex;
+    setFoobar(!foobar)
+  };
+
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
 
@@ -568,7 +588,7 @@ export default function App() {
 
     // camera
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-    camera.position.set(...sideCameraPosition);
+    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
     setCamera(camera);
 
     // scene
@@ -692,6 +712,7 @@ export default function App() {
         controls.target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
         controls.update();
       }
+      console.log(`${camera.position.x}, ${camera.position.y}, ${camera.position.z}`)
 
       // update animations
       TWEEN.update(time);
@@ -757,13 +778,18 @@ export default function App() {
     <Modal
       transparent={true}
       visible={true} >
+
+      {/* 3d */}
       <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitShit}>
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
       </OrbitControlsView>
+
+      {/* next */}
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
         zoomTo(currentIndex+3);
       }}><Text>NEXT</Text></TouchableHighlight>
 
+      {/* slider */}
       <View style={styles.sliderContainer}>
         <View style={styles.sliderRotateContainer}>
           <Slider
@@ -780,9 +806,17 @@ export default function App() {
         </View>
       </View>
 
+      {/* prev */}
       <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
         zoomTo(currentIndex-3);
       }}><Text>PREV</Text></TouchableHighlight>
+
+      {/* camera presets */}
+      <View style={styles.presetCamera}>
+        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
+        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
+        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
+      </View>
     </Modal>
   );
 }
@@ -811,5 +845,19 @@ const styles = StyleSheet.create({
   slider: {
     marginBottom: (windowWidth * 0.5) - 10,
     width: windowHeight * 0.65,
+  },
+  presetCamera: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 70,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cameraItem: {
+    padding: 15,
   }
 });

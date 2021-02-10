@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, TextInput } from 'react-native';
 import { Provider } from 'react-redux';
-
 import 'app/configs+constants/ReactotronConfig';
+
+import Foobar from './test3d'; // NOTE: Somehow importing htis later causes animations to fail
 
 import Store from 'app/redux/Store';
 import ApplicationScreen from 'app/features/application/ApplicationScreen';
@@ -13,7 +14,6 @@ import AppState from 'app/services/AppState';
 import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
 
-import Foobar from './test3d';
 
 // TODO: confirm font scaling disabled
 Text.defaultProps = Text.defaultProps || {};
