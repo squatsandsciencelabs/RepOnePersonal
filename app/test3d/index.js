@@ -615,6 +615,25 @@ export default function App() {
     const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
     scene.add(sphere);
 
+    // grid position helpers
+    const helperGeo = new THREE.SphereBufferGeometry(0.5, 8, 8);
+    const helperMat1 = new THREE.MeshBasicMaterial({color: 'red'});
+    const helper1 = new THREE.Mesh(helperGeo, helperMat1);
+    helper1.position.set(0, 0, 0);
+    scene.add(helper1);
+    const helperMat2 = new THREE.MeshBasicMaterial({color: 'green'});
+    const helper2 = new THREE.Mesh(helperGeo, helperMat2);
+    helper2.position.set(1, 0, 0);
+    scene.add(helper2);
+    const helperMat3 = new THREE.MeshBasicMaterial({color: 'blue'});
+    const helper3 = new THREE.Mesh(helperGeo, helperMat3);
+    helper3.position.set(0, 1, 0);
+    scene.add(helper3)
+    const helperMat4 = new THREE.MeshBasicMaterial({color: 'yellow'});
+    const helper4 = new THREE.Mesh(helperGeo, helperMat4);
+    helper4.position.set(0, 0, 1);
+    scene.add(helper4)
+
     // sensor
     const model = await loadAsync(require('../appearance/models/sensor.obj'));
     const texture = await loadAsync(require('../appearance/images/adam.png'));
@@ -731,7 +750,7 @@ export default function App() {
         prevIndex = currentIndex;
       }
 
-      // update sphere
+      // update spherebox
       if (controls) {
         if (controls.state === 3) {
           if (!sphereVisible) {
