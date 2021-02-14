@@ -501,6 +501,7 @@ let currentIndex = midpointIndex;
 let points;
 
 // animations
+const zoomDistance = 50;
 let sphereVisible = false;
 let cameraTween = null;
 let sphereTween = null;
@@ -555,15 +556,18 @@ export default function App() {
   };
 
   const lookTop = () => {
-    camera.position.set(vertices[vertices.length-3]+.0000001, vertices[vertices.length-2], vertices[vertices.length-1]+100);
-    orbitShit.current.getControls().target.set( vertices[vertices.length-3], vertices[vertices.length-2], vertices[vertices.length-1] );
+    // camera.position.set(vertices[vertices.length-3]+.0000001, vertices[vertices.length-2], vertices[vertices.length-1]+zoomDistance);
+    camera.position.set(vertices[0]+.0000001, vertices[1], vertices[2]+zoomDistance+(vertices[2]-vertices[0]));
+    // orbitShit.current.getControls().target.set( vertices[vertices.length-3], vertices[vertices.length-2], vertices[vertices.length-1] );
+    orbitShit.current.getControls().target.set( vertices[0], vertices[1], vertices[2] );
     orbitShit.current.getControls().update();
-    currentIndex = vertices.length-3;
+    // currentIndex = vertices.length-3;
+    currentIndex = 0;
     setFoobar(!foobar)
   };
 
   const lookFront = () => {
-    camera.position.set(vertices[midpointIndex]+100, vertices[midpointIndex+1], vertices[midpointIndex+2]);
+    camera.position.set(vertices[midpointIndex]+zoomDistance, vertices[midpointIndex+1], vertices[midpointIndex+2]);
     orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
     orbitShit.current.getControls().update();
     currentIndex = midpointIndex;
@@ -571,7 +575,7 @@ export default function App() {
   };
 
   const lookSide = () => {
-    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
+    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
     orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
     orbitShit.current.getControls().update();
     currentIndex = midpointIndex;
@@ -588,7 +592,7 @@ export default function App() {
 
     // camera
     const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+100, vertices[midpointIndex+2]);
+    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
     setCamera(camera);
 
     // scene
