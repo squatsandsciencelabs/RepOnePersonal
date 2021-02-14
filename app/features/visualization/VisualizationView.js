@@ -513,7 +513,7 @@ if (Platform.OS === 'ios') {
   var thumbTintColor = '#368fff';
 }
 
-export default function App() {
+export default function App(props) {
   const [camera, setCamera] = React.useState(null);
   const [foobar, setFoobar] = React.useState(false);
   const orbitShit = React.useRef();
@@ -635,8 +635,8 @@ export default function App() {
     scene.add(helper4)
 
     // sensor
-    const model = await loadAsync(require('../appearance/models/sensor.obj'));
-    const texture = await loadAsync(require('../appearance/images/adam.png'));
+    const model = await loadAsync(require('app/appearance/models/sensor.obj'));
+    const texture = await loadAsync(require('app/appearance/images/adam.png'));
     model.traverse((o) => {
       if (o.isMesh) {
         o.material.map = texture;
@@ -727,6 +727,10 @@ export default function App() {
 
     // Setup an animation loop
     const render = (time) => {
+      // was remved from view hierarchy
+      if (!orbitShit.current) {
+        return;
+      }
       const controls = orbitShit.current.getControls();
       // hack just set initial point
       // TODO: figure out right way to do this
@@ -799,7 +803,7 @@ export default function App() {
   return (
     <Modal
       transparent={true}
-      visible={true} >
+      visible={props.isShowing} >
 
       {/* 3d */}
       <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitShit}>
@@ -839,6 +843,9 @@ export default function App() {
         <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
         <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
       </View>
+
+      {/* close */}
+      <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>CLOSE</Text></TouchableHighlight>
     </Modal>
   );
 }
@@ -881,5 +888,11 @@ const styles = StyleSheet.create({
   },
   cameraItem: {
     padding: 15,
+  },
+  close: {
+    position: 'absolute',
+    padding: 15,
+    top: 0,
+    left: 0,
   }
 });

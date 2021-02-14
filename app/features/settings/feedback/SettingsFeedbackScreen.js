@@ -7,6 +7,7 @@ import * as Actions from './SettingsFeedbackActions';
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         tappedFeedback: Actions.presentFeedback,
+        showVisualization: Actions.showVisualization, // TODO: remove this test code
     }, dispatch);
 };
 

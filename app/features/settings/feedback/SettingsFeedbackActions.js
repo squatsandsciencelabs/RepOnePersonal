@@ -4,6 +4,7 @@ import {
 
 import {
     FEEDBACK,
+    SHOW_VISUALIZATION_MODAL,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 
@@ -18,6 +19,11 @@ export const presentFeedback = () => (dispatch, getState) => {
         type: FEEDBACK
     });
 };
+
+// TODO: remove this test code
+export const showVisualization = () => ({
+    type: SHOW_VISUALIZATION_MODAL,
+});
 
 const logFeedbackAnalytics = (state) => {
     Analytics.logEventWithAppState('feedback', {

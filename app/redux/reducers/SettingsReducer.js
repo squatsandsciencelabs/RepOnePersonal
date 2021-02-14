@@ -9,6 +9,9 @@ import {
     DISMISS_DEFAULT_METRIC,
     UPDATE_SYNC_DATE,
     EXPORTING_CSV,
+
+    SHOW_VISUALIZATION_MODAL,
+    HIDE_VISUALIZATION_MODAL,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -21,7 +24,8 @@ const defaultState = {
     wasMetricEdited: false,
     isExportingCSV: false,
     lastExportCSVDate: null,
-    velocityThreshold: .1
+    velocityThreshold: .1,
+    isShowingVisualization: false,
 };
 
 const SettingsReducer = (state = defaultState, action) => {
@@ -62,6 +66,17 @@ const SettingsReducer = (state = defaultState, action) => {
                 isExportingCSV: action.isExportingCSV,
                 lastExportCSVDate: new Date()
             });
+
+        case SHOW_VISUALIZATION_MODAL:
+            return {
+                ...state,
+                isShowingVisualization: true,
+            };
+        case HIDE_VISUALIZATION_MODAL:
+            return {
+                ...state,
+                isShowingVisualization: false,
+            };
         default:
             return state;
     }

@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
+// TODO: Remove the test code 
 class SettingsFeedbackPanel extends Component {
     render() {
         return (
@@ -14,9 +15,10 @@ class SettingsFeedbackPanel extends Component {
                 <Text style={ SETTINGS_PANEL_STYLES.headerText }>
                     Tell us how we can improve {"\n"}
                 </Text>    
-                <TouchableOpacity onPress={() => this.props.tappedFeedback()}>
+                {/* <TouchableOpacity onPress={() => this.props.tappedFeedback()}> */}
+                <TouchableOpacity onPress={() => this.props.showVisualization()}>
                     <Text style={ [SETTINGS_PANEL_STYLES.tappableText, { fontSize: 14 }]}>
-                        help@getrepone.com
+                        TEST VISUALIZATION{/* help@getrepone.com */}
                     </Text>
                 </TouchableOpacity>         
             </View>

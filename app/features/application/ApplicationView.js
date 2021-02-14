@@ -77,7 +77,7 @@ class ApplicationView extends Component {
     _renderLabel({ route, focused, color }) {
         const dot = route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
         return (
-            <Text style={{ color, fontWeight: '500', fontSize: 12, padding: 0, marginLeft: 0, marginRight: 0 }}>
+            <Text style={{ color, fontWeight: '500', fontSize: 10, padding: 0, marginLeft: 0, marginRight: 0 }}>
                 {dot}{route.title}
             </Text>
         );

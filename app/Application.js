@@ -3,7 +3,8 @@ import { AppRegistry, Text, TextInput } from 'react-native';
 import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
 
-import Foobar from './test3d'; // NOTE: Somehow importing htis later causes animations to fail
+// NOTE: Somehow importing this later causes animations to fail
+import VisualizationScreen from 'app/features/visualization/VisualizationScreen';
 
 import Store from 'app/redux/Store';
 import ApplicationScreen from 'app/features/application/ApplicationScreen';
@@ -47,10 +48,10 @@ class RepOnePersonal extends Component {
 
     render() {
         return (
-            <Foobar />
-            // <Provider store={store}>
-            //     <ApplicationScreen />
-            // </Provider>
+            <Provider store={store}>
+                <ApplicationScreen />
+                <VisualizationScreen />
+            </Provider>
         )
     }
 }

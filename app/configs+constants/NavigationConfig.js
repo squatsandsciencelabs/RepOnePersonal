@@ -7,7 +7,7 @@ import AnalysisScreen from 'app/features/analysis/AnalysisScreen';
 import HistoryScreen from 'app/features/history/HistoryScreen';
 import ScalarScreen from '../features/scalar/ScalarScreen';
 
-export const initialIndex = 3;
+export const initialIndex = 4; // TODO: revert back to 3 after scalar gone
 
 export const routes = [
     { key: '0', title: 'WORKOUT' },
