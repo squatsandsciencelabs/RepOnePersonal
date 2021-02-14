@@ -21,9 +21,9 @@ function* setupServices(action) {
         yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273']);
 
         // api format 2 check
-        if (action.apiFormatVersion < 2) {
-            return;
-        }
+        // if (action.apiFormatVersion < 2) {
+        //     return;
+        // }
 
         // listen for bulk data
         yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
