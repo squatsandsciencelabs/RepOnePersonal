@@ -716,7 +716,6 @@ export default function App() {
         controls.target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
         controls.update();
       }
-      console.log(`${camera.position.x}, ${camera.position.y}, ${camera.position.z}`)
 
       // update animations
       TWEEN.update(time);
