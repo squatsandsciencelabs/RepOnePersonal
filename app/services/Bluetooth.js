@@ -66,11 +66,14 @@ export default function (store) {
             const response = await BleManager.read(args.peripheral, 'A5183278-CA65-45B7-B6C3-A68552F3026D', 'A5183278-CA65-45B7-B6C3-A68552F3026E'); // get version info
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
-            const apiFormatVersion = data16[0];
-            if (apiFormatVersion > maxFormatVersion) {
-                console.tron.log(`api version mismatch`);
-                Alert.alert(`Please update your RepOne app to use this device.`);
-            }
+
+            // TODO: revert api format version
+            const apiFormatVersion = 2;
+            // const apiFormatVersion = data16[0];
+            // if (apiFormatVersion > maxFormatVersion) {
+            //     console.tron.log(`api version mismatch`);
+            //     Alert.alert(`Please update your RepOne app to use this device.`);
+            // }
 
             // connected
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, apiFormatVersion, `${data16[1]}.${data16[2]}.${data16[3]}`));
