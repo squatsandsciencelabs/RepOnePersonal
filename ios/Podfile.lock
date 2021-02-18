@@ -123,15 +123,15 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - Permission-BluetoothPeripheral (2.0.8):
+  - Permission-BluetoothPeripheral (2.2.2):
     - RNPermissions
-  - Permission-Camera (2.0.8):
+  - Permission-Camera (2.2.2):
     - RNPermissions
-  - Permission-Microphone (2.0.8):
+  - Permission-Microphone (2.2.2):
     - RNPermissions
-  - Permission-Notifications (2.0.8):
+  - Permission-Notifications (2.2.2):
     - RNPermissions
-  - Permission-PhotoLibrary (2.0.8):
+  - Permission-PhotoLibrary (2.2.2):
     - RNPermissions
   - Protobuf (3.11.4)
   - RCTRequired (0.61.5)
@@ -387,8 +387,8 @@ PODS:
   - RNGoogleSignin (3.0.3):
     - GoogleSignIn (~> 5.0.0)
     - React
-  - RNPermissions (2.0.8):
-    - React
+  - RNPermissions (2.2.2):
+    - React-Core
   - RNReanimated (1.4.0):
     - React
   - RNSound (0.11.0):
@@ -599,9 +599,9 @@ SPEC CHECKSUMS:
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
@@ -622,11 +622,11 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   iOSDFULibrary: 3053cf01eaabec37dc7372fb77ae4a218b577c55
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  Permission-BluetoothPeripheral: 425fda0e17a4bf5e28aee8c1f195c45a024e81ad
-  Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
-  Permission-Microphone: 49c91ea622029b8c36a6ecfb65482cf4c513b53c
-  Permission-Notifications: 0722c1cd783b86d2ae77a1a0c925d525f9170e7d
-  Permission-PhotoLibrary: c15c7245aeb74aff3ad5edf70ce34adbcf02541b
+  Permission-BluetoothPeripheral: 73e80c434beef6570ba7c322a6882a8d46c2c4d3
+  Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
+  Permission-Microphone: a0e56790d61392c31627df33328fef079ad46fa8
+  Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
+  Permission-PhotoLibrary: 8227a6ed9f6a971537afe63742d54f5f23a38fe2
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -664,7 +664,7 @@ SPEC CHECKSUMS:
   RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
   RNGoogleSignin: a10b849c165088c737d4465de6c2062f24d06002
-  RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
+  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
