@@ -274,6 +274,10 @@ export const SAVE_COLUMN_METRIC = 'SAVE_COLUMN_METRIC';
 
 export const CONFIG_READY = 'CONFIG_READY';
 
+// HELP
+
+export const HELP = 'HELP';
+
 // OTA
 
 export const OTA_UPDATE_APP_REQUIRED = 'OTA_UPDATE_APP_REQUIRED';
