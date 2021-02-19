@@ -1,6 +1,7 @@
 // TODO: refactor so that selectors are aware of the entire state path
 // reason being that, the callers shouldn't know to make this state.sets
 // right now only a few of them use the stateRoot
+import { createSelector } from 'reselect';
 import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 import * as OneRMCalculator from 'app/math/OneRMCalculator';
@@ -250,11 +251,12 @@ export const getHistorySetsChronological = (state) => {
     return array;
 };
 
-export const getHistorySets = (state) => {
-    const sets = stateRoot(state);
-    var array = dictToArray(sets.historyData);
-    return array;
-};
+export const getHistorySets = createSelector(
+    stateRoot,
+    (sets) => {
+        return dictToArray(sets.historyData);
+    }
+);
 
 export const getNumHistorySets = (state) => {
     let sets = stateRoot(state);
