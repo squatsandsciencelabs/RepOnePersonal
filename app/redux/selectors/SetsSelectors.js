@@ -4,10 +4,7 @@
 import { createSelector } from 'reselect';
 import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
-import * as OneRMCalculator from 'app/math/OneRMCalculator';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
-import * as DateUtils from 'app/utility/DateUtils';
-import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
 const stateRoot = (state) => state.sets;
@@ -233,23 +230,26 @@ const dictToArray = (dictionary) => {
 
 // History
 
-export const getHistorySetsChronological = (state) => {
-    var array = getHistorySets(state);
-    array.sort((set1, set2) => {
-        let set1Start = SetUtils.startTime(set1);
-        if (set1Start !== null) {
-            set1Start = Date.parse(set1Start);
-        }
-
-        let set2Start = SetUtils.startTime(set2);
-        if (set2Start !== null) {
-            set2Start = Date.parse(set2Start);
-        }
-
-        return set1Start - set2Start;
-    });
-    return array;
-};
+export const getHistorySetsChronological = createSelector(
+    getHistorySets,
+    (sets) => {
+        const array = [...sets]; // ensure immutability
+        array.sort((set1, set2) => {
+            let set1Start = SetUtils.startTime(set1);
+            if (set1Start !== null) {
+                set1Start = Date.parse(set1Start);
+            }
+    
+            let set2Start = SetUtils.startTime(set2);
+            if (set2Start !== null) {
+                set2Start = Date.parse(set2Start);
+            }
+    
+            return set1Start - set2Start;
+        });
+        return array;
+    }
+);
 
 export const getHistorySets = createSelector(
     stateRoot,
@@ -264,33 +264,32 @@ export const getNumHistorySets = (state) => {
     return array.length;
 };
 
-export const getFilteredHistorySets = (state) => {
-    let data = [];
-    
-    const allSets = getHistorySetsChronological(state);
-    const exercise = HistorySelectors.getHistoryFilterExercise(state);
-    const tagsToInclude = HistorySelectors.getHistoryFilterTagsToInclude(state);
-    const tagsToExclude = HistorySelectors.getHistoryFilterTagsToExclude(state);
-    const startingRPE = HistorySelectors.getHistoryFilterStartingRPE(state);
-    const endingRPE = HistorySelectors.getHistoryFilterEndingRPE(state);
-    const startingWeight = HistorySelectors.getHistoryFilterStartingWeight(state);
-    const startingWeightMetric = HistorySelectors.getHistoryFilterStartingWeightMetric(state);
-    const endingWeight = HistorySelectors.getHistoryFilterEndingWeight(state);
-    const endingWeightMetric = HistorySelectors.getHistoryFilterEndingWeightMetric(state);
-    const startingRepRange = HistorySelectors.getHistoryFilterStartingRepRange(state);
-    const endingRepRange = HistorySelectors.getHistoryFilterEndingRepRange(state);
-    const startingDate = HistorySelectors.getHistoryFilterStartingDate(state);
-    const endingDate = HistorySelectors.getHistoryFilterEndingDate(state);
-    const showRemoved = HistorySelectors.getShowRemoved(state);
-
-    allSets.forEach((set) => {
-        if (SetUtils.startTime(set) !== null && isValidForHistoryFilter(set, exercise, tagsToInclude, tagsToExclude, startingRPE, endingRPE, startingWeight, startingWeightMetric, endingWeight, endingWeightMetric, startingRepRange, endingRepRange, startingDate, endingDate, showRemoved)) {
-            data.push(set);
-        }
-    });
-
-    return data;
-};
+export const getFilteredHistorySets = createSelector(
+    getHistorySetsChronological,
+    HistorySelectors.getShowRemoved,
+    HistorySelectors.getHistoryFilterExercise,
+    HistorySelectors.getHistoryFilterTagsToInclude,
+    HistorySelectors.getHistoryFilterTagsToExclude,
+    HistorySelectors.getHistoryFilterStartingDate,
+    HistorySelectors.getHistoryFilterEndingDate,
+    HistorySelectors.getHistoryFilterStartingWeight,
+    HistorySelectors.getHistoryFilterStartingWeightMetric,
+    HistorySelectors.getHistoryFilterEndingWeight,
+    HistorySelectors.getHistoryFilterEndingWeightMetric,
+    HistorySelectors.getHistoryFilterStartingRPE,
+    HistorySelectors.getHistoryFilterEndingRPE,
+    HistorySelectors.getHistoryFilterStartingRepRange,
+    HistorySelectors.getHistoryFilterEndingRepRange,
+    (allSets, showRemoved, exercise, tagsToInclude, tagsToExclude, startingDate, endingDate, startingWeight, startingWeightMetric, endingWeight, endingWeightMetric, startingRPE, endingRPE, startingRepRange, endingRepRange) => {
+        const data = [];
+        allSets.forEach((set) => {
+            if (SetUtils.startTime(set) !== null && isValidForHistoryFilter(set, exercise, tagsToInclude, tagsToExclude, startingRPE, endingRPE, startingWeight, startingWeightMetric, endingWeight, endingWeightMetric, startingRepRange, endingRepRange, startingDate, endingDate, showRemoved)) {
+                data.push(set);
+            }
+        });
+        return data;
+    }
+)
 
 const isValidForHistoryFilter = (set, exercise, tagsToInclude, tagsToExclude, startingRPE, endingRPE, startingWeight, startingWeightMetric, endingWeight, endingWeightMetric, startingRepRange, endingRepRange, startingDate, endingDate, showRemoved) => {
     return (showRemoved || !SetUtils.isDeleted(set))
