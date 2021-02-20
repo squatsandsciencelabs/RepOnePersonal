@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
@@ -13,7 +14,7 @@ import * as WorkoutCollapsedSelectors from 'app/redux/selectors/WorkoutCollapsed
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
 // assumes chronological sets
-const createViewModels = (state, sets) => {
+const createViewModels = (sets, collapsedModel) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
     let sections = [section]; // the return value
@@ -40,7 +41,7 @@ const createViewModels = (state, sets) => {
         let array = [0, 0];
 
         // set state booleans
-        isCollapsed = isLastSet ? false : WorkoutCollapsedSelectors.getIsCollapsed(state, set.setID);
+        isCollapsed = isLastSet ? false : collapsedModel[set.setID] !== false; // TODO: make this cleaner, old method was isCollapsed = isLastSet ? false : WorkoutCollapsedSelectors.getIsCollapsed(state, set.setID);
         isRemoved = isLastSet ? false : SetUtils.isDeleted(set);
 
         // card header logic
@@ -61,7 +62,7 @@ const createViewModels = (state, sets) => {
         }
         if (!isRemoved) {
             array.push(createTopBorder(set));
-            array.push(createTitleViewModel(state, set, setNumber, lastExerciseName, isLastSet, isCollapsed));
+            array.push(createTitleViewModel(set, setNumber, lastExerciseName, isLastSet, isCollapsed));
             if (!isCollapsed) {
                 array.push(createFormViewModel(set, setNumber, isRemoved));
                 if (!isRemoved) {
@@ -170,7 +171,7 @@ const getVideoFileURL = (set) => {
     return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
 };
 
-const createTitleViewModel = (state, set, setNumber, bias=null, isLastSet=false, isCollapsed=false) => ({
+const createTitleViewModel = (set, setNumber, bias=null, isLastSet=false, isCollapsed=false) => ({
     type: 'title',
     key: set.setID+'title',
     setNumber: setNumber,
@@ -320,18 +321,30 @@ const createBottomBorder = (set) => ({
     key: set.setID + 'bottomborder',
 });
 
-const mapStateToProps = (state) => {
-    let sets = SetsSelectors.getWorkoutSets(state);
-    if (sets.length === 0) {
-        var isAddEnabled = false;
-    } else {
-        var isAddEnabled = !SetUtils.isUntouched(sets[sets.length-1]);
+const getWorkoutSections = createSelector(
+    SetsSelectors.getWorkoutSets,
+    WorkoutCollapsedSelectors.getCollapsedModel,
+    (sets, collapsedModel) => {
+        return createViewModels(sets, collapsedModel);
     }
+);
 
+const calculateIsAddEnabled = createSelector(
+    SetsSelectors.getWorkoutSets,
+    (sets) => {
+        if (sets.length === 0) {
+            return false;
+        } else {
+            return !SetUtils.isUntouched(sets[sets.length-1]);
+        }
+    }
+);
+
+const mapStateToProps = (state) => {
     return {
-        sections: createViewModels(state, sets),
-        sets: sets,
-        isAddEnabled: isAddEnabled,
+        sections: getWorkoutSections(state),
+        sets: SetsSelectors.getWorkoutSets(state),
+        isAddEnabled: calculateIsAddEnabled(state),
         isLoggedIn: AuthSelectors.getIsLoggedIn(state),
         isLoggingIn: AuthSelectors.getIsLoggingIn(state),
     }

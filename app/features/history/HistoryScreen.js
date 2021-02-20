@@ -1,5 +1,3 @@
-// TODO: use selectors to cache things rather than doing the manual caching by hand that I do here
-
 import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
