@@ -1,7 +1,7 @@
 import { all, call } from 'redux-saga/effects';
 
 import KillSwitchSaga from './KillSwitchSaga';
-import InitConfigSaga from './InitConfigSaga';
+// import InitConfigSaga from './InitConfigSaga';
 import TokenSaga from './TokenSaga';
 import AuthSaga from './AuthSaga';
 import BluetoothSaga from './BluetoothSaga';
@@ -11,7 +11,7 @@ import TimerSaga from './TimerSaga';
 import TimerUnlockSaga from './TimerUnlockSaga';
 import EndOldWorkoutSaga from './EndOldWorkoutSaga';
 import ReconnectSaga from './ReconnectSaga';
-import SurveySaga from './SurveySaga';
+// import SurveySaga from './SurveySaga';
 import InitializedAnalyticsSaga from './InitializedAnalyticsSaga';
 import OneRMAnalyticsSaga from './OneRMAnalyticsSaga';
 // import VelocityThresholdSaga from './VelocityThresholdSaga';
@@ -23,7 +23,7 @@ import ScalarSaga from './ScalarSaga';
 const Sagas = function* Sagas(dispatch) {
     yield all([
         KillSwitchSaga(),
-        InitConfigSaga(),
+        // InitConfigSaga(),
         TokenSaga(),
         AuthSaga(),
         BluetoothSaga(),
@@ -33,7 +33,7 @@ const Sagas = function* Sagas(dispatch) {
         TimerUnlockSaga(),
         EndOldWorkoutSaga(),
         ReconnectSaga(),
-        SurveySaga(),
+        // SurveySaga(),
         InitializedAnalyticsSaga(),
         OneRMAnalyticsSaga(),
         OTASaga(dispatch),
