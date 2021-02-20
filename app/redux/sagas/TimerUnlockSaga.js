@@ -6,7 +6,6 @@ import {
 } from 'app/configs+constants/ActionTypes';
 
 import * as TimerActionCreators from 'app/redux/shared_actions/TimerActionCreators';
-import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
 const TimerUnlockSaga = function * TimerSaga() {
     if (Platform.OS === 'ios') {
