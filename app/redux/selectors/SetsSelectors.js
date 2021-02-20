@@ -230,6 +230,13 @@ const dictToArray = (dictionary) => {
 
 // History
 
+export const getHistorySets = createSelector(
+    stateRoot,
+    (sets) => {
+        return dictToArray(sets.historyData);
+    }
+);
+
 export const getHistorySetsChronological = createSelector(
     getHistorySets,
     (sets) => {
@@ -248,13 +255,6 @@ export const getHistorySetsChronological = createSelector(
             return set1Start - set2Start;
         });
         return array;
-    }
-);
-
-export const getHistorySets = createSelector(
-    stateRoot,
-    (sets) => {
-        return dictToArray(sets.historyData);
     }
 );
 
