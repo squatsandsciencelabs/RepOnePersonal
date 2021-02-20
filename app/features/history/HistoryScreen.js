@@ -3,9 +3,9 @@
 import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
-import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
@@ -15,32 +15,8 @@ import HistoryList from './HistoryList';
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 
-// NOTE: this means that every history screen accesses previous values as singletons
-var storedSections = null; // the actual data
-var storedHistoryData = null; // for comparison purposes, determine if things have changed
-var storedHistoryCollapsed = null;
-var storedHistorySets = null; // to remove the need to fetch the sets again in chronological order
-var storedShouldShowRemoved = null; // for comparison purposes
-// for comparison purposes
-var storedFilters = {
-    exercise: null,
-    tagsToInclude: [],
-    tagsToExclude: [],
-    startingDate: null,
-    endingDate: null,
-    startingWeight: null,
-    startingWeightMetric: 'kgs',
-    endingWeight: null,
-    endingWeightMetric: 'kgs',
-    startingRPE: null,
-    endingRPE: null,
-    startingRepRange: null,
-    endingRepRange: null,
-    shouldShowRemoved: false,
-};
-
 // assumes chronological sets
-const createViewModels = (state, sets, shouldShowRemoved) => {
+const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -89,7 +65,7 @@ const createViewModels = (state, sets, shouldShowRemoved) => {
         let array = [0, 0];
 
         // set state booleans
-        isCollapsed = HistoryCollapsedSelectors.getIsCollapsed(state, set.setID);
+        isCollapsed = collapsedModel[set.setID] !== false; // TODO: make this cleaner, old method was isCollapsed = HistoryCollapsedSelectors.getIsCollapsed(state, set.setID)
         isRemoved = SetUtils.isDeleted(set);
 
         // card header logic
@@ -106,7 +82,7 @@ const createViewModels = (state, sets, shouldShowRemoved) => {
 
         // card header view
         if (!isRemoved) {
-            array.push(createTitleViewModel(state, set, setNumber, isCollapsed));
+            array.push(createTitleViewModel(set, setNumber, isCollapsed));
             if (!isCollapsed) {
                 array.push(createFormViewModel(set, setNumber, isRemoved));
                 if (!isRemoved) {
@@ -197,7 +173,7 @@ const getVideoFileURL = (set) => {
     return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
 };
 
-const createTitleViewModel = (state, set, setNumber, isCollapsed=false) => ({
+const createTitleViewModel = (set, setNumber, isCollapsed=false) => ({
     type: 'title',
     key: set.setID+'title',
     setNumber: setNumber,
@@ -341,69 +317,26 @@ const createBottomBorder = (set) => ({
     key: set.setID + 'bottomborder',
 });
 
-// TODO: use reselect instead perhaps?
+const getHistorySections = createSelector(
+    SetsSelectors.getFilteredHistorySets,
+    HistoryCollapsedSelectors.getCollapsedModel,
+    HistorySelectors.getShowRemoved,
+    (sets, collapsedModel, shouldShowRemoved) => {
+        return createViewModels(sets, collapsedModel, shouldShowRemoved);
+    }
+);
+
 const mapStateToProps = (state) => {
-    // model vars
-    const historyData = SetsSelectors.getHistorySets(state);
-    const historyCollapsed = HistoryCollapsedSelectors.getCollapsedModel(state);
-    let rebuildViewModels = false;
-
-    // filter vars
+    const email = AuthSelectors.getEmail(state);
     const shouldShowRemoved = HistorySelectors.getShowRemoved(state);
-    const exercise = HistorySelectors.getHistoryFilterExercise(state);
-    const tagsToInclude = HistorySelectors.getHistoryFilterTagsToInclude(state);
-    const tagsToExclude = HistorySelectors.getHistoryFilterTagsToExclude(state);
-    const startingDate = HistorySelectors.getHistoryFilterStartingDate(state);
-    const endingDate = HistorySelectors.getHistoryFilterEndingDate(state);
-    const startingWeight = HistorySelectors.getHistoryFilterStartingWeight(state);
-    const startingWeightMetric = HistorySelectors.getHistoryFilterStartingWeightMetric(state);
-    const endingWeight = HistorySelectors.getHistoryFilterEndingWeight(state);
-    const endingWeightMetric = HistorySelectors.getHistoryFilterEndingWeightMetric(state);
-    const startingRPE = HistorySelectors.getHistoryFilterStartingRPE(state);
-    const endingRPE = HistorySelectors.getEditingHistoryFilterEndingRPE(state);
-    const startingRepRange = HistorySelectors.getHistoryFilterStartingRepRange(state);
-    const endingRepRange = HistorySelectors.getHistoryFilterEndingRepRange(state);
     const isFiltering = HistorySelectors.getIsFiltering(state);
-    const filtersChanged = shouldShowRemoved !== storedFilters.shouldShowRemoved
-        || exercise !== storedFilters.exercise
-        || tagsToInclude !== storedFilters.tagsToInclude
-        || tagsToExclude !== storedFilters.tagsToExclude
-        || startingDate !== storedFilters.startingDate
-        || endingDate !== storedFilters.endingDate
-        || startingWeight !== storedFilters.startingWeight
-        || startingWeightMetric !== storedFilters.startingWeightMetric
-        || endingWeight !== storedFilters.endingWeight
-        || endingWeightMetric !== storedFilters.endingWeightMetric
-        || startingRPE !== storedFilters.startingRPE
-        || endingRPE !== storedFilters.endingRPE
-        || startingRepRange !== storedFilters.startingRepRange
-        || endingRepRange !== storedFilters.endingRepRange;
+    const sections = getHistorySections(state);
 
-    // determine rebuilding of viewmodels
-    if (historyData !== storedHistoryData || filtersChanged) {
-        // data changed, redo it all
-        storedHistoryData = historyData;
-        storedHistorySets = SetsSelectors.getFilteredHistorySets(state);
-        rebuildViewModels = true;
-    }
-    if (historyCollapsed !== storedHistoryCollapsed) {
-        // toggled with no data changed, rebuild vms and save
-        storedHistoryCollapsed = historyCollapsed;
-        rebuildViewModels = true;
-    }
-
-    // rebuild if needed
-    if (rebuildViewModels) {
-        storedSections = createViewModels(state, storedHistorySets, shouldShowRemoved);
-        storedShouldShowRemoved = shouldShowRemoved;
-    }
-
-    // return
     return {
-        email: AuthSelectors.getEmail(state),
-        sections: storedSections,
-        shouldShowRemoved: shouldShowRemoved,
-        isFiltering: isFiltering,
+        email,
+        sections,
+        shouldShowRemoved,
+        isFiltering,
     };
 };
 
