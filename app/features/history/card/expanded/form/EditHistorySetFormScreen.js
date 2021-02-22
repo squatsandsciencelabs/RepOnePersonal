@@ -1,17 +1,27 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import SetForm from 'app/shared_features/set_card/expanded/SetForm';
 import * as Actions from './EditHistorySetFormActions';
 import * as DateUtils from 'app/utility/DateUtils';
 
-const mapStateToProps = (state, ownProps) => {
-    const rpeDisabled = !DateUtils.checkDateWithinRange(7, ownProps.initialStartTime)
-    
-    return {
-        rpeDisabled: rpeDisabled,
+const makeSelector = () => createSelector(
+    (state, props) => props.initialStartTime,
+    initialStartTime => {
+        return {
+            rpeDisabled: !DateUtils.checkDateWithinRange(7, initialStartTime),
+        };
+    }
+);
+
+const makeMapStateToProps = () => {
+    const getModel = makeSelector();
+    return (state, props) => {
+        return getModel(state, props);
     };
-}
+};
+
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -27,7 +37,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const EditHistorySetFormScreen = connect(
-    mapStateToProps,
+    makeMapStateToProps,
     mapDispatchToProps
 )(SetForm);
 

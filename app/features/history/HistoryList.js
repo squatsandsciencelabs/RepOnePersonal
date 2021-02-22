@@ -182,7 +182,7 @@ class HistoryList extends Component {
                 renderSectionFooter={({section}) => this._renderSectionFooter(section)}              
                 sections={this.props.sections}
                 getItemLayout={(data, index) => {
-                    return { length: 500, offset: 53 * index, index: index };
+                    return { length: 500, offset: 53 * index, index: index }; // this is wrong
                 }}
                 onEndReached={() => this.props.finishLoading() }
                 style = {{padding: 10, backgroundColor: '#f2f2f2'}}
