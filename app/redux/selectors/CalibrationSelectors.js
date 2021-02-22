@@ -1,18 +1,26 @@
+import { createSelector } from 'reselect';
+import { INSTRUCTIONS, CALIBRATING, CLOSED } from 'app/configs+constants/CalibrationModeTypes';
+
 const stateRoot = (state) => state.calibration;
 
-export const getIsModalShowing = state => stateRoot(state).mode !== 'CLOSED';
+export const getMode = state => stateRoot(state).mode;
 
-export const getStep = state => {
-    const mode = stateRoot(state).mode;
-    if (mode === 'INSTRUCTIONS') {
-        return 1;
-    } else if (mode === 'CALIBRATING') {
-        return 2;
+export const getIsModalShowing = state => getMode(state) !== CLOSED;
+
+// memoization is debatable here, but should be some gain for minor loss
+export const getStep = createSelector(
+    getMode,
+    mode => {
+        if (mode === INSTRUCTIONS) {
+            return 1;
+        } else if (mode === CALIBRATING) {
+            return 2;
+        }
+    
+        return 0;
     }
-
-    return 0;
-};
+);
 
 export const getIsCancelEnabled = state => {
-    return stateRoot(state).mode === 'INSTRUCTIONS';
+    return getMode(state) === INSTRUCTIONS;
 };

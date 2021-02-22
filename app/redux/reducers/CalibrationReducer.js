@@ -4,9 +4,10 @@ import {
     CANCEL_CALIBRATION,
     FINISH_CALIBRATION,
 } from 'app/configs+constants/ActionTypes';
+import { INSTRUCTIONS, CALIBRATING, CLOSED } from 'app/configs+constants/CalibrationModeTypes';
 
 const defaultState = {
-    mode: 'CLOSED',
+    mode: CLOSED,
 };
 
 const CalibrationReducer = (state = defaultState, action) => {
@@ -14,18 +15,18 @@ const CalibrationReducer = (state = defaultState, action) => {
         case SHOW_CALIBRATION_MODAL:
             return {
                 ...state,
-                mode: 'INSTRUCTIONS',
+                mode: INSTRUCTIONS,
             };
         case START_CALIBRATION:
             return {
                 ...state,
-                mode: 'CALIBRATING',
+                mode: CALIBRATING,
             };
         case CANCEL_CALIBRATION: // a disconnect should cause the saga to send this too
         case FINISH_CALIBRATION:
             return {
                 ...state,
-                mode: 'CLOSED',
+                mode: CLOSED,
             };
         default:
             return state;
