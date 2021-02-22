@@ -1,4 +1,6 @@
 import * as SetUtils from 'app/utility/SetUtils';
+import { createSelector } from 'reselect';
+import { Platform } from "react-native";
 
 const stateRoot = (state) => state.analysis;
 
@@ -76,23 +78,26 @@ export const getWatchSetID = (state) => stateRoot(state).watchSetID;
 export const getIsVideoPlayerVisible = (state) => stateRoot(state).watchSetID !== null;
 
 // TODO: remove hack fix, see https://github.com/react-native-community/react-native-video/issues/1572
-export const getWatchFileURL = (state) => {
-    // Android
-    if (Platform.OS !== 'ios') {
-        return stateRoot(state).watchFileURL;
-    }
+export const getWatchFileURL = createSelector(
+    state => stateRoot(state).watchFileURL,
+    url => {
+        // Android
+        if (Platform.OS !== 'ios') {
+            return url;
+        }
 
-    // iOS Hack Fix
-    if (!stateRoot(state).watchFileURL) {
-        return null;
+        // iOS Hack Fix
+        if (!url) {
+            return null;
+        }
+        if (!url.startsWith('ph://')) {
+            return url;
+        }
+        const appleId = url.substring(5, 41);
+        const ext = 'mov';
+        return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
     }
-    if (!stateRoot(state).watchFileURL.startsWith('ph://')) {
-        return stateRoot(state).watchFileURL;
-    }
-    const appleId = stateRoot(state).watchFileURL.substring(5, 41);
-    const ext = 'mov';
-    return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
-};
+);
 
 // edit video recorder
 
