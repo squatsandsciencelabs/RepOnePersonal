@@ -132,31 +132,18 @@ export const getEditingShowRemoved = (state) => stateRoot(state).editingShowRemo
 export const getShowRemoved = (state) => stateRoot(state).showRemoved;
 
 // NOTE: this does not check metrics because weight without metrics isn't actually filtering
-export const getIsFiltering = createSelector(
-    getHistoryFilterExercise,
-    getHistoryFilterTagsToInclude,
-    getHistoryFilterTagsToExclude,
-    getHistoryFilterStartingDate,
-    getHistoryFilterEndingDate,
-    getHistoryFilterStartingWeight,
-    getHistoryFilterEndingWeight,
-    getHistoryFilterStartingRPE,
-    getHistoryFilterEndingRPE,
-    getHistoryFilterStartingRepRange,
-    getHistoryFilterEndingRepRange,
-    getShowRemoved,
-    (exercise, tagsToInclude, tagsToExclude, startingDate, endingDate, startingWeight, endingWeight, startingRPE, endingRPE, startingRepRange, endingRepRange, showRemoved) => {
-        return exercise
-        || tagsToInclude.length > 0
-        || tagsToExclude.length > 0
-        || startingDate
-        || endingDate
-        || startingWeight
-        || endingWeight
-        || startingRPE
-        || endingRPE
-        || startingRepRange
-        || endingRepRange
-        || showRemoved;
-    }
-);
+// not memoizing as memoizing would need reference checks anyways, and this can actually end faster as it's a combined or statement
+export const getIsFiltering = state => {
+    return getHistoryFilterExercise(state)
+    || getHistoryFilterTagsToInclude(state).length > 0
+    || getHistoryFilterTagsToExclude(state).length > 0
+    || getHistoryFilterStartingDate(state)
+    || getHistoryFilterEndingDate(state)
+    || getHistoryFilterStartingWeight(state)
+    || getHistoryFilterEndingWeight(state)
+    || getHistoryFilterStartingRPE(state)
+    || getHistoryFilterEndingRPE(state)
+    || getHistoryFilterStartingRepRange(state)
+    || getHistoryFilterEndingRepRange(state)
+    || getShowRemoved(state);
+};

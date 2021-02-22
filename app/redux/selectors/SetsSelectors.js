@@ -20,6 +20,7 @@ export const getNumWorkoutSets = (state) => {
 };
 
 // memoizing as this gets called on every analytics call
+// worth memoizing as 1 ref check saves multiple ref checks without memoizing
 export const getIsWorkoutEmpty = createSelector(
     getWorkoutSets,
     (workoutData) => {
@@ -36,6 +37,7 @@ export const getIsWorkoutEmpty = createSelector(
 );
 
 // memoizing as it gets called on every add rep
+// arguable if worth memoizing, memoizing has 1 ref check to save a ref check + length check + pulling a ref
 export const getWorkingSet = createSelector(
     getWorkoutSets,
     (sets) => {
@@ -487,14 +489,11 @@ export const getNumSetsBeingUploaded = state => getSetIDsBeingUploaded(state).le
 
 export const getIsUploading = state => getSetIDsBeingUploaded(state).length > 0;
 
-// memoizing as settings screen uses it on mapstatetoprops
-export const hasChangesToSync = createSelector(
-    getNumSetsToUpload,
-    getNumSetsBeingUploaded,
-    (numToUpload, numBeingUploaded) => {
-        return numToUpload > 0 || numBeingUploaded > 0;
-    }
-)
+// not memoizing as it's too minor
+// memoizing would involve 2 ref checks anyway, this involves two > 0 checks, difference in theory is minor
+export const hasChangesToSync = state => {
+    return getNumSetsToUpload(state) > 0 || getNumSetsBeingUploaded(state) > 0;
+}
 
 export const getRevision = (state) => stateRoot(state).revision;
 

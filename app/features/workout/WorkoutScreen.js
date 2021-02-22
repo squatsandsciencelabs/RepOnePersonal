@@ -329,6 +329,7 @@ const getWorkoutSections = createSelector(
     }
 );
 
+// worth memoizing because isUntouched ref check saves
 const calculateIsAddEnabled = createSelector(
     SetsSelectors.getWorkoutSets,
     (sets) => {
