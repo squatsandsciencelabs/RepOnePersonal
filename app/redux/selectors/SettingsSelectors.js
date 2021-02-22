@@ -12,6 +12,7 @@ export const getIfTimerWasEdited = (state) => stateRoot(state).wasTimerEdited;
 
 export const getIsExportingCSV = (state) => stateRoot(state).isExportingCSV;
 
+// not memoizing as this is for analytics and needs to be real time
 export const getEndSetTimeLeft = (state) => {
     const endSetTimerDuration = getEndSetTimerDuration(state);
     const currentTime = Date.now();

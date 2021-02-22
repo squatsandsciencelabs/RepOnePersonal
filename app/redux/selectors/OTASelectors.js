@@ -8,6 +8,7 @@ export const getFirmwareDescription = (state) => stateRoot(state).firmwareDescri
 
 export const getStatus = (state) => stateRoot(state).status;
 
+// not memoizing as memoizing would require 2 if checks here, whereas this coudl actually have less
 export const getIsInstalling = (state) => getStatus(state) === OTAStatus.INSTALLING || getProgress(state) !== 0;
 
 export const getProgress = (state) => stateRoot(state).progress;

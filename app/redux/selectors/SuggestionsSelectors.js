@@ -4,6 +4,9 @@ const exerciseNameModel = (state) => stateRoot(state).exerciseModel;
 
 const tagsModel = (state) => stateRoot(state).tagsModel;
 
+// not memoizing anything here as generation is called only when needed
+// if i want to tweak this, it would have to be on a screen level so it wouldn't need to call it an extra time on mount, but even that idk is worth
+
 export const generateExerciseNameSuggestions = (state, input, bias = null) => {
     console.tron.log(input);
     return generateSuggestions(exerciseNameModel(state), input, bias, false);

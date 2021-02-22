@@ -2,6 +2,9 @@ import * as DurationCalculator from 'app/utility/DurationCalculator';
 
 const stateRoot = (state) => state.durations
 
+// analytics
+// not memoizing because it's only called on each analytics call, and each time the value changes so memoizing not useful
+
 export const getEditWorkoutExerciseStart = (state) => stateRoot(state).editWorkoutExerciseStart;
 
 export const getEditWorkoutExerciseDuration = (state) => DurationCalculator.getDurationBetween(getEditWorkoutExerciseStart(state), Date.now());
