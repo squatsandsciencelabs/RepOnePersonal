@@ -250,9 +250,9 @@ const dictToArray = (dictionary) => {
 // History
 
 export const getHistorySets = createSelector(
-    stateRoot,
-    (sets) => {
-        return dictToArray(sets.historyData);
+    state => stateRoot(state).historyData,
+    (historyData) => {
+        return dictToArray(historyData);
     }
 );
 
@@ -595,6 +595,15 @@ export const getSlowestDurationEver = (state, set) => {
 
 export const getRevision = (state) => stateRoot(state).revision;
 
+// memoizing called in enough places, hoping shallow copy of arrays is enough as it's just an array of references anyway
+export const getAllSets = createSelector(
+    getHistorySets,
+    getWorkoutSets,
+    (historySets, workoutSets) => {
+        return historySets.concat(workoutSets);
+    }
+);
+
 // check if exercise exists
 const exerciseExists = (exercise, arr) => {
     return arr.some((item) => {
@@ -618,14 +627,5 @@ export const generateExerciseItems = createSelector(
         });
     
         return exercises;
-    }
-);
-
-// memoizing called in enough places, hoping shallow copy of arrays is enough as it's just an array of references anyway
-export const getAllSets = createSelector(
-    getHistorySets,
-    getWorkoutSets,
-    (historySets, workoutSets) => {
-        return historySets.concat(workoutSets);
     }
 );
