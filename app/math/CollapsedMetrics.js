@@ -435,6 +435,95 @@ export const getRPE1RM = (set, useLBs=false) => {
     return Math.round(result);
 };
 
+// Best Ever
+
+const getBestEverOfMetric = (set, allSets, metricFunction, isMax=true) => {
+    // null if not enough data entered
+    if (!isSetComparable(set)) {
+        return null;
+    }
+
+    // find all instances of this exercise with weight and reps
+    const matchedSets = allSets.filter(historySet => areSetsComparable(historySet, set));
+    
+    let metrics = matchedSets.map((matchedSet) => {
+        return metricFunction(matchedSet);
+    });
+
+    metrics = metrics.reduce((a, b) => a.concat(b), []);
+    
+    if (metrics.length > 0) {
+        if (isMax) {
+            return Math.max(...metrics);
+        } else {
+            return Math.min(...metrics);
+        }
+    } else {
+        return null;
+    }
+};
+
+const areSetsComparable = (historySet, set) => {
+    if (!isSetComparable(set)) {
+        return false;
+    }
+    return historySet.exercise === set.exercise &&
+        historySet.weight === set.weight &&
+        historySet.metric === set.metric;
+};
+
+const isSetComparable = (set) => {
+    if (!set.exercise || set.exercise === '') {
+        return false;
+    }
+
+    if (!set.weight || set.weight === '') {
+        return false;
+    }
+
+    if (!set.metric || set.metric === '') {
+        return false;
+    }
+
+    if (set.reps.length <= 0) {
+        return false;
+    }
+
+    if (SetUtils.isDeleted(set)) {
+        return false;
+    }
+
+    if (SetUtils.numValidUnremovedReps(set) <= 0) {
+        return false;
+    }
+
+    return true;
+};
+
+export const getFastestAvgVelocityEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getAvgVelocities);
+};
+
+export const getFastestPKVEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getPKVs);
+};
+
+export const getFastestDurationEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations, false);
+};
+
+export const getSlowestAvgVelocityEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getAvgVelocities, false);
+};
+
+export const getSlowestPKVEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getPKVs, false);
+};
+
+export const getSlowestDurationEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations);
+};
+
 // To String
 
 export const metricAbbreviation = (metric) => {

@@ -1,5 +1,5 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import {
     EMPTY_METRIC,
@@ -28,7 +28,7 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 
-const metricValue = (state, set, quantifier, metric) => {
+const metricValue = (set, allSets, quantifier, metric) => {
     let returnValue = null;
 
     switch (metric) {
@@ -62,10 +62,10 @@ const metricValue = (state, set, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfAvgVelocities(set);
                     break;                    
                 case FASTEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getFastestAvgVelocityEver(state, set);
+                    returnValue = CollapsedMetrics.getFastestAvgVelocityEver(set, allSets);
                     break;
                 case SLOWEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getSlowestAvgVelocityEver(state, set);
+                    returnValue = CollapsedMetrics.getSlowestAvgVelocityEver(set, allSets);
                     break;
             }
             break;
@@ -99,10 +99,10 @@ const metricValue = (state, set, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfDurations(set);
                     break; 
                 case FASTEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getFastestDurationEver(state, set);
+                    returnValue = CollapsedMetrics.getFastestDurationEver(set, allSets);
                     break;
                 case SLOWEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getSlowestDurationEver(state, set);
+                    returnValue = CollapsedMetrics.getSlowestDurationEver(set, allSets);
                     break;
             }
             if (returnValue !== null) {
@@ -186,10 +186,10 @@ const metricValue = (state, set, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfPKVs(set);
                     break; 
                 case FASTEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getFastestPKVEver(state, set);
+                    returnValue = SetsSelectors.getFastestPKVEver(set, allSets);
                     break;
                 case SLOWEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getSlowestPKVEver(state, set);
+                    returnValue = SetsSelectors.getSlowestPKVEver(set, allSets);
                     break;
             }
             break;
@@ -218,45 +218,56 @@ const metricDescription = (quantifier, metric, rpe, weightMetric) => {
 
 const unit = (metric, quantifier) => CollapsedMetrics.metricUnit(metric, quantifier);
 
-const mapStateToProps = (state, ownProps) => {
-    // raw values
-    const set = ownProps.set;
-    const rpe = set.rpe;
-    const weightMetric = set.metric;
-    const metric1 = CollapsedSettingsSelectors.getMetric1(state);
-    const quantifier1 = CollapsedSettingsSelectors.getQuantifier1(state);
-    const metric2 = CollapsedSettingsSelectors.getMetric2(state);
-    const quantifier2 = CollapsedSettingsSelectors.getQuantifier2(state);
-    const metric3 = CollapsedSettingsSelectors.getMetric3(state);
-    const quantifier3 = CollapsedSettingsSelectors.getQuantifier3(state);
-    const metric4 = CollapsedSettingsSelectors.getMetric4(state);
-    const quantifier4 = CollapsedSettingsSelectors.getQuantifier4(state);
-    const metric5 = CollapsedSettingsSelectors.getMetric5(state);
-    const quantifier5 = CollapsedSettingsSelectors.getQuantifier5(state);
 
-    // display values
-    return {
-        value1: metricValue(state, set, quantifier1, metric1),
-        unit1: unit(metric1, quantifier1),
-        description1: metricDescription(quantifier1, metric1, rpe, weightMetric),
-        value2: metricValue(state, set, quantifier2, metric2),
-        description2: metricDescription(quantifier2, metric2, rpe, weightMetric),
-        unit2: unit(metric2, quantifier2),
-        value3: metricValue(state, set, quantifier3, metric3),
-        description3: metricDescription(quantifier3, metric3, rpe, weightMetric),
-        unit3: unit(metric3, quantifier3),
-        value4: metricValue(state, set, quantifier4, metric4),
-        description4: metricDescription(quantifier4, metric4, rpe, weightMetric),
-        unit4: unit(metric4, quantifier4),
-        value5: metricValue(state, set, quantifier5, metric5),
-        description5: metricDescription(quantifier5, metric5, rpe, weightMetric),
-        unit5: unit(metric5, quantifier5),
-        rpe: rpe,
+// selector
+
+const makeSelector = () => createSelector(
+    (state, props) => props.set,
+    SetsSelectors.getAllSets,
+    CollapsedSettingsSelectors.getMetric1,
+    CollapsedSettingsSelectors.getQuantifier1,
+    CollapsedSettingsSelectors.getMetric2,
+    CollapsedSettingsSelectors.getQuantifier2,
+    CollapsedSettingsSelectors.getMetric3,
+    CollapsedSettingsSelectors.getQuantifier3,
+    CollapsedSettingsSelectors.getMetric4,
+    CollapsedSettingsSelectors.getQuantifier4,
+    CollapsedSettingsSelectors.getMetric5,
+    CollapsedSettingsSelectors.getQuantifier5,
+    (set, allSets, metric1, quantifier1, metric2, quantifier2, metric3, quantifier3, metric4, quantifier4, metric5, quantifier5) => {
+        const rpe = set.rpe;
+        const weightMetric = set.metric;
+        return {
+            value1: metricValue(set, allSets, quantifier1, metric1),
+            unit1: unit(metric1, quantifier1),
+            description1: metricDescription(quantifier1, metric1, rpe, weightMetric),
+            value2: metricValue(set, allSets, quantifier2, metric2),
+            description2: metricDescription(quantifier2, metric2, rpe, weightMetric),
+            unit2: unit(metric2, quantifier2),
+            value3: metricValue(set, allSets, quantifier3, metric3),
+            description3: metricDescription(quantifier3, metric3, rpe, weightMetric),
+            unit3: unit(metric3, quantifier3),
+            value4: metricValue(set, allSets, quantifier4, metric4),
+            description4: metricDescription(quantifier4, metric4, rpe, weightMetric),
+            unit4: unit(metric4, quantifier4),
+            value5: metricValue(set, allSets, quantifier5, metric5),
+            description5: metricDescription(quantifier5, metric5, rpe, weightMetric),
+            unit5: unit(metric5, quantifier5),
+            rpe: rpe,
+        };
+    }
+);
+
+// map state to props
+const makeMapStateToProps = () => {
+    const getModel = makeSelector();
+    return (state, props) => {
+        return getModel(state, props);
     };
 };
 
 const SetAnalysisScreen = connect(
-    mapStateToProps,
+    makeMapStateToProps,
 )(SetAnalysis);
 
 export default SetAnalysisScreen;

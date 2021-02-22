@@ -496,104 +496,9 @@ export const hasChangesToSync = createSelector(
     }
 )
 
-// collapsed metrics
-// TODO: all of these recalculate WAY Too often with SetAnalysisScreen
-// need to look into how to potentially assist there, caching likely has to be on the setanalysisscreen itself rather than here
-
-const getBestEverOfMetric = (state, set, metricFunction, isMax=true) => {
-    // null if not enough data entered
-    if (!isSetComparable(set)) {
-        return null;
-    }
-
-    const historySets = getHistorySets(state);
-    const workoutSets = getWorkoutSets(state);
-
-    // find all instances of this exercise with weight and reps
-    const matchedSets = historySets.concat(workoutSets).filter(historySet => areSetsComparable(historySet, set));
-    
-    let metrics = matchedSets.map((matchedSet) => {
-        return metricFunction(matchedSet);
-    });
-
-    metrics = metrics.reduce((a, b) => a.concat(b), []);
-    
-    if (metrics.length > 0) {
-        if (isMax) {
-            return Math.max(...metrics);
-        } else {
-            return Math.min(...metrics);
-        }
-    } else {
-        return null;
-    }
-};
-
-const areSetsComparable = (historySet, set) => {
-    if (!isSetComparable(set)) {
-        return false;
-    }
-    return historySet.exercise === set.exercise &&
-        historySet.weight === set.weight &&
-        historySet.metric === set.metric;
-};
-
-const isSetComparable = (set) => {
-    if (!set.exercise || set.exercise === '') {
-        return false;
-    }
-
-    if (!set.weight || set.weight === '') {
-        return false;
-    }
-
-    if (!set.metric || set.metric === '') {
-        return false;
-    }
-
-    if (set.reps.length <= 0) {
-        return false;
-    }
-
-    if (SetUtils.isDeleted(set)) {
-        return false;
-    }
-
-    if (SetUtils.numValidUnremovedReps(set) <= 0) {
-        return false;
-    }
-
-    return true;
-};
-
-export const getFastestAvgVelocityEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getAvgVelocities);
-};
-
-export const getFastestPKVEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getPKVs);
-};
-
-export const getFastestDurationEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getDurations, false);
-};
-
-export const getSlowestAvgVelocityEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getAvgVelocities, false);
-};
-
-export const getSlowestPKVEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getPKVs, false);
-};
-
-export const getSlowestDurationEver = (state, set) => {
-    return getBestEverOfMetric(state, set, CollapsedMetrics.getDurations);
-};
-
-
-
-
 export const getRevision = (state) => stateRoot(state).revision;
+
+// ALL
 
 // memoizing called in enough places, hoping shallow copy of arrays is enough as it's just an array of references anyway
 export const getAllSets = createSelector(
@@ -603,6 +508,8 @@ export const getAllSets = createSelector(
         return historySets.concat(workoutSets);
     }
 );
+
+// EXERCISE
 
 // check if exercise exists
 const exerciseExists = (exercise, arr) => {
