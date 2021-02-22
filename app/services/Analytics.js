@@ -106,7 +106,7 @@ export const logEventWithAppState = (event, params, state) => {
     if (devices.length > 25) {
         devices = devices.slice(0, 25);
     };
-    const connectedDeviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
+    // const connectedDeviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
     const isWorkoutEmpty = SetsSelectors.getIsWorkoutEmpty(state);
     const isSurveyVisible = SurveySelectors.getSurveyAvailable(state);
 
@@ -115,6 +115,7 @@ export const logEventWithAppState = (event, params, state) => {
         
     params.num_scanned_devices = devices.length;  
     
+    // not sure why this was disabled, but leaving it this way as I assume it was for a reason
     // params.is_bluetooth_on = connectedDeviceStatus !== 'BLUETOOTH_OFF';
 
     params.is_workout_in_progress = !isWorkoutEmpty;

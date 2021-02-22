@@ -8,18 +8,22 @@ import {
     TouchableHighlight,
     TouchableOpacity
 } from 'react-native';
+import {
+    CONNECTED,
+    RECONNECTING,
+} from 'app/configs+constants/SensorStatus';
 import * as Device from 'app/utility/Device';
 
 class ConnectedDeviceStatus extends Component {
 
     render() {
-        if (this.props.deviceStatus === 'CONNECTED') {
+        if (this.props.deviceStatus === CONNECTED) {
             var statusView = (
                 <View style={styles.statusBar}>
                     <Image style={styles.imageStyle} source={require('app/appearance/images/icon_connected.png')} />
                     <Text style={styles.textStyle}> {this.props.deviceName} </Text>
                 </View>);
-        } else if (this.props.deviceStatus === 'RECONNECTING') {
+        } else if (this.props.deviceStatus === RECONNECTING) {
             var statusView = (
                 <View style={styles.statusBar}>
                     <Image style={styles.imageStyle} source={require('app/appearance/images/icon_disconnected.png')} />

@@ -350,7 +350,7 @@ describe('Analytics', () => {
             });
             
             test('false if bluetooth off', () => {
-                ConnectedDeviceStatusSelectors.getConnectedDeviceStatus = () => 'BLUETOOTH_OFF';
+                ConnectedDeviceStatusSelectors.getConnectedDeviceStatus = () => 'DEVICE_BLUETOOTH_OFF';
                 
                 sut.logEventWithAppState(null, params, null);
                 

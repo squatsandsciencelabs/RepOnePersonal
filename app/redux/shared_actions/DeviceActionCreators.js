@@ -20,6 +20,11 @@ import {
     RECONNECT_DEVICE,
     VELOCITY_DROPPED,
 } from 'app/configs+constants/ActionTypes';
+import {
+    CONNECTING,
+    CONNECTED,
+    DISCONNECTING,
+} from 'app/configs+constants/SensorStatus';
 import * as TimerActionCreators from './TimerActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
@@ -85,7 +90,7 @@ export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getSta
         // check to see if stuck connecting
         const state = getState();
         const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-        if (status === 'CONNECTING') {
+        if (status === CONNECTING) {
             // disconnect
             logConnectedToDeviceTimedOutAnalytics(false, state);            
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
@@ -118,7 +123,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
         // check to see if stuck connecting
         const state = getState();
         const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-        if (status !== 'CONNECTED') {
+        if (status !== CONNECTED) {
             // disconnect
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
             dispatch(disconnectedFromDevice(deviceName, deviceIdentifier)); // in case it can never find it, visually update and trigger another reconnect
@@ -172,8 +177,8 @@ export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dis
 
     const state = getState();
     const deviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-    if (deviceStatus === 'CONNECTED' || deviceStatus === 'DISCONNECTING') {
-        const isIntentional = deviceStatus === 'DISCONNECTING';
+    if (deviceStatus === CONNECTED || deviceStatus === DISCONNECTING) {
+        const isIntentional = deviceStatus === DISCONNECTING;
         logDisconnectedFromDeviceAnalytics(isIntentional, state);
     }
 

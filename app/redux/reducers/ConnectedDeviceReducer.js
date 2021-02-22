@@ -10,9 +10,17 @@ import {
     RECONNECTING_TO_DEVICE,
     END_WORKOUT,
 } from 'app/configs+constants/ActionTypes';
+import {
+    DEVICE_BLUETOOTH_OFF,
+    DISCONNECTED,
+    CONNECTING,
+    CONNECTED,
+    DISCONNECTING,
+    RECONNECTING,
+} from 'app/configs+constants/SensorStatus';
 
 const defaultState = {
-    status: 'DISCONNECTED',
+    status: DISCONNECTED,
     deviceName: null,
     deviceIdentifier: null,
     isReconnecting: false,
@@ -26,13 +34,13 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
     switch (action.type) {
         case CONNECT_DEVICE:
             return Object.assign({}, state, {
-                status: 'CONNECTING',
+                status: CONNECTING,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
             });
         case RECONNECT_DEVICE:
             return Object.assign({}, state, {
-                status: 'CONNECTING',
+                status: CONNECTING,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
                 numReconnects: state.numReconnects + 1
@@ -42,19 +50,19 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
             // It's possible that the disconnect fails and removing the device name and identifier here could cause an issue
             // For now, setting to null on disconnect to differentiate between manual disconnect and other disconnects
             return Object.assign({}, state, {
-                status: 'DISCONNECTING',
+                status: DISCONNECTING,
                 deviceName: null,
                 deviceIdentifier: null,
             });
         case BLUETOOTH_OFF:
             return Object.assign({}, state, {
-                status: 'BLUETOOTH_OFF',
+                status: DEVICE_BLUETOOTH_OFF,
                 deviceName: null,
                 deviceIdentifier: null,
             });
         case DISCONNECTED_FROM_DEVICE:
             return Object.assign({}, state, {
-                status: 'DISCONNECTED',
+                status: DISCONNECTED,
                 deviceName: null,
                 deviceIdentifier: null,
                 numDisconnects: action.deviceName ? state.numDisconnects + 1 : state.numDisconnects, // TODO: need to test this
@@ -63,7 +71,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
             });
         case STOP_RECONNECT:
             return Object.assign({}, state, {
-                status: 'DISCONNECTED',
+                status: DISCONNECTED,
                 deviceName: null,
                 deviceIdentifier: null,
                 isReconnecting: false,
@@ -71,13 +79,13 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
         case CONNECTING_TO_DEVICE:
             return {
                 ...state,
-                status: 'CONNECTING',
+                status: CONNECTING,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
             };
         case CONNECTED_TO_DEVICE:
             return Object.assign({}, state, {
-                status: 'CONNECTED',
+                status: CONNECTED,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
                 isReconnecting: false,

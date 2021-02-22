@@ -1,9 +1,14 @@
+import { RECONNECTING } from 'app/configs+constants/SensorStatus';
+
 const stateRoot = (state) => state.connectedDevice;
 
+// not memoizing as memoized would need to do 2 if checks (did status change)
+// this has a single if check as well before returning values
+// at worst it has to go down the reference chain a tad more
 export const getConnectedDeviceStatus = (state) => {
     let root = stateRoot(state);
     if (root.isReconnecting) {
-        return 'RECONNECTING';
+        return RECONNECTING;
     } else {
         return root.status;
     }
