@@ -11,68 +11,85 @@ const stateRoot = (state) => state.sets;
 
 // Workout
 
-// TODO: fix bug here because I'm no longer using set's end and start time
-// apparently I used it for more than just rest timer fml
+// not memoizing because it's just a reference
+export const getWorkoutSets = (state) => stateRoot(state).workoutData;
 
-export const lastWorkoutRepTime = (state) => {
-    // check if there's workout data
-    var workoutData = stateRoot(state).workoutData;
-    if (workoutData.length <= 0) {
-        return null;
-    }
-
-    // check the current set for end time
-    var currentSet = getWorkingSet(state);
-    var endTime = SetUtils.endTime(currentSet);
-    if (endTime !== null) {
-        return endTime;
-    }
-
-    // check previous sets for end time
-    if (workoutData.length > 1) {
-        for (var i=workoutData.length-2; i>=0; i--) {
-            var previousSet = workoutData[i];
-            var endTime = SetUtils.endTime(previousSet);            
-            if (endTime !== null) {
-                return endTime;
-            }
-        }
-    }
-
-    // no end times found
-    return null;
-}
-
-export const getWorkoutSets = (state) => {
-    return stateRoot(state).workoutData;
-};
-
+// up in the air for memoizing
 export const getNumWorkoutSets = (state) => {
     return getWorkoutSets(state).length;
 };
 
-export const getIsWorkoutEmpty = (state) => {
-    const workoutData = stateRoot(state).workoutData;
-
-    if (workoutData.length >= 2) {
-        // at least one set
-        return false;
-    } else if (workoutData.length === 1 && !SetUtils.isUntouched(workoutData[0])) {
-        // only one set and it has data
-        return false;
+// memoizing as this gets called on every analytics call
+export const getIsWorkoutEmpty = createSelector(
+    getWorkoutSets,
+    (workoutData) => {
+        if (workoutData.length >= 2) {
+            // at least one set
+            return false;
+        } else if (workoutData.length === 1 && !SetUtils.isUntouched(workoutData[0])) {
+            // only one set and it has data
+            return false;
+        }
+    
+        return true;
     }
+);
 
-    return true;
-};
+// memoizing as it gets called on every add rep
+export const getWorkingSet = createSelector(
+    getWorkoutSets,
+    (sets) => {
+        if (sets && sets.length > 0) {
+            return sets[sets.length - 1];
+        }
+        return null;
+    }
+);
 
+// TODO: fix bug here because I'm no longer using set's end and start time
+// apparently I used it for more than just rest timer fml
+// memoizing as it gets called often, on each change tab even
+export const lastWorkoutRepTime = createSelector(
+    getWorkoutSets,
+    getWorkingSet,
+    (workoutData, currentSet) => {
+        if (workoutData.length <= 0) {
+            return null;
+        }
+    
+        // check the current set for end time
+        var endTime = SetUtils.endTime(currentSet);
+        if (endTime !== null) {
+            return endTime;
+        }
+    
+        // check previous sets for end time
+        if (workoutData.length > 1) {
+            for (var i=workoutData.length-2; i>=0; i--) {
+                var previousSet = workoutData[i];
+                var endTime = SetUtils.endTime(previousSet);            
+                if (endTime !== null) {
+                    return endTime;
+                }
+            }
+        }
+    
+        // no end times found
+        return null;
+    }
+);
+
+// not memoizing because setID
 export const getWorkoutSet = (state, setID) => {
     return stateRoot(state).workoutData.find( set => set.setID == setID );
 };
 
+// not memoizing because setID
 export const getIsWorkoutSet = (state, setID) => {
     return getWorkoutSet(state, setID) !== undefined;
 };
 
+// not memoizing as it's only called in two places for analytics, and each time the value would be different
 export const getNumWorkoutReps = (state) => {
     const sets = getWorkoutSets(state);
     var num_reps = 0;
@@ -87,6 +104,7 @@ export const getNumWorkoutReps = (state) => {
 };
 
 // at least 1 field entered not counting video
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getNumWorkoutSetsWithFields = (state) => {
     const sets = getWorkoutSets(state);
     var num_sets_with_fields = 0;
@@ -101,6 +119,7 @@ export const getNumWorkoutSetsWithFields = (state) => {
 };
 
 // at least 1 field entered not counting video
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getPercentWorkoutSetsWithFields = (state) => {
     const sets = getWorkoutSets(state);
     const numSetsFields = getNumWorkoutSetsWithFields(state);
@@ -113,6 +132,7 @@ export const getPercentWorkoutSetsWithFields = (state) => {
 };
 
 // all fields but doesn't count video
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getNumWorkoutSetsWithAllFields = (state) => {
     const sets = getWorkoutSets(state);
     var num_sets_with_all_fields = 0;
@@ -127,6 +147,7 @@ export const getNumWorkoutSetsWithAllFields = (state) => {
 };
 
 // all fields but doesn't count video
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getPercentWorkoutSetsWithAllFields = (state) => {
     const sets = getWorkoutSets(state);
     const numSetsAllFields = getNumWorkoutSetsWithAllFields(state);
@@ -138,6 +159,7 @@ export const getPercentWorkoutSetsWithAllFields = (state) => {
     }
 };
 
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getNumWorkoutSetsWithRPE = (state) => {
     const sets = getWorkoutSets(state);
     var num_sets_with_RPE = 0;
@@ -151,6 +173,7 @@ export const getNumWorkoutSetsWithRPE = (state) => {
     return num_sets_with_RPE; 
 };
 
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getPercentWorkoutSetsWithRPE = (state) => {
     const sets = getWorkoutSets(state);
     const numSetsWithRPE = getNumWorkoutSetsWithRPE(state);
@@ -162,6 +185,7 @@ export const getPercentWorkoutSetsWithRPE = (state) => {
     }
 };
 
+// not memoizing as it's only called in at end workout for analytics, and each time the value would be different
 export const getWorkoutDuration = (state) => {
     const sets = getWorkoutSets(state);
     const startDate = SetUtils.startTime(sets[0]);
@@ -173,19 +197,13 @@ export const getWorkoutDuration = (state) => {
     }
 };
 
-export const getWorkingSet = (state) => {
-    const sets = getWorkoutSets(state);
-    if (sets && sets.length > 0) {
-        return sets[sets.length - 1];
-    }
-    return null;
-};
-
+// not memoizing because setID
 export const getIsWorkingSet = (state, setID) => {
     const currentSet = getWorkingSet(state);
     return setID === currentSet.setID;
 };
 
+// not memoizing as it's only called in at end SET for analytics, and each time the value would be different
 export const getWorkoutPreviousSetHasEmptyReps = (state) => {
     const workoutData = stateRoot(state).workoutData;
 
@@ -199,6 +217,7 @@ export const getWorkoutPreviousSetHasEmptyReps = (state) => {
     return false;
 }
 
+// not memoizing as it's only called in at end SET for analytics, and each time the value would be different
 export const getIsPreviousWorkoutSetFilled = (state) => {
     const workoutData = stateRoot(state).workoutData;
 
@@ -258,11 +277,7 @@ export const getHistorySetsChronological = createSelector(
     }
 );
 
-export const getNumHistorySets = (state) => {
-    let sets = stateRoot(state);
-    var array = dictToArray(sets.historyData);
-    return array.length;
-};
+export const getNumHistorySets = state => getHistorySets(state).length;
 
 export const getFilteredHistorySets = createSelector(
     getHistorySetsChronological,
@@ -302,10 +317,10 @@ const isValidForHistoryFilter = (set, exercise, tagsToInclude, tagsToExclude, st
     && SetUtils.checkRepRange(set, startingRepRange, endingRepRange);
 };
 
-export const getHistoryFilterTagsToIncludeSuggestions = (state, input, ignore) => getHistoryFilterTagsSuggestions(state, input, ignore, true);
-
-export const getHistoryFilterTagsToExcludeSuggestions = (state, input, ignore) => getHistoryFilterTagsSuggestions(state, input, ignore, false);
-
+// can't really memoize as input and stuff can change if passed in
+// would need to set the input to the STORE itself, which was slower than being on a component level
+// should still be fine, like it'll run each time you open when it didn't need to, but other than that it only runs on change which it would need to anyways
+// memoizing would only save it on opening the modal
 export const getHistoryFilterTagsSuggestions = (state, input, ignore, isIncluded = true) => {
     const sets = getAllSets(state);
     if (isIncluded) {
@@ -341,6 +356,12 @@ export const getHistoryFilterTagsSuggestions = (state, input, ignore, isIncluded
     return tags;
 };
 
+export const getHistoryFilterTagsToIncludeSuggestions = (state, input, ignore) => getHistoryFilterTagsSuggestions(state, input, ignore, true);
+
+export const getHistoryFilterTagsToExcludeSuggestions = (state, input, ignore) => getHistoryFilterTagsSuggestions(state, input, ignore, false);
+
+// up in the air for memoizing, only runs on attempt export csv, export csv, and export csv error
+// may not be worth caching for a rare operation that won't be needed outside it
 export const getNumHistoryReps = (state) => {
     let sets = getHistorySetsChronological(state);
 
@@ -373,10 +394,13 @@ const getHistoryWorkoutIDs = (state) => {
     return workoutIDs;
 };
 
+// up in the air for memoizing, only runs on attempt export csv, export csv, and export csv error
+// may not be worth caching for a rare operation that won't be needed outside it
 export const getNumHistoryWorkouts = (state) => {
     return getHistoryWorkoutIDs(state).length;
 };
 
+// not memoizing because setID
 export const getHistorySet = (state, setID) => {
     var dictionary = stateRoot(state).historyData;
     for (var property in dictionary) {
@@ -390,6 +414,8 @@ export const getHistorySet = (state, setID) => {
     return null;
 };
 
+// up in the air for memoizing, only runs on attempt export csv, export csv, and export csv error
+// may not be worth caching for a rare operation that won't be needed outside it
 export const getTimeSinceLastWorkout = (state) => {
     const sets = getHistorySetsChronological(state);
     if (sets.length <= 0) {
@@ -403,6 +429,7 @@ export const getTimeSinceLastWorkout = (state) => {
 
 // Workout / History
 
+// not memoizing because setID
 export const getSet = (state, setID) => {
     // check workout
     let set = getWorkoutSet(state, setID);
@@ -417,6 +444,9 @@ export const getSet = (state, setID) => {
 
 // Analysis
 
+// TODO: can't really memoize due to workoutID as is
+// depends how I refactor the 1rm edit screen, as it's called there when recreating the thing
+// may require that workoutID be stored in the store for it to work too, idk
 export const getAnalysisWorkoutSetsChronological = (state, workoutID) => {
     const sets = getAllSets(state);
     let analysisSets = sets.filter((set) => set.workoutID === workoutID);
@@ -438,21 +468,37 @@ export const getAnalysisWorkoutSetsChronological = (state, workoutID) => {
 
 // Syncing
 
-export const getSetsToUpload = (state) => {
-    const root = stateRoot(state);
-    return root.setIDsToUpload.map( setID => root.historyData[setID] );
-};
+export const getSetIDsToUpload = state => stateRoot(state).setIDsToUpload;
 
-export const getNumSetsBeingUploaded = (state) => stateRoot(state).setIDsBeingUploaded.length;
+// memoizing in case of failed sync
+export const getSetsToUpload = createSelector(
+    getSetIDsToUpload,
+    state => stateRoot(state).historyData,
+    (ids, historyData) => {
+        return ids.map( setID => historyData[setID] );
+    }
+);
 
-export const getIsUploading = (state) => stateRoot(state).setIDsBeingUploaded.length > 0;
+export const getNumSetsToUpload = state => getSetIDsToUpload(state).length;
 
-export const hasChangesToSync = (state) => {
-    const root = stateRoot(state);
-    return (root.setIDsToUpload.length > 0 || root.setIDsBeingUploaded.length > 0);
-};
+export const getSetIDsBeingUploaded = state => stateRoot(state).setIDsBeingUploaded;
+
+export const getNumSetsBeingUploaded = state => getSetIDsBeingUploaded(state).length;
+
+export const getIsUploading = state => getSetIDsBeingUploaded(state).length > 0;
+
+// memoizing as settings screen uses it on mapstatetoprops
+export const hasChangesToSync = createSelector(
+    getNumSetsToUpload,
+    getNumSetsBeingUploaded,
+    (numToUpload, numBeingUploaded) => {
+        return numToUpload > 0 || numBeingUploaded > 0;
+    }
+)
 
 // collapsed metrics
+// TODO: all of these recalculate WAY Too often with SetAnalysisScreen
+// need to look into how to potentially assist there, caching likely has to be on the setanalysisscreen itself rather than here
 
 const getBestEverOfMetric = (state, set, metricFunction, isMax=true) => {
     // null if not enough data entered
@@ -544,23 +590,10 @@ export const getSlowestDurationEver = (state, set) => {
     return getBestEverOfMetric(state, set, CollapsedMetrics.getDurations);
 };
 
+
+
+
 export const getRevision = (state) => stateRoot(state).revision;
-
-export const generateExerciseItems = (state) => {
-    const sets = getAllSets(state);
-    let exercises = [];
-
-    sets.forEach((set) => {
-        if (set.exercise) {
-            const lowercase = set.exercise.toLowerCase();
-            if (!exerciseExists(lowercase, exercises) && SetUtils.numValidUnremovedReps(set) > 0) {
-                exercises.push({ label: lowercase, value: lowercase });
-            }
-        }
-    });
-
-    return exercises;
-};
 
 // check if exercise exists
 const exerciseExists = (exercise, arr) => {
@@ -569,9 +602,30 @@ const exerciseExists = (exercise, arr) => {
     }); 
 };
 
-export const getAllSets = (state) => {
-    const historySets = getHistorySets(state);
-    const workoutSets = getWorkoutSets(state);
+// memoizing due to exercise picker screen
+export const generateExerciseItems = createSelector(
+    getAllSets,
+    (sets) => {
+        const exercises = [];
 
-    return historySets.concat(workoutSets);
-};
+        sets.forEach((set) => {
+            if (set.exercise) {
+                const lowercase = set.exercise.toLowerCase();
+                if (!exerciseExists(lowercase, exercises) && SetUtils.numValidUnremovedReps(set) > 0) {
+                    exercises.push({ label: lowercase, value: lowercase });
+                }
+            }
+        });
+    
+        return exercises;
+    }
+);
+
+// memoizing called in enough places, hoping shallow copy of arrays is enough as it's just an array of references anyway
+export const getAllSets = createSelector(
+    getHistorySets,
+    getWorkoutSets,
+    (historySets, workoutSets) => {
+        return historySets.concat(workoutSets);
+    }
+);
