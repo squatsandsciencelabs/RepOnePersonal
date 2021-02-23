@@ -1,6 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
+import { createSelector } from 'reselect';
 
 import {
     EMPTY_METRIC,
@@ -10,7 +11,6 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
-    EMPTY_QUANTIFIER,
     AVG_QUANTIFIER,
     FASTEST_EVER_QUANTIFIER,
     SLOWEST_EVER_QUANTIFIER,
@@ -71,45 +71,72 @@ const generateItems = (quantifier) => {
     };
 };
 
-const mapStateToProps = (state, ownProps) => {
-    if (Platform.OS === 'ios') {
-        return {
-            isModalShowing: CollapsedSettingsSelectors.getIsEditingMetric(state),
-            items: generateItems(CollapsedSettingsSelectors.getCurrentQuantifier(state)),
-            selectedValue: CollapsedSettingsSelectors.getCurrentMetric(state),
-        };
-    } else {
-        switch (ownProps.rank) {
+const getiOSItems = createSelector(
+    CollapsedSettingsSelectors.getCurrentQuantifier,
+    quantifier => {
+        return generateItems(quantifier);
+    }
+);
+
+const mapStateToPropsiOS = (state) => {
+    return {
+        isModalShowing: CollapsedSettingsSelectors.getIsEditingMetric(state),
+        items: getiOSItems(state),
+        selectedValue: CollapsedSettingsSelectors.getCurrentMetric(state),
+    };
+};
+
+// tough call whether to have it check against EVERY quantifier and metric, versus caching 5 of them and selecting the cache you want
+// check against each means more reference checks every action that gets run, AND it recalculates more than it should as it doesn't NEED to recalculate if the rank is still 1 and quant 5 changes
+// however caching all 5 means more shit in memory for something that rarely changes
+// going with former solution rather than latter, more worried about memory than a few extra ref checks
+const selectMapStateToPropsAndroid = createSelector(
+    (state, props) => props.rank,
+    CollapsedSettingsSelectors.getQuantifier1,
+    CollapsedSettingsSelectors.getMetric1,
+    CollapsedSettingsSelectors.getQuantifier2,
+    CollapsedSettingsSelectors.getMetric2,
+    CollapsedSettingsSelectors.getQuantifier3,
+    CollapsedSettingsSelectors.getMetric3,
+    CollapsedSettingsSelectors.getQuantifier4,
+    CollapsedSettingsSelectors.getMetric4,
+    CollapsedSettingsSelectors.getQuantifier5,
+    CollapsedSettingsSelectors.getMetric5,
+    (rank, quantifier1, metric1, quantifier2, metric2, quantifier3, metric3, quantifier4, metric4, quantifier5, metric5) => {
+        switch (rank) {
             case 1:
                 return {
-                    items: generateItems(CollapsedSettingsSelectors.getQuantifier1(state)),
-                    selectedValue: CollapsedSettingsSelectors.getMetric1(state),
+                    items: generateItems(quantifier1),
+                    selectedValue: metric1,
                 };
             case 2:
                 return {
-                    items: generateItems(CollapsedSettingsSelectors.getQuantifier2(state)),
-                    selectedValue: CollapsedSettingsSelectors.getMetric2(state),
+                    items: generateItems(quantifier2),
+                    selectedValue: metric2,
                 };
             case 3:
                 return {
-                    items: generateItems(CollapsedSettingsSelectors.getQuantifier3(state)),
-                    selectedValue: CollapsedSettingsSelectors.getMetric3(state),
+                    items: generateItems(quantifier3),
+                    selectedValue: metric3,
                 };
             case 4:
                 return {
-                    items: generateItems(CollapsedSettingsSelectors.getQuantifier4(state)),
-                    selectedValue: CollapsedSettingsSelectors.getMetric4(state),
+                    items: generateItems(quantifier4),
+                    selectedValue: metric4,
                 };
             case 5:
                 return {
-                    items: generateItems(CollapsedSettingsSelectors.getQuantifier5(state)),
-                    selectedValue: CollapsedSettingsSelectors.getMetric5(state),
+                    items: generateItems(quantifier5),
+                    selectedValue: metric5,
                 };
             default:
                 return {};
         }
     }
-};
+);
+
+// this way only check OS once
+const mapStateToProps = Platform.OS === 'ios' ? mapStateToPropsiOS : selectMapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {
