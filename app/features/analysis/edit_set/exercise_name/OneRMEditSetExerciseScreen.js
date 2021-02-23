@@ -6,12 +6,15 @@ import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './OneRMEditSetExerciseActions';
 
+const title = 'Edit Exercise';
+const placeholder = 'Enter Exercise';
+
 const mapStateToProps = (state) => {
     const setID = AnalysisSelectors.getEditingExerciseSetID(state);
 
     return {
-        title: 'Edit Exercise',
-        placeholder: 'Enter Exercise',
+        title,
+        placeholder,
         text: AnalysisSelectors.getEditingExerciseName(state),
         setID: setID,
         generateSingleInputSuggestions: (input) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input) },

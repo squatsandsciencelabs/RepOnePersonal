@@ -2,18 +2,21 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SelectTagsModal from 'app/shared_features/tags/SelectTagsModal';
-import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as Actions from './EditAnalysisTagsToExcludeActions';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as OneRMCalculator from 'app/math/OneRMCalculator';
+
+const title = 'Tags to Exclude';
+const placeholder = 'Enter Tag';
+const text = '';
 
 const mapStateToProps = (state) => {
     const exercise = AnalysisSelectors.getExercise(state);
     
     return {
-        title: 'Tags to Exclude',
-        placeholder: 'Enter Tag',
-        text: '',
+        title,
+        placeholder,
+        text,
         inputs: AnalysisSelectors.getTagsToExclude(state),
         generateSuggestions: (input, ignore) => OneRMCalculator.getTagsToExcludeSuggestions(state, exercise, input, ignore),
         isModalShowing: AnalysisSelectors.getIsEditingExcludeTags(state),

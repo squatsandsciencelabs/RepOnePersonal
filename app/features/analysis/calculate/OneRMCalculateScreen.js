@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 
 import OneRMCalculateView from './OneRMCalculateView';
 import * as Actions from './OneRMCalculateActions';
-import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
-import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
-import * as AppStateActionCreators from 'app/redux/shared_actions/AppStateActionCreators';
-import * as OneRMCalculator from 'app/math/OneRMCalculator';
 
 const mapStateToProps = (state) => ({
     velocity: AnalysisSelectors.getVelocitySlider(state),

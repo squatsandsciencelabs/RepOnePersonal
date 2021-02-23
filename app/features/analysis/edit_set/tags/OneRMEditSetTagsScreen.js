@@ -6,13 +6,17 @@ import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './OneRMEditSetTagsActions';
 
+const title = 'Edit Tags';
+const placeholder = 'Enter Tag';
+const text = '';
+
 const mapStateToProps = (state) => {
     const setID = AnalysisSelectors.getEditingTagsSetID(state);
 
     return {
-        title: 'Edit Tags',
-        placeholder: 'Enter Tag',
-        text: '',
+        title,
+        placeholder,
+        text,
         multipleInput: true,
         setID: setID,
         inputs: AnalysisSelectors.getEditingTags(state),
