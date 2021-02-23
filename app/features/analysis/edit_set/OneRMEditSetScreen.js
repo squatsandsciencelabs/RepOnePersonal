@@ -3,6 +3,7 @@
 import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import * as Actions from './OneRMEditSetActions';
 import OneRMEditSetView from './OneRMEditSetView';
@@ -15,7 +16,7 @@ import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 
 // assumes chronological sets
-const createViewModels = (state, sets, setID, metric) => {
+const createViewModels = (sets, setID, metric) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -82,7 +83,7 @@ const createViewModels = (state, sets, setID, metric) => {
 
             // card views
             if (!isRemoved) {
-                array.push(createTitleViewModel(state, set, setNumber));
+                array.push(createTitleViewModel(set, setNumber));
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
                 if (set.reps.length > 0) {
@@ -151,7 +152,7 @@ const getVideoFileURL = (set) => {
     return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
 };
 
-const createTitleViewModel = (state, set, setNumber) => ({
+const createTitleViewModel = (set, setNumber) => ({
     type: 'title',
     key: set.setID+'title',
     setNumber: setNumber,
@@ -285,28 +286,54 @@ const createDeleteVM = (set) => ({
     key: set.setID + 'delete',
 });
 
-const mapStateToProps = (state) => {
-    const setID = AnalysisSelectors.getSetID(state);
-    const workoutID = AnalysisSelectors.getWorkoutID(state);
-    if (setID) { // no workoutID means it's a live workout
-        const sets = SetsSelectors.getAnalysisWorkoutSetsChronological(state, workoutID);
-        const {title, sections} = createViewModels(state, sets, setID, SettingsSelectors.getDefaultMetric(state));
+// workout sets
 
-        return {
-            title: title,
-            setID: setID,
-            sections: sections,
-            isModalShowing: true,
-        };
-    } else {
-        return {
-            title: '',
-            setID: null,
-            sections: [],
-            isModalShowing: false,
+const getAnalysisWorkoutSetsChronological = (sets, workoutID) => {
+    let analysisSets = sets.filter((set) => set.workoutID === workoutID);
+    analysisSets.sort((set1, set2) => {
+        let set1Start = SetUtils.startTime(set1);
+        if (set1Start !== null) {
+            set1Start = Date.parse(set1Start);
+        }
+
+        let set2Start = SetUtils.startTime(set2);
+        if (set2Start !== null) {
+            set2Start = Date.parse(set2Start);
+        }
+
+        return set1Start - set2Start;
+    });
+    return analysisSets;
+};
+
+// map state
+
+const selectMapStateToProps = createSelector(
+    AnalysisSelectors.getSetID,
+    AnalysisSelectors.getWorkoutID,
+    SetsSelectors.getAllSets,
+    SettingsSelectors.getDefaultMetric,
+    (setID, workoutID, allSets, defaultMetric) => {
+        if (setID) {
+            const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
+            const {title, sections} = createViewModels(sets, setID, defaultMetric);
+
+            return {
+                title: title,
+                setID,
+                sections: sections,
+                isModalShowing: true,
+            };
+        } else {
+            return {
+                title: '',
+                setID: null,
+                sections: [],
+                isModalShowing: false,
+            };
         }
     }
-};
+);
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -319,7 +346,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const OneRMEditSetScreen = connect(
-    mapStateToProps,
+    selectMapStateToProps,
     mapDispatchToProps
 )(OneRMEditSetView);
 

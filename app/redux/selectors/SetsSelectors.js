@@ -444,30 +444,6 @@ export const getSet = (state, setID) => {
     return set;
 };
 
-// Analysis
-
-// TODO: can't really memoize due to workoutID as is
-// depends how I refactor the 1rm edit screen, as it's called there when recreating the thing
-// may require that workoutID be stored in the store for it to work too, idk
-export const getAnalysisWorkoutSetsChronological = (state, workoutID) => {
-    const sets = getAllSets(state);
-    let analysisSets = sets.filter((set) => set.workoutID === workoutID);
-    analysisSets.sort((set1, set2) => {
-        let set1Start = SetUtils.startTime(set1);
-        if (set1Start !== null) {
-            set1Start = Date.parse(set1Start);
-        }
-
-        let set2Start = SetUtils.startTime(set2);
-        if (set2Start !== null) {
-            set2Start = Date.parse(set2Start);
-        }
-
-        return set1Start - set2Start;
-    });
-    return analysisSets;
-};
-
 // Syncing
 
 export const getSetIDsToUpload = state => stateRoot(state).setIDsToUpload;
