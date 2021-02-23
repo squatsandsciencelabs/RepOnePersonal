@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import { OTAStatus } from "../reducers/OTAReducer";
 
 const stateRoot = (state) => state.ota;
@@ -12,3 +13,10 @@ export const getStatus = (state) => stateRoot(state).status;
 export const getIsInstalling = (state) => getStatus(state) === OTAStatus.INSTALLING || getProgress(state) !== 0;
 
 export const getProgress = (state) => stateRoot(state).progress;
+
+export const getProgressDividedBy100 = createSelector(
+    getProgress,
+    progress => {
+        return progress / 100.0;
+    }
+);

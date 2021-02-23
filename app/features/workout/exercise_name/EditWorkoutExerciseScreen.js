@@ -6,9 +6,12 @@ import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditWorkoutExerciseActions';
 
+const title = 'Edit Exercise';
+const placeholder = 'Enter Exercise';
+
 const mapStateToProps = (state) => ({
-    title: 'Edit Exercise',
-    placeholder: 'Enter Exercise',
+    title,
+    placeholder,
     text: WorkoutSelectors.getEditingExerciseName(state),
     setID: WorkoutSelectors.getEditingExerciseSetID(state),
     bias: WorkoutSelectors.getEditingExerciseBias(state),

@@ -6,9 +6,12 @@ import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors'
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as Actions from './EditHistoryFilterExerciseActions';
 
+const title = 'Edit Exercise';
+const placeholder = 'Enter Exercise';
+
 const mapStateToProps = (state) => ({
-    title: 'Edit Exercise',
-    placeholder: 'Enter Exercise',
+    title,
+    placeholder,
     text: HistorySelectors.getEditingFilterExerciseName(state),
     generateSingleInputSuggestions: (input) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input) },
     isModalShowing: HistorySelectors.getIsEditingHistoryFilterExercise(state),

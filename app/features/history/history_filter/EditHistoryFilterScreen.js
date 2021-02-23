@@ -1,25 +1,34 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { createSelector } from 'reselect';
 
 import EditHistoryFilterView from './EditHistoryFilterView';
 import * as Actions from './EditHistoryFilterActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
+const getFormattedStartDate = createSelector(
+    HistorySelectors.getEditingHistoryFilterStartingDate,
+    startDate => {
+        return startDate ? moment(startDate).format('MM/DD/YYYY') : null;
+    }
+);
+
+const getFormattedEndDate = createSelector(
+    HistorySelectors.getEditingHistoryFilterEndingDate,
+    endDate => {
+        return endDate ? moment(endDate).format('MM/DD/YYYY') : null;
+    }
+);
+
 const mapStateToProps = (state) => {
-    const startDate = HistorySelectors.getEditingHistoryFilterStartingDate(state);
-    const formattedStartDate = startDate ? moment(startDate).format('MM/DD/YYYY') : null;
-
-    const endDate = HistorySelectors.getEditingHistoryFilterEndingDate(state);
-    const formattedEndDate = endDate ? moment(endDate).format('MM/DD/YYYY') : null;
-
     return {
         isModalShowing: HistorySelectors.getShowHistoryFilter(state),
         exercise: HistorySelectors.getEditingFilterExerciseName(state),
         tagsToInclude: HistorySelectors.getEditingFilterTagsToInclude(state),
         tagsToExclude: HistorySelectors.getEditingFilterTagsToExclude(state),
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
+        startDate: getFormattedStartDate(state),
+        endDate: getFormattedEndDate(state),
         startWeight: HistorySelectors.getEditingHistoryFilterStartingWeight(state),
         endWeight: HistorySelectors.getEditingHistoryFilterEndingWeight(state),
         startRPE: HistorySelectors.getEditingHistoryFilterStartingRPE(state),

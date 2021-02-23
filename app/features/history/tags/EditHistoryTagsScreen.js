@@ -5,10 +5,14 @@ import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditHistoryTagsActions';
 
+const title = 'Edit Tags';
+const placeholder = 'Enter Tag';
+const text = '';
+
 const mapStateToProps = (state) => ({
-    title: 'Edit Tags',
-    placeholder: 'Enter Tag',
-    text: '',
+    title,
+    placeholder,
+    text,
     multipleInput: true,
     setID: state.history.editingTagsSetID,
     inputs: state.history.editingTags,

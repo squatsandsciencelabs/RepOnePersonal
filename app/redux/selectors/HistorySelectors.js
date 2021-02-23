@@ -3,6 +3,10 @@ import { Platform } from "react-native";
 
 const stateRoot = (state) => state.history;
 
+// general
+
+export const getIsLoading = state => stateRoot(state).isLoadingHistory;
+
 // video recorder / camera
 
 export const getIsRecording = (state) => stateRoot(state).isRecording;

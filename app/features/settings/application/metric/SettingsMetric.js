@@ -6,12 +6,14 @@ import * as Actions from './SettingsMetricActions';
 
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 
+const items = [
+    {label: 'kgs', value: 'kgs'},
+    {label: 'lbs', value: 'lbs'}
+];
+
 const mapStateToProps = (state) => ({
     isModalShowing: SettingsSelectors.getIsEditingDefaultMetric(state),
-    items: [
-        {label: 'kgs', value: 'kgs'},
-        {label: 'lbs', value: 'lbs'}
-    ],
+    items,
     selectedValue: SettingsSelectors.getDefaultMetric(state)
 });
 

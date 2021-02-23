@@ -6,12 +6,16 @@ import * as Actions from './EditHistoryFilterTagsToIncludeActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
+const title = 'Tags to Include';
+const placeholder = 'Enter Tag';
+const text = '';
+
 const mapStateToProps = (state) => {
     // TODO move tags suggestion out
     return {
-        title: 'Tags to Include',
-        placeholder: 'Enter Tag',
-        text: '',
+        title,
+        placeholder,
+        text,
         inputs: HistorySelectors.getEditingFilterTagsToInclude(state),
         generateSuggestions: (input, ignore) => SetsSelectors.getHistoryFilterTagsToIncludeSuggestions(state, input, ignore),
         isModalShowing: HistorySelectors.getIsEditingHistoryFilterTagsToInclude(state),

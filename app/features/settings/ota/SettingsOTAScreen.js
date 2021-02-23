@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
         firmwareVersion: OTASelectors.getFirmwareVersion(state),
         firmwareDescription: OTASelectors.getFirmwareDescription(state),
         status: OTASelectors.getStatus(state),
-        progress: OTASelectors.getProgress(state) / 100.0,
+        progress: OTASelectors.getProgressDividedBy100(state),
     };
 };
 

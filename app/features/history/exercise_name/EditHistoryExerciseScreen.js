@@ -5,9 +5,12 @@ import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditHistoryExerciseActions';
 
+const title = 'Edit Exercise';
+const placeholder = 'Enter Exercise';
+
 const mapStateToProps = (state) => ({
-    title: 'Edit Exercise',
-    placeholder: 'Enter Exercise',
+    title,
+    placeholder,
     text: state.history.editingExerciseName,
     setID: state.history.editingExerciseSetID,
     generateSingleInputSuggestions: (input) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input) },

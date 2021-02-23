@@ -1,10 +1,9 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import ListLoadingFooter from './ListLoadingFooter';
 
 const mapStateToProps = (state) => ({
-    isLoading: state.history.isLoadingHistory,
+    isLoading: HistorySelectors.getIsLoading(state),
     isLargeFooter: true,
 });
 

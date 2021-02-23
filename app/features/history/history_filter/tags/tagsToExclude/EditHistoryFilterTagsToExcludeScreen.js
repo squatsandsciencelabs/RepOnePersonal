@@ -6,12 +6,16 @@ import * as Actions from './EditHistoryFilterTagsToExcludeActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
+const title = 'Tags to Exclude';
+const placeholder = 'Enter Tag';
+const text = '';
+
 const mapStateToProps = (state) => {
     // TODO move tags suggestion out
     return {
-        title: 'Tags to Exclude',
-        placeholder: 'Enter Tag',
-        text: '',
+        title,
+        placeholder,
+        text,
         inputs: HistorySelectors.getEditingFilterTagsToExclude(state),
         generateSuggestions: (input, ignore) => SetsSelectors.getHistoryFilterTagsToExcludeSuggestions(state, input, ignore),
         isModalShowing: HistorySelectors.getIsEditingHistoryFilterTagsToExclude(state),
