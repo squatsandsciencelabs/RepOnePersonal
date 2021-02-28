@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor:'white',
         paddingTop: 10,
-        paddingBottom: 10,
+        paddingBottom: 0,
         paddingLeft: 5,
     },
     border: {

@@ -68,6 +68,9 @@ const createViewModels = (sets, collapsedModel) => {
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
+                if (isLastSet || set.reps.length > 0) {
+                    array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                }
                 if (set.reps.length > 0) {
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }

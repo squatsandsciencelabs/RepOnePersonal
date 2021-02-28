@@ -35,7 +35,7 @@ import {
     },
     disabledButton: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderColor: 'rgba(47, 128, 237, 1)',        
+        borderColor: 'rgba(47, 128, 237, 1)',
         borderWidth: 5,
         borderRadius: 15,
         opacity: 0.3
