@@ -69,10 +69,10 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
-                if (can3D && (isLastSet || set.reps.length > 0)) {
+                if ((can3D || SetUtils.hasRepWith3D(set)) && (isLastSet || set.reps.length > 0)) {
                     array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
                 }
-                if (set.reps.length > 0) {
+                if (isLastSet || set.reps.length > 0) {
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }
             } else if (!isRemoved) {

@@ -75,6 +75,13 @@ export const validUnremovedReps = (set) => {
     return set.reps.filter(rep => rep.isValid && !rep.removed);
 };
 
+export const hasRepWith3D = set => {
+    if (!set || !set.hasOwnProperty('reps')) {
+        return false;
+    }
+    return set.reps.some(rep => rep.bulkData);
+};
+
 export const weightInLBs = (set) => {
     if (!set.hasOwnProperty('weight') || set.weight === null || isNaN(set.weight) || !set.metric) {
         return null;
