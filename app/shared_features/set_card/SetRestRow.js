@@ -4,31 +4,38 @@ import {
     StyleSheet,
     Text
 } from 'react-native';
+import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 
-// TODO: this shouldn't use item directly, should instead be passed in the individual values it needs
+const image = require('app/appearance/images/3d.png');
 
-class SetRestRow extends PureComponent {
-
-    render() {
-        if (this.props.item.hasOwnProperty('isWorkingSet') && this.props.item.isWorkingSet) {
-            var marginTop = 15;
-            var marginBottom = 15;
-        } else if (this.props.item.isCollapsed) {
-            var marginTop = 0;
-            var marginBottom = 15;
-        } else {
-            var marginTop = 15;
-            var marginBottom = 0;
-        }
-
-        return (
-            <View style={[styles.border, {flex:1, flexDirection: 'row', alignItems:'stretch', backgroundColor:'white'}]}>
-                <Text style={{flex: 1, textAlign: 'center', color: 'gray', marginBottom: marginBottom, marginTop: marginTop}}>{ this.props.item.rest }</Text>
-            </View>
-        );
+export default props => {
+    if (props.item.hasOwnProperty('isWorkingSet') && props.item.isWorkingSet) {
+        var marginTop = 15;
+        var marginBottom = 15;
+    } else if (props.item.isCollapsed) {
+        var marginTop = 0;
+        var marginBottom = 15;
+    } else {
+        var marginTop = 15;
+        var marginBottom = 0;
     }
 
-}
+    if (props.item.show3D) {
+        var button = <OutlineButton
+            image={image}
+            onPress={tappedButton}
+            text='3D View' />
+    } else {
+        var button = null;
+    }
+
+    return (
+        <View style={[styles.border, {flex:1, flexDirection: 'row', alignItems:'stretch', backgroundColor:'white'}]}>
+            <Text style={{flex: 1, textAlign: 'center', color: 'gray', marginBottom: marginBottom, marginTop: marginTop}}>{ props.item.rest }</Text>
+            {button}
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     border: {
@@ -38,5 +45,3 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
     },
 });
-
-export default SetRestRow;

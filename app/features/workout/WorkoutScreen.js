@@ -303,15 +303,19 @@ const createWorkingSetFooterVM = (set, restStartTime) => {
 };
 
 const createRestVM = (set, lastSetEndTime, isCollapsed, isWorkingSet) => {
-    let restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
-    let footerVM = {
+    let rest = null;
+    if (lastSetEndTime) {
+        const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+        rest = DateUtils.restInSentenceFormat(restInMS);
+    }
+    return {
         type: "rest",
-        rest: DateUtils.restInSentenceFormat(restInMS),
+        rest,
         key: set.setID + 'rest',
         isCollapsed: isCollapsed,
         isWorkingSet: isWorkingSet,
+        show3D: isCollapsed && !isWorkingSet && SetUtils.hasRepWith3D(set),
     };
-    return footerVM;
 };
 
 const createDeleteVM = (set) => ({

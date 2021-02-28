@@ -17,6 +17,7 @@ export default props => {
         Alert.alert('hi')
         // props.tappedButton(props.setID);
     };
+
     return (<View style={styles.container}>
         <View style={styles.border} />
         <OutlineButton
