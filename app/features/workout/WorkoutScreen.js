@@ -11,10 +11,11 @@ import WorkoutList from './WorkoutList';
 import * as Actions from './WorkoutActions';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as WorkoutCollapsedSelectors from 'app/redux/selectors/WorkoutCollapsedSelectors';
+import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, collapsedModel) => {
+const createViewModels = (sets, collapsedModel, can3D) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
     let sections = [section]; // the return value
@@ -68,7 +69,7 @@ const createViewModels = (sets, collapsedModel) => {
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
-                if (isLastSet || set.reps.length > 0) {
+                if (can3D && (isLastSet || set.reps.length > 0)) {
                     array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
                 }
                 if (set.reps.length > 0) {
@@ -327,8 +328,9 @@ const createBottomBorder = (set) => ({
 const getWorkoutSections = createSelector(
     SetsSelectors.getWorkoutSets,
     WorkoutCollapsedSelectors.getCollapsedModel,
-    (sets, collapsedModel) => {
-        return createViewModels(sets, collapsedModel);
+    ConnectedDeviceStatusSelectors.getCan3D,
+    (sets, collapsedModel, can3D) => {
+        return createViewModels(sets, collapsedModel, can3D);
     }
 );
 
