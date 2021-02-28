@@ -61,6 +61,7 @@ const createViewModels = (sets, collapsedModel, can3D) => {
         if (isLastSet) {
             array.push({type: 'working set header', key: set.setID+'end set timer'});
         }
+        const setHasUnremovedRepWith3D = SetUtils.hasUnremovedRepWith3D(set);
         if (!isRemoved) {
             array.push(createTopBorder(set));
             array.push(createTitleViewModel(set, setNumber, lastExerciseName, isLastSet, isCollapsed));
@@ -69,10 +70,10 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
-                if ((can3D || SetUtils.hasRepWith3D(set)) && (isLastSet || set.reps.length > 0)) {
-                    array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
-                }
                 if (isLastSet || set.reps.length > 0) {
+                    if ((isLastSet && can3D) || setHasUnremovedRepWith3D) {
+                        array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                    }
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }
             } else if (!isRemoved) {
@@ -93,10 +94,14 @@ const createViewModels = (sets, collapsedModel, can3D) => {
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
+            if (setHasUnremovedRepWith3D) {
+                // add rest footer anyways just for the 3D button
+                array.push(createRestVM(set, null, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+            }
         } else if (!isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
             // add footer if valid
-            if (lastSetEndTime !== null) {
-                array.push(createRestVM(set, lastSetEndTime, isCollapsed, isLastSet));
+            if (lastSetEndTime !== null || setHasUnremovedRepWith3D) {
+                array.push(createRestVM(set, lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
             }
 
             // update variable for calculation purposes
@@ -302,7 +307,7 @@ const createWorkingSetFooterVM = (set, restStartTime) => {
     return footerVM;
 };
 
-const createRestVM = (set, lastSetEndTime, isCollapsed, isWorkingSet) => {
+const createRestVM = (set, lastSetEndTime, isCollapsed, isWorkingSet, setHasUnremovedRepWith3D) => {
     let rest = null;
     if (lastSetEndTime) {
         const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
@@ -314,7 +319,7 @@ const createRestVM = (set, lastSetEndTime, isCollapsed, isWorkingSet) => {
         key: set.setID + 'rest',
         isCollapsed: isCollapsed,
         isWorkingSet: isWorkingSet,
-        show3D: isCollapsed && !isWorkingSet && SetUtils.hasRepWith3D(set),
+        show3D: isCollapsed && !isWorkingSet && setHasUnremovedRepWith3D,
     };
 };
 

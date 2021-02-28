@@ -5,10 +5,7 @@ import {
     StyleSheet,
     View,
     SectionList,
-    Dimensions,
-    ListItem
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import WorkoutBottomBarScreen from './bottom_bar/WorkoutBottomBarScreen';
 import EditWorkoutTitleExpandedScreen from './card/expanded/title/EditWorkoutTitleExpandedScreen';

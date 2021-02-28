@@ -18,7 +18,7 @@ export default props => {
         onPress: () => true,
     };
 
-    return (<TouchableHighlight {...touchProps} onPress={props.onPress}>
+    return (<TouchableHighlight {...touchProps} onPress={props.onPress} style={props.style}>
         <View style={[isPress ? styles.pressed : styles.normal, styles.button]}>
             {props.image ? <Image source={props.image} style={[isPress ? styles.pressedImage : styles.normalImage, styles.image]} /> : null}
             <Text style={isPress ? styles.pressedText : styles.normalText}>{props.text}</Text>

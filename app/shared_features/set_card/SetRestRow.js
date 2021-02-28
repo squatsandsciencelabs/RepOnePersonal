@@ -20,28 +20,48 @@ export default props => {
         var marginBottom = 0;
     }
 
+    const tappedButton = () => {
+        Alert.alert('hi')
+        // props.tappedButton(props.setID);
+    };
+
     if (props.item.show3D) {
-        var button = <OutlineButton
+        var button =<OutlineButton
+            style={styles.button}
             image={image}
             onPress={tappedButton}
-            text='3D View' />
+            text='3D' />;
     } else {
         var button = null;
     }
 
     return (
-        <View style={[styles.border, {flex:1, flexDirection: 'row', alignItems:'stretch', backgroundColor:'white'}]}>
-            <Text style={{flex: 1, textAlign: 'center', color: 'gray', marginBottom: marginBottom, marginTop: marginTop}}>{ props.item.rest }</Text>
+        <View style={[styles.border, styles.container]}>
+            <Text style={{textAlign: 'center', color: 'gray', marginBottom: marginBottom, marginTop: marginTop}}>{ props.item.rest }</Text>
             {button}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'white',
+        textAlign: 'center',
+        position: 'relative',
+    },
     border: {
         borderColor: '#e0e0e0',
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderBottomWidth: 0,
     },
+    button: {
+        position: 'absolute',
+        right: 5,
+        bottom: 5,
+    }
 });

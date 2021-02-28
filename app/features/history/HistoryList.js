@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import {
-    TouchableHighlight,
     Text,
-    StyleSheet,
     View,
     SectionList,
     ScrollView,
-    Dimensions,
-    ListItem,
     TouchableOpacity,
 } from 'react-native';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import EditHistorySetFormScreen from './card/expanded/form/EditHistorySetFormScreen';
 import EditHistoryTitleExpandedScreen from './card/expanded/title/EditHistoryTitleExpandedScreen';
@@ -32,6 +26,7 @@ import SetSummary from 'app/shared_features/set_card/collapsed/SetSummary';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
 import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
+import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 
 class HistoryList extends Component {
 
@@ -130,6 +125,10 @@ class HistoryList extends Component {
                                 }}
                             />
                         </View>);
+            case "open 3d button":
+                return (
+                    <Open3DRow />
+                );                        
             case "subheader":
                 return (
                     <SetDataLabelRow />
