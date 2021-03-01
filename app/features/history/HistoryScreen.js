@@ -112,7 +112,7 @@ const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
-            if (setHasUnremovedRepWith3D) {
+            if (isCollapsed && setHasUnremovedRepWith3D) {
                 // add rest footer anyways just for the 3D button
                 hasRest = true;
                 array.push(createRestVM(set, null, isCollapsed, setHasUnremovedRepWith3D));
