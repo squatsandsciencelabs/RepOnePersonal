@@ -139,7 +139,11 @@ class HistoryList extends Component {
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
             case "bottom border":
-                return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
+                if (item.isPadded) {
+                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10, marginBottom: 15}} />);
+                } else {
+                    return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
+                }
             case "rest":
                 return (
                     <SetRestRow item={item} />

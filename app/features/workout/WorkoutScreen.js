@@ -91,16 +91,19 @@ const createViewModels = (sets, collapsedModel, can3D) => {
         }
 
         // rest footer
+        let hasRest = false;
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
             if (setHasUnremovedRepWith3D) {
                 // add rest footer anyways just for the 3D button
+                hasRest = true;
                 array.push(createRestVM(set, null, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
             }
         } else if (!isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
             // add footer if valid
             if (lastSetEndTime !== null || setHasUnremovedRepWith3D) {
+                hasRest = true;
                 array.push(createRestVM(set, lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
             }
 
@@ -114,13 +117,14 @@ const createViewModels = (sets, collapsedModel, can3D) => {
         // delete set row
         if (isLastSet) {
             if (lastSetEndTime === null || set.reps.length > 0) {
-                array.push(createBottomBorder(set));
+                // if no working set footer vm basically
+                array.push(createBottomBorder(set, false));
             }
         } else {
             if (!isRemoved && !isCollapsed) {
                 array.push(createDeleteVM(set));
             } else {
-                array.push(createBottomBorder(set));
+                array.push(createBottomBorder(set, !hasRest));
             }
         }
 
@@ -329,9 +333,10 @@ const createDeleteVM = (set) => ({
     key: set.setID + 'delete',
 });
 
-const createBottomBorder = (set) => ({
+const createBottomBorder = (set, isPadded) => ({
     type: "bottom border",
     key: set.setID + 'bottomborder',
+    isPadded,
 });
 
 const getWorkoutSections = createSelector(

@@ -186,7 +186,11 @@ class WorkoutList extends Component {
             case "top border":
                 return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1}} />);
             case "bottom border":
-                return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
+                if (item.isPadded) {
+                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 5, marginBottom: 15}} />);
+                } else {
+                    return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
+                }
             case "working set footer":
                 return (
                     <View style={{marginBottom: 15}}>
