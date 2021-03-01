@@ -180,13 +180,9 @@ class HistoryList extends Component {
                 stickySectionHeadersEnabled={false}
                 ListFooterComponent={HistoryLoadingFooterScreen}
                 renderItem={({item, index, section}) => this._renderRow(section, index, item)}
-                // getItemLayout={{item, index, section}}
                 renderSectionHeader={({section}) => this._renderSectionHeader(section) }
                 renderSectionFooter={({section}) => this._renderSectionFooter(section)}              
                 sections={this.props.sections}
-                // getItemLayout={(data, index) => {
-                //     return { length: 500, offset: 53 * index, index: index }; // this is wrong
-                // }}
                 onEndReached={() => this.props.finishLoading() }
                 style = {{padding: 10, backgroundColor: '#f2f2f2'}}
             />);
