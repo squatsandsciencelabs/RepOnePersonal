@@ -90,42 +90,40 @@ const createViewModels = (sets, collapsedModel, can3D) => {
             Array.prototype.push.apply(array, createRowViewModels(set));
         }
 
-        // rest footer
-        let hasRest = false;
+        // footer with rest, 3d, and delete
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
-            if (setHasUnremovedRepWith3D) {
-                // add rest footer anyways just for the 3D button
-                hasRest = true;
-                array.push(createRestVM(set, null, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+        }
+        let hasFooter = false;
+        if (isLastSet) {
+            if (lastSetEndTime !== null) {
+                if (set.reps.length === 0) {
+                    // working set, live rest mode
+                    array.push(createWorkingSetFooterVM(set, lastSetEndTime));
+                } else {
+                    // working set, normal rest time (not live)
+                    hasFooter = true;
+                    array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+                }
             }
-        } else if (!isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
-            // add footer if valid
-            if (lastSetEndTime !== null || setHasUnremovedRepWith3D) {
-                hasRest = true;
-                array.push(createRestVM(set, lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
-            }
-
+        } else if (!isRemoved && (!isCollapsed || (!isInitialSet && lastSetEndTime !== null) || setHasUnremovedRepWith3D)) {
+            hasFooter = true;
+            array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+        }
+        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
             // update variable for calculation purposes
             lastSetEndTime = SetUtils.endTime(set);
-        } else if (isLastSet && lastSetEndTime !== null && set.reps.length === 0) {
-            // working set, live rest mode
-            array.push(createWorkingSetFooterVM(set, lastSetEndTime));
         }
 
-        // delete set row
+        // bottom border
         if (isLastSet) {
             if (lastSetEndTime === null || set.reps.length > 0) {
-                // if no working set footer vm basically
+                // if no working set footer vm, add bottom border. no need if working set footer with live rest is visible
                 array.push(createBottomBorder(set, false));
             }
         } else {
-            if (!isRemoved && !isCollapsed) {
-                array.push(createDeleteVM(set));
-            } else {
-                array.push(createBottomBorder(set, !hasRest));
-            }
+            array.push(createBottomBorder(set, !hasFooter && !isRemoved));
         }
 
         // insert set card data
@@ -311,27 +309,22 @@ const createWorkingSetFooterVM = (set, restStartTime) => {
     return footerVM;
 };
 
-const createRestVM = (set, lastSetEndTime, isCollapsed, isWorkingSet, setHasUnremovedRepWith3D) => {
+const createFooterVM = (set, lastSetEndTime, isCollapsed, isWorkingSet, setHasUnremovedRepWith3D) => {
     let rest = null;
     if (lastSetEndTime) {
         const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
         rest = DateUtils.restInSentenceFormat(restInMS);
     }
     return {
-        type: "rest",
+        type: "footer",
         rest,
         key: set.setID + 'rest',
+        setID: set.setID,
         isCollapsed: isCollapsed,
         isWorkingSet: isWorkingSet,
         show3D: isCollapsed && !isWorkingSet && setHasUnremovedRepWith3D,
     };
 };
-
-const createDeleteVM = (set) => ({
-    type: "delete",
-    setID: set.setID,
-    key: set.setID + 'delete',
-});
 
 const createBottomBorder = (set, isPadded) => ({
     type: "bottom border",

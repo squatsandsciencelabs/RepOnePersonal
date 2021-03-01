@@ -15,7 +15,7 @@ import EditWorkoutExerciseScreen from './exercise_name/EditWorkoutExerciseScreen
 import EditWorkoutTagsScreen from './tags/EditWorkoutTagsScreen';
 import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
 import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
-import SetRestRow from 'app/shared_features/set_card/SetRestRow';
+import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import LiveRestRow from 'app/shared_features/set_card/expanded/LiveRestRow';
 import WorkoutVideoButtonScreen from './card/expanded/form/WorkoutVideoButtonScreen';
 import WorkoutVideoRecorderScreen from './camera/WorkoutVideoRecorderScreen';
@@ -24,7 +24,6 @@ import ListLoadingFooter from '../history/loading/ListLoadingFooter';
 import TimerProgressBarScreen from 'app/features/workout/card/expanded/TimerProgressBarScreen';
 import SetSummary from 'app/shared_features/set_card/collapsed/SetSummary';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
-import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import WorkoutLoginBannerView from './login_banner/WorkoutLoginBannerView';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
@@ -171,12 +170,8 @@ class WorkoutList extends Component {
                             onPressRemove={() =>this.props.removeRep(item.setID, item.rep) }
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
-            case "rest":
-                return (<SetRestRow item={item} />);
-            case "delete":
-                return (
-                    <DeleteSetRow onPressDelete={() => this.props.deleteSet(item.setID)} />
-                );
+            case "footer":
+                return <SetFooterRow item={item} onPressDelete={this.props.deleteSet} />;
             case "working set header":
                 return (
                     <View style={{marginTop: 15}}>

@@ -1,3 +1,6 @@
+// NOTE: THIS HAS BEEN REMOVED AND INSTEADM ERGED INTO REST ROW
+// TODO: DELETE THIS ONCE TOTALLY REMOVED
+
 import React, {PureComponent} from 'react';
 import {
     View,

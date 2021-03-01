@@ -18,13 +18,12 @@ import UserLoggedOutPanel from './logged_out/UserLoggedOutPanel';
 import ListLoadingFooter from '../history/loading/ListLoadingFooter';
 import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
 import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
-import SetRestRow from 'app/shared_features/set_card/SetRestRow';
+import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import HistoryVideoButtonScreen from './card/expanded/form/HistoryVideoButtonScreen';
 import HistoryVideoRecorderScreen from './camera/HistoryVideoRecorderScreen';
 import HistoryVideoPlayerScreen from './video/HistoryVideoPlayerScreen';
 import SetSummary from 'app/shared_features/set_card/collapsed/SetSummary';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
-import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 
@@ -144,13 +143,9 @@ class HistoryList extends Component {
                 } else {
                     return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
                 }
-            case "rest":
+            case "footer":
                 return (
-                    <SetRestRow item={item} />
-                );
-            case "delete":
-                return (
-                    <DeleteSetRow onPressDelete={() => this.props.deleteSet(item.setID)} />
+                    <SetFooterRow item={item} onPressDelete={this.props.deleteSet} />
                 );
             default:
                 break;

@@ -1,8 +1,10 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {
     View,
     StyleSheet,
-    Text
+    Text,
+    Alert,
+    TouchableOpacity,
 } from 'react-native';
 import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 
@@ -14,30 +16,39 @@ export default props => {
         var marginBottom = 15;
     } else if (props.item.isCollapsed) {
         var marginTop = 0;
-        var marginBottom = 15;
+        var marginBottom = 10;
     } else {
-        var marginTop = 15;
-        var marginBottom = 0;
+        var marginTop = 5;
+        var marginBottom = 10;
     }
 
-    const tappedButton = () => {
+    const tapped3DButton = () => {
         Alert.alert('hi')
         // props.tappedButton(props.setID);
     };
 
+    const tappedDeleteButton = () => {
+        console.tron.log(`on press delete ${props.item.setID}`);
+        props.onPressDelete(props.item.setID);
+    };
+
     if (props.item.show3D) {
         var button =<OutlineButton
-            style={styles.button}
+            style={styles.accessoryButton}
             image={image}
-            onPress={tappedButton}
+            onPress={tapped3DButton}
             text='3D' />;
+    } else if (!props.item.isWorkingSet && !props.item.isCollapsed) {
+        var button = <TouchableOpacity onPress={tappedDeleteButton} style={styles.accessoryButton}>
+            <Text style={styles.deleteText}>Delete Set</Text>
+        </TouchableOpacity>
     } else {
         var button = null;
     }
 
     return (
         <View style={[styles.border, styles.container]}>
-            <Text style={{textAlign: 'center', color: 'gray', marginBottom: marginBottom, marginTop: marginTop}}>{ props.item.rest }</Text>
+            <Text style={{textAlign: 'center', color: 'gray', marginBottom, marginTop}}>{ props.item.rest }</Text>
             {button}
         </View>
     );
@@ -46,7 +57,6 @@ export default props => {
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor:'white',
@@ -59,9 +69,13 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderBottomWidth: 0,
     },
-    button: {
+    accessoryButton: {
         position: 'absolute',
         right: 5,
         bottom: 5,
-    }
+    },
+    deleteText: {
+        color: 'red',
+        padding: 5,
+    },
 });

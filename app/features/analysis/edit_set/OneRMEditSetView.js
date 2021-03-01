@@ -20,7 +20,7 @@ import OneRMEditSetVideoPlayerScreen from './video/OneRMEditSetVideoPlayerScreen
 
 import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
 import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
-import SetRestRow from 'app/shared_features/set_card/SetRestRow';
+import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
 import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
@@ -142,7 +142,7 @@ class OneRMEditSetView extends Component {
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
             case "rest":
-                return (<SetRestRow item={item} />);
+                return (<SetFooterRow item={item} />);
             case "delete":
                 return (
                     <DeleteSetRow onPressDelete={() => this.props.deleteSet(item.setID)} />

@@ -107,33 +107,26 @@ const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
             Array.prototype.push.apply(array, createRowViewModels(set, shouldShowRemoved));
         }
 
-        // rest footer
-        let hasRest = false;
+        // footer with rest, 3d, and delete
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
-            if (isCollapsed && setHasUnremovedRepWith3D) {
-                // add rest footer anyways just for the 3D button
-                hasRest = true;
-                array.push(createRestVM(set, null, isCollapsed, setHasUnremovedRepWith3D));
-            }
-        } else if (!isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
+        }
+        let hasFooter = false;
+        if (!isRemoved && (!isCollapsed || (!isInitialSet && lastSetEndTime !== null) || setHasUnremovedRepWith3D)) {
             // add rest footer if valid
-            if (lastSetEndTime !== null || setHasUnremovedRepWith3D) {
-                hasRest = true;
-                array.push(createRestVM(set, lastSetEndTime, isCollapsed, setHasUnremovedRepWith3D));
-            }
-
-            // update variable for calculation purposes
+            // ALWAYS shows up when expanded regardless of rest, as it needs to have delete
+            // on collapsed, it only shows up if REST or if has 3D
+            hasFooter = true;
+            array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, setHasUnremovedRepWith3D));
+        }
+        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
+            // update end time for calculation purposes
             lastSetEndTime = SetUtils.endTime(set);
         }
 
-        // delete set row
-        if (!isRemoved && !isCollapsed) {
-            array.push(createDeleteVM(set));
-        } else {
-            array.push(createBottomBorder(set, !hasRest));
-        }
+        // bottom border
+        array.push(createBottomBorder(set, !hasFooter && !isRemoved));
 
         // insert set card data
         Array.prototype.splice.apply(section.data, array);
@@ -304,27 +297,21 @@ const createRowViewModels = (set, shouldShowRemoved) => {
     return array;
 };
 
-const createRestVM = (set, lastSetEndTime, isCollapsed, setHasRepWith3D) => {
+const createFooterVM = (set, lastSetEndTime, isCollapsed, setHasRepWith3D) => {
     let rest = null;
     if (lastSetEndTime) {
         const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
         rest = DateUtils.restInSentenceFormat(restInMS);
     }
-    let footerVM = {
-        type: "rest",
+    return {
+        type: "footer",
         rest,
         key: set.setID + 'rest',
+        setID: set.setID,
         isCollapsed: isCollapsed,
         show3D: isCollapsed && setHasRepWith3D,
     };
-    return footerVM;
 };
-
-const createDeleteVM = (set) => ({
-    type: "delete",
-    setID: set.setID,
-    key: set.setID + 'delete',
-});
 
 const createBottomBorder = (set, isPadded) => ({
     type: "bottom border",
