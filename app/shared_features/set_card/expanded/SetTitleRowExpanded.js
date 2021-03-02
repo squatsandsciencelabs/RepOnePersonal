@@ -51,7 +51,7 @@ class SetTitleRowExpanded extends Component {
                         <Text style={styles.detailText}>{this._renderSetNumber()}</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.chevronContainer} onPress={() => this.props.tappedCollapse(this.props.setID)}>
+                <TouchableOpacity style={styles.chevronContainer} onPress={() => this.props.isCollapsable ? this.props.tappedCollapse(this.props.setID) : false }>
                     {this._renderChevron()}
                 </TouchableOpacity>
             </View>

@@ -159,9 +159,6 @@ class OneRMEditSetView extends Component {
                 renderItem={({item, index, section}) => this._renderRow(section, index, item)}
                 renderSectionHeader={({section}) => this._renderSectionHeader(section) }
                 sections={this.props.sections}
-                getItemLayout={(data, index) => {
-                    return { length: 500, offset: 53 * index, index: index };
-                }}
                 style = {{padding: 10, backgroundColor: '#f2f2f2'}}
             />);
         }
