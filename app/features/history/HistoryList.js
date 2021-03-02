@@ -127,7 +127,7 @@ class HistoryList extends Component {
             case "open 3d button":
                 return (
                     <Open3DRow />
-                );                        
+                );
             case "subheader":
                 return (
                     <SetDataLabelRow />

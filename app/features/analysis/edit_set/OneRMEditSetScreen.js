@@ -86,6 +86,9 @@ const createViewModels = (sets, setID, metric) => {
                 array.push(createTitleViewModel(set, setNumber));
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
+                if (SetUtils.hasUnremovedRepWith3D(set)) {
+                    array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                }
                 if (set.reps.length > 0) {
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }

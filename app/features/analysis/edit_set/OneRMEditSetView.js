@@ -23,6 +23,8 @@ import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
+import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
+
 import * as Device from 'app/utility/Device';
 
 // TODO: add a close button on this shit
@@ -131,6 +133,10 @@ class OneRMEditSetView extends Component {
                                 }}
                             />
                         </View>);
+            case "open 3d button":
+                return (
+                    <Open3DRow />
+                );
             case "subheader":
                 return (
                     <SetDataLabelRow />
