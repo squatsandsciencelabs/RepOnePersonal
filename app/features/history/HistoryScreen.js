@@ -126,7 +126,9 @@ const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
         }
 
         // bottom border
-        array.push(createBottomBorder(set, !hasFooter && !isRemoved));
+        if (!hasFooter) {
+            array.push(createBottomBorder(set, !isRemoved));
+        }
 
         // insert set card data
         Array.prototype.splice.apply(section.data, array);

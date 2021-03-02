@@ -122,8 +122,8 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                 // if no working set footer vm, add bottom border. no need if working set footer with live rest is visible
                 array.push(createBottomBorder(set, false));
             }
-        } else {
-            array.push(createBottomBorder(set, !hasFooter && !isRemoved));
+        } else if (!hasFooter) {
+            array.push(createBottomBorder(set, !isRemoved));
         }
 
         // insert set card data

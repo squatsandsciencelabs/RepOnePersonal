@@ -62,12 +62,13 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         textAlign: 'center',
         position: 'relative',
+        marginBottom: 15,
     },
     border: {
         borderColor: '#e0e0e0',
         borderLeftWidth: 1,
         borderRightWidth: 1,
-        borderBottomWidth: 0,
+        borderBottomWidth: 1,
     },
     accessoryButton: {
         position: 'absolute',
