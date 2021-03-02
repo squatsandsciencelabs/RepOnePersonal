@@ -22,7 +22,6 @@ import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelR
 import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
-import DeleteSetRow from 'app/shared_features/set_card/expanded/DeleteSetRow';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import * as Device from 'app/utility/Device';
 
@@ -141,12 +140,8 @@ class OneRMEditSetView extends Component {
                             onPressRemove={() =>this.props.removeRep(item.setID, item.rep) }
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
-            case "rest":
-                return (<SetFooterRow item={item} />);
-            case "delete":
-                return (
-                    <DeleteSetRow onPressDelete={() => this.props.deleteSet(item.setID)} />
-                );
+            case "footer":
+                return (<SetFooterRow item={item} onPressDelete={this.props.deleteSet} />);
             default:
                 break;
         }

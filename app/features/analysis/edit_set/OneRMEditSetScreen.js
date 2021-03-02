@@ -90,10 +90,7 @@ const createViewModels = (sets, setID, metric) => {
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }
                 Array.prototype.push.apply(array, createRowViewModels(set));
-                if (!isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null) {
-                    array.push(createRestVM(set, lastSetEndTime));
-                }
-                array.push(createDeleteVM(set));
+                array.push(createFooterVM(set, !isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null ? lastSetEndTime : null));
             } else {
                 array.push(createRestoreViewModel(set));
             }
@@ -269,22 +266,22 @@ const createRowViewModels = (set) => {
     return array;
 };
 
-const createRestVM = (set, lastSetEndTime) => {
-    let restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+const createFooterVM = (set, lastSetEndTime) => {
+    let rest = null;
+    if (lastSetEndTime) {
+        const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+        rest = DateUtils.restInSentenceFormat(restInMS);
+    }
     let restVM = {
-        type: "rest",
-        rest: DateUtils.restInSentenceFormat(restInMS),
+        type: "footer",
+        rest,
+        setID: set.setID,
         key: set.setID + 'rest',
         isCollapsed: false,
+        show3D: false,
     };
     return restVM;
 };
-
-const createDeleteVM = (set) => ({
-    type: "delete",
-    setID: set.setID,
-    key: set.setID + 'delete',
-});
 
 // workout sets
 

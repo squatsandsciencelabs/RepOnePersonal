@@ -10,6 +10,9 @@ target 'RepOnePersonal' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  # Charts, as it doesn't seem to work normally
+  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
+
   # Firebase Pods
   pod 'Firebase/Core', '~> 6.3.0'
   pod 'Firebase/Messaging', '~> 6.3.0'

@@ -78,7 +78,6 @@ export const calcE1RM = () => (dispatch, getState) => {
     const results = OneRMCalculator.calculate1RM(exercise, tagsToInclude, tagsToExclude, daysRange, velocity, metric, allSets);
 
     // analytics
-
     const oneRMAnalyticsParams = analyticsParams(
         exercise,
         tagsToInclude ? tagsToInclude.length : 0,

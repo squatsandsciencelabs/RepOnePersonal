@@ -11,7 +11,7 @@ class OneRMDebugView extends Component {
     render() {
         if (this.props.visible) {
             return (
-                <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton]} onPress={ () => this.props.onPressButton() } >
+                <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton]} onPress={this.props.onPressButton} >
                     <Text style={[SETTINGS_PANEL_STYLES.buttonText]}>Enable Debug Data</Text>
                 </TouchableOpacity>
             );

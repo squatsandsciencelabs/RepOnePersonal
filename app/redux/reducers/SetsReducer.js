@@ -711,6 +711,15 @@ const overrideWithTestData = (state, action) => {
                     if (rep.time) {
                         rep.time = addTime(rep.time, dateDifference);
                     }
+                    const data = rep.data;
+                    rep.averageVelocity = Math.round(data[2] * 1000);
+                    rep.rom = Math.round(data[3]);
+                    rep.peakVelocity = Math.round(data[4] * 1000);
+                    rep.peakHeight = Math.round(data[5] / 100 * rep.rom); // need to convert % to number
+                    rep.duration = data[6];
+                    rep.totalSampleCount = 100; // bullshit, got no 3d data
+                    rep.linear3DAverageVelocity = rep.averageVelocity; // just make it average vel
+                    rep.linear3DROM = rep.rom; // just make it rom
                 }
             }
             historyData[property] = set;
