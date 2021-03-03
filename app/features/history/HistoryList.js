@@ -126,7 +126,7 @@ class HistoryList extends Component {
                         </View>);
             case "open 3d button":
                 return (
-                    <Open3DRow />
+                    <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
             case "subheader":
                 return (
@@ -145,7 +145,7 @@ class HistoryList extends Component {
                 }
             case "footer":
                 return (
-                    <SetFooterRow item={item} onPressDelete={this.props.deleteSet} />
+                    <SetFooterRow item={item} onPressDelete={this.props.deleteSet} open3D={this.props.open3D} />
                 );
             default:
                 break;

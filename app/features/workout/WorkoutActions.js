@@ -3,6 +3,7 @@ import {
     EXPAND_WORKOUT_SET,
     DELETE_WORKOUT_SET,
     RESTORE_WORKOUT_SET,
+    SHOW_VISUALIZATION_MODAL,
 } from 'app/configs+constants/ActionTypes';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
@@ -40,6 +41,14 @@ export const restoreRep = (setID, repIndex) => SetsActionCreators.restoreWorkout
 
 export const endSet = () => {
     return SetsActionCreators.endSet(true, false);
+};
+
+export const open3D = setID => {
+    Analytics.setCurrentScreen('3d_visualization');
+    return {
+        type: SHOW_VISUALIZATION_MODAL,
+        setID,
+    };
 };
 
 // ANALYTICS

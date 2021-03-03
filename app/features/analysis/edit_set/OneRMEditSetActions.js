@@ -1,5 +1,6 @@
 import {
     DISMISS_EDIT_1RM_SET,
+    SHOW_VISUALIZATION_MODAL,
 } from 'app/configs+constants/ActionTypes';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as Analytics from 'app/services/Analytics';
@@ -51,6 +52,14 @@ export const dismissEditSet = () => (dispatch, getState) => {
     dispatch({
         type: DISMISS_EDIT_1RM_SET
     });
+};
+
+export const open3D = setID => {
+    Analytics.setCurrentScreen('3d_visualization');
+    return {
+        type: SHOW_VISUALIZATION_MODAL,
+        setID,
+    };
 };
 
 // ANALYTICS

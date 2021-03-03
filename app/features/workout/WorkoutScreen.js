@@ -72,7 +72,7 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                 }
                 if (isLastSet || set.reps.length > 0) {
                     if ((isLastSet && can3D) || setHasUnremovedRepWith3D) {
-                        array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                        array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
                     }
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }
@@ -371,6 +371,7 @@ const mapDispatchToProps = (dispatch) => {
         deleteSet: Actions.deleteSet,
         restoreSet: Actions.restoreSet,
         getDefaultMetric: SetsActionCreators.getDefaultMetric,
+        open3D: Actions.open3D,
         tappedLoginBanner: Actions.tappedLoginBanner,
     }, dispatch);
 };

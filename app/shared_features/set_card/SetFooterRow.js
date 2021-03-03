@@ -23,12 +23,10 @@ export default props => {
     }
 
     const tapped3DButton = () => {
-        Alert.alert('hi')
-        // props.tappedButton(props.setID);
+        props.open3D(props.item.setID);
     };
 
     const tappedDeleteButton = () => {
-        console.tron.log(`on press delete ${props.item.setID}`);
         props.onPressDelete(props.item.setID);
     };
 

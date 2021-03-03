@@ -14,8 +14,7 @@ const image = require('app/appearance/images/3d.png');
 export default props => {
 
     const tappedButton = () => {
-        Alert.alert('hi')
-        // props.tappedButton(props.setID);
+        props.open3D(props.setID);
     };
 
     return (<View style={styles.container}>

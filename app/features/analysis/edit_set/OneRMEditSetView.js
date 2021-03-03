@@ -135,7 +135,7 @@ class OneRMEditSetView extends Component {
                         </View>);
             case "open 3d button":
                 return (
-                    <Open3DRow />
+                    <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
             case "subheader":
                 return (
@@ -147,6 +147,7 @@ class OneRMEditSetView extends Component {
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
             case "footer":
+                // shouldn't need open 3d as it should never open 3d from here
                 return (<SetFooterRow item={item} onPressDelete={this.props.deleteSet} />);
             default:
                 break;

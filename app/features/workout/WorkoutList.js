@@ -159,7 +159,7 @@ class WorkoutList extends Component {
                         </View>);
             case "open 3d button":
                 return (
-                    <Open3DRow />
+                    <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
             case "subheader":
                 return (
@@ -171,7 +171,7 @@ class WorkoutList extends Component {
                             onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
                         />);
             case "footer":
-                return <SetFooterRow item={item} onPressDelete={this.props.deleteSet} />;
+                return <SetFooterRow item={item} onPressDelete={this.props.deleteSet} open3D={this.props.open3D} />;
             case "working set header":
                 return (
                     <View style={{marginTop: 15}}>

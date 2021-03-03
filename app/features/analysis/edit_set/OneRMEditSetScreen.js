@@ -87,7 +87,7 @@ const createViewModels = (sets, setID, metric) => {
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
                 if (SetUtils.hasUnremovedRepWith3D(set)) {
-                    array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                    array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
                 }
                 if (set.reps.length > 0) {
                     array.push({type: "subheader", key: set.setID+"subheader"});
@@ -341,6 +341,7 @@ const mapDispatchToProps = (dispatch) => {
         restoreSet: Actions.restoreSet,
         removeRep: Actions.removeRep,
         restoreRep: Actions.restoreRep,
+        open3D: Actions.open3D,
         dismissModal: Actions.dismissEditSet,
     }, dispatch);
 };

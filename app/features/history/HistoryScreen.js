@@ -89,7 +89,7 @@ const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
                 }
                 if ((shouldShowRemoved && !SetUtils.hasNoReps(set)) || (!shouldShowRemoved && SetUtils.numValidUnremovedReps(set) > 0)) { // TODO: might have bug where set has just 1 invalid rep?
                     if (setHasUnremovedRepWith3D) {
-                        array.push({type: 'open 3d button', key: set.setID+"open 3d button"}); // TODO: update this better
+                        array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
                     }
                     array.push({type: "subheader", key: set.setID+"subheader"});
                 }
@@ -350,6 +350,7 @@ const mapDispatchToProps = (dispatch) => {
         restoreRep: Actions.restoreRep,
         deleteSet: Actions.deleteSet,
         restoreSet: Actions.restoreSet,
+        open3D: Actions.open3D,
         finishLoading: Actions.finishLoading,
         presentHistoryFilter: Actions.presentHistoryFilter,
     }, dispatch);

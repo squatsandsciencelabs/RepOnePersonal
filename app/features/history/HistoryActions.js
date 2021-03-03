@@ -3,6 +3,7 @@ import {
     COLLAPSE_HISTORY_SET,
     EXPAND_HISTORY_SET,
     PRESENT_HISTORY_FILTER,
+    SHOW_VISUALIZATION_MODAL,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
@@ -39,5 +40,13 @@ export const presentHistoryFilter = () => {
 
     return {
         type: PRESENT_HISTORY_FILTER,
+    };
+};
+
+export const open3D = setID => {
+    Analytics.setCurrentScreen('3d_visualization');
+    return {
+        type: SHOW_VISUALIZATION_MODAL,
+        setID,
     };
 };
