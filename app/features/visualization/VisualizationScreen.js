@@ -2,11 +2,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import VisualizationView from './VisualizationView';
-import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
+import * as VisualizationSelectors from 'app/redux/selectors/VisualizationSelectors';
 
 const mapStateToProps = (state) => {
     return {
-        isShowing: SettingsSelectors.getIsShowingVisualization(state),
+        isShowing: VisualizationSelectors.getIsShowingVisualization(state),
    };
 };
 

@@ -18,6 +18,7 @@ import SurveyReducer from './SurveyReducer';
 import OTAReducer from './OTAReducer';
 import CalibrationReducer from './CalibrationReducer';
 import ScalarReducer from './ScalarReducer';
+import VisualizationReducer from './VisualizationReducer';
 
 export default reducers = combineReducers({
     sets: SetsReducer,
@@ -39,4 +40,5 @@ export default reducers = combineReducers({
     ota: OTAReducer,
     calibration: CalibrationReducer,
     scalar: ScalarReducer,
+    visualization: VisualizationReducer,
 });
