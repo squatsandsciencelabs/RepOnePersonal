@@ -4,9 +4,8 @@ import {
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
-   isShowingVisualization: false,
    setID: null,
-   rep: null, // this one is weird, should it be index or should it be the id itself? Tough as it shouldn't loop through removed or invalid ones after all
+   repID: null,
 };
 
 export default (state = defaultState, action) => {
@@ -14,12 +13,13 @@ export default (state = defaultState, action) => {
         case SHOW_VISUALIZATION_MODAL:
             return {
                 ...state,
-                isShowingVisualization: true,
+                setID: action.setID,
             };
         case HIDE_VISUALIZATION_MODAL:
             return {
                 ...state,
-                isShowingVisualization: false,
+                setID: null,
+                repID: null,
             };
         default:
             return state;
