@@ -13,7 +13,16 @@ if (__DEV__) {
     .use(reactotronRedux()) // add all built-in react native plugins
     .connect() // let's connect!
 
-    console.tron = Reactotron
+    console.tron = {
+        log: (msg) => {
+            console.log(msg);
+            Reactotron.log(msg);
+        },
+        display: (obj) => {
+            console.log(obj.value)
+            Reactotron.display(obj);
+        },
+    };
 } else {
     // production, remove tron logs
     console.tron = {};
