@@ -18,6 +18,10 @@ import {
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 
+
+
+/// THeSE ARE VALUES TO BE PASSED IN!
+
 const data = [
   0,	-3219,	4398,
   0,	-3021,	4566,
@@ -492,18 +496,15 @@ speeds.forEach(s => {
 const vertices = data.map(x => x / 100);
 
 // helpers
-let timeout;
-let loaded = false;
 const midpointIndex = Math.floor(times.length/2) * 3;
-let prevIndex = midpointIndex;
-let currentIndex = midpointIndex;
-let points;
+
+
+
+
+// HELPER CONSTANTS
 
 // animations
 const zoomDistance = 50;
-let sphereVisible = false;
-let cameraTween = null;
-let sphereTween = null;
 
 // slider visuals
 if (Platform.OS === 'ios') {
@@ -512,400 +513,409 @@ if (Platform.OS === 'ios') {
   var thumbTintColor = '#368fff';
 }
 
+// default up
+THREE.Object3D.DefaultUp.set(0, 0, 1);
+
 export default function App(props) {
-  const [camera, setCamera] = React.useState(null);
-  const [foobar, setFoobar] = React.useState(false);
-  const orbitShit = React.useRef();
-
-  React.useEffect(() => {
-    // Clear the animation loop when the component unmounts
-    return () => {
-      console.tron.log(`clear 3d mode`);
-      clearTimeout(timeout);
-      timeout = null;
-      loaded = false;
-      prevIndex = midpointIndex;
-      currentIndex = midpointIndex;
-      points = null;
-      sphereVisible = false;
-      cameraTween = null;
-      sphereTween = null;
-    };
-  }, []);
-
-  console.tron.log(`initialize 3d mode`);
-
-  // default up
-  THREE.Object3D.DefaultUp.set(0, 0, 1);
-
-  const zoomTo = (newIndex) => {
-    if (newIndex < 0 || newIndex >= data.length) {
-      return;
-    }
-
-    if (cameraTween) { cameraTween.stop(); }
-
-    const target = orbitShit.current.getControls().target;
-    const from = { x: target.x, y: target.y, z: target.z };
-    const coords = { x: target.x, y: target.y, z: target.z };
-    const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
-    const cameraOrig = camera.position.clone();
-
-    cameraTween = new TWEEN.Tween(coords)
-      .to(to, 500)
-      .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(() => {
-        camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
-        orbitShit.current.getControls().target.set( coords.x, coords.y, coords.z );
-        orbitShit.current.getControls().update();
-      })
-      .onComplete(() => {
-        cameraTween = null;
-      })
-      .start();
-      currentIndex = newIndex;
-      setFoobar(!foobar)
-  };
-
-  const lookTop = () => {
-    // camera.position.set(vertices[vertices.length-3]+.0000001, vertices[vertices.length-2], vertices[vertices.length-1]+zoomDistance);
-    camera.position.set(vertices[0]+.0000001, vertices[1], vertices[2]+zoomDistance+(vertices[2]-vertices[0]));
-    // orbitShit.current.getControls().target.set( vertices[vertices.length-3], vertices[vertices.length-2], vertices[vertices.length-1] );
-    orbitShit.current.getControls().target.set( vertices[0], vertices[1], vertices[2] );
-    orbitShit.current.getControls().update();
-    // currentIndex = vertices.length-3;
-    currentIndex = 0;
-    setFoobar(!foobar)
-  };
-
-  const lookFront = () => {
-    camera.position.set(vertices[midpointIndex]+zoomDistance, vertices[midpointIndex+1], vertices[midpointIndex+2]);
-    orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
-    orbitShit.current.getControls().update();
-    currentIndex = midpointIndex;
-    setFoobar(!foobar)
-  };
-
-  const lookSide = () => {
-    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
-    orbitShit.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
-    orbitShit.current.getControls().update();
-    currentIndex = midpointIndex;
-    setFoobar(!foobar)
-  };
-
-  const onContextCreate = async (gl) => {
-    console.tron.log(`on context create`);
-    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-
-    // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
-    renderer.setSize(width, height);
-    renderer.setClearColor(0xffffff);
-
-    // camera
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-    camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
-    setCamera(camera);
-
-    // scene
-    const scene = new Scene();
-    // scene.scale.set(-1, 1, 1); // depends on coordinate plane
-
-    // light
-    const ambientLight = new AmbientLight( 0xffffff, 1, 100);
-    scene.add( ambientLight );
-
-    // skysphere
-    const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
-    const sphereMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(0.8, 0.8, 0.8),
-        side: THREE.BackSide,
-        wireframe: true,
-        opacity: 0,
-        transparent: true,
+    // NOTE: we do NOT want re-renders of the component in most cases due to rendering being handled by GLView
+    // therefore, modify the state directly here, NEVER call setState
+    const [state, setState] = React.useState({
+        points: [],
+        selected: [],
+        currentIndex: midpointIndex,
+        timeout: null,
+        sphereVisible: false,
+        cameraTween: null,
+        sphereTween: null,
+        isLoaded: false,
     });
-    const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    scene.add(sphere);
 
-    // grid position helpers
-    const helperGeo = new THREE.SphereBufferGeometry(0.5, 8, 8);
-    const helperMat1 = new THREE.MeshBasicMaterial({color: 'red'});
-    const helper1 = new THREE.Mesh(helperGeo, helperMat1);
-    helper1.position.set(0, 0, 0);
-    scene.add(helper1);
-    const helperMat2 = new THREE.MeshBasicMaterial({color: 'green'});
-    const helper2 = new THREE.Mesh(helperGeo, helperMat2);
-    helper2.position.set(1, 0, 0);
-    scene.add(helper2);
-    const helperMat3 = new THREE.MeshBasicMaterial({color: 'blue'});
-    const helper3 = new THREE.Mesh(helperGeo, helperMat3);
-    helper3.position.set(0, 1, 0);
-    scene.add(helper3)
-    const helperMat4 = new THREE.MeshBasicMaterial({color: 'yellow'});
-    const helper4 = new THREE.Mesh(helperGeo, helperMat4);
-    helper4.position.set(0, 0, 1);
-    scene.add(helper4)
+    // camera, separate from general state just in case as it's referenced directly in the render function
+    const [camera, setCamera] = React.useState(null);
 
-    // sensor
-    const model = await loadAsync(require('app/appearance/models/sensor.obj'));
-    const texture = await loadAsync(require('app/appearance/images/adam.png'));
-    model.traverse((o) => {
-      if (o.isMesh) {
-        o.material.map = texture;
-      }
-    });
-    model.position.set(vertices[0], vertices[1], vertices[2]-10);
-    model.rotateX(Math.PI * 0.5);
-    model.rotateY(Math.PI * 0.5);
-    scene.add(model);
+    // hack to force re-renders without calling forceUpdate directly
+    // in essence, if current index change actually NEEDS a force update, call this
+    const [boolean, setBoolean] = React.useState(false);
 
-    // recalculate selected
-    const selected = [];
-    for (let i=0; i<data.length; i+=3) {
-      selected.push(i === currentIndex ? 1.0 : 0.0);
-    }
+    // refs
+    const orbitControls = React.useRef();
 
-    // draw
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-    geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-    geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
-    const material = new THREE.ShaderMaterial({
-      vertexColors: THREE.VertexColors,
-      uniforms: {
-          size: {value: 20},
-          scale: {value: 10},
-      },
-      defines: {
-        USE_MAP: "",
-        USE_SIZEATTENUATION: ""
-      },
-      vertexShader: `
-      uniform float size;
-      uniform float scale;
-      in float selected;
-      out float vSelected;
-      #include <common>
-      #include <color_pars_vertex>
-      #include <fog_pars_vertex>
-      #include <morphtarget_pars_vertex>
-      #include <logdepthbuf_pars_vertex>
-      #include <clipping_planes_pars_vertex>
-      void main() {
-        #include <color_vertex>
-        #include <begin_vertex>
-        #include <morphtarget_vertex>
-        #include <project_vertex>
-        vSelected = selected;
-        if (vSelected > 0.0) {
-          gl_PointSize = size * 3.0;
-        } else {
-          gl_PointSize = size;
-        }
-        #ifdef USE_SIZEATTENUATION
-          bool isPerspective = isPerspectiveMatrix( projectionMatrix );
-          if ( isPerspective ) {
-            gl_PointSize *= ( scale / - mvPosition.z );
-            gl_PointSize = max(gl_PointSize, vSelected > 0.0 ? 30.0 : 10.0);
-          }
-        #endif
-        #include <logdepthbuf_vertex>
-        #include <clipping_planes_vertex>
-        #include <worldpos_vertex>
-        #include <fog_vertex>
-      }
-      `,
-      fragmentShader: `
-      in vec3 vColor;
-      in float vSelected;
-      void main() {
-          if (vSelected > 0.0) {
-            vec2 xy = gl_PointCoord.xy - vec2(0.5);
-            float ll = length(xy);
-            if (ll > 0.5) discard;
-            if (ll > 0.25 && ll < 0.4) discard;
-            gl_FragColor = vec4(vColor, step(ll, 0.5));
-          } else {
-            vec2 xy = gl_PointCoord.xy - vec2(0.5);
-            float ll = length(xy);
-            if (ll > 0.5) discard;
-            gl_FragColor = vec4(vColor, step(ll, 0.5));
-          }
-      }
-      `
-    });
-    points = new THREE.Points( geometry, material );
-    scene.add( points );
+    React.useEffect(() => {
+        // Clear the animation loop when the component unmounts
+        return () => {
+            console.tron.log(`clear 3d mode, timeout is ${state.timeout}`);
+            clearTimeout(state.timeout);
+        };
+    }, []);
 
-    // Setup an animation loop
-    const render = (time) => {
-      // was remved from view hierarchy
-      if (!orbitShit.current) {
-        console.tron.log(`render, but orbshit removed from view hierarchy`);
-        return;
-      }
-      const controls = orbitShit.current.getControls();
-      // hack just set initial point
-      // TODO: figure out right way to do this
-      if (!loaded && controls) {
-        console.tron.log(`render initialize target`);
-        loaded = true;
-        controls.target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
-        controls.update();
-      }
+    console.tron.log(`initialize 3d mode`);
 
-      // update animations
-      TWEEN.update(time);
+    const updateIndex = (newIndex, rerender=false) => {
+        // save it without re-rendering
+        state.currentIndex = newIndex;
 
-      // update target
-      if (prevIndex !== currentIndex) {
-        // recreate selected as somehow just modify it isn't enough
-        selected.length = 0;
+        // update target
+        state.selected.length = 0;
         for (let i=0; i<data.length; i+=3) {
-          selected.push(i === currentIndex ? 1.0 : 0.0);
+            state.selected.push(i === newIndex ? 1.0 : 0.0);
         }
-        points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( selected, 1 ) );
-        prevIndex = currentIndex;
-      }
+        state.points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) );
 
-      // update spherebox
-      if (controls) {
-        if (controls.state === 3) {
-          if (!sphereVisible) {
-            sphereVisible = true;
-
-            if (sphereTween) { sphereTween.stop() }
-
-            const opacity = {value: sphere.material.opacity};
-            sphereTween = new TWEEN.Tween(opacity)
-            .to({value: 1.0}, 300)
-            .easing(TWEEN.Easing.Quadratic.In)
-            .onUpdate(() => {
-              sphere.material.opacity = opacity.value;
-            })
-            .onComplete(() => {
-              sphereTween = null;
-            })
-            .start();
-          }
-        } else if (sphereVisible) {
-          sphereVisible = false;
-
-          if (sphereTween) { sphereTween.stop() }
-
-          const opacity = {value: sphere.material.opacity};
-          sphereTween = new TWEEN.Tween(opacity)
-          .to({value: 0.0}, 300)
-          .easing(TWEEN.Easing.Quadratic.Out)
-          .onUpdate(() => {
-            sphere.material.opacity = opacity.value;
-          })
-          .onComplete(() => {
-            sphereTween = null;
-          })
-          .start();
+        // rerender if needed
+        if (rerender) {
+            setBoolean(!boolean);
         }
-      }
-
-      timeout = requestAnimationFrame(render);
-      renderer.render(scene, camera);
-      gl.endFrameEXP();
     };
-    render();
-  };
 
-  return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    const zoomTo = (newIndex, rerender=false) => {
+        if (newIndex < 0 || newIndex >= data.length) {
+            return;
+        }
 
-      {/* 3d */}
-      <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitShit}>
-        <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
-      </OrbitControlsView>
+        if (state.cameraTween) { state.cameraTween.stop(); }
 
-      {/* next */}
-      <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
-        zoomTo(currentIndex+3);
-      }}><Text>NEXT</Text></TouchableHighlight>
+        const target = orbitControls.current.getControls().target;
+        const from = { x: target.x, y: target.y, z: target.z };
+        const coords = { x: target.x, y: target.y, z: target.z };
+        const to = { x: vertices[newIndex], y: vertices[newIndex+1], z: vertices[newIndex+2] };
+        const cameraOrig = camera.position.clone();
 
-      {/* slider */}
-      <View style={styles.sliderContainer}>
-        <View style={styles.sliderRotateContainer}>
-          <Slider
-              value={currentIndex / 3} 
-              style={styles.slider}
-              onValueChange={(value) => zoomTo(value * 3) }
-              minimumValue={0}
-              maximumValue={speeds.length-1}
-              step={1}
-              thumbTintColor={thumbTintColor}
-              minimumTrackTintColor={'#368fff'}
-              animateTransitions={true}
-          />
+        state.cameraTween = new TWEEN.Tween(coords)
+        .to(to, 500)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+            camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
+            orbitControls.current.getControls().target.set( coords.x, coords.y, coords.z );
+            orbitControls.current.getControls().update();
+        })
+        .onComplete(() => {
+            state.cameraTween = null;
+        })
+        .start();
+        updateIndex(newIndex, rerender);
+    };
+
+    const lookTop = () => {
+        camera.position.set(vertices[0]+.0000001, vertices[1], vertices[2]+zoomDistance+(vertices[2]-vertices[0]));
+        orbitControls.current.getControls().target.set( vertices[0], vertices[1], vertices[2] );
+        orbitControls.current.getControls().update();
+        updateIndex(0);
+    };
+
+    const lookFront = () => {
+        camera.position.set(vertices[midpointIndex]+zoomDistance, vertices[midpointIndex+1], vertices[midpointIndex+2]);
+        orbitControls.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+        orbitControls.current.getControls().update();
+        updateIndex(midpointIndex);
+    };
+
+    const lookSide = () => {
+        camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
+        orbitControls.current.getControls().target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+        orbitControls.current.getControls().update();
+        updateIndex(midpointIndex);
+    };
+
+    const onContextCreate = async (gl) => {
+        console.tron.log(`on context create`);
+        const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
+
+        // Create a WebGLRenderer without a DOM element
+        const renderer = new Renderer({ gl });
+        renderer.setSize(width, height);
+        renderer.setClearColor(0xffffff);
+
+        // camera
+        const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
+        camera.position.set(vertices[midpointIndex], vertices[midpointIndex+1]+zoomDistance, vertices[midpointIndex+2]);
+        setCamera(camera);
+
+        // scene
+        const scene = new Scene();
+        // scene.scale.set(-1, 1, 1); // depends on coordinate plane
+
+        // light
+        const ambientLight = new AmbientLight( 0xffffff, 1, 100);
+        scene.add( ambientLight );
+
+        // skysphere
+        const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(0.8, 0.8, 0.8),
+            side: THREE.BackSide,
+            wireframe: true,
+            opacity: 0,
+            transparent: true,
+        });
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        scene.add(sphere);
+
+        // grid position helpers
+        const helperGeo = new THREE.SphereBufferGeometry(0.5, 8, 8);
+        const helperMat1 = new THREE.MeshBasicMaterial({color: 'red'});
+        const helper1 = new THREE.Mesh(helperGeo, helperMat1);
+        helper1.position.set(0, 0, 0);
+        scene.add(helper1);
+        const helperMat2 = new THREE.MeshBasicMaterial({color: 'green'});
+        const helper2 = new THREE.Mesh(helperGeo, helperMat2);
+        helper2.position.set(1, 0, 0);
+        scene.add(helper2);
+        const helperMat3 = new THREE.MeshBasicMaterial({color: 'blue'});
+        const helper3 = new THREE.Mesh(helperGeo, helperMat3);
+        helper3.position.set(0, 1, 0);
+        scene.add(helper3)
+        const helperMat4 = new THREE.MeshBasicMaterial({color: 'yellow'});
+        const helper4 = new THREE.Mesh(helperGeo, helperMat4);
+        helper4.position.set(0, 0, 1);
+        scene.add(helper4)
+
+        // sensor
+        const model = await loadAsync(require('app/appearance/models/sensor.obj'));
+        const texture = await loadAsync(require('app/appearance/images/adam.png'));
+        model.traverse((o) => {
+            if (o.isMesh) {
+                o.material.map = texture;
+            }
+        });
+        model.position.set(vertices[0], vertices[1], vertices[2]-10);
+        model.rotateX(Math.PI * 0.5);
+        model.rotateY(Math.PI * 0.5);
+        scene.add(model);
+
+        // recalculate selected
+        for (let i=0; i<data.length; i+=3) {
+            state.selected.push(i === state.currentIndex ? 1.0 : 0.0);
+        }
+
+        // draw
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+        geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+        geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) );
+        const material = new THREE.ShaderMaterial({
+            vertexColors: THREE.VertexColors,
+            uniforms: {
+                size: {value: 20},
+                scale: {value: 10},
+            },
+            defines: {
+                USE_MAP: "",
+                USE_SIZEATTENUATION: ""
+            },
+            vertexShader: `
+                uniform float size;
+                uniform float scale;
+                in float selected;
+                out float vSelected;
+                #include <common>
+                #include <color_pars_vertex>
+                #include <fog_pars_vertex>
+                #include <morphtarget_pars_vertex>
+                #include <logdepthbuf_pars_vertex>
+                #include <clipping_planes_pars_vertex>
+                void main() {
+                    #include <color_vertex>
+                    #include <begin_vertex>
+                    #include <morphtarget_vertex>
+                    #include <project_vertex>
+                    vSelected = selected;
+                    if (vSelected > 0.0) {
+                    gl_PointSize = size * 3.0;
+                    } else {
+                    gl_PointSize = size;
+                    }
+                    #ifdef USE_SIZEATTENUATION
+                    bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+                    if ( isPerspective ) {
+                        gl_PointSize *= ( scale / - mvPosition.z );
+                        gl_PointSize = max(gl_PointSize, vSelected > 0.0 ? 30.0 : 10.0);
+                    }
+                    #endif
+                    #include <logdepthbuf_vertex>
+                    #include <clipping_planes_vertex>
+                    #include <worldpos_vertex>
+                    #include <fog_vertex>
+                }
+            `,
+            fragmentShader: `
+                in vec3 vColor;
+                in float vSelected;
+                void main() {
+                    if (vSelected > 0.0) {
+                        vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                        float ll = length(xy);
+                        if (ll > 0.5) discard;
+                        if (ll > 0.25 && ll < 0.4) discard;
+                        gl_FragColor = vec4(vColor, step(ll, 0.5));
+                    } else {
+                        vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                        float ll = length(xy);
+                        if (ll > 0.5) discard;
+                        gl_FragColor = vec4(vColor, step(ll, 0.5));
+                    }
+                }
+                `
+            });
+        const points = new THREE.Points( geometry, material );
+        scene.add(points);
+        state.points = points;
+
+        // Setup an animation loop
+        const render = (time) => {
+            // was remved from view hierarchy
+            if (!orbitControls.current) {
+                console.tron.log(`render, but orbshit removed from view hierarchy`);
+                return;
+            }
+            const controls = orbitControls.current.getControls();
+            // hack just set initial point
+            // TODO: figure out right way to do this as I don't really get an "onLoad" function callback FFS
+            if (!state.isLoaded && controls) {
+                console.tron.log(`render initialize target ${state.isLoaded}`);
+                state.isLoaded = true;
+                controls.target.set( vertices[midpointIndex], vertices[midpointIndex+1], vertices[midpointIndex+2] );
+                controls.update();
+            }
+
+            // update animations
+            TWEEN.update(time);
+
+            // update spherebox
+            if (controls) {
+                if (controls.state === 3) {
+                    if (!state.sphereVisible) {
+                        state.sphereVisible = true;
+
+                        if (state.sphereTween) { state.sphereTween.stop() }
+
+                        const opacity = {value: sphere.material.opacity};
+                        state.sphereTween = new TWEEN.Tween(opacity)
+                            .to({value: 1.0}, 300)
+                            .easing(TWEEN.Easing.Quadratic.In)
+                            .onUpdate(() => {
+                                sphere.material.opacity = opacity.value;
+                            })
+                            .onComplete(() => {
+                                state.sphereTween = null;
+                            })
+                            .start();
+                    }
+                } else if (state.sphereVisible) {
+                    state.sphereVisible = false;
+
+                    if (state.sphereTween) { state.sphereTween.stop() }
+
+                    const opacity = {value: sphere.material.opacity};
+                    state.sphereTween = new TWEEN.Tween(opacity)
+                        .to({value: 0.0}, 300)
+                        .easing(TWEEN.Easing.Quadratic.Out)
+                        .onUpdate(() => {
+                            sphere.material.opacity = opacity.value;
+                        })
+                        .onComplete(() => {
+                            state.sphereTween = null;
+                        })
+                        .start();
+                }
+            }
+
+            const timeout = requestAnimationFrame(render);
+            state.timeout = timeout;
+            renderer.render(scene, camera);
+            gl.endFrameEXP();
+        };
+        render();
+    };
+
+    return (<View style={{ flex: 1, backgroundColor: 'white' }}>
+
+        {/* 3d */}
+        <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControls}>
+            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
+        </OrbitControlsView>
+
+        {/* next */}
+        <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
+            zoomTo(state.currentIndex+3, true);
+        }}><Text>NEXT</Text></TouchableHighlight>
+
+        {/* slider */}
+        <View style={styles.sliderContainer}>
+            <View style={styles.sliderRotateContainer}>
+            <Slider
+                value={state.currentIndex / 3} 
+                style={styles.slider}
+                onValueChange={(value) => zoomTo(value * 3) }
+                minimumValue={0}
+                maximumValue={speeds.length-1}
+                step={1}
+                thumbTintColor={thumbTintColor}
+                minimumTrackTintColor={'#368fff'}
+                animateTransitions={true}
+            />
+            </View>
         </View>
-      </View>
 
-      {/* prev */}
-      <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
-        zoomTo(currentIndex-3);
-      }}><Text>PREV</Text></TouchableHighlight>
+        {/* prev */}
+        <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
+            zoomTo(state.currentIndex-3, true);
+        }}><Text>PREV</Text></TouchableHighlight>
 
-      {/* camera presets */}
-      <View style={styles.presetCamera}>
-        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
-        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
-        <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
-      </View>
+        {/* camera presets */}
+        <View style={styles.presetCamera}>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
+        </View>
 
-      {/* close */}
-      <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>CLOSE</Text></TouchableHighlight>
-    </View>
-  );
+        {/* close */}
+        <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>CLOSE</Text></TouchableHighlight>
+
+    </View>);
 }
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  sliderContainer: {
-    position: 'absolute',
-    top: 100,
-    bottom: 100,
-    right: 0,
-    width: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-
-  },
-  sliderRotateContainer: {
-    transform: [{ rotate: '-90deg' }],
-    flexDirection: 'column-reverse',
-    height: windowWidth,
-  },
-  slider: {
-    marginBottom: (windowWidth * 0.5) - 10,
-    width: windowHeight * 0.65,
-  },
-  presetCamera: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 70,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cameraItem: {
-    padding: 15,
-  },
-  close: {
-    position: 'absolute',
-    padding: 15,
-    top: 0,
-    left: 0,
-  }
+    sliderContainer: {
+        position: 'absolute',
+        top: 100,
+        bottom: 100,
+        right: 0,
+        width: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
+    sliderRotateContainer: {
+        transform: [{ rotate: '-90deg' }],
+        flexDirection: 'column-reverse',
+        height: windowWidth,
+    },
+    slider: {
+        marginBottom: (windowWidth * 0.5) - 10,
+        width: windowHeight * 0.65,
+    },
+    presetCamera: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 70,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cameraItem: {
+        padding: 15,
+    },
+    close: {
+        position: 'absolute',
+        padding: 15,
+        top: 0,
+        left: 0,
+    }
 });

@@ -25,6 +25,7 @@ export default props => {
             text='3D View' />
     </View>);
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
