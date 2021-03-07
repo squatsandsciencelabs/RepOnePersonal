@@ -42,12 +42,12 @@ export default function App(props) {
     const numPoints = props.numPoints;
 
     // helpers
-    const initialX = data[0].x / renderScale;
-    const initialY = data[0].y / renderScale;
-    const initialZ = data[0].z / renderScale;
-    const midX = data[midpointIndex].x / renderScale;
-    const midY = data[midpointIndex].y / renderScale;
-    const midZ = data[midpointIndex].z / renderScale;
+    const initialX = model ? data[0].x / renderScale : 0;
+    const initialY = model ? data[0].y / renderScale : 0;
+    const initialZ = model ? data[0].z / renderScal : 0;
+    const midX = model ? data[midpointIndex].x / renderScale : 0;
+    const midY = model ? data[midpointIndex].y / renderScale : 0;
+    const midZ = model ? data[midpointIndex].z / renderScal : 0;
 
     // NOTE: we do NOT want re-renders of the component in most cases due to rendering being handled by GLView
     // therefore, modify the state directly here for data changes

@@ -60,6 +60,10 @@ const getRep = createSelector(
 export const getRepModel = createSelector(
     getRep,
     rep => {
+        if (!rep) {
+            return null;
+        }
+        
         const vm = {
             averageVelocity: "Invalid",
             peakVelocity: "Invalid",
