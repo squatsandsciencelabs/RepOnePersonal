@@ -8,7 +8,11 @@ import * as VisualizationSelectors from 'app/redux/selectors/VisualizationSelect
 const mapStateToProps = state => {
     return {
         model: VisualizationSelectors.getRepModel(state),
-        data: VisualizationSelectors.getBulkData(state),
+        colors: VisualizationSelectors.getColors(state),
+        data: VisualizationSelectors.getData(state),
+        vertices: VisualizationSelectors.getVertices(state),
+        numPoints: VisualizationSelectors.getNumPoints(state),
+        midpointIndex: VisualizationSelectors.getMidpointIndex(state),
    };
 };
 

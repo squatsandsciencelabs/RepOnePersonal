@@ -43,7 +43,6 @@ const getReps = createSelector(
     }
 );
 
-// will be used directly for average vel, peak, bulk, etc. as no reason for additional layer of selectors on it
 const getRep = createSelector(
     getVisualizationRepID,
     getReps,
@@ -109,7 +108,71 @@ export const getRepModel = createSelector(
     }
 );
 
-export const getBulkData = state => getRep(state).bulkData;
+export const getData = createSelector(
+    getRep,
+    rep => {
+        if (!rep || !rep.bulkData) {
+            return [];
+        }
+
+        const data = [];
+        for (const index in rep.bulkData) {
+            data[parseInt(index)] = rep.bulkData[index];
+        }
+        return data;
+    }
+);
+
+export const getColors = createSelector(
+    getData,
+    data => {
+        if (data.length <= 0) {
+            return [];
+        }
+
+        const speeds = [0];
+        for (let i=1; i<data.length; i++) {
+            const deltaT = data[i].time-data[i-1].time;
+            const prevPoint = new THREE.Vector3(data[i-1].x, data[i-1].y, data[i-1].z);
+            const currentPoint = new THREE.Vector3(data[i].x, data[i].y, data[i].z);
+            const deltaD = prevPoint.distanceTo(currentPoint);
+            const speed = parseFloat(deltaD / deltaT);
+            speeds.push(speed);
+        }
+        const maxSpeed = Math.max(...speeds);
+        const halfSpeed = maxSpeed * 0.5;
+        const colors = [1, 0, 0];
+        speeds.forEach(s => {
+            const r = s <= halfSpeed ? 1 : 1 - ((s-halfSpeed) / halfSpeed);
+            const g = s >= halfSpeed ? 1 : s / halfSpeed;
+            colors.push(r, g, 0);
+        });
+        return colors;
+    }
+);
+
+const renderScale = 100;
+export const getVertices = createSelector(
+    getData,
+    data => {
+        const vertices = [];
+        data.forEach(d => {
+            vertices.push(d.x / renderScale);
+            vertices.push(d.y / renderScale);
+            vertices.push(d.z / renderScale);
+        });
+        return vertices;
+    }
+);
+
+export const getNumPoints = state => getData(state).length;
+
+export const getMidpointIndex = createSelector(
+    getNumPoints,
+    numPoints => {
+        return Math.floor(numPoints/2);
+    }
+);
 
 // TODO: get set description (includes set num which has to be calculated sadly), has to be sep due to calculations for it
 // TODO: is working set (so if rep is null, it can display waiting for reps)
