@@ -12,6 +12,7 @@ const mapStateToProps = state => {
 
         // navigation
         navigationText: VisualizationSelectors.getRepNavigationText(state),
+        repIndex: VisualizationSelectors.getSelectedRepIndex(state),
         prevRepIndex: VisualizationSelectors.getPrevRepIndex(state),
         nextRepIndex: VisualizationSelectors.getNextRepIndex(state),
 

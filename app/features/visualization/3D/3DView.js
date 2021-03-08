@@ -32,6 +32,72 @@ if (Platform.OS === 'ios') {
 // default up
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
+// rendering material
+const material = new THREE.ShaderMaterial({
+    vertexColors: THREE.VertexColors,
+    uniforms: {
+        size: {value: 20},
+        scale: {value: 10},
+    },
+    defines: {
+        USE_MAP: "",
+        USE_SIZEATTENUATION: ""
+    },
+    vertexShader: `
+        uniform float size;
+        uniform float scale;
+        in float selected;
+        out float vSelected;
+        #include <common>
+        #include <color_pars_vertex>
+        #include <fog_pars_vertex>
+        #include <morphtarget_pars_vertex>
+        #include <logdepthbuf_pars_vertex>
+        #include <clipping_planes_pars_vertex>
+        void main() {
+            #include <color_vertex>
+            #include <begin_vertex>
+            #include <morphtarget_vertex>
+            #include <project_vertex>
+            vSelected = selected;
+            if (vSelected > 0.0) {
+            gl_PointSize = size * 3.0;
+            } else {
+            gl_PointSize = size;
+            }
+            #ifdef USE_SIZEATTENUATION
+            bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+            if ( isPerspective ) {
+                gl_PointSize *= ( scale / - mvPosition.z );
+                gl_PointSize = max(gl_PointSize, vSelected > 0.0 ? 30.0 : 10.0);
+            }
+            #endif
+            #include <logdepthbuf_vertex>
+            #include <clipping_planes_vertex>
+            #include <worldpos_vertex>
+            #include <fog_vertex>
+        }
+    `,
+    fragmentShader: `
+        in vec3 vColor;
+        in float vSelected;
+        void main() {
+            if (vSelected > 0.0) {
+                vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                float ll = length(xy);
+                if (ll > 0.5) discard;
+                if (ll > 0.25 && ll < 0.4) discard;
+                gl_FragColor = vec4(vColor, step(ll, 0.5));
+            } else {
+                vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                float ll = length(xy);
+                if (ll > 0.5) discard;
+                gl_FragColor = vec4(vColor, step(ll, 0.5));
+            }
+        }
+        `
+});
+
 export default function App(props) {
     // pull from props
     const model = props.model;
@@ -53,7 +119,10 @@ export default function App(props) {
     // therefore, modify the state directly here for data changes
     // and for rerenders, for instance after sliding is completed, call setState({...state})
     const [state, setState] = React.useState({
+        repIndex: props.repIndex,
+        scene: null,
         points: null,
+        sensor: null,
         selected: [],
         currentIndex: midpointIndex,
         timeout: null,
@@ -164,6 +233,7 @@ export default function App(props) {
 
         // scene
         const scene = new Scene();
+        state.scene = scene;
         // scene.scale.set(-1, 1, 1); // depends on coordinate plane
 
         // light
@@ -202,17 +272,18 @@ export default function App(props) {
         // scene.add(helper4)
 
         // sensor
-        const model = await loadAsync(require('app/appearance/models/sensor.obj'));
+        const sensor = await loadAsync(require('app/appearance/models/sensor.obj'));
         const texture = await loadAsync(require('app/appearance/images/adam.png'));
-        model.traverse((o) => {
+        sensor.traverse((o) => {
             if (o.isMesh) {
                 o.material.map = texture;
             }
         });
-        model.position.set(initialX, initialY, initialZ-10);
-        model.rotateX(Math.PI * 0.5);
-        model.rotateY(Math.PI * 0.5);
-        scene.add(model);
+        sensor.position.set(initialX, initialY, initialZ-10);
+        sensor.rotateX(Math.PI * 0.5);
+        sensor.rotateY(Math.PI * 0.5);
+        scene.add(sensor);
+        state.sensor = sensor;
 
         // recalculate selected
         for (let i=0; i<numPoints; i++) {
@@ -224,70 +295,6 @@ export default function App(props) {
         geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
         geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
         geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) );
-        const material = new THREE.ShaderMaterial({
-            vertexColors: THREE.VertexColors,
-            uniforms: {
-                size: {value: 20},
-                scale: {value: 10},
-            },
-            defines: {
-                USE_MAP: "",
-                USE_SIZEATTENUATION: ""
-            },
-            vertexShader: `
-                uniform float size;
-                uniform float scale;
-                in float selected;
-                out float vSelected;
-                #include <common>
-                #include <color_pars_vertex>
-                #include <fog_pars_vertex>
-                #include <morphtarget_pars_vertex>
-                #include <logdepthbuf_pars_vertex>
-                #include <clipping_planes_pars_vertex>
-                void main() {
-                    #include <color_vertex>
-                    #include <begin_vertex>
-                    #include <morphtarget_vertex>
-                    #include <project_vertex>
-                    vSelected = selected;
-                    if (vSelected > 0.0) {
-                    gl_PointSize = size * 3.0;
-                    } else {
-                    gl_PointSize = size;
-                    }
-                    #ifdef USE_SIZEATTENUATION
-                    bool isPerspective = isPerspectiveMatrix( projectionMatrix );
-                    if ( isPerspective ) {
-                        gl_PointSize *= ( scale / - mvPosition.z );
-                        gl_PointSize = max(gl_PointSize, vSelected > 0.0 ? 30.0 : 10.0);
-                    }
-                    #endif
-                    #include <logdepthbuf_vertex>
-                    #include <clipping_planes_vertex>
-                    #include <worldpos_vertex>
-                    #include <fog_vertex>
-                }
-            `,
-            fragmentShader: `
-                in vec3 vColor;
-                in float vSelected;
-                void main() {
-                    if (vSelected > 0.0) {
-                        vec2 xy = gl_PointCoord.xy - vec2(0.5);
-                        float ll = length(xy);
-                        if (ll > 0.5) discard;
-                        if (ll > 0.25 && ll < 0.4) discard;
-                        gl_FragColor = vec4(vColor, step(ll, 0.5));
-                    } else {
-                        vec2 xy = gl_PointCoord.xy - vec2(0.5);
-                        float ll = length(xy);
-                        if (ll > 0.5) discard;
-                        gl_FragColor = vec4(vColor, step(ll, 0.5));
-                    }
-                }
-                `
-            });
         const points = new THREE.Points( geometry, material );
         scene.add(points);
         state.points = points;
@@ -359,6 +366,31 @@ export default function App(props) {
         render();
     };
 
+    // update points
+    if (props.repIndex !== state.repIndex && state.scene && state.points && state.sensor) {
+        // reset rep index
+        state.repIndex = props.repIndex;
+
+        // remove points
+        state.scene.remove(state.points);
+
+        // recreate points
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+        geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+        geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) ); // selected will be recreate with look side, so no need to redo it here
+        const points = new THREE.Points( geometry, material );
+        state.scene.add(points);
+        state.points = points;
+
+        // reposition sensor
+        state.sensor.position.set(initialX, initialY, initialZ-10);
+
+        // reposition
+        lookSide(); 
+    }
+
+    // render
     return (<View style={{ flex: 1, backgroundColor: 'white' }}>
 
         {/* 3d */}

@@ -43,7 +43,7 @@ const getReps = createSelector(
     }
 );
 
-const getSelectedRepIndex = createSelector(
+export const getSelectedRepIndex = createSelector(
     getVisualizationRepIndex,
     getReps,
     (index, reps) => {
