@@ -366,6 +366,13 @@ export default function App(props) {
             <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
         </OrbitControlsView>
 
+        {/* camera presets */}
+        <View style={styles.presetCamera}>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
+        </View>
+
         {/* next */}
         <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
             zoomTo(state.currentIndex+1, true);
@@ -393,13 +400,6 @@ export default function App(props) {
         <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
             zoomTo(state.currentIndex-1, true);
         }}><Text>PREV</Text></TouchableHighlight>
-
-        {/* camera presets */}
-        <View style={styles.presetCamera}>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
-        </View>
 
         {/* navigate */}
         <View style={styles.navigation}><Text>{props.navigationText}</Text></View>
@@ -445,10 +445,10 @@ const styles = StyleSheet.create({
     // camera
     presetCamera: {
         position: 'absolute',
-        bottom: 70,
+        bottom: 50,
         left: 0,
         right: 0,
-        height: 70,
+        height: 50,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 70,
+        height: 50,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
@@ -474,17 +474,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         left: 0,
-        width: 70,
-        height: 70,
-        padding: 25,
+        width: 50,
+        height: 50,
+        padding: 15,
     },
     navNextRep: {
         position: 'absolute',
         bottom: 0,
         right: 0,
-        width: 70,
-        height: 70,
-        padding: 25,
+        width: 50,
+        height: 50,
+        padding: 15,
     },
 
     // close
