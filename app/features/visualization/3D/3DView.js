@@ -398,6 +398,43 @@ export default function App(props) {
             <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
         </OrbitControlsView>
 
+        {/* summary information */}
+        <View style={styles.description}>
+            <Text style={styles.exercise}>Exercise #</Text>
+            <Text style={styles.repTitle}>Rep X of Y</Text>
+            <View style={styles.column}>
+                <View>
+                    <Text style={styles.label}>AVG</Text>
+                    <Text style={styles.label}>PKV</Text>
+                    <Text style={styles.label}>PKH</Text>
+                    <Text style={styles.label}>ROM</Text>
+                    <Text style={styles.label}>DUR</Text>
+                </View>
+                <View>
+                    <Text style={styles.data}>{model.averageVelocity}</Text>
+                    <Text style={styles.data}>{model.peakVelocity}</Text>
+                    <Text style={styles.data}>{model.peakVelocityLocation}</Text>
+                    <Text style={styles.data}>{model.rangeOfMotion}</Text>
+                    <Text style={styles.data}>{model.duration}</Text>
+                </View>
+            </View>
+            <View style={styles.circle} />
+            <View style={styles.column}>
+                <View>
+                    <Text style={styles.label}>VEL</Text>
+                    <Text style={styles.label}>ACC</Text>
+                    <Text style={styles.label}>POS</Text>
+                    <Text style={styles.label}>TIME</Text>
+                </View>
+                <View>
+                    <Text style={styles.data}>speeds need to go here</Text>
+                    <Text style={styles.data}>idk acc</Text>
+                    <Text style={styles.data}>{state.currentIndex+1}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].time}</Text>
+                </View>
+            </View>
+        </View>
+
         {/* camera presets */}
         <View style={styles.presetCamera}>
             <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
@@ -452,6 +489,31 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    description: {
+        position: 'absolute',
+        top: 15,
+        left: 15,
+    },
+    column: {
+        flexDirection: 'row',
+    },
+    label: {
+        width: 40,
+        color: 'rgba(150, 150, 150, 1)',
+        fontWeight: 'bold',
+    },
+    data: {
+    },
+    //circle
+    // TODO: move this to its own component to try to get a ring?
+    circle: {
+        marginTop: 15,
+        width: 10,
+        height: 10,
+        borderRadius: 10/2,
+        backgroundColor: 'red',
+    },
+
     // slider
     sliderContainer: {
         position: 'absolute',
