@@ -77,7 +77,7 @@ export default function App(props) {
         };
     }, []);
 
-    console.tron.log(`initialize 3d mode, current index is ${state.currentIndex}`);
+    console.tron.log(`initialize 3d mode, prev ${props.prevRepIndex} next ${props.nextRepIndex}`);
 
     const rerender = () => setState({...state});
 
@@ -183,23 +183,23 @@ export default function App(props) {
         scene.add(sphere);
 
         // grid position helpers
-        const helperGeo = new THREE.SphereBufferGeometry(0.5, 8, 8);
-        const helperMat1 = new THREE.MeshBasicMaterial({color: 'red'});
-        const helper1 = new THREE.Mesh(helperGeo, helperMat1);
-        helper1.position.set(0, 0, 0);
-        scene.add(helper1);
-        const helperMat2 = new THREE.MeshBasicMaterial({color: 'green'});
-        const helper2 = new THREE.Mesh(helperGeo, helperMat2);
-        helper2.position.set(1, 0, 0);
-        scene.add(helper2);
-        const helperMat3 = new THREE.MeshBasicMaterial({color: 'blue'});
-        const helper3 = new THREE.Mesh(helperGeo, helperMat3);
-        helper3.position.set(0, 1, 0);
-        scene.add(helper3)
-        const helperMat4 = new THREE.MeshBasicMaterial({color: 'yellow'});
-        const helper4 = new THREE.Mesh(helperGeo, helperMat4);
-        helper4.position.set(0, 0, 1);
-        scene.add(helper4)
+        // const helperGeo = new THREE.SphereBufferGeometry(0.5, 8, 8);
+        // const helperMat1 = new THREE.MeshBasicMaterial({color: 'red'});
+        // const helper1 = new THREE.Mesh(helperGeo, helperMat1);
+        // helper1.position.set(0, 0, 0);
+        // scene.add(helper1);
+        // const helperMat2 = new THREE.MeshBasicMaterial({color: 'green'});
+        // const helper2 = new THREE.Mesh(helperGeo, helperMat2);
+        // helper2.position.set(1, 0, 0);
+        // scene.add(helper2);
+        // const helperMat3 = new THREE.MeshBasicMaterial({color: 'blue'});
+        // const helper3 = new THREE.Mesh(helperGeo, helperMat3);
+        // helper3.position.set(0, 1, 0);
+        // scene.add(helper3)
+        // const helperMat4 = new THREE.MeshBasicMaterial({color: 'yellow'});
+        // const helper4 = new THREE.Mesh(helperGeo, helperMat4);
+        // helper4.position.set(0, 0, 1);
+        // scene.add(helper4)
 
         // sensor
         const model = await loadAsync(require('app/appearance/models/sensor.obj'));
@@ -401,8 +401,17 @@ export default function App(props) {
             <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
         </View>
 
+        {/* navigate */}
+        <View style={styles.navigation}><Text>{props.navigationText}</Text></View>
+
+        {/* navigate prev */}
+        <TouchableHighlight style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== null ? props.navigateToRep(props.prevRepIndex) : false}><Text>{'<'}</Text></TouchableHighlight>
+
+        {/* navigate next */}
+        <TouchableHighlight style={styles.navNextRep} onPress={()=> props.nextRepIndex !== null? props.navigateToRep(props.nextRepIndex) : false}><Text>{'>'}</Text></TouchableHighlight>
+
         {/* close */}
-        <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>CLOSE</Text></TouchableHighlight>
+        <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>X</Text></TouchableHighlight>
 
     </View>);
 }
@@ -411,6 +420,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    // slider
     sliderContainer: {
         position: 'absolute',
         top: 100,
@@ -431,9 +441,11 @@ const styles = StyleSheet.create({
         marginBottom: (windowWidth * 0.5) - 10,
         width: windowHeight * 0.65,
     },
+
+    // camera
     presetCamera: {
         position: 'absolute',
-        bottom: 0,
+        bottom: 70,
         left: 0,
         right: 0,
         height: 70,
@@ -445,10 +457,41 @@ const styles = StyleSheet.create({
     cameraItem: {
         padding: 15,
     },
+
+    // nav
+    navigation: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 70,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    navPrevRep: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: 70,
+        height: 70,
+        padding: 25,
+    },
+    navNextRep: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        width: 70,
+        height: 70,
+        padding: 25,
+    },
+
+    // close
     close: {
         position: 'absolute',
         padding: 15,
         top: 0,
-        left: 0,
+        right: 0,
     }
 });

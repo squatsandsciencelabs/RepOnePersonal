@@ -9,7 +9,7 @@ export const getIsShowingVisualization = state => stateRoot(state).setID !== nul
 
 export const getVisualizationSetID = state => stateRoot(state).setID;
 
-export const getVisualizationRepID = state => stateRoot(state).repID;
+const getVisualizationRepIndex = state => stateRoot(state).repIndex;
 
 // for internal calculation uses
 const getSet = createSelector(
@@ -39,21 +39,35 @@ const getReps = createSelector(
             return [];
         }
 
-        return SetUtils.validUnremovedReps(set);
+        return set.reps;
+    }
+);
+
+const getSelectedRepIndex = createSelector(
+    getVisualizationRepIndex,
+    getReps,
+    (index, reps) => {
+        if (index === null) {
+            for (let i=reps.length-1; i>=0; i--) {
+                const rep = reps[i];
+                if (rep.isValid && !rep.removed) {
+                    return i;
+                }
+            }
+            return null;
+        }
+        return index;
     }
 );
 
 const getRep = createSelector(
-    getVisualizationRepID,
+    getSelectedRepIndex,
     getReps,
-    (repID, reps) => {
-        // get last
-        if (!repID) {
-            return reps[reps.length-1];
+    (index, reps) => {
+        if (index === null) {
+            return null;
         }
-
-        // find specific one
-        return reps.find(r => r.id === repID);
+        return reps[index];
     }
 );
 
@@ -178,9 +192,75 @@ export const getMidpointIndex = createSelector(
     }
 );
 
+export const getNextRepIndex = createSelector(
+    getReps,
+    getSelectedRepIndex,
+    (reps, selectedIndex) => {
+        for (let i=selectedIndex+1; i<reps.length; i++) {
+            const rep = reps[i];
+            if (rep.isValid && !rep.removed) {
+                return i;
+            }
+        }
+        return null;
+    }
+);
+
+export const getPrevRepIndex = createSelector(
+    getReps,
+    getSelectedRepIndex,
+    (reps, selectedIndex) => {
+        for (let i=selectedIndex-1; i>=0; i--) {
+            const rep = reps[i];
+            if (rep.isValid && !rep.removed) {
+                return i;
+            }
+        }
+        return null;
+    }
+);
+
+const getSelectedRepNumber = createSelector(
+    getReps,
+    getSelectedRepIndex,
+    (reps, index) => {
+        if (index === null) {
+            return 0;
+        }
+
+        let number = 1;
+        for (let i=0; i<reps.length; i++) {
+            const rep = reps[i];
+            if (!rep.isValid || rep.removed) {
+                continue;
+            }
+
+            if (i === index) {
+                return number;                
+            } else {
+                number++;
+            }
+        }
+        return null; // something went wrong, couldn't find the selected rep index
+    }
+);
+
+export const getRepNavigationText = createSelector(
+    getSet,
+    getSelectedRepNumber,
+    (set, repNumber) => {
+        if (repNumber === null) {
+            return null;
+        }
+        
+        const numReps = SetUtils.numValidUnremovedReps(set);
+        if (numReps <= 0) {
+            return null;
+        }
+
+        return `${repNumber} / ${numReps}`;
+    }
+);
+
 // TODO: get set description (includes set num which has to be calculated sadly), has to be sep due to calculations for it
-// TODO: is working set (so if rep is null, it can display waiting for reps)
-// TODO: prev rep id
-// TODO: next rep id
-// TODO: set total num reps - could just be utils?
-// TODO: get current rep number
+// TODO: is working set (so if rep is null, it can display waiting for reps) - may not be needed

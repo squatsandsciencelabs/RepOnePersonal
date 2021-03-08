@@ -7,7 +7,15 @@ import * as VisualizationSelectors from 'app/redux/selectors/VisualizationSelect
 
 const mapStateToProps = state => {
     return {
+        // metadata
         model: VisualizationSelectors.getRepModel(state),
+
+        // navigation
+        navigationText: VisualizationSelectors.getRepNavigationText(state),
+        prevRepIndex: VisualizationSelectors.getPrevRepIndex(state),
+        nextRepIndex: VisualizationSelectors.getNextRepIndex(state),
+
+        // rendering
         colors: VisualizationSelectors.getColors(state),
         data: VisualizationSelectors.getData(state),
         vertices: VisualizationSelectors.getVertices(state),
@@ -18,6 +26,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        navigateToRep: Actions.navigateToRep,
         tappedClose: Actions.tappedClose,
     }, dispatch);
 };
