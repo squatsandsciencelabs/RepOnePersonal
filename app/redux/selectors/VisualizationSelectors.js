@@ -335,7 +335,7 @@ export const getRepTitleText = createSelector(
         
         const numReps = SetUtils.numValidUnremovedReps(set);
         if (numReps <= 0) {
-            return null;
+            return `Waiting...`;
         }
 
         return `Rep ${repNumber} of ${numReps}`;
@@ -359,6 +359,24 @@ export const getRepNavigationText = createSelector(
     }
 );
 
+export const getErrorMessage = createSelector(
+    getSet,
+    getSelectedRepNumber,
+    getData,
+    (set, repNumber, data) => {
+        if (repNumber === null) {
+            return 'Error, something went wrong';
+        }
 
-// TODO: get set description (includes set num which has to be calculated sadly), has to be sep due to calculations for it
-// TODO: is working set (so if rep is null, it can display waiting for reps) - may not be needed
+        const numReps = SetUtils.numValidUnremovedReps(set);
+        if (numReps <= 0) {
+            return `Waiting for 3D rep data`;
+        }
+
+        if (data.length <= 0) {
+            return `No 3D rep data`;
+        }
+
+        return null;
+    }
+);

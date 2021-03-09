@@ -108,12 +108,13 @@ export default function App(props) {
     const numPoints = props.numPoints;
 
     // helpers
-    const initialX = model ? data[0].x / renderScale : 0;
-    const initialY = model ? data[0].y / renderScale : 0;
-    const initialZ = model ? data[0].z / renderScale : 0;
-    const midX = model ? data[midpointIndex].x / renderScale : 0;
-    const midY = model ? data[midpointIndex].y / renderScale : 0;
-    const midZ = model ? data[midpointIndex].z / renderScale : 0;
+    const hasData = model && data.length > 0;
+    const initialX = hasData ? data[0].x / renderScale : 0;
+    const initialY = hasData ? data[0].y / renderScale : 0;
+    const initialZ = hasData ? data[0].z / renderScale : 0;
+    const midX = hasData ? data[midpointIndex].x / renderScale : 0;
+    const midY = hasData ? data[midpointIndex].y / renderScale : 0;
+    const midZ = hasData ? data[midpointIndex].z / renderScale : 0;
 
     // NOTE: we do NOT want re-renders of the component in most cases due to rendering being handled by GLView
     // therefore, modify the state directly here for data changes
@@ -394,7 +395,8 @@ export default function App(props) {
     let summary = null;
     let sliderControls = null;
     let cameraControls = null;
-    if (model) {
+    let errorMessage = null;
+    if (hasData) {
         summary = (<React.Fragment>
             <View style={styles.column}>
                 <View>
@@ -465,6 +467,9 @@ export default function App(props) {
             }}><Text>PREV</Text></TouchableHighlight>
         </React.Fragment>);
     }
+    if (props.errorMessage) {
+        errorMessage = <View style={styles.errorContainer}><Text style={styles.errorMessage}>{props.errorMessage}</Text></View>
+    }
 
     // render
     return (<View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -473,6 +478,9 @@ export default function App(props) {
         <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControls}>
             <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
         </OrbitControlsView>
+
+        {/* error */}
+        {errorMessage}
 
         {/* summary information */}
         <View style={styles.description}>
@@ -498,7 +506,6 @@ export default function App(props) {
 
         {/* close */}
         <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>X</Text></TouchableHighlight>
-
     </View>);
 }
 
@@ -614,5 +621,21 @@ const styles = StyleSheet.create({
         padding: 15,
         top: 0,
         right: 0,
+    },
+
+    // error
+    errorContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+    },
+    errorMessage: {
+        color: 'rgba(130, 130, 130, 1)',
+        fontWeight: 'bold',
     }
 });
