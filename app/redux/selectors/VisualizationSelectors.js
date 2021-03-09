@@ -43,7 +43,6 @@ const getReps = createSelector(
     }
 );
 
-// TODO: calculate set number
 export const getSetExercise = createSelector(
     getVisualizationSetID,
     SetsSelectors.getWorkoutSets,
@@ -63,11 +62,29 @@ export const getSetExercise = createSelector(
         } else {
             array = workoutSets;
         }
+        const currentSet = array[setIndex];
 
         // search for exercise number
+        let setNumber = 1;
+        for (let i=setIndex-1; i>=0; i--) {
+            const set = array[i];
+
+            // ignore removed
+            if (SetUtils.isDeleted(set)) {
+                continue;
+            }
+
+            // break out if it's considered different
+            if (set.exercise !== currentSet.exercise || set.workoutID !== currentSet.workoutID) {
+                break;
+            }
+
+            // decrement
+            setNumber++;
+        }
 
         // return
-        return array[setIndex].exercise;
+        return `${currentSet.exercise} #${setNumber}`;
     }
 );
 
@@ -157,7 +174,7 @@ export const getRepModel = createSelector(
 export const getData = createSelector(
     getRep,
     (rep) => {
-        if (!rep || !rep.bulkData) {
+        if (!rep || !rep.bulkData || rep.rom === 519) {
             return [];
         }
 
