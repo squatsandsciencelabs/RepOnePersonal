@@ -494,12 +494,22 @@ const styles = StyleSheet.create({
         top: 15,
         left: 15,
     },
+    exercise: {
+        color: 'rgba(130, 130, 130, 1)',
+        fontWeight: 'bold',
+    },
+    repTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        paddingTop: 7,
+        paddingBottom: 7,
+    },
     column: {
         flexDirection: 'row',
     },
     label: {
         width: 40,
-        color: 'rgba(150, 150, 150, 1)',
+        color: 'rgba(130, 130, 130, 1)',
         fontWeight: 'bold',
     },
     data: {
