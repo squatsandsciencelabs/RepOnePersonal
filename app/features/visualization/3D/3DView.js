@@ -390,18 +390,12 @@ export default function App(props) {
         lookSide(); 
     }
 
-    // render
-    return (<View style={{ flex: 1, backgroundColor: 'white' }}>
-
-        {/* 3d */}
-        <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControls}>
-            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
-        </OrbitControlsView>
-
-        {/* summary information */}
-        <View style={styles.description}>
-            <Text style={styles.exercise}>{props.exercise}</Text>
-            <Text style={styles.repTitle}>{props.title}</Text>
+    // conditional renders
+    let summary = null;
+    let sliderControls = null;
+    let cameraControls = null;
+    if (model) {
+        summary = (<React.Fragment>
             <View style={styles.column}>
                 <View>
                     <Text style={styles.label}>AVG</Text>
@@ -433,42 +427,65 @@ export default function App(props) {
                     <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
                 </View>
             </View>
-        </View>
+        </React.Fragment>);
 
-        {/* camera presets */}
-        <View style={styles.presetCamera}>
+        cameraControls = (<View style={styles.presetCamera}>
             <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
             <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
             <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
+        </View>);
+
+        sliderControls = (<React.Fragment>
+            {/* next */}
+            <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
+                zoomTo(state.currentIndex+1, true);
+            }}><Text>NEXT</Text></TouchableHighlight>
+
+            {/* slider */}
+            <View style={styles.sliderContainer}>
+                <View style={styles.sliderRotateContainer}>
+                <Slider
+                    value={state.currentIndex} 
+                    style={styles.slider}
+                    onValueChange={(value) => zoomTo(value) }
+                    minimumValue={0}
+                    maximumValue={numPoints-1}
+                    step={1}
+                    thumbTintColor={thumbTintColor}
+                    minimumTrackTintColor={'#368fff'}
+                    animateTransitions={true}
+                    onSlidingComplete={rerender}
+                />
+                </View>
+            </View>
+
+            {/* prev */}
+            <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
+                zoomTo(state.currentIndex-1, true);
+            }}><Text>PREV</Text></TouchableHighlight>
+        </React.Fragment>);
+    }
+
+    // render
+    return (<View style={{ flex: 1, backgroundColor: 'white' }}>
+
+        {/* 3d */}
+        <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControls}>
+            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
+        </OrbitControlsView>
+
+        {/* summary information */}
+        <View style={styles.description}>
+            <Text style={styles.exercise}>{props.exercise}</Text>
+            <Text style={styles.repTitle}>{props.title}</Text>
+            {summary}
         </View>
 
-        {/* next */}
-        <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
-            zoomTo(state.currentIndex+1, true);
-        }}><Text>NEXT</Text></TouchableHighlight>
+        {/* camera presets */}
+        {cameraControls}
 
         {/* slider */}
-        <View style={styles.sliderContainer}>
-            <View style={styles.sliderRotateContainer}>
-            <Slider
-                value={state.currentIndex} 
-                style={styles.slider}
-                onValueChange={(value) => zoomTo(value) }
-                minimumValue={0}
-                maximumValue={numPoints-1}
-                step={1}
-                thumbTintColor={thumbTintColor}
-                minimumTrackTintColor={'#368fff'}
-                animateTransitions={true}
-                onSlidingComplete={rerender}
-            />
-            </View>
-        </View>
-
-        {/* prev */}
-        <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
-            zoomTo(state.currentIndex-1, true);
-        }}><Text>PREV</Text></TouchableHighlight>
+        {sliderControls}
 
         {/* navigate */}
         <View style={styles.navigation}><Text>{props.navigationText}</Text></View>
