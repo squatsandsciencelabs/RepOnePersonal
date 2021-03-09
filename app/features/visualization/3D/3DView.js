@@ -400,8 +400,8 @@ export default function App(props) {
 
         {/* summary information */}
         <View style={styles.description}>
-            <Text style={styles.exercise}>Exercise #</Text>
-            <Text style={styles.repTitle}>Rep X of Y</Text>
+            <Text style={styles.exercise}>{props.exercise}</Text>
+            <Text style={styles.repTitle}>{props.title}</Text>
             <View style={styles.column}>
                 <View>
                     <Text style={styles.label}>AVG</Text>
@@ -427,8 +427,8 @@ export default function App(props) {
                     <Text style={styles.label}>TIME</Text>
                 </View>
                 <View>
-                    <Text style={styles.data}>speeds need to go here</Text>
-                    <Text style={styles.data}>idk acc</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].velocity}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].acceleration}</Text>
                     <Text style={styles.data}>{state.currentIndex+1}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].time}</Text>
                 </View>
@@ -508,6 +508,7 @@ const styles = StyleSheet.create({
     // TODO: move this to its own component to try to get a ring?
     circle: {
         marginTop: 15,
+        marginBottom: 5,
         width: 10,
         height: 10,
         borderRadius: 10/2,

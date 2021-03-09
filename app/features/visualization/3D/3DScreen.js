@@ -9,6 +9,8 @@ const mapStateToProps = state => {
     return {
         // metadata
         model: VisualizationSelectors.getRepModel(state),
+        exercise: VisualizationSelectors.getSetExercise(state),
+        title: VisualizationSelectors.getRepTitleText(state),
 
         // navigation
         navigationText: VisualizationSelectors.getRepNavigationText(state),

@@ -43,6 +43,34 @@ const getReps = createSelector(
     }
 );
 
+// TODO: calculate set number
+export const getSetExercise = createSelector(
+    getVisualizationSetID,
+    SetsSelectors.getWorkoutSets,
+    SetsSelectors.getHistorySets,
+    (setID, workoutSets, historySets) => {
+        // valid check
+        if (!setID) {
+            return null;
+        }
+
+        // find it
+        let setIndex = workoutSets.findIndex( set => set.setID == setID );
+        let array;
+        if (setIndex === -1) {
+            setIndex = historySets.findIndex( set => set.setID === setID );
+            array = historySets;
+        } else {
+            array = workoutSets;
+        }
+
+        // search for exercise number
+
+        // return
+        return array[setIndex].exercise;
+    }
+);
+
 export const getSelectedRepIndex = createSelector(
     getVisualizationRepIndex,
     getReps,
@@ -89,12 +117,12 @@ export const getRepModel = createSelector(
 
         let avgVel = rep.averageVelocity;
         if (avgVel !== null) {
-            vm.averageVelocity = avgVel / 1000;
+            vm.averageVelocity = Number(avgVel / 1000.0).toFixed(2);
         }
 
         let peakVel = rep.peakVelocity;
         if (peakVel !== null) {
-            vm.peakVelocity = peakVel / 1000;
+            vm.peakVelocity = Number(peakVel / 1000).toFixed(2);
         }
 
         let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
@@ -103,7 +131,7 @@ export const getRepModel = createSelector(
         }
 
         if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-            vm.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
+            vm.linear3DAverageVelocity = Number(rep.linear3DAverageVelocity / 1000.0).toFixed(2);
         }
 
         let rom = rep.rom;
@@ -133,14 +161,54 @@ export const getData = createSelector(
             return [];
         }
 
+        // loop add data
         const data = [];
         for (const index in rep.bulkData) {
-            data[parseInt(index)] = rep.bulkData[index];
+            data[parseInt(index)] = { ...rep.bulkData[index] };
         }
+
+        // set velocity and accel for initial point
+        if (data.length > 0) {
+            const bulkData = data[0];
+            bulkData.velocity = 0;
+            bulkData.acceleration = 0;
+        }
+
+        // loop add and modify data
+        for (let i=1; i<data.length; i++) {
+            // select points
+            const bulkData = data[i];
+            const prevBulkData = data[i-1];
+
+            // calculate velocity
+            const deltaT = (prevBulkData.time - bulkData.time) / 1000000.0; // microseconds conversion
+            const prevPoint = new THREE.Vector3(prevBulkData.x, prevBulkData.y, prevBulkData.z);
+            const currentPoint = new THREE.Vector3(bulkData.x, bulkData.y, bulkData.z);
+            const deltaD = prevPoint.distanceTo(currentPoint) / 100000.0; // 1/10 of a mm conversion
+            const velocity = Math.abs(parseFloat(deltaD / deltaT));
+
+            // calculate acceleration
+            const deltaV = velocity - prevBulkData.velocity;
+            const acceleration = Math.abs(parseFloat(deltaV / deltaT));
+
+            // save values
+            bulkData.velocity = velocity;
+            bulkData.acceleration = acceleration;
+        }
+
+        // to fixed
+        data.forEach(d => {
+            d.time = Number(d.time / 1000000.0).toFixed(2);
+            d.velocity = Number(d.velocity).toFixed(2);
+            d.acceleration = Number(d.acceleration).toFixed(2);
+        });
+
+        // return
         return data;
     }
 );
 
+// TODO: consider just getting it from getData instead as the logic is duplicated
 export const getColors = createSelector(
     getData,
     data => {
@@ -245,6 +313,23 @@ const getSelectedRepNumber = createSelector(
     }
 );
 
+export const getRepTitleText = createSelector(
+    getSet,
+    getSelectedRepNumber,
+    (set, repNumber) => {
+        if (repNumber === null) {
+            return null;
+        }
+        
+        const numReps = SetUtils.numValidUnremovedReps(set);
+        if (numReps <= 0) {
+            return null;
+        }
+
+        return `Rep ${repNumber} of ${numReps}`;
+    }
+);
+
 export const getRepNavigationText = createSelector(
     getSet,
     getSelectedRepNumber,
@@ -261,6 +346,7 @@ export const getRepNavigationText = createSelector(
         return `${repNumber} / ${numReps}`;
     }
 );
+
 
 // TODO: get set description (includes set num which has to be calculated sadly), has to be sep due to calculations for it
 // TODO: is working set (so if rep is null, it can display waiting for reps) - may not be needed
