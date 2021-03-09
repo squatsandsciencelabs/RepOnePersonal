@@ -418,7 +418,7 @@ export default function App(props) {
                     <Text style={styles.data}>{model.duration}</Text>
                 </View>
             </View>
-            <View style={styles.circle} />
+            <View style={[styles.circle, { backgroundColor: data[state.currentIndex].color }]} />
             <View style={styles.column}>
                 <View>
                     <Text style={styles.label}>VEL</Text>
@@ -427,10 +427,10 @@ export default function App(props) {
                     <Text style={styles.label}>TIME</Text>
                 </View>
                 <View>
-                    <Text style={styles.data}>{data[state.currentIndex].velocity}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].acceleration}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].displayVelocity}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].displayAcceleration}</Text>
                     <Text style={styles.data}>{state.currentIndex+1}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].time}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
                 </View>
             </View>
         </View>
@@ -512,7 +512,6 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         borderRadius: 10/2,
-        backgroundColor: 'red',
     },
 
     // slider

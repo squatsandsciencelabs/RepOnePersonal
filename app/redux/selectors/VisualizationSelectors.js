@@ -156,7 +156,7 @@ export const getRepModel = createSelector(
 
 export const getData = createSelector(
     getRep,
-    rep => {
+    (rep) => {
         if (!rep || !rep.bulkData) {
             return [];
         }
@@ -172,9 +172,11 @@ export const getData = createSelector(
             const bulkData = data[0];
             bulkData.velocity = 0;
             bulkData.acceleration = 0;
+            bulkData.color = `rgba(255, 0, 0, 1)`;
         }
 
         // loop add and modify data
+        const speeds = [0];
         for (let i=1; i<data.length; i++) {
             // select points
             const bulkData = data[i];
@@ -194,13 +196,23 @@ export const getData = createSelector(
             // save values
             bulkData.velocity = velocity;
             bulkData.acceleration = acceleration;
+            speeds.push(velocity);
         }
 
         // to fixed
-        data.forEach(d => {
-            d.time = Number(d.time / 1000000.0).toFixed(2);
-            d.velocity = Number(d.velocity).toFixed(2);
-            d.acceleration = Number(d.acceleration).toFixed(2);
+        data.forEach((d) => {
+            d.displayTime = Number(d.time / 1000000.0).toFixed(2);
+            d.displayVelocity = Number(d.velocity).toFixed(2);
+            d.displayAcceleration = Number(d.acceleration).toFixed(2);
+        });
+
+        // colors
+        const maxSpeed = Math.max(...speeds);
+        const halfSpeed = maxSpeed * 0.5;
+        speeds.forEach((s, index) => {
+            const r = s <= halfSpeed ? 1 : 1 - ((s-halfSpeed) / halfSpeed);
+            const g = s >= halfSpeed ? 1 : s / halfSpeed;
+            data[index].color = `rgba(${r*255}, ${g*255}, 0, 1)`;
         });
 
         // return
@@ -208,7 +220,7 @@ export const getData = createSelector(
     }
 );
 
-// TODO: consider just getting it from getData instead as the logic is duplicated
+// TODO: refactor so it doesn't recalculate speeds and colors again
 export const getColors = createSelector(
     getData,
     data => {
