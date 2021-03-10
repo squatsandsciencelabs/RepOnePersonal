@@ -3,12 +3,14 @@ import { Renderer, loadAsync } from 'expo-three';
 import OrbitControlsView from 'expo-three-orbit-controls';
 import * as React from 'react';
 import {
+  TouchableOpacity,
   TouchableHighlight,
   Text,
   StyleSheet,
   View,
   Platform,
   Dimensions,
+  Image,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {
@@ -432,17 +434,12 @@ export default function App(props) {
         </React.Fragment>);
 
         cameraControls = (<View style={styles.presetCamera}>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text>FRONT</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text>SIDE</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookTop()}><Text>TOP</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text style={styles.cameraText}>FRONT</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text style={styles.cameraText} >SIDE</Text></TouchableHighlight>
+            <TouchableHighlight style={[styles.cameraItem, styles.lastCameraItem]} onPress={()=> lookTop()}><Text style={styles.cameraText}>TOP</Text></TouchableHighlight>
         </View>);
 
         sliderControls = (<React.Fragment>
-            {/* next */}
-            <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, top: 50}} onPress={()=> {
-                zoomTo(state.currentIndex+1, true);
-            }}><Text>NEXT</Text></TouchableHighlight>
-
             {/* slider */}
             <View style={styles.sliderContainer}>
                 <View style={styles.sliderRotateContainer}>
@@ -461,10 +458,15 @@ export default function App(props) {
                 </View>
             </View>
 
+            {/* next */}
+            <TouchableOpacity style={styles.sliderNext} onPress={()=> {
+                zoomTo(state.currentIndex+1, true);
+            }}><Text><Image source={require('app/appearance/images/up_arrow.png')} /></Text></TouchableOpacity>
+
             {/* prev */}
-            <TouchableHighlight style={{ padding: 20, position: 'absolute', right: 0, bottom: 50 }} onPress={()=> {
+            <TouchableOpacity style={styles.sliderPrev} onPress={()=> {
                 zoomTo(state.currentIndex-1, true);
-            }}><Text>PREV</Text></TouchableHighlight>
+            }}><Text><Image source={require('app/appearance/images/down_arrow.png')} /></Text></TouchableOpacity>
         </React.Fragment>);
     }
     if (props.errorMessage) {
@@ -496,16 +498,16 @@ export default function App(props) {
         {sliderControls}
 
         {/* navigate */}
-        <View style={styles.navigation}><Text>{props.navigationText}</Text></View>
+        <View style={styles.navigation}><Text style={styles.navigationText}>{props.navigationText}</Text></View>
 
         {/* navigate prev */}
-        <TouchableHighlight style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== null ? props.navigateToRep(props.prevRepIndex) : false}><Text>{'<'}</Text></TouchableHighlight>
+        <TouchableOpacity style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== null ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
 
         {/* navigate next */}
-        <TouchableHighlight style={styles.navNextRep} onPress={()=> props.nextRepIndex !== null? props.navigateToRep(props.nextRepIndex) : false}><Text>{'>'}</Text></TouchableHighlight>
+        <TouchableOpacity style={styles.navNextRep} onPress={()=> props.nextRepIndex !== null? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
 
         {/* close */}
-        <TouchableHighlight style={styles.close} onPress={()=> props.tappedClose()}><Text>X</Text></TouchableHighlight>
+        <TouchableOpacity style={styles.close} onPress={()=> props.tappedClose()}><Image source={require('app/appearance/images/x.png')} /></TouchableOpacity>
     </View>);
 }
 
@@ -527,16 +529,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingTop: 7,
         paddingBottom: 7,
+        color: 'rgba(79, 79, 79, 1)',
     },
     column: {
         flexDirection: 'row',
     },
     label: {
-        width: 40,
+        width: 45,
         color: 'rgba(130, 130, 130, 1)',
         fontWeight: 'bold',
     },
     data: {
+        color: 'rgba(79, 79, 79, 1)',
     },
     //circle
     // TODO: move this to its own component to try to get a ring?
@@ -549,6 +553,12 @@ const styles = StyleSheet.create({
     },
 
     // slider
+    sliderNext: {
+        position: 'absolute',
+        right: 0,
+        top: (windowHeight * 0.45 / 2) - 40 - 20,
+        padding: 26.5,
+    },
     sliderContainer: {
         position: 'absolute',
         top: 100,
@@ -567,7 +577,13 @@ const styles = StyleSheet.create({
     },
     slider: {
         marginBottom: (windowWidth * 0.5) - 10,
-        width: windowHeight * 0.65,
+        width: windowHeight * 0.55,
+    },
+    sliderPrev: {
+        position: 'absolute',
+        right: 0,
+        bottom: (windowHeight * 0.45 / 2) - 40 - 20,
+        padding: 26.5,
     },
 
     // camera
@@ -576,14 +592,28 @@ const styles = StyleSheet.create({
         bottom: 50,
         left: 0,
         right: 0,
-        height: 50,
+        height: 30,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        opacity: 0.5,
     },
     cameraItem: {
-        padding: 15,
+        width: 80,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderLeftWidth: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        alignItems: 'center',
+        borderColor: 'rgba(51, 51, 51, 1)',
+    },
+    lastCameraItem: {
+        borderRightWidth: 1,
+    },
+    cameraText: {
+        color: 'rgba(51, 51, 51, 1)',
     },
 
     // nav
@@ -597,6 +627,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    navigationText: {
+        color: 'rgba(51, 51, 51, 1)',
     },
     navPrevRep: {
         position: 'absolute',
@@ -618,7 +651,7 @@ const styles = StyleSheet.create({
     // close
     close: {
         position: 'absolute',
-        padding: 15,
+        padding: 30,
         top: 0,
         right: 0,
     },
