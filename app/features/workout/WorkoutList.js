@@ -180,6 +180,8 @@ class WorkoutList extends Component {
                 );
             case "top border":
                 return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1}} />);
+            case "border":
+                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
             case "bottom border":
                 if (item.isPadded) {
                     return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 5, marginBottom: 15}} />);

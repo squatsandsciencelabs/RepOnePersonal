@@ -89,9 +89,11 @@ const createViewModels = (sets, collapsedModel, shouldShowRemoved) => {
                 }
                 if ((shouldShowRemoved && !SetUtils.hasNoReps(set)) || (!shouldShowRemoved && SetUtils.numValidUnremovedReps(set) > 0)) { // TODO: might have bug where set has just 1 invalid rep?
                     if (setHasUnremovedRepWith3D) {
-                        array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
+                        array.push(createOpen3DButton(set));
+                    } else {
+                        array.push(createBorder(set));
                     }
-                    array.push({type: "subheader", key: set.setID+"subheader"});
+                    array.push(createSubheaderModel(set));
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -219,6 +221,22 @@ const createAnalysisViewModel = (set) => ({
     type: 'analysis',
     key: set.setID+'analysis',
     set: set,
+});
+
+const createOpen3DButton = (set) => ({
+    type: 'open 3d button',
+    setID: set.setID,
+    key: set.setID+"open 3d button",
+});
+
+const createBorder = (set) => ({
+    type: "border",
+    key: `${set.setID}border`,
+});
+
+const createSubheaderModel = (set) => ({
+    type: "subheader",
+    key: set.setID+"subheader",
 });
 
 const createRowViewModels = (set, shouldShowRemoved) => {

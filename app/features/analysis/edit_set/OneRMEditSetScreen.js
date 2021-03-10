@@ -87,10 +87,12 @@ const createViewModels = (sets, setID, metric) => {
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
                 if (SetUtils.hasUnremovedRepWith3D(set)) {
-                    array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
+                    array.push(createOpen3DButton(set));
+                } else {
+                    array.push(createBorder(set));
                 }
                 if (set.reps.length > 0) {
-                    array.push({type: "subheader", key: set.setID+"subheader"});
+                    array.push(createSubheaderModel(set));
                 }
                 Array.prototype.push.apply(array, createRowViewModels(set));
                 array.push(createFooterVM(set, !isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null ? lastSetEndTime : null));
@@ -194,6 +196,22 @@ const createAnalysisViewModel = (set) => ({
     type: 'analysis',
     key: set.setID+'analysis',
     set: set,
+});
+
+const createOpen3DButton = (set) => ({
+    type: 'open 3d button',
+    setID: set.setID,
+    key: set.setID+"open 3d button",
+});
+
+const createBorder = (set) => ({
+    type: "border",
+    key: `${set.setID}border`,
+});
+
+const createSubheaderModel = (set) => ({
+    type: "subheader",
+    key: set.setID+"subheader",
 });
 
 const createRowViewModels = (set) => {

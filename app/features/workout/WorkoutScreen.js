@@ -59,7 +59,7 @@ const createViewModels = (sets, collapsedModel, can3D) => {
 
         // card header view
         if (isLastSet) {
-            array.push({type: 'working set header', key: set.setID+'end set timer'});
+            array.push(createWorkingSetHeader(set));
         }
         const setHasUnremovedRepWith3D = SetUtils.hasUnremovedRepWith3D(set);
         if (!isRemoved) {
@@ -72,9 +72,11 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                 }
                 if (isLastSet || set.reps.length > 0) {
                     if ((isLastSet && can3D) || setHasUnremovedRepWith3D) {
-                        array.push({type: 'open 3d button', setID: set.setID, key: set.setID+"open 3d button"});
+                        array.push(createOpen3DButton(set));
+                    } else {
+                        array.push(createBorder(set));
                     }
-                    array.push({type: "subheader", key: set.setID+"subheader"});
+                    array.push(createSubheaderModel(set));
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -146,6 +148,11 @@ const createViewModels = (sets, collapsedModel, can3D) => {
 const createTopBorder = (set) => ({
     type: 'top border',
     key: set.setID + 'topborder',
+});
+
+const createWorkingSetHeader = (set) => ({
+    type: 'working set header',
+    key: set.setID+'end set timer'
 });
 
 const createRestoreViewModel = (set) => {
@@ -225,6 +232,22 @@ const createAnalysisViewModel = (set) => ({
     type: 'analysis',
     key: set.setID+'analysis',
     set: set,
+});
+
+const createOpen3DButton = (set) => ({
+    type: 'open 3d button',
+    setID: set.setID,
+    key: set.setID+"open 3d button",
+});
+
+const createBorder = (set) => ({
+    type: "border",
+    key: `${set.setID}border`,
+});
+
+const createSubheaderModel = (set) => ({
+    type: "subheader",
+    key: set.setID+"subheader",
 });
 
 const createRowViewModels = (set) => {

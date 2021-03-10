@@ -137,6 +137,8 @@ class OneRMEditSetView extends Component {
                 return (
                     <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
+            case "border":
+                return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
             case "subheader":
                 return (
                     <SetDataLabelRow />
