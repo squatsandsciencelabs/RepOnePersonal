@@ -19,6 +19,7 @@ import {
   AmbientLight,
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
+import TargetCircle from 'app/shared_features/target/TargetCircle';
 
 // animations
 const renderScale = 100;
@@ -416,7 +417,7 @@ export default function App(props) {
                     <Text style={styles.data}>{model.duration}</Text>
                 </View>
             </View>
-            <View style={[styles.circle, { backgroundColor: data[state.currentIndex].color }]} />
+            <TargetCircle style={styles.circle} color={data[state.currentIndex].color} size={10} />
             <View style={styles.column}>
                 <View>
                     <Text style={styles.label}>VEL</Text>
@@ -548,13 +549,9 @@ const styles = StyleSheet.create({
         color: 'rgba(79, 79, 79, 1)',
     },
     //circle
-    // TODO: move this to its own component to try to get a ring?
     circle: {
         marginTop: 15,
         marginBottom: 5,
-        width: 10,
-        height: 10,
-        borderRadius: 10/2,
     },
 
     // slider
