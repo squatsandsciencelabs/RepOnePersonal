@@ -457,7 +457,8 @@ export default function App(props) {
                             maximumValue={numPoints-1}
                             step={1}
                             thumbTintColor={thumbTintColor}
-                            minimumTrackTintColor={'#368fff'}
+                            minimumTrackTintColor={'#D1D1D1'}
+                            maximumTrackTintColor={'#D1D1D1'}
                             animateTransitions={true}
                             onSlidingComplete={rerender}
                         />
