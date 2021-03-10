@@ -440,33 +440,37 @@ export default function App(props) {
         </View>);
 
         sliderControls = (<React.Fragment>
-            {/* slider */}
             <View style={styles.sliderContainer}>
                 <View style={styles.sliderRotateContainer}>
-                <Slider
-                    value={state.currentIndex} 
-                    style={styles.slider}
-                    onValueChange={(value) => zoomTo(value) }
-                    minimumValue={0}
-                    maximumValue={numPoints-1}
-                    step={1}
-                    thumbTintColor={thumbTintColor}
-                    minimumTrackTintColor={'#368fff'}
-                    animateTransitions={true}
-                    onSlidingComplete={rerender}
-                />
+                    <View style={styles.sliderLayout}>
+                        {/* prev */}
+                        <TouchableOpacity style={styles.sliderPrev} onPress={()=> {
+                            zoomTo(state.currentIndex-1, true);
+                        }}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
+
+                        {/* slider */}
+                        <Slider
+                            value={state.currentIndex} 
+                            style={styles.slider}
+                            onValueChange={(value) => zoomTo(value) }
+                            minimumValue={0}
+                            maximumValue={numPoints-1}
+                            step={1}
+                            thumbTintColor={thumbTintColor}
+                            minimumTrackTintColor={'#368fff'}
+                            animateTransitions={true}
+                            onSlidingComplete={rerender}
+                        />
+
+                        {/* next */}
+                        <TouchableOpacity style={styles.sliderNext} onPress={()=> {
+                            zoomTo(state.currentIndex+1, true);
+                        }}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
+                    </View>
                 </View>
             </View>
 
-            {/* next */}
-            <TouchableOpacity style={styles.sliderNext} onPress={()=> {
-                zoomTo(state.currentIndex+1, true);
-            }}><Text><Image source={require('app/appearance/images/up_arrow.png')} /></Text></TouchableOpacity>
 
-            {/* prev */}
-            <TouchableOpacity style={styles.sliderPrev} onPress={()=> {
-                zoomTo(state.currentIndex-1, true);
-            }}><Text><Image source={require('app/appearance/images/down_arrow.png')} /></Text></TouchableOpacity>
         </React.Fragment>);
     }
     if (props.errorMessage) {
@@ -554,10 +558,8 @@ const styles = StyleSheet.create({
 
     // slider
     sliderNext: {
-        position: 'absolute',
-        right: 0,
-        top: (windowHeight * 0.45 / 2) - 40 - 20,
-        padding: 26.5,
+        padding: 10,
+        marginLeft: 10,
     },
     sliderContainer: {
         position: 'absolute',
@@ -573,23 +575,22 @@ const styles = StyleSheet.create({
     sliderRotateContainer: {
         transform: [{ rotate: '-90deg' }],
         flexDirection: 'column-reverse',
-        height: windowWidth,
+    },
+    sliderLayout: {
+        flexDirection: 'row',
     },
     slider: {
-        marginBottom: (windowWidth * 0.5) - 10,
         width: windowHeight * 0.55,
     },
     sliderPrev: {
-        position: 'absolute',
-        right: 0,
-        bottom: (windowHeight * 0.45 / 2) - 40 - 20,
-        padding: 26.5,
+        padding: 10,
+        marginRight: 10,
     },
 
     // camera
     presetCamera: {
         position: 'absolute',
-        bottom: 50,
+        bottom: 60,
         left: 0,
         right: 0,
         height: 30,
