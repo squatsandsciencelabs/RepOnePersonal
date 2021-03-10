@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 100,
         bottom: 100,
-        right: 0,
+        right: 5,
         width: 50,
         flexDirection: 'row',
         alignItems: 'center',
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
     // close
     close: {
         position: 'absolute',
-        padding: 30,
+        padding: 25,
         top: 0,
         right: 0,
     },
