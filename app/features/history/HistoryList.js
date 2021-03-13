@@ -130,7 +130,7 @@ class HistoryList extends Component {
                 );
             case "subheader":
                 return (
-                    <SetDataLabelRow />
+                    <SetDataLabelRow item={item} />
                 );
             case "data":
                 return (<SetDataRow item={item}

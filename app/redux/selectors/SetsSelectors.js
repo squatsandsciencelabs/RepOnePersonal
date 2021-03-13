@@ -4,7 +4,6 @@
 import { createSelector } from 'reselect';
 import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
-import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
 const stateRoot = (state) => state.sets;

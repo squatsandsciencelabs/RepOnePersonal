@@ -37,12 +37,7 @@ class SetDataRow extends PureComponent {
                 <TouchableOpacity style={{flex:1}} onPress={ () => this._onPressRow() } >
                     <View style={styles.bar}>
                         <Text style={dataStyle}> { this.props.item.repDisplay } </Text>
-                        <Text style={dataStyle}> { this.props.item.averageVelocity } </Text>
-                        <Text style={dataStyle}> { this.props.item.linear3DAverageVelocity } </Text>
-                        <Text style={dataStyle}> { this.props.item.peakVelocity } </Text>
-                        {/* <Text style={dataStyle}> { this.props.item.peakVelocityLocation } </Text> */}
-                        <Text style={dataStyle}> { this.props.item.linear3DROM } </Text>
-                        <Text style={dataStyle}> { this.props.item.duration } </Text>
+                        {this.props.item.columns.map(i => <Text style={dataStyle}> { i } </Text>)}
                         {button}
                     </View>
                 </TouchableOpacity>

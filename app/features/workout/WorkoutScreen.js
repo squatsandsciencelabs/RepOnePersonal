@@ -248,6 +248,8 @@ const createBorder = (set) => ({
 const createSubheaderModel = (set) => ({
     type: "subheader",
     key: set.setID+"subheader",
+    labels: [1, 2, 3, 4, 5],
+    units: [1, 2, 3, 4, 5],
 });
 
 const createRowViewModels = (set) => {

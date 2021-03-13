@@ -10,6 +10,8 @@ export const getMetric4 = (state) => stateRoot(state).metrics[3];
 
 export const getMetric5 = (state) => stateRoot(state).metrics[4];
 
+export const getMetrics = state => stateRoot(state).metrics;
+
 export const getIsEditingMetric = (state) => stateRoot(state).editingMetricRank !== null;
 
 export const getEditingMetricRank = state => stateRoot(state).editingMetricRank;
