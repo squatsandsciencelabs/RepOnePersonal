@@ -84,7 +84,7 @@ export const getSetExercise = createSelector(
         }
 
         // return
-        return `${currentSet.exercise} #${setNumber}`;
+        return currentSet.exercise ? `${currentSet.exercise} #${setNumber}` : `#${setNumber}`;
     }
 );
 
