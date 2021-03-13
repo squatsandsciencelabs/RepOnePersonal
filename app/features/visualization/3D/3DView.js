@@ -124,6 +124,7 @@ export default function App(props) {
     // and for rerenders, for instance after sliding is completed, call setState({...state})
     const [state, setState] = React.useState({
         repIndex: props.repIndex,
+        vertices: null, // to determine should re-render points from bulk data coming in
         scene: null,
         points: null,
         sensor: null,
@@ -302,6 +303,7 @@ export default function App(props) {
         const points = new THREE.Points( geometry, material );
         scene.add(points);
         state.points = points;
+        state.vertices = vertices;
 
         // Setup an animation loop
         const render = (time) => {
@@ -371,9 +373,10 @@ export default function App(props) {
     };
 
     // update points
-    if (props.repIndex !== state.repIndex && state.scene && state.points && state.sensor) {
-        // reset rep index
+    if ((props.repIndex !== state.repIndex || vertices !== state.vertices) && state.scene && state.points && state.sensor) {
+        // reset rep index and vertices
         state.repIndex = props.repIndex;
+        state.vertices = vertices;
 
         // remove points
         state.scene.remove(state.points);
