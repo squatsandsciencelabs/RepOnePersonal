@@ -242,8 +242,8 @@ export default function App(props) {
         // scene.scale.set(-1, 1, 1); // depends on coordinate plane
 
         // light
-        const ambientLight = new AmbientLight( 0xffffff, 1, 100);
-        scene.add( ambientLight );
+        // const ambientLight = new AmbientLight( 0xffffff, 1, 100);
+        // scene.add( ambientLight );
 
         // skysphere
         const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
@@ -278,12 +278,12 @@ export default function App(props) {
 
         // sensor
         const sensor = await loadAsync(require('app/appearance/models/sensor.obj'));
-        const texture = await loadAsync(require('app/appearance/images/adam.png'));
-        sensor.traverse((o) => {
-            if (o.isMesh) {
-                o.material.map = texture;
-            }
-        });
+        // const texture = await loadAsync(require('app/appearance/images/adam.png'));
+        // sensor.traverse((o) => {
+        //     if (o.isMesh) {
+        //         o.material.map = texture;
+        //     }
+        // });
         sensor.position.set(initialX, initialY, initialZ-10);
         sensor.rotateX(Math.PI * 0.5);
         sensor.rotateY(Math.PI * 0.5);
