@@ -1,6 +1,16 @@
 import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import {
+    AVG_VELOCITY_METRIC,
+    PKV_METRIC,
+    PKH_METRIC,
+    ROM_METRIC,
+    DURATION_METRIC,
+} from 'app/configs+constants/CollapsedMetricTypes';
+import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
+
 import { createSelector } from 'reselect';
 
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
@@ -10,12 +20,13 @@ import * as DurationCalculator from 'app/utility/DurationCalculator'
 import WorkoutList from './WorkoutList';
 import * as Actions from './WorkoutActions';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
+import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as WorkoutCollapsedSelectors from 'app/redux/selectors/WorkoutCollapsedSelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, collapsedModel, can3D) => {
+const createViewModels = (sets, columnsModel, collapsedModel, can3D) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
     let sections = [section]; // the return value
@@ -76,7 +87,7 @@ const createViewModels = (sets, collapsedModel, can3D) => {
                     } else {
                         array.push(createBorder(set));
                     }
-                    array.push(createSubheaderModel(set));
+                    array.push(createSubheaderModel(set, columnsModel));
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -89,7 +100,7 @@ const createViewModels = (sets, collapsedModel, can3D) => {
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            Array.prototype.push.apply(array, createRowViewModels(set));
+            Array.prototype.push.apply(array, createRowViewModels(set, columnsModel));
         }
 
         // footer with rest, 3d, and delete
@@ -245,11 +256,11 @@ const createBorder = (set) => ({
     key: `${set.setID}border`,
 });
 
-const createSubheaderModel = (set) => ({
+const createSubheaderModel = (set, columnsModel) => ({
     type: "subheader",
     key: set.setID+"subheader",
-    labels: [1, 2, 3, 4, 5],
-    units: [1, 2, 3, 4, 5],
+    labels: columnsModel.map(metric => CollapsedMetrics.metricAbbreviation(metric)),
+    units: columnsModel.map(metric => CollapsedMetrics.metricUnit(metric)),
 });
 
 const createRowViewModels = (set) => {
@@ -259,21 +270,30 @@ const createRowViewModels = (set) => {
         // get rep
         let rep = set.reps[i];
 
+        // ignore deleted rows if necessary
+        if (shouldShowRemoved === false && rep.removed === true) {
+            continue;
+        }
+
         // increment rep count
         repCount++;
 
-        // obv1 properties
+        // helpers
+        const helper = {
+            AVG_VELOCITY_METRIC: "INV",
+            PKV_METRIC: "INV",
+            PKH_METRIC: "INV",
+            // linear3DAverageVelocity: "INV",
+            ROM_METRIC: "INV",
+            DURATION_METRIC: "INV",
+        };
+
+        // vm
         let vm = {
             type: "data",
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
-            averageVelocity: "Invalid",
-            peakVelocity: "Invalid",
-            // peakVelocityLocation: "Invalid",
-            linear3DAverageVelocity: "Invalid",
-            rangeOfMotion: "Invalid",
-            duration: "Invalid",
             removed: rep.removed,
             key: set.setID+i,
         };
@@ -282,42 +302,45 @@ const createRowViewModels = (set) => {
         if (rep.isValid == true) {
             let avgVel = rep.averageVelocity;
             if (avgVel !== null) {
-                vm.averageVelocity = avgVel / 1000;
+                helper.AVG_VELOCITY_METRIC = avgVel / 1000;
             }
 
             let peakVel = rep.peakVelocity;
             if (peakVel !== null) {
-                vm.peakVelocity = peakVel / 1000;
+                helper.PKV_METRIC = peakVel / 1000;
             }
 
-            // let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-            // if (peakVelLoc !== null) {
-            //     vm.peakVelocityLocation = peakVelLoc;
+            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
+            if (peakVelLoc !== null) {
+                helper.PKH_METRIC = peakVelLoc;
+            }
+
+            // if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
+            //     helper.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
             // }
-
-            if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-                vm.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
-            }
 
             let rom = rep.rom;
             if (rom !== null) {
-                vm.rangeOfMotion = rom;
+                helper.ROM_METRIC = rom;
             }
 
-            if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
-                vm.linear3DROM = rep.linear3DROM;
-            }
+            // if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
+            //     helper.linear3DROM = rep.linear3DROM;
+            // }
 
             // obv2 properties
-            let duration = rep.duration; 
+            let duration = rep.duration;
             if (duration !== null) {
-                vm.duration = DurationCalculator.displayDuration(duration);
+                helper.DURATION_METRIC = DurationCalculator.displayDuration(duration);
             } else {
-                vm.duration = "-";
+                helper.DURATION_METRIC = "-";
             }
         }
 
-        //add obj
+        // update vm
+        vm.columns = columnsModel.map(m => helper[m]);
+
+        // add obj
         array.splice(0, 0, vm); // insert at beginning
     }
 
@@ -359,10 +382,11 @@ const createBottomBorder = (set, isPadded) => ({
 
 const getWorkoutSections = createSelector(
     SetsSelectors.getWorkoutSets,
+    ColumnsSettingsSelectors.getMetrics,
     WorkoutCollapsedSelectors.getCollapsedModel,
     ConnectedDeviceStatusSelectors.getCan3D,
-    (sets, collapsedModel, can3D) => {
-        return createViewModels(sets, collapsedModel, can3D);
+    (sets, columnsModel, collapsedModel, can3D) => {
+        return createViewModels(sets, columnsModel, collapsedModel, can3D);
     }
 );
 
