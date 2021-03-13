@@ -270,11 +270,6 @@ const createRowViewModels = (set) => {
         // get rep
         let rep = set.reps[i];
 
-        // ignore deleted rows if necessary
-        if (shouldShowRemoved === false && rep.removed === true) {
-            continue;
-        }
-
         // increment rep count
         repCount++;
 

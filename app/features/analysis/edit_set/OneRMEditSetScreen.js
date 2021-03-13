@@ -5,9 +5,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import {
+    AVG_VELOCITY_METRIC,
+    PKV_METRIC,
+    PKH_METRIC,
+    ROM_METRIC,
+    DURATION_METRIC,
+} from 'app/configs+constants/CollapsedMetricTypes';
+import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
+
 import * as Actions from './OneRMEditSetActions';
 import OneRMEditSetView from './OneRMEditSetView';
 
+import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
@@ -16,7 +26,7 @@ import * as SetUtils from 'app/utility/SetUtils';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 
 // assumes chronological sets
-const createViewModels = (sets, setID, metric) => {
+const createViewModels = (sets, setID, columnsModel, metric) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -92,9 +102,9 @@ const createViewModels = (sets, setID, metric) => {
                     array.push(createBorder(set));
                 }
                 if (set.reps.length > 0) {
-                    array.push(createSubheaderModel(set));
+                    array.push(createSubheaderModel(set, columnsModel));
                 }
-                Array.prototype.push.apply(array, createRowViewModels(set));
+                Array.prototype.push.apply(array, createRowViewModels(set, columnsModel));
                 array.push(createFooterVM(set, !isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null ? lastSetEndTime : null));
             } else {
                 array.push(createRestoreViewModel(set));
@@ -209,12 +219,14 @@ const createBorder = (set) => ({
     key: `${set.setID}border`,
 });
 
-const createSubheaderModel = (set) => ({
+const createSubheaderModel = (set, columnsModel) => ({
     type: "subheader",
     key: set.setID+"subheader",
+    labels: columnsModel.map(metric => CollapsedMetrics.metricAbbreviation(metric)),
+    units: columnsModel.map(metric => CollapsedMetrics.metricUnit(metric)),
 });
 
-const createRowViewModels = (set) => {
+const createRowViewModels = (set, columnsModel) => {
     let array = [];
 
     for (let i=0, repCount=0; i<set.reps.length; i++) {
@@ -224,18 +236,22 @@ const createRowViewModels = (set) => {
         // increment rep count
         repCount++;
 
-        // obv1 properties
+        // helpers
+        const helper = {
+            AVG_VELOCITY_METRIC: "INV",
+            PKV_METRIC: "INV",
+            PKH_METRIC: "INV",
+            // linear3DAverageVelocity: "INV",
+            ROM_METRIC: "INV",
+            DURATION_METRIC: "INV",
+        };
+
+        // vm
         let vm = {
             type: "data",
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
-            averageVelocity: "Invalid",
-            peakVelocity: "Invalid",
-            // peakVelocityLocation: "Invalid",
-            linear3DAverageVelocity: "Invalid",
-            rangeOfMotion: "Invalid",
-            duration: "Invalid",
             removed: rep.removed,
             key: set.setID+i,
         };
@@ -244,42 +260,45 @@ const createRowViewModels = (set) => {
         if (rep.isValid == true) {
             let avgVel = rep.averageVelocity;
             if (avgVel !== null) {
-                vm.averageVelocity = avgVel / 1000;
+                helper.AVG_VELOCITY_METRIC = avgVel / 1000;
             }
 
             let peakVel = rep.peakVelocity;
             if (peakVel !== null) {
-                vm.peakVelocity = peakVel / 1000;
+                helper.PKV_METRIC = peakVel / 1000;
             }
 
-            // let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-            // if (peakVelLoc !== null) {
-            //     vm.peakVelocityLocation = peakVelLoc;
+            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
+            if (peakVelLoc !== null) {
+                helper.PKH_METRIC = peakVelLoc;
+            }
+
+            // if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
+            //     helper.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
             // }
-
-            if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-                vm.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
-            }
 
             let rom = rep.rom;
             if (rom !== null) {
-                vm.rangeOfMotion = rom;
+                helper.ROM_METRIC = rom;
             }
 
-            if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
-                vm.linear3DROM = rep.linear3DROM;
-            }
+            // if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
+            //     helper.linear3DROM = rep.linear3DROM;
+            // }
 
             // obv2 properties
             let duration = rep.duration;
             if (duration !== null) {
-                vm.duration = DurationCalculator.displayDuration(duration);
+                helper.DURATION_METRIC = DurationCalculator.displayDuration(duration);
             } else {
-                vm.duration = "-";
+                helper.DURATION_METRIC = "-";
             }
         }
 
-        //add obj
+        // update vm
+        vm.columns = columnsModel.map(m => helper[m]);
+
+        // add obj
         array.push(vm);
     }
 
@@ -330,11 +349,12 @@ const selectMapStateToProps = createSelector(
     AnalysisSelectors.getSetID,
     AnalysisSelectors.getWorkoutID,
     SetsSelectors.getAllSets,
+    ColumnsSettingsSelectors.getMetrics,
     SettingsSelectors.getDefaultMetric,
-    (setID, workoutID, allSets, defaultMetric) => {
+    (setID, workoutID, allSets, columnsModel, defaultMetric) => {
         if (setID) {
             const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
-            const {title, sections} = createViewModels(sets, setID, defaultMetric);
+            const {title, sections} = createViewModels(sets, setID, columnsModel, defaultMetric);
 
             return {
                 title: title,
