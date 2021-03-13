@@ -309,7 +309,9 @@ export const getNextRepIndex = createSelector(
                 return null;
             }
         }
-        return null;
+
+        // nothing found, don't navigate
+        return -1;
     }
 );
 
@@ -323,7 +325,9 @@ export const getPrevRepIndex = createSelector(
                 return i;
             }
         }
-        return null;
+
+        // nothing found, don't navigate
+        return -1;
     }
 );
 

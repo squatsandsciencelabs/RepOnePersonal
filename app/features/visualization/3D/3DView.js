@@ -510,10 +510,10 @@ export default function App(props) {
         <View style={styles.navigation}><Text style={styles.navigationText}>{props.navigationText}</Text></View>
 
         {/* navigate prev */}
-        <TouchableOpacity style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== null ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== -1 ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
 
         {/* navigate next */}
-        <TouchableOpacity style={styles.navNextRep} onPress={()=> props.nextRepIndex !== null? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navNextRep} onPress={()=> props.nextRepIndex !== -1 ? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
 
         {/* close */}
         <TouchableOpacity style={styles.close} onPress={()=> props.tappedClose()}><Image source={require('app/appearance/images/x.png')} /></TouchableOpacity>
