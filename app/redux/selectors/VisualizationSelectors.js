@@ -296,7 +296,17 @@ export const getNextRepIndex = createSelector(
         for (let i=selectedIndex+1; i<reps.length; i++) {
             const rep = reps[i];
             if (rep.isValid && !rep.removed) {
-                return i;
+                // confirming if it's last or not
+                for (j=i+1; j<reps.length; j++) {
+                    const rep = reps[j];
+                    if (rep.isValid && !rep.removed) {
+                        // found another rep that counts, return i as i is not the last possible
+                        return i;
+                    }
+                }
+
+                // found it but it's the last one, return null so it always snaps to the last
+                return null;
             }
         }
         return null;
