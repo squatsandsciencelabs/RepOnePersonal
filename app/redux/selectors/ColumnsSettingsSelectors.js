@@ -1,0 +1,23 @@
+const stateRoot = (state) => state.columnsSettings;
+
+export const getMetric1 = (state) => stateRoot(state).metrics[0];
+
+export const getMetric2 = (state) => stateRoot(state).metrics[1];
+
+export const getMetric3 = (state) => stateRoot(state).metrics[2];
+
+export const getMetric4 = (state) => stateRoot(state).metrics[3];
+
+export const getMetric5 = (state) => stateRoot(state).metrics[4];
+
+export const getIsEditingMetric = (state) => stateRoot(state).editingMetricRank !== null;
+
+export const getEditingMetricRank = state => stateRoot(state).editingMetricRank;
+
+export const getCurrentMetric = (state) => {
+    const rank = getEditingMetricRank(state);
+    if (rank === null) {
+        return null;
+    }
+    return stateRoot(state)[rank-1];
+};

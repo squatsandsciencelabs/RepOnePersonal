@@ -66,7 +66,8 @@ export default initializeStore = () => {
         transforms: [
             createFilter('auth', ['accessToken', 'refreshToken', 'lastRefreshDate', 'email']),
             createFilter('settings', ['defaultMetric', 'endSetTimerDuration', 'syncDate', 'wasTimerEdited', 'wasMetricEdited', 'lastExportCSVDate']),
-            createFilter('collapsedSettings', ['metric1', 'quantifier1', 'metric2', 'quantifier2', 'metric3', 'quantifier3', 'metric4', 'quantifier4', 'metric5', 'quantifier5']),            
+            createFilter('collapsedSettings', ['metric1', 'quantifier1', 'metric2', 'quantifier2', 'metric3', 'quantifier3', 'metric4', 'quantifier4', 'metric5', 'quantifier5']),
+            createFilter('columnsSettings', ['metrics']),
             createFilter('workout', ['removedCounter', 'restoredCounter']),
             createFilter('history', ['viewedCounter']),
             createFilter('analysis', ['exercise', 'velocitySlider', 'daysRange', 'tagsToInclude', 'tagsToExclude', 'oneRMAnalytics']),

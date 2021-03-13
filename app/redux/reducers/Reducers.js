@@ -10,6 +10,7 @@ import KillSwitchReducer from './KillSwitchReducer';
 import AuthReducer from './AuthReducer';
 import SettingsReducer from './SettingsReducer';
 import CollapsedSettingsReducer from './CollapsedSettingsReducer';
+import ColumnsSettingsReducer from './ColumnsSettingsReducer';
 import SuggestionsReducer from './SuggestionsReducer';
 import AppStateReducer from './AppStateReducer';
 import DurationsReducer from './DurationsReducer';
@@ -33,6 +34,7 @@ export default reducers = combineReducers({
     suggestions: SuggestionsReducer,
     settings: SettingsReducer,
     collapsedSettings: CollapsedSettingsReducer,
+    columnsSettings: ColumnsSettingsReducer,
     appState: AppStateReducer,
     durations: DurationsReducer,
     analysis: AnalysisReducer,
