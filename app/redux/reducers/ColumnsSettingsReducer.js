@@ -37,7 +37,7 @@ export default (state = defaultState, action) => {
             };
         case SAVE_COLUMN_METRIC:
             const metrics = [...state.metrics];
-            metrics[state.editingMetricRank-1] = action.metric;
+            metrics[action.rank-1] = action.metric; // note: not grabbing from editingMetricRank due to potential iOS vs Andoid differences
             return {
                 ...state,
                 metrics,

@@ -21,5 +21,5 @@ export const getCurrentMetric = (state) => {
     if (rank === null) {
         return null;
     }
-    return stateRoot(state)[rank-1];
+    return stateRoot(state).metrics[rank-1];
 };
