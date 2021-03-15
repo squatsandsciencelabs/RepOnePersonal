@@ -56,8 +56,8 @@ class SettingsMetricsPanel extends Component {
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
                         {this.props.metrics.map((m, i) => <View style={{flex: 1, flexDirection: 'row'}}>
-                            <View style={styles.numberBackground}><Text style={styles.numberLabel}>1</Text></View>
-                            <View style={styles.dropdownButton}><SettingsEditColumnsScreen color={'white'} rank={i+1} /></View>
+                            <View style={styles.numberBackground}><Text style={styles.numberLabel}>{i+1}</Text></View>
+                            <View style={[{flex: 1}, styles.dropdownButton]}><SettingsEditColumnsScreen color={'white'} rank={i+1} /></View>
                         </View>)}
                     </View>
                 </View>

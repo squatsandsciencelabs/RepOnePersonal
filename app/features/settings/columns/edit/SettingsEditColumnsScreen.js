@@ -17,7 +17,7 @@ import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSe
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 
 const pickerItem = (metric) => ({
-    label: Platform.OS === 'ios' ? CollapsedMetricsUtility.metricString(metric) : CollapsedMetricsUtility.metricAbbreviation(metric),
+    label: CollapsedMetricsUtility.metricString(metric),
     value: metric,
 });
 
@@ -37,15 +37,27 @@ const mapStateToPropsiOS = (state) => {
     };
 };
 
-const mapStateToPropsAndroid = (state) => {
-    return {
-        items,
-        selectedValue: ColumnsSettingsSelectors.getCurrentMetric(state),
+const makeAndroidSelector = () => createSelector(
+    (state, props) => props.rank,
+    ColumnsSettingsSelectors.getMetrics,
+    (rank, metrics) => {
+        console.tron.log(`rank ${rank} should return value ${metrics[rank-1]}`);
+        return {
+            items,
+            selectedValue: metrics[rank-1],
+        };
+    },
+);
+
+const makeMapStateToPropsAndroid = () => {
+    const getModel = makeAndroidSelector();
+    return (state, props) => {
+        return getModel(state, props);
     };
 };
 
 // this way only check OS once
-const mapStateToProps = Platform.OS === 'ios' ? mapStateToPropsiOS : mapStateToPropsAndroid;
+const mapStateToProps = Platform.OS === 'ios' ? mapStateToPropsiOS : makeMapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {
