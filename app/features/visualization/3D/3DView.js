@@ -16,7 +16,6 @@ import Slider from '@react-native-community/slider';
 import {
   PerspectiveCamera,
   Scene,
-  AmbientLight,
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 import TargetCircle from 'app/shared_features/target/TargetCircle';
@@ -278,12 +277,6 @@ export default function App(props) {
 
         // sensor
         const sensor = await loadAsync(require('app/appearance/models/sensor.obj'));
-        // const texture = await loadAsync(require('app/appearance/images/adam.png'));
-        // sensor.traverse((o) => {
-        //     if (o.isMesh) {
-        //         o.material.map = texture;
-        //     }
-        // });
         sensor.position.set(initialX, initialY, initialZ-10);
         sensor.rotateX(Math.PI * 0.5);
         sensor.rotateY(Math.PI * 0.5);
@@ -425,12 +418,14 @@ export default function App(props) {
                 <View>
                     <Text style={styles.label}>VEL</Text>
                     <Text style={styles.label}>ACC</Text>
+                    <Text style={styles.label}>FORCE</Text>
                     <Text style={styles.label}>POS</Text>
                     <Text style={styles.label}>TIME</Text>
                 </View>
                 <View>
                     <Text style={styles.data}>{data[state.currentIndex].displayVelocity}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayAcceleration}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].displayForce}</Text>
                     <Text style={styles.data}>{state.currentIndex+1}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
                 </View>
@@ -544,7 +539,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     label: {
-        width: 45,
+        width: 60,
         color: 'rgba(130, 130, 130, 1)',
         fontWeight: 'bold',
     },

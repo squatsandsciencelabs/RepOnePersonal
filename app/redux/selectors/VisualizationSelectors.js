@@ -171,9 +171,20 @@ export const getRepModel = createSelector(
     }
 );
 
+const getWeight = (state) => {
+    const set = getSet(state);
+    if (!set) {
+        return null;
+    } else {
+        return SetUtils.weightInKGs(set);
+    }
+};
+
+const gravity = 9.80665;
 export const getData = createSelector(
     getRep,
-    (rep) => {
+    getWeight,
+    (rep, weight) => {
         if (!rep || !rep.bulkData || rep.rom === 519) {
             return [];
         }
@@ -210,9 +221,13 @@ export const getData = createSelector(
             const deltaV = velocity - prevBulkData.velocity;
             const acceleration = Math.abs(parseFloat(deltaV / deltaT));
 
+            // calculate instaneous force
+            const displayForce = weight !== null ? Number((acceleration + gravity) * weight).toFixed(2) : '-';
+
             // save values
             bulkData.velocity = velocity;
             bulkData.acceleration = acceleration;
+            bulkData.displayForce = displayForce;
             speeds.push(velocity);
         }
 
