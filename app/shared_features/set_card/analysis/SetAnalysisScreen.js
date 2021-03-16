@@ -9,6 +9,9 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    LINEAR_3D_AVG_VELOCITY_METRIC,
+    LINEAR_3D_ROM_METRIC,
+
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -195,6 +198,74 @@ const metricValue = (set, allSets, quantifier, metric) => {
             break;
         case RPE_METRIC:
             returnValue = CollapsedMetrics.getRPE1RM(set);
+            break;
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
+            switch (quantifier) {
+                case FIRST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFirstLinear3DAvgVelocity(set);
+                    break;
+                case LAST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getLastLinear3DAvgVelocity(set);
+                    break;
+                case MIN_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMinLinear3DAvgVelocity(set);
+                    break;
+                case MAX_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMaxLinear3DAvgVelocity(set);
+                    break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgOfLinear3DAvgVelocities(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAbsLossOfLinear3DAvgVelocities(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPercentLossOfLinear3DAvgVelocities(set);
+                    break;
+                case SET_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getSetLossOfLinear3DAvgVelocities(set);
+                    break;
+                case PEAK_END_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPeakEndOfLinear3DAvgVelocities(set);
+                    break;                    
+                case FASTEST_EVER_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFastestLinear3DAvgVelocityEver(set, allSets);
+                    break;
+                case SLOWEST_EVER_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getSlowestLinear3DAvgVelocityEver(set, allSets);
+                    break;
+            }
+            break;
+        case LINEAR_3D_ROM_METRIC:
+            switch (quantifier) {
+                case FIRST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFirstLinear3DROM(set);
+                    break;
+                case LAST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getLastLinear3DROM(set);
+                    break;
+                case MIN_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMinLinear3DROM(set);
+                    break;
+                case MAX_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMaxLinear3DROM(set);
+                    break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgLinear3DROM(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAbsLossOfLinear3DROMs(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPercentLossOfLinear3DROMs(set);
+                    break;
+                case SET_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getSetLossOfLinear3DROMs(set);
+                    break;
+                case PEAK_END_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPeakEndOfLinear3DROMs(set);
+                    break; 
+            }
             break;
     }
 

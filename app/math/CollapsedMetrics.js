@@ -12,7 +12,7 @@ import {
     AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
-    
+
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -70,6 +70,10 @@ export const getDurations = (set) => {
     return getMetrics(set, r => r.duration);
 };
 
+export const getLinear3DAvgVelocities = set => getMetrics(set, r => r.linear3DAverageVelocity / 1000);
+
+export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
+
 // Average Quantifiers
 
 const getAvgOfMetrics = (metrics) => {
@@ -99,6 +103,16 @@ export const getAvgROM = (set) => {
 export const getAvgDuration = (set) => {
     const durations = getDurations(set);
     return getAvgOfMetrics(durations);
+};
+
+export const getAvgOfLinear3DAvgVelocities = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getAvgOfMetrics(velocities);
+};
+
+export const getAvgLinear3DROM = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getAvgOfMetrics(roms);
 };
 
 // Absolute Loss Quantifiers
@@ -134,6 +148,16 @@ export const getAbsLossOfDurations = (set) => {
     return getAbsLossOfMetrics(durations);    
 };
 
+export const getAbsLossOfLinear3DAvgVelocities = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getAbsLossOfMetrics(velocities);
+};
+
+export const getAbsLossOfLinear3DROMs = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getAbsLossOfMetrics(roms);
+};
+
 // Percent Loss Quantifiers
 
 const getPercentLossOfMetrics = (metrics) => {
@@ -165,6 +189,16 @@ export const getPercentLossOfROMs = (set) => {
 export const getPercentLossOfDurations = (set) => {
     const durations = getDurations(set);
     return getPercentLossOfMetrics(durations);    
+};
+
+export const getPercentLossOfLinear3DAvgVelocities = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getPercentLossOfMetrics(velocities);
+};
+
+export const getPercentLossOfLinear3DROMs = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getPercentLossOfMetrics(roms);
 };
 
 // First Rep Quantifiers
@@ -202,6 +236,16 @@ export const getFirstDuration = (set) => {
     return getFirstRepOfMetrics(durations);
 };
 
+export const getFirstLinear3DAvgVelocity = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getFirstRepOfMetrics(velocities);
+};
+
+export const getFirstLinear3DROM = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getFirstRepOfMetrics(roms);
+};
+
 // Last Rep Quantifiers
 
 const getLastRepMetrics = (metrics) => {
@@ -235,6 +279,16 @@ export const getLastROM = (set) => {
 export const getLastDuration = (set) => {
     const durations = getDurations(set);
     return getLastRepMetrics(durations);
+};
+
+export const getLastLinear3DAvgVelocity = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getLastRepMetrics(velocities);
+};
+
+export const getLastLinear3DROM = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getLastRepMetrics(roms);
 };
 
 // Get Min Quantifiers
@@ -272,6 +326,16 @@ export const getMinDuration = (set) => {
     return getMinMetrics(durations);
 };
 
+export const getMinLinear3DAvgVelocity = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getMinMetrics(velocities);
+};
+
+export const getMinLinear3DROM = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getMinMetrics(roms);
+};
+
 // Get Max Quantifiers
 
 const getMaxMetrics = (metrics) => {
@@ -307,6 +371,16 @@ export const getMaxDuration = (set) => {
     return getMaxMetrics(durations);
 };
 
+export const getMaxLinear3DAvgVelocity = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getMaxMetrics(velocities);
+};
+
+export const getMaxLinear3DROM = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getMaxMetrics(roms);
+};
+
 // Peak-End
 
 const getPeakEndMetrics = (metrics) => {
@@ -338,6 +412,16 @@ export const getPeakEndOfROMs = (set) => {
 export const getPeakEndOfDurations = (set) => {
     const durations = getDurations(set);
     return getPeakEndMetrics(durations);
+};
+
+export const getPeakEndOfLinear3DAvgVelocities = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getPeakEndMetrics(velocities);
+};
+
+export const getPeakEndOfLinear3DROMs = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getPeakEndMetrics(roms);
 };
 
 // Set Loss
@@ -372,6 +456,18 @@ export const getSetLossOfDurations = (set) => {
     const durations = getDurations(set);
     return getSetLossMetrics(durations);
 };
+
+export const getSetLossOfLinear3DAvgVelocities = (set) => {
+    const velocities = getLinear3DAvgVelocities(set);
+    return getSetLossMetrics(velocities);
+};
+
+export const getSetLossOfLinear3DROMs = (set) => {
+    const roms = getLinear3DROMs(set);
+    return getSetLossMetrics(roms);
+};
+
+// RPE 1RM
 
 export const canCalcRPE1RM = (set) => {
     let rpe = set.rpe;
@@ -517,6 +613,10 @@ export const getFastestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations, false);
 };
 
+export const getFastestLinear3DAvgVelocityEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getLinear3DAvgVelocities);
+};
+
 export const getSlowestAvgVelocityEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, CollapsedMetrics.getAvgVelocities, false);
 };
@@ -527,6 +627,10 @@ export const getSlowestPKVEver = (set, allSets) => {
 
 export const getSlowestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations);
+};
+
+export const getSlowestLinear3DAvgVelocityEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getLinear3DAvgVelocities, false);
 };
 
 // To String

@@ -11,6 +11,9 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    LINEAR_3D_AVG_VELOCITY_METRIC,
+    LINEAR_3D_ROM_METRIC,
+
     AVG_QUANTIFIER,
     FASTEST_EVER_QUANTIFIER,
     SLOWEST_EVER_QUANTIFIER,
@@ -42,6 +45,7 @@ const generateItems = (quantifier) => {
                 pickerItem(EMPTY_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
             ];
@@ -53,8 +57,10 @@ const generateItems = (quantifier) => {
             return [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(ROM_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
             ];
@@ -63,8 +69,10 @@ const generateItems = (quantifier) => {
                 pickerItem(EMPTY_METRIC),
                 pickerItem(PKH_METRIC),
                 pickerItem(ROM_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
             ];
