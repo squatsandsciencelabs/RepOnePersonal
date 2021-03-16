@@ -180,58 +180,47 @@ const getWeight = (state) => {
     }
 };
 
-// TODO: acceleration calculation ideally happens in SetUtils rather than beign duplicated twice over
-// ideally get velocities is one thing, then get accelerations from it, then get forces, and this can calculate colors
-// but being lazy for now and just copy pasting work as it's more effort to refactor this to use SetUtils and test to prove it works
-const gravity = 9.80665;
 export const getData = createSelector(
     getRep,
-    getWeight,
-    (rep, weight) => {
+    getSet,
+    (rep, set) => {
         if (!rep || !rep.bulkData) {
             return [];
         }
 
         // loop add data
-        const data = [];
-        for (const index in rep.bulkData) {
-            data[parseInt(index)] = { ...rep.bulkData[index] };
-        }
+        const data = SetUtils.getBulkArray(rep);
 
         // set velocity and accel for initial point
         if (data.length > 0) {
             const bulkData = data[0];
             bulkData.velocity = 0;
             bulkData.acceleration = 0;
+            bulkData.force = 0;
+            bulkData.power = 0;
             bulkData.color = `rgba(255, 0, 0, 1)`;
         }
 
+        // get data
+        const deltaTs = SetUtils.getDeltaTimes(rep, data);
+        const velocities = SetUtils.getVelocities(rep, deltaTs, data);
+        const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
+        const forces = SetUtils.getForces(set, rep, accelerations, velocities);
+        const powers = SetUtils.getPowers(set, rep, forces, velocities);
+
+        // length check
+        if (powers.length !== forces.length || forces.length !== accelerations.length || accelerations.length !== velocities.length || velocities.length !== deltaTs.length) {
+            console.tron.log(`Error getData, powers length ${powers.length} != forces length ${forces.length} != accelerations length ${accelerations.length} != velocities length ${velocities.length} != deltaTs length ${deltaTs.length}`);
+            return [];
+        }
+
         // loop add and modify data
-        const speeds = [0];
         for (let i=1; i<data.length; i++) {
-            // select points
             const bulkData = data[i];
-            const prevBulkData = data[i-1];
-
-            // calculate velocity
-            const deltaT = (prevBulkData.time - bulkData.time) / 1000000.0; // microseconds conversion
-            const prevPoint = new THREE.Vector3(prevBulkData.x, prevBulkData.y, prevBulkData.z);
-            const currentPoint = new THREE.Vector3(bulkData.x, bulkData.y, bulkData.z);
-            const deltaD = prevPoint.distanceTo(currentPoint) / 100000.0; // 1/10 of a mm conversion
-            const velocity = Math.abs(parseFloat(deltaD / deltaT));
-
-            // calculate acceleration
-            const deltaV = velocity - prevBulkData.velocity;
-            const acceleration = Math.abs(parseFloat(deltaV / deltaT));
-
-            // calculate instaneous force
-            const displayForce = weight !== null ? Number((acceleration + gravity) * weight).toFixed(2) : '-';
-
-            // save values
-            bulkData.velocity = velocity;
-            bulkData.acceleration = acceleration;
-            bulkData.displayForce = displayForce;
-            speeds.push(velocity);
+            bulkData.velocity = velocities[i];
+            bulkData.acceleration = accelerations[i];
+            bulkData.force = forces[i];
+            bulkData.power = powers[i];
         }
 
         // to fixed
@@ -239,12 +228,14 @@ export const getData = createSelector(
             d.displayTime = Number(d.time / 1000000.0).toFixed(2);
             d.displayVelocity = Number(d.velocity).toFixed(2);
             d.displayAcceleration = Number(d.acceleration).toFixed(2);
+            d.displayForce = d.force ? Number(d.force).toFixed(2) : '-';
+            d.displayPower = d.power ? Number(d.power).toFixed(2) : '-';
         });
 
         // colors
-        const maxSpeed = Math.max(...speeds);
+        const maxSpeed = Math.max(...velocities);
         const halfSpeed = maxSpeed * 0.5;
-        speeds.forEach((s, index) => {
+        velocities.forEach((s, index) => {
             const r = s <= halfSpeed ? 1 : 1 - ((s-halfSpeed) / halfSpeed);
             const g = s >= halfSpeed ? 1 : s / halfSpeed;
             data[index].color = `rgba(${r*255}, ${g*255}, 0, 1)`;

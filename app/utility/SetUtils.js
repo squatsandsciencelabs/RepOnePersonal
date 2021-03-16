@@ -304,22 +304,42 @@ export const checkDateRange = (setInitialStartTime, startingDate, endingDate) =>
 
 // Not sure if this belongs in setutils as it actually requires rep, but whatever
 
-export const getDeltaTimes = rep => {
+export const getBulkArray = rep => {
     if (!rep || !rep.bulkData) {
         return [];
+    }
+
+    // loop add data
+    const data = [];
+    for (const index in rep.bulkData) {
+        data[parseInt(index)] = { ...rep.bulkData[index] };
+    }
+
+    // return
+    return data;
+};
+
+export const getDeltaTimes = (rep, bulkData=null) => {
+    if (!rep) {
+        return [];
+    }
+
+    // get bulk if needed
+    if (bulkData === null || bulkData === undefined) {
+        bulkData = getBulkArray(rep);
     }
 
     // loop add data
     const times = [0];
 
     // loop add and modify data
-    for (let i=1; i<rep.bulkData.length; i++) {
+    for (let i=1; i<bulkData.length; i++) {
         // select points
-        const bulkData = rep.bulkData[i];
-        const prevBulkData = rep.bulkData[i-1];
+        const current = bulkData[i];
+        const prev = bulkData[i-1];
 
         // calculate times
-        const deltaT = (prevBulkData.time - bulkData.time) / 1000000.0; // microseconds conversion
+        const deltaT = (prev.time - current.time) / 1000000.0; // microseconds conversion
 
         // save values
         times.push(deltaT);
@@ -328,35 +348,38 @@ export const getDeltaTimes = rep => {
     return times;
 }
 
-export const getVelocities = (rep, times=null) => {
+export const getVelocities = (rep, times=null, bulkData=null) => {
     if (!rep || !rep.bulkData) {
         return [];
     }
 
+    // get bulk if needed
+    if (bulkData === null || bulkData === undefined) {
+        bulkData = getBulkArray(rep);
+    }
+
     // get times if needed
     if (times === null || times === undefined) {
-        times = getDeltaTimes(rep);
+        times = getDeltaTimes(rep, bulkData);
     }
 
     // length check
-    if (rep.bulkData.length !== times.length) {
-        console.tron.log(`Error getVelocities, times length ${times.length} not equal to bulk data length ${rep.bulkData.length}`);
+    if (bulkData.length !== times.length) {
+        console.tron.log(`Error getVelocities, times length ${times.length} not equal to bulk data length ${bulkData.length}`);
         return null;
     }
 
-    // loop add data
-    const velocities = [0];
-
     // loop add and modify data
-    for (let i=1; i<rep.bulkData.length; i++) {
+    const velocities = [0];
+    for (let i=1; i<bulkData.length; i++) {
         // select points
-        const bulkData = rep.bulkData[i];
-        const prevBulkData = rep.bulkData[i-1];
+        const current = bulkData[i];
+        const prev = bulkData[i-1];
         const deltaT = times[i];
 
         // calculate velocity
-        const prevPoint = new THREE.Vector3(prevBulkData.x, prevBulkData.y, prevBulkData.z);
-        const currentPoint = new THREE.Vector3(bulkData.x, bulkData.y, bulkData.z);
+        const prevPoint = new THREE.Vector3(prev.x, prev.y, prev.z);
+        const currentPoint = new THREE.Vector3(current.x, current.y, current.z);
         const deltaD = prevPoint.distanceTo(currentPoint) / 100000.0; // 1/10 of a mm conversion
         const velocity = Math.abs(parseFloat(deltaD / deltaT));
 
@@ -374,6 +397,8 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
         return [];
     }
 
+    console.log(`getAccelerations called with velocities ${velocities} and times ${times}`);
+
     // get times if needed
     if (times === null || times === undefined) {
         times = getDeltaTimes(rep);
@@ -385,16 +410,15 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
     }
 
     // length check
-    if (rep.bulkData.length !== times.length || times.length !== velocities.length) {
-        console.tron.log(`Error getAccelerations, length of bulk data ${rep.bulkData.length} not equal to times ${times.length} not equal to velocities ${velocities.length}`);
+    console.log(`getAccelerations length check with ${velocities} and times ${times}`);
+    if (times.length !== velocities.length) {
+        console.tron.log(`Error getAccelerations, length of times ${times.length} not equal to velocities ${velocities.length}`);
         return null;
     }
 
-    // loop add data
-    const accelerations = [0];
-
     // loop add and modify data
-    for (let i=1; i<rep.bulkData.length; i++) {
+    const accelerations = [0];
+    for (let i=1; i<times.length; i++) {
         // select points
         const velocity = velocities[i];
         const prevVelocity = velocities[i-1];
@@ -413,7 +437,7 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
 };
 
 const gravity = 9.80665;
-export const getForces = (set, rep, velocities=null) => {
+export const getForces = (set, rep, accelerations=null, velocities=null) => {
     if (!set || !rep || !rep.bulkData) {
         return [];
     }
@@ -423,22 +447,31 @@ export const getForces = (set, rep, velocities=null) => {
         return [];
     }
 
+    // get arrays if needed
+    if (accelerations === null || accelerations === undefined) {
+        if (velocities === null || velocities === undefined) {
+            velocities = getVelocities(rep);
+        }
+        accelerations = getAccelerations(rep, velocities);
+    }
+
+    // return
+    return accelerations.map(a => (a + gravity) * weight);
+}
+
+export const getPowers = (set, rep, forces=null, velocities=null) => {
     // get velocities if needed
     if (velocities === null || velocities === undefined) {
         velocities = getVelocities(rep);
     }
-
-    const accelerations = getAccelerations(rep, velocities);
-    return accelerations.map(a => (a + gravity) * weight);
-}
-
-export const getPowers = (set, rep) => {
-    const velocities = getVelocities(rep);
     if (velocities.length <= 0) {
         return [];
     }
 
-    const forces = getForces(set, rep, velocities);
+    // get forces if needed
+    if (forces === null || forces === undefined) {
+        forces = getForces(set, rep, null, velocities);
+    }
     if (forces.length <= 0) {
         return [];
     }
@@ -451,8 +484,11 @@ export const getPowers = (set, rep) => {
     return forces.map((f, i) => f * velocities[i]);
 };
 
-export const getPeakForce = (set, rep) => {
-    const forces = getForces(set, rep);
+export const getPeakForce = (set, rep, forces=null) => {
+    // get forces if needed
+    if (forces === null || forces === undefined) {
+        forces = getForces(set, rep);
+    }
     if (forces.length <= 0) {
         return null;
     }
@@ -460,8 +496,11 @@ export const getPeakForce = (set, rep) => {
     return Math.max(...forces);
 };
 
-export const getAverageForce = (set, rep) => {
-    const forces = getForces(set, rep);
+export const getAverageForce = (set, rep, forces=null) => {
+    // get forces if needed
+    if (forces === null || forces === undefined) {
+        forces = getForces(set, rep);
+    }
     if (forces.length <= 0) {
         return null;
     }
@@ -470,8 +509,11 @@ export const getAverageForce = (set, rep) => {
     return sum / forces.length;
 };
 
-export const getPeakPower = (set, rep) => {
-    const powers = getPowers(set, rep);
+export const getPeakPower = (set, rep, powers=null) => {
+    // get powers if needed
+    if (powers === null || powers === undefined) {
+        powers = getPowers(set, rep);
+    }
     if (powers.length <= 0) {
         return null;
     }
@@ -479,8 +521,11 @@ export const getPeakPower = (set, rep) => {
     return Math.max(...powers);
 };
 
-export const getAveragePower = (set, rep) => {
-    const powers = getPowers(set, rep);
+export const getAveragePower = (set, rep, powers=null) => {
+    // get powers if needed
+    if (powers === null || powers === undefined) {
+        powers = getPowers(set, rep);
+    }
     if (powers.length <= 0) {
         return null;
     }

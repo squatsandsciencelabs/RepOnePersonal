@@ -419,6 +419,7 @@ export default function App(props) {
                     <Text style={styles.label}>VEL</Text>
                     <Text style={styles.label}>ACC</Text>
                     <Text style={styles.label}>FORCE</Text>
+                    <Text style={styles.label}>POW</Text>
                     <Text style={styles.label}>POS</Text>
                     <Text style={styles.label}>TIME</Text>
                 </View>
@@ -426,6 +427,7 @@ export default function App(props) {
                     <Text style={styles.data}>{data[state.currentIndex].displayVelocity}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayAcceleration}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayForce}</Text>
+                    <Text style={styles.data}>{data[state.currentIndex].displayPower}</Text>
                     <Text style={styles.data}>{state.currentIndex+1}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
                 </View>
