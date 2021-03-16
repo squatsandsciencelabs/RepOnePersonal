@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
     headerLabel: {
         flex: 1,
         width: 45,
+        height: 20,
         alignItems: 'center',
+        overflow: 'hidden',
     },
     text: {
         color: 'lightgray'
