@@ -397,8 +397,6 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
         return [];
     }
 
-    console.log(`getAccelerations called with velocities ${velocities} and times ${times}`);
-
     // get times if needed
     if (times === null || times === undefined) {
         times = getDeltaTimes(rep);
@@ -410,7 +408,6 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
     }
 
     // length check
-    console.log(`getAccelerations length check with ${velocities} and times ${times}`);
     if (times.length !== velocities.length) {
         console.tron.log(`Error getAccelerations, length of times ${times.length} not equal to velocities ${velocities.length}`);
         return null;
