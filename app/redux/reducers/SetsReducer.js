@@ -574,11 +574,11 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     let setWasRemoved = activeRep === undefined;
 
     // set
-    let setChanges = {
+    return {
+        ...set,
         reps: newReps,
-        removed: setWasRemoved
+        removed: setWasRemoved,
     };
-    return Object.assign({}, set, setChanges);
 };
 
 // END_SET
