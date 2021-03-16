@@ -209,7 +209,12 @@ export const getData = createSelector(
         const powers = SetUtils.getPowers(set, rep, forces, velocities);
 
         // length check
-        if (powers.length !== forces.length || forces.length !== accelerations.length || accelerations.length !== velocities.length || velocities.length !== deltaTs.length) {
+        if (accelerations.length !== velocities.length || velocities.length !== deltaTs.length) {
+            console.tron.log(`Error getData, accelerations length ${accelerations.length} != velocities length ${velocities.length} != deltaTs length ${deltaTs.length}`);
+            return [];
+        }
+
+        if (forces.length > 0 && forces.length !== powers.length && powers.length !== accelerations.length) {
             console.tron.log(`Error getData, powers length ${powers.length} != forces length ${forces.length} != accelerations length ${accelerations.length} != velocities length ${velocities.length} != deltaTs length ${deltaTs.length}`);
             return [];
         }
