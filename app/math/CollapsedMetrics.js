@@ -12,6 +12,7 @@ import {
     AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
+    
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -554,6 +555,10 @@ export const metricAbbreviation = (metric) => {
             return 'PKP';
         case AVERAGE_POWER_METRIC:
             return 'AVP';
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
+            return 'VEL³';
+        case LINEAR_3D_ROM_METRIC:
+            return 'ROM³';
         default:
             return null;
     };
@@ -583,6 +588,10 @@ export const metricString = (metric) => {
             return 'Peak Power';
         case AVERAGE_POWER_METRIC:
             return 'Average Power';
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
+            return 'Average Velocity 3D';
+        case LINEAR_3D_ROM_METRIC:
+            return 'Range Of Motion 3D';
         default:
             return null;
     };
@@ -598,9 +607,11 @@ export const metricUnit = (metric, quantifier) => {
         case EMPTY_METRIC:
             return '';
         case AVG_VELOCITY_METRIC:
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'm/s';
         case DURATION_METRIC:
             return 'sec';
+        case LINEAR_3D_ROM_METRIC:
         case ROM_METRIC:
             return 'mm';
         case PKH_METRIC:

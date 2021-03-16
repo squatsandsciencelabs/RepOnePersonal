@@ -13,6 +13,8 @@ import {
     AVERAGE_FORCE_METRIC,
     PEAK_POWER_METRIC,
     AVERAGE_POWER_METRIC,
+    LINEAR_3D_AVG_VELOCITY_METRIC,
+    LINEAR_3D_ROM_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import PickerModal from 'app/shared_features/picker/PickerModal';
@@ -27,9 +29,11 @@ const pickerItem = (metric) => ({
 
 const items = [
     pickerItem(AVG_VELOCITY_METRIC),
+    pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
     pickerItem(PKV_METRIC),
     pickerItem(PKH_METRIC),
     pickerItem(ROM_METRIC),
+    pickerItem(LINEAR_3D_ROM_METRIC),
     pickerItem(DURATION_METRIC),
     pickerItem(PEAK_FORCE_METRIC),
     pickerItem(AVERAGE_FORCE_METRIC),

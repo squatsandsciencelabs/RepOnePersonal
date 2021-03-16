@@ -11,6 +11,8 @@ import {
     AVERAGE_FORCE_METRIC,
     PEAK_POWER_METRIC,
     AVERAGE_POWER_METRIC,
+    LINEAR_3D_AVG_VELOCITY_METRIC,
+    LINEAR_3D_ROM_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 export const isDeleted = (set) => {
@@ -555,12 +557,16 @@ export const getDisplayMetric = (metric, rep, set=null, powers=null, forces=null
     switch (metric) {
         case AVG_VELOCITY_METRIC:
             return rep.averageVelocity ? rep.averageVelocity / 1000 : INVALID;
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
+            return rep.linear3DAverageVelocity ? rep.linear3DAverageVelocity / 1000 : INVALID;
         case PKV_METRIC:
             return rep.peakVelocity ? rep.peakVelocity / 1000 : INVALID;
         case PKH_METRIC:
             return rep.peakHeight && rep.rom ? Math.round(rep.peakHeight / rep.rom * 100) : INVALID;
         case ROM_METRIC:
             return rep.rom ? rep.rom : INVALID;
+        case LINEAR_3D_ROM_METRIC:
+            return rep.linear3DROM ? rep.linear3DROM : INVALID;
         case DURATION_METRIC:
             return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
         case PEAK_FORCE_METRIC: {
