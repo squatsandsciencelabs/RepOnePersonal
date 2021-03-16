@@ -301,3 +301,190 @@ export const checkDateRange = (setInitialStartTime, startingDate, endingDate) =>
         return DateUtils.getDate(setInitialStartTime) >= DateUtils.getDate(startingDate) && DateUtils.getDate(setInitialStartTime) <= DateUtils.getDate(endingDate);
     }
 };
+
+// Not sure if this belongs in setutils as it actually requires rep, but whatever
+
+export const getDeltaTimes = rep => {
+    if (!rep || !rep.bulkData) {
+        return [];
+    }
+
+    // loop add data
+    const times = [0];
+
+    // loop add and modify data
+    for (let i=1; i<rep.bulkData.length; i++) {
+        // select points
+        const bulkData = rep.bulkData[i];
+        const prevBulkData = rep.bulkData[i-1];
+
+        // calculate times
+        const deltaT = (prevBulkData.time - bulkData.time) / 1000000.0; // microseconds conversion
+
+        // save values
+        times.push(deltaT);
+    } 
+
+    return times;
+}
+
+export const getVelocities = (rep, times=null) => {
+    if (!rep || !rep.bulkData) {
+        return [];
+    }
+
+    // get times if needed
+    if (times === null || times === undefined) {
+        times = getDeltaTimes(rep);
+    }
+
+    // length check
+    if (rep.bulkData.length !== times.length) {
+        console.tron.log(`Error getVelocities, times length ${times.length} not equal to bulk data length ${rep.bulkData.length}`);
+        return null;
+    }
+
+    // loop add data
+    const velocities = [0];
+
+    // loop add and modify data
+    for (let i=1; i<rep.bulkData.length; i++) {
+        // select points
+        const bulkData = rep.bulkData[i];
+        const prevBulkData = rep.bulkData[i-1];
+        const deltaT = times[i];
+
+        // calculate velocity
+        const prevPoint = new THREE.Vector3(prevBulkData.x, prevBulkData.y, prevBulkData.z);
+        const currentPoint = new THREE.Vector3(bulkData.x, bulkData.y, bulkData.z);
+        const deltaD = prevPoint.distanceTo(currentPoint) / 100000.0; // 1/10 of a mm conversion
+        const velocity = Math.abs(parseFloat(deltaD / deltaT));
+
+        // save values
+        velocities.push(velocity);
+    }
+
+    // return
+    return velocities;
+};
+
+export const getAccelerations = (rep, velocities=null, times=null) => {
+    // valid check
+    if (!rep || !rep.bulkData) {
+        return [];
+    }
+
+    // get times if needed
+    if (times === null || times === undefined) {
+        times = getDeltaTimes(rep);
+    }
+
+    // get velocities if needed
+    if (velocities === null || velocities === undefined) {
+        velocities = getVelocities(rep, times);
+    }
+
+    // length check
+    if (rep.bulkData.length !== times.length || times.length !== velocities.length) {
+        console.tron.log(`Error getAccelerations, length of bulk data ${rep.bulkData.length} not equal to times ${times.length} not equal to velocities ${velocities.length}`);
+        return null;
+    }
+
+    // loop add data
+    const accelerations = [0];
+
+    // loop add and modify data
+    for (let i=1; i<rep.bulkData.length; i++) {
+        // select points
+        const velocity = velocities[i];
+        const prevVelocity = velocities[i-1];
+        const deltaT = times[i];
+
+        // calculate acceleration
+        const deltaV = velocity - prevVelocity;
+        const acceleration = Math.abs(parseFloat(deltaV / deltaT));
+
+        // save values
+        accelerations.push(acceleration);
+    }
+
+    // return
+    return accelerations;
+};
+
+const gravity = 9.80665;
+export const getForces = (set, rep, velocities=null) => {
+    if (!set || !rep || !rep.bulkData) {
+        return [];
+    }
+
+    const weight = weightInKGs(set);
+    if (weight === null) {
+        return [];
+    }
+
+    // get velocities if needed
+    if (velocities === null || velocities === undefined) {
+        velocities = getVelocities(rep);
+    }
+
+    const accelerations = getAccelerations(rep, velocities);
+    return accelerations.map(a => (a + gravity) * weight);
+}
+
+export const getPowers = (set, rep) => {
+    const velocities = getVelocities(rep);
+    if (velocities.length <= 0) {
+        return [];
+    }
+
+    const forces = getForces(set, rep, velocities);
+    if (forces.length <= 0) {
+        return [];
+    }
+
+    if (forces.length !== velocities.length) {
+        console.tron.log(`Error getPowers, forces length ${forces.length} not equal to velocities length ${velocities.length}`);
+        return [];
+    }
+
+    return forces.map((f, i) => f * velocities[i]);
+};
+
+export const getPeakForce = (set, rep) => {
+    const forces = getForces(set, rep);
+    if (forces.length <= 0) {
+        return null;
+    }
+
+    return Math.max(...forces);
+};
+
+export const getAverageForce = (set, rep) => {
+    const forces = getForces(set, rep);
+    if (forces.length <= 0) {
+        return null;
+    }
+
+    const sum = forces.reduce((a, b) => a + b, 0);
+    return sum / forces.length;
+};
+
+export const getPeakPower = (set, rep) => {
+    const powers = getPowers(set, rep);
+    if (powers.length <= 0) {
+        return null;
+    }
+
+    return Math.max(...powers);
+};
+
+export const getAveragePower = (set, rep) => {
+    const powers = getPowers(set, rep);
+    if (powers.length <= 0) {
+        return null;
+    }
+
+    const sum = powers.reduce((a, b) => a + b, 0);
+    return sum / powers.length;
+};

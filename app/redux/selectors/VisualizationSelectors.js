@@ -180,12 +180,15 @@ const getWeight = (state) => {
     }
 };
 
+// TODO: acceleration calculation ideally happens in SetUtils rather than beign duplicated twice over
+// ideally get velocities is one thing, then get accelerations from it, then get forces, and this can calculate colors
+// but being lazy for now and just copy pasting work as it's more effort to refactor this to use SetUtils and test to prove it works
 const gravity = 9.80665;
 export const getData = createSelector(
     getRep,
     getWeight,
     (rep, weight) => {
-        if (!rep || !rep.bulkData || rep.rom === 519) {
+        if (!rep || !rep.bulkData) {
             return [];
         }
 
