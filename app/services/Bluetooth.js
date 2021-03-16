@@ -106,7 +106,7 @@ export default function (store) {
 
                 // not sending valid until methods to determine invalid are determined
                 store.dispatch(DeviceActionCreators.receivedLiftData({
-                    isValid: true, // TODO: should actually calculate when data could be valid
+                    isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
                     deviceRepID: data[0],
                     repNumber: data[1],
                     averageVelocity: data[2],

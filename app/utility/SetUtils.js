@@ -602,6 +602,13 @@ export const getDisplayMetric = (metric, rep, set=null, powers=null, forces=null
     }
 };
 
+export const getRepHasBulkComputedProperties = r => {
+    return (r.peakForce !== null && r.peakForce !== undefined)
+        || (r.averageForce !== null && r.averageForce !== undefined)
+        || (r.peakPower !== null && r.peakPower !== undefined)
+        || (r.averagePower !== null && r.averagePower !== undefined);
+};
+
 export const getMetricsUsesBulk = (metrics) => {
     for (let i=0; i<metrics.length; i++) {
         const metric = metrics[i];

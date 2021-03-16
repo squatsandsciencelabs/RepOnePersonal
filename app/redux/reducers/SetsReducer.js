@@ -173,12 +173,56 @@ const saveWorkoutSet = (state, action) => {
     if (!set.initialStartTime) {
         changes.initialStartTime = new Date();
     }
+    const newSet = {
+        ...set,
+        ...changes,
+    };
 
-    newWorkoutData[setIndex] = Object.assign({}, set, changes);
+    // update rep computed properties
+    if ('weight' in action || 'metric' in action) {
+        // load changed, update computed properties
+        newSet.reps = newSet.reps.map(r => {
+            if (SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+                // can process
+                const rep = {...r};
+                const data = SetUtils.getBulkArray(rep);
+                const deltaTs = SetUtils.getDeltaTimes(rep, data);
+                const velocities = SetUtils.getVelocities(rep, deltaTs, data);
+                const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
+                const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
+                const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
+                
+                rep.peakForce = SetUtils.getPeakForce(newSet, rep, forces);
+                rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
+                rep.peakPower = SetUtils.getPeakPower(newSet, rep, powers);
+                rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
 
-    return Object.assign({}, state, {
-        workoutData: newWorkoutData
-    });
+                return rep;
+            } else {
+                // cannot process
+                if (SetUtils.getRepHasBulkComputedProperties(r)) {
+                    // need to reset
+                    return {
+                        ...r,
+                        peakForce: null,
+                        averageForce: null,
+                        peakPower: null,
+                        averagePower: null,
+                    };
+                } else {
+                    // return original
+                    return r;
+                }
+            }
+        });
+    }
+    
+    newWorkoutData[setIndex] = newSet;
+
+    return {
+        ...state,
+        workoutData: newWorkoutData,
+    };
 };
 
 // DELETE_WORKOUT_SET
@@ -255,18 +299,65 @@ const saveHistorySet = (state, action) => {
     if ('rpe' in action) {
         setChanges.rpe = action.rpe;
     }
-    let newSet = Object.assign({}, set, setChanges);
+    const newSet = {
+        ...set,
+        ...setChanges,
+    };
+
+    // update rep computed properties
+    if ('weight' in action || 'metric' in action) {
+        // load changed, update computed properties
+        newSet.reps = newSet.reps.map(r => {
+            if (SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+                // can process
+                const rep = {...r};
+                const data = SetUtils.getBulkArray(rep);
+                const deltaTs = SetUtils.getDeltaTimes(rep, data);
+                const velocities = SetUtils.getVelocities(rep, deltaTs, data);
+                const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
+                const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
+                const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
+                
+                rep.peakForce = SetUtils.getPeakForce(newSet, rep, forces);
+                rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
+                rep.peakPower = SetUtils.getPeakPower(newSet, rep, powers);
+                rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
+
+                return rep;
+            } else {
+                // cannot process
+                if (SetUtils.getRepHasBulkComputedProperties(r)) {
+                    // need to reset
+                    return {
+                        ...r,
+                        peakForce: null,
+                        averageForce: null,
+                        peakPower: null,
+                        averagePower: null,
+                    };
+                } else {
+                    // return original
+                    return r;
+                }
+            }
+        });
+    }
 
     // state changes
-    let stateChanges = {};
-    stateChanges.historyData = Object.assign({}, historyData, {
-        [setID]: newSet
-    });
+    const stateChanges = {
+        historyData: {
+            ...historyData,
+            [setID]: newSet,
+        }
+    };
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
     }
 
-    return Object.assign({}, state, stateChanges);
+    return {
+        ...state,
+        ...stateChanges,
+    };
 };
 
 // DELETE_HISTORY_SET
@@ -356,6 +447,10 @@ const addRepData = (state, action) => {
         duration: action.duration,
         linear3DAverageVelocity: action.linear3DAverageVelocity,
         linear3DROM: action.linear3DROM,
+        peakForce: null,
+        averageForce: null,
+        peakPower: null,
+        averagePower: null,
     };
 
     let setChanges = {
@@ -443,6 +538,28 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     // update bulk
     if (bulkData !== undefined && bulkData !== null) {
         newRep.bulkData = {...bulkData};
+    }
+
+    // update computed properties
+    if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
+        // cannot process, null
+        newRep.peakForce = null;
+        newRep.averageForce = null;
+        newRep.peakPower = null;
+        newRep.averagePower = null;
+    } else {
+        // can process, update it
+        const data = SetUtils.getBulkArray(newRep);
+        const deltaTs = SetUtils.getDeltaTimes(newRep, data);
+        const velocities = SetUtils.getVelocities(newRep, deltaTs, data);
+        const accelerations = SetUtils.getAccelerations(newRep, velocities, deltaTs);
+        const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
+        const powers = SetUtils.getPowers(set, newRep, forces, velocities);
+
+        newRep.peakForce = SetUtils.getPeakForce(set, newRep, forces);
+        newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
+        newRep.peakPower = SetUtils.getPeakPower(set, newRep, powers);
+        newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
     }
     
     // reps
