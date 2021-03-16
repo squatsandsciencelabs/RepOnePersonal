@@ -30,14 +30,14 @@ class SetDataRow extends PureComponent {
             );
         }
 
-        var dataStyle = this.props.item.removed ? styles.removedData : styles.data;
+        const dataStyle = this.props.item.removed ? styles.removedData : styles.data;
         
         return (
             <View style={[styles.border, {flex:1, alignItems:'stretch', backgroundColor:'white'}]}>
                 <TouchableOpacity style={{flex:1}} onPress={ () => this._onPressRow() } >
                     <View style={styles.bar}>
-                        <Text style={dataStyle}> { this.props.item.repDisplay } </Text>
-                        {this.props.item.columns.map(i => <Text style={dataStyle}> { i } </Text>)}
+                        <View style={styles.itemContainer}><Text style={dataStyle}> { this.props.item.repDisplay } </Text></View>
+                        {this.props.item.columns.map(i => <View style={styles.itemContainer}><Text style={dataStyle}> { i } </Text></View>)}
                         {button}
                     </View>
                 </TouchableOpacity>
@@ -67,15 +67,22 @@ const styles = StyleSheet.create({
         marginRight: 0,
         overflow: 'hidden'
     },
-    data: {
+    itemContainer: {
         width: 45,
+        height: 20,
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
+    data: {
         textAlign: 'center',
         color: 'rgba(77, 77, 77, 1)',
     },
     removedData: {
         width: 45,
+        height: 45,
         textAlign: 'center',
-        color: 'lightgray'
+        color: 'lightgray',
+        overflow: 'hidden',
     }
 });
 

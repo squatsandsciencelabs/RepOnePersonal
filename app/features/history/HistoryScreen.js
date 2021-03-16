@@ -3,13 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import {
-    AVG_VELOCITY_METRIC,
-    PKV_METRIC,
-    PKH_METRIC,
-    ROM_METRIC,
-    DURATION_METRIC,
-} from 'app/configs+constants/CollapsedMetricTypes';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
@@ -21,7 +14,6 @@ import * as Actions from './HistoryActions';
 import HistoryList from './HistoryList';
 import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
-import * as DurationCalculator from 'app/utility/DurationCalculator';
 
 // assumes chronological sets
 const createViewModels = (sets, columnsModel, collapsedModel, shouldShowRemoved) => {
@@ -266,16 +258,6 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
         // increment rep count
         repCount++;
 
-        // helpers
-        const helper = {
-            AVG_VELOCITY_METRIC: "INV",
-            PKV_METRIC: "INV",
-            PKH_METRIC: "INV",
-            // linear3DAverageVelocity: "INV",
-            ROM_METRIC: "INV",
-            DURATION_METRIC: "INV",
-        };
-
         // vm
         let vm = {
             type: "data",
@@ -286,47 +268,10 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             key: set.setID+i,
         };
 
-        // update data if valid
-        if (rep.isValid == true) {
-            let avgVel = rep.averageVelocity;
-            if (avgVel !== null) {
-                helper.AVG_VELOCITY_METRIC = avgVel / 1000;
-            }
-
-            let peakVel = rep.peakVelocity;
-            if (peakVel !== null) {
-                helper.PKV_METRIC = peakVel / 1000;
-            }
-
-            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-            if (peakVelLoc !== null) {
-                helper.PKH_METRIC = peakVelLoc;
-            }
-
-            // if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-            //     helper.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
-            // }
-
-            let rom = rep.rom;
-            if (rom !== null) {
-                helper.ROM_METRIC = rom;
-            }
-
-            // if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
-            //     helper.linear3DROM = rep.linear3DROM;
-            // }
-
-            // obv2 properties
-            let duration = rep.duration;
-            if (duration !== null) {
-                helper.DURATION_METRIC = DurationCalculator.displayDuration(duration);
-            } else {
-                helper.DURATION_METRIC = "-";
-            }
-        }
-
         // update vm
-        vm.columns = columnsModel.map(m => helper[m]);
+        const helpers = SetUtils.getPowersAndForces(set, rep, columnsModel);
+        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set, helpers.powers, helpers.forces));
+
 
         // add obj
         array.push(vm);

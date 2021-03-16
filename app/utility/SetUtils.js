@@ -1,5 +1,17 @@
 import * as WeightConversion from 'app/utility/WeightConversion';
 import * as DateUtils from 'app/utility/DateUtils';
+import * as DurationCalculator from 'app/utility/DurationCalculator';
+import {
+    AVG_VELOCITY_METRIC,
+    PKV_METRIC,
+    PKH_METRIC,
+    ROM_METRIC,
+    DURATION_METRIC,
+    PEAK_FORCE_METRIC,
+    AVERAGE_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    AVERAGE_POWER_METRIC,
+} from 'app/configs+constants/CollapsedMetricTypes';
 
 export const isDeleted = (set) => {
     if (set.hasOwnProperty('deleted')) {
@@ -529,4 +541,101 @@ export const getAveragePower = (set, rep, powers=null) => {
 
     const sum = powers.reduce((a, b) => a + b, 0);
     return sum / powers.length;
+};
+
+// display helpers, mayb should go into another file honestly
+
+const INVALID = 'INV';
+const EMPTY = '-';
+export const getDisplayMetric = (metric, rep, set=null, powers=null, forces=null) => {
+    if (!rep || !rep.isValid) {
+        return INVALID;
+    }
+
+    switch (metric) {
+        case AVG_VELOCITY_METRIC:
+            return rep.averageVelocity ? rep.averageVelocity / 1000 : INVALID;
+        case PKV_METRIC:
+            return rep.peakVelocity ? rep.peakVelocity / 1000 : INVALID;
+        case PKH_METRIC:
+            return rep.peakHeight && rep.rom ? Math.round(rep.peakHeight / rep.rom * 100) : INVALID;
+        case ROM_METRIC:
+            return rep.rom ? rep.rom : INVALID;
+        case DURATION_METRIC:
+            return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
+        case PEAK_FORCE_METRIC: {
+            if (!set) {
+                return INVALID;
+            }
+            const result = getPeakForce(set, rep, forces);
+            return result ? Number(result).toFixed(2) : EMPTY;
+        }
+        case AVERAGE_FORCE_METRIC: {
+            if (!set) {
+                return INVALID;
+            }
+            const result = getAverageForce(set, rep, forces);
+            return result ? Number(result).toFixed(2) : EMPTY;
+        }
+        case PEAK_POWER_METRIC: {
+            if (!set) {
+                return INVALID;
+            }
+            const result = getPeakPower(set, rep, powers);
+            return result ? Number(result).toFixed(2) : EMPTY;
+        }
+        case AVERAGE_POWER_METRIC: {
+            if (!set) {
+                return INVALID;
+            }
+            const result = getAveragePower(set, rep, powers);
+            return result ? Number(result).toFixed(2) : EMPTY;
+        }
+        default:
+            return INVALID;
+    }
+};
+
+export const getMetricsUsesBulk = (metrics) => {
+    for (let i=0; i<metrics.length; i++) {
+        const metric = metrics[i];
+        if (metric === PEAK_FORCE_METRIC || metric === AVERAGE_FORCE_METRIC || metric === PEAK_POWER_METRIC || metric === AVERAGE_POWER_METRIC) {
+            return true;
+        }
+    }
+    return false;
+};
+
+export const getCanProcessForceOrMetric = (set, rep) => {
+    if (!set || !rep || !rep.bulkData) {
+        return false;
+    }
+
+    const weight = weightInKGs(set);
+    if (weight === null) {
+        return false;
+    }
+
+    return true;
+};
+
+export const getPowersAndForces = (set, rep, metrics) => {
+    if (getMetricsUsesBulk(metrics)) {
+        if (getCanProcessForceOrMetric(set, rep)) {
+            const data = getBulkArray(rep);
+            const deltaTs = getDeltaTimes(rep, data);
+            const velocities = getVelocities(rep, deltaTs, data);
+            const accelerations = getAccelerations(rep, velocities, deltaTs);
+            const forces = getForces(set, rep, accelerations, velocities);
+            const powers = getPowers(set, rep, forces, velocities);
+            return {
+                powers,
+                forces,
+            };
+        }
+    }
+    return {
+        powers: null,
+        forces: null,
+    };
 };

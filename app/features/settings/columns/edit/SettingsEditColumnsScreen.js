@@ -9,6 +9,10 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    PEAK_FORCE_METRIC,
+    AVERAGE_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    AVERAGE_POWER_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import PickerModal from 'app/shared_features/picker/PickerModal';
@@ -27,6 +31,10 @@ const items = [
     pickerItem(PKH_METRIC),
     pickerItem(ROM_METRIC),
     pickerItem(DURATION_METRIC),
+    pickerItem(PEAK_FORCE_METRIC),
+    pickerItem(AVERAGE_FORCE_METRIC),
+    pickerItem(PEAK_POWER_METRIC),
+    pickerItem(AVERAGE_POWER_METRIC),
 ];
 
 const mapStateToPropsiOS = (state) => {

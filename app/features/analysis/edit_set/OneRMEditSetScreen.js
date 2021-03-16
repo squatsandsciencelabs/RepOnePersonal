@@ -236,17 +236,6 @@ const createRowViewModels = (set, columnsModel) => {
         // increment rep count
         repCount++;
 
-        // helpers
-        const helper = {
-            AVG_VELOCITY_METRIC: "INV",
-            PKV_METRIC: "INV",
-            PKH_METRIC: "INV",
-            // linear3DAverageVelocity: "INV",
-            ROM_METRIC: "INV",
-            DURATION_METRIC: "INV",
-        };
-
-        // vm
         let vm = {
             type: "data",
             rep: i,
@@ -256,47 +245,9 @@ const createRowViewModels = (set, columnsModel) => {
             key: set.setID+i,
         };
 
-        // update data if valid
-        if (rep.isValid == true) {
-            let avgVel = rep.averageVelocity;
-            if (avgVel !== null) {
-                helper.AVG_VELOCITY_METRIC = avgVel / 1000;
-            }
-
-            let peakVel = rep.peakVelocity;
-            if (peakVel !== null) {
-                helper.PKV_METRIC = peakVel / 1000;
-            }
-
-            let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-            if (peakVelLoc !== null) {
-                helper.PKH_METRIC = peakVelLoc;
-            }
-
-            // if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-            //     helper.linear3DAverageVelocity = rep.linear3DAverageVelocity / 1000;
-            // }
-
-            let rom = rep.rom;
-            if (rom !== null) {
-                helper.ROM_METRIC = rom;
-            }
-
-            // if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
-            //     helper.linear3DROM = rep.linear3DROM;
-            // }
-
-            // obv2 properties
-            let duration = rep.duration;
-            if (duration !== null) {
-                helper.DURATION_METRIC = DurationCalculator.displayDuration(duration);
-            } else {
-                helper.DURATION_METRIC = "-";
-            }
-        }
-
         // update vm
-        vm.columns = columnsModel.map(m => helper[m]);
+        const helpers = SetUtils.getPowersAndForces(set, rep, columnsModel);
+        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set, helpers.powers, helpers.forces));
 
         // add obj
         array.push(vm);

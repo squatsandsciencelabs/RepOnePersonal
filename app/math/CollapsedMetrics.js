@@ -6,6 +6,10 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    PEAK_FORCE_METRIC,
+    AVERAGE_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
@@ -542,6 +546,14 @@ export const metricAbbreviation = (metric) => {
             return 'PKH';
         case PKV_METRIC:
             return 'PKV';
+        case PEAK_FORCE_METRIC:
+            return 'PKF';
+        case AVERAGE_FORCE_METRIC:
+            return 'AVF';
+        case PEAK_POWER_METRIC:
+            return 'PKP';
+        case AVERAGE_POWER_METRIC:
+            return 'AVP';
         default:
             return null;
     };
@@ -563,6 +575,14 @@ export const metricString = (metric) => {
             return 'Peak Height';
         case PKV_METRIC:
             return 'Peak Velocity';
+        case PEAK_FORCE_METRIC:
+            return 'Peak Force';
+        case AVERAGE_FORCE_METRIC:
+            return 'Average Force';
+        case PEAK_POWER_METRIC:
+            return 'Peak Power';
+        case AVERAGE_POWER_METRIC:
+            return 'Average Power';
         default:
             return null;
     };
@@ -587,6 +607,14 @@ export const metricUnit = (metric, quantifier) => {
             return '%';
         case PKV_METRIC:
             return 'm/s';
+        case PEAK_FORCE_METRIC:
+            return 'N';
+        case AVERAGE_FORCE_METRIC:
+            return 'N';
+        case PEAK_POWER_METRIC:
+            return 'W';
+        case AVERAGE_POWER_METRIC:
+            return 'W';
         default:
             return null;
     };
