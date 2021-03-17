@@ -16,7 +16,7 @@ import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSe
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, columnsModel, collapsedModel, shouldShowRemoved) => {
+const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -95,7 +95,7 @@ const createViewModels = (sets, columnsModel, collapsedModel, shouldShowRemoved)
                     } else {
                         array.push(createBorder(set));
                     }
-                    array.push(createSubheaderModel(set, columnsModel));
+                    array.push(createSubheaderModel(set, columnLabels, columnUnits));
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -236,11 +236,11 @@ const createBorder = (set) => ({
     key: `${set.setID}border`,
 });
 
-const createSubheaderModel = (set, columnsModel) => ({
+const createSubheaderModel = (set, labels, units) => ({
     type: "subheader",
     key: set.setID+"subheader",
-    labels: columnsModel.map(metric => CollapsedMetrics.metricAbbreviation(metric)),
-    units: columnsModel.map(metric => CollapsedMetrics.metricUnit(metric)),
+    labels,
+    units,
 });
 
 const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
@@ -303,11 +303,13 @@ const createBottomBorder = (set, isPadded) => ({
 
 const getHistorySections = createSelector(
     SetsSelectors.getFilteredHistorySets,
-    ColumnsSettingsSelectors.getMetrics,
     HistoryCollapsedSelectors.getCollapsedModel,
+    ColumnsSettingsSelectors.getMetrics,
+    ColumnsSettingsSelectors.getColumnLabels,
+    ColumnsSettingsSelectors.getColumnUnits,
     HistorySelectors.getShowRemoved,
-    (sets, columnsModel, collapsedModel, shouldShowRemoved) => {
-        return createViewModels(sets, columnsModel, collapsedModel, shouldShowRemoved);
+    (sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved) => {
+        return createViewModels(sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved);
     }
 );
 

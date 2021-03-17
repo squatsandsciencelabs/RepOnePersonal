@@ -27,9 +27,16 @@ export const getCurrentMetric = (state) => {
     return stateRoot(state).metrics[rank-1];
 };
 
-export const getColumnAbbreviations = createSelector(
+export const getColumnLabels = createSelector(
     getMetrics,
     metrics => {
         return metrics.map(metric => CollapsedMetrics.metricAbbreviation(metric));
+    }
+);
+
+export const getColumnUnits = createSelector(
+    getMetrics,
+    metrics => {
+        return metrics.map(metric => CollapsedMetrics.metricUnit(metric));
     }
 );

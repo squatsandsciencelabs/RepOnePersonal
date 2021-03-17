@@ -17,7 +17,7 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, columnsModel, collapsedModel, can3D) => {
+const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can3D) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
     let sections = [section]; // the return value
@@ -78,7 +78,7 @@ const createViewModels = (sets, columnsModel, collapsedModel, can3D) => {
                     } else {
                         array.push(createBorder(set));
                     }
-                    array.push(createSubheaderModel(set, columnsModel));
+                    array.push(createSubheaderModel(set, labels, units));
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -247,11 +247,11 @@ const createBorder = (set) => ({
     key: `${set.setID}border`,
 });
 
-const createSubheaderModel = (set, columnsModel) => ({
+const createSubheaderModel = (set, labels, units) => ({
     type: "subheader",
     key: set.setID+"subheader",
-    labels: columnsModel.map(metric => CollapsedMetrics.metricAbbreviation(metric)),
-    units: columnsModel.map(metric => CollapsedMetrics.metricUnit(metric)),
+    labels,
+    units,
 });
 
 const createRowViewModels = (set, columnsModel) => {
@@ -319,11 +319,13 @@ const createBottomBorder = (set, isPadded) => ({
 
 const getWorkoutSections = createSelector(
     SetsSelectors.getWorkoutSets,
-    ColumnsSettingsSelectors.getMetrics,
     WorkoutCollapsedSelectors.getCollapsedModel,
+    ColumnsSettingsSelectors.getMetrics,
+    ColumnsSettingsSelectors.getColumnLabels,
+    ColumnsSettingsSelectors.getColumnUnits,
     ConnectedDeviceStatusSelectors.getCan3D,
-    (sets, columnsModel, collapsedModel, can3D) => {
-        return createViewModels(sets, columnsModel, collapsedModel, can3D);
+    (sets, collapsedModel, columnsModel, labels, units, can3D) => {
+        return createViewModels(sets, collapsedModel, columnsModel, labels, units, can3D);
     }
 );
 

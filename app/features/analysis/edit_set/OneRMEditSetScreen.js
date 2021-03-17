@@ -17,7 +17,7 @@ import * as DateUtils from 'app/utility/DateUtils';
 import * as SetUtils from 'app/utility/SetUtils';
 
 // assumes chronological sets
-const createViewModels = (sets, setID, columnsModel, metric) => {
+const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -93,7 +93,7 @@ const createViewModels = (sets, setID, columnsModel, metric) => {
                     array.push(createBorder(set));
                 }
                 if (set.reps.length > 0) {
-                    array.push(createSubheaderModel(set, columnsModel));
+                    array.push(createSubheaderModel(set, labels, units));
                 }
                 Array.prototype.push.apply(array, createRowViewModels(set, columnsModel));
                 array.push(createFooterVM(set, !isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null ? lastSetEndTime : null));
@@ -210,11 +210,11 @@ const createBorder = (set) => ({
     key: `${set.setID}border`,
 });
 
-const createSubheaderModel = (set, columnsModel) => ({
+const createSubheaderModel = (set, labels, units) => ({
     type: "subheader",
     key: set.setID+"subheader",
-    labels: columnsModel.map(metric => CollapsedMetrics.metricAbbreviation(metric)),
-    units: columnsModel.map(metric => CollapsedMetrics.metricUnit(metric)),
+    labels,
+    units,
 });
 
 const createRowViewModels = (set, columnsModel) => {
@@ -291,11 +291,13 @@ const selectMapStateToProps = createSelector(
     AnalysisSelectors.getWorkoutID,
     SetsSelectors.getAllSets,
     ColumnsSettingsSelectors.getMetrics,
+    ColumnsSettingsSelectors.getColumnLabels,
+    ColumnsSettingsSelectors.getColumnUnits,
     SettingsSelectors.getDefaultMetric,
-    (setID, workoutID, allSets, columnsModel, defaultMetric) => {
+    (setID, workoutID, allSets, columnsModel, labels, units, defaultMetric) => {
         if (setID) {
             const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
-            const {title, sections} = createViewModels(sets, setID, columnsModel, defaultMetric);
+            const {title, sections} = createViewModels(sets, setID, columnsModel, labels, units, defaultMetric);
 
             return {
                 title: title,

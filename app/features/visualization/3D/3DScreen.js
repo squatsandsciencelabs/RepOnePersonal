@@ -10,7 +10,7 @@ const mapStateToProps = state => {
     return {
         // metadata
         repExists: VisualizationSelectors.getRepExists(state),
-        labels: ColumnsSettingsSelectors.getColumnAbbreviations(state),
+        labels: ColumnsSettingsSelectors.getColumnLabels(state),
         metrics: VisualizationSelectors.getRepMetrics(state),
         exercise: VisualizationSelectors.getSetExercise(state),
         title: VisualizationSelectors.getRepTitleText(state),
