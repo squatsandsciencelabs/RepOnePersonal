@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
     Platform
  }  from 'react-native';
-import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles'; // TODO: shouldn't use settings panel styles, make a generic stylesheet instead
 
 class PickerModal extends Component {
 

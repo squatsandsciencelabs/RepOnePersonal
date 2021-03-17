@@ -28,6 +28,7 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -241,7 +242,7 @@ const shouldResetMetric = (quantifier, metric) => {
     if ((quantifier === AVG_QUANTIFIER || quantifier === ABS_LOSS_QUANTIFIER || quantifier === PERCENT_LOSS_QUANTIFIER || quantifier === SET_LOSS_QUANTIFIER || quantifier === PEAK_END_QUANTIFIER) && metric === PKH_METRIC) {
         return true;
     }
-    if ((quantifier === FASTEST_EVER_QUANTIFIER || quantifier === SLOWEST_EVER_QUANTIFIER) && (metric === PKH_METRIC || metric === ROM_METRIC)) {
+    if ((quantifier === FASTEST_EVER_QUANTIFIER || quantifier === SLOWEST_EVER_QUANTIFIER) && (metric === PKH_METRIC || metric === ROM_METRIC || metric === LINEAR_3D_ROM_METRIC)) {
         return true;
     }
     return false;
