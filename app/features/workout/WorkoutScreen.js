@@ -275,8 +275,7 @@ const createRowViewModels = (set, columnsModel) => {
         };
 
         // update vm
-        const helpers = SetUtils.getPowersAndForces(set, rep, columnsModel);
-        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set, helpers.powers, helpers.forces));
+        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set));
 
         // add obj
         array.splice(0, 0, vm); // insert at beginning

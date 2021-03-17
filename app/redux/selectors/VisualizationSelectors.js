@@ -171,15 +171,6 @@ export const getRepModel = createSelector(
     }
 );
 
-const getWeight = (state) => {
-    const set = getSet(state);
-    if (!set) {
-        return null;
-    } else {
-        return SetUtils.weightInKGs(set);
-    }
-};
-
 export const getData = createSelector(
     getRep,
     getSet,

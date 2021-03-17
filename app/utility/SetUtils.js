@@ -549,7 +549,7 @@ export const getAveragePower = (set, rep, powers=null) => {
 
 const INVALID = 'INV';
 const EMPTY = '-';
-export const getDisplayMetric = (metric, rep, set=null, powers=null, forces=null) => {
+export const getDisplayMetric = (metric, rep, set=null) => {
     if (!rep || !rep.isValid) {
         return INVALID;
     }
@@ -569,34 +569,14 @@ export const getDisplayMetric = (metric, rep, set=null, powers=null, forces=null
             return rep.linear3DROM ? rep.linear3DROM : INVALID;
         case DURATION_METRIC:
             return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
-        case PEAK_FORCE_METRIC: {
-            if (!set) {
-                return INVALID;
-            }
-            const result = getPeakForce(set, rep, forces);
-            return result ? Number(result).toFixed(2) : EMPTY;
-        }
-        case AVERAGE_FORCE_METRIC: {
-            if (!set) {
-                return INVALID;
-            }
-            const result = getAverageForce(set, rep, forces);
-            return result ? Number(result).toFixed(2) : EMPTY;
-        }
-        case PEAK_POWER_METRIC: {
-            if (!set) {
-                return INVALID;
-            }
-            const result = getPeakPower(set, rep, powers);
-            return result ? Number(result).toFixed(2) : EMPTY;
-        }
-        case AVERAGE_POWER_METRIC: {
-            if (!set) {
-                return INVALID;
-            }
-            const result = getAveragePower(set, rep, powers);
-            return result ? Number(result).toFixed(2) : EMPTY;
-        }
+        case PEAK_FORCE_METRIC:
+            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+        case AVERAGE_FORCE_METRIC:
+            return rep.averageForce ? Number(rep.averageForce).toFixed(2) : EMPTY;
+        case PEAK_POWER_METRIC:
+            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+        case AVERAGE_POWER_METRIC:
+            return rep.averagePower ? Number(rep.averagePower).toFixed(2) : EMPTY;
         default:
             return INVALID;
     }
@@ -607,16 +587,6 @@ export const getRepHasBulkComputedProperties = r => {
         || (r.averageForce !== null && r.averageForce !== undefined)
         || (r.peakPower !== null && r.peakPower !== undefined)
         || (r.averagePower !== null && r.averagePower !== undefined);
-};
-
-export const getMetricsUsesBulk = (metrics) => {
-    for (let i=0; i<metrics.length; i++) {
-        const metric = metrics[i];
-        if (metric === PEAK_FORCE_METRIC || metric === AVERAGE_FORCE_METRIC || metric === PEAK_POWER_METRIC || metric === AVERAGE_POWER_METRIC) {
-            return true;
-        }
-    }
-    return false;
 };
 
 export const getCanProcessForceOrMetric = (set, rep) => {
@@ -630,25 +600,4 @@ export const getCanProcessForceOrMetric = (set, rep) => {
     }
 
     return true;
-};
-
-export const getPowersAndForces = (set, rep, metrics) => {
-    if (getMetricsUsesBulk(metrics)) {
-        if (getCanProcessForceOrMetric(set, rep)) {
-            const data = getBulkArray(rep);
-            const deltaTs = getDeltaTimes(rep, data);
-            const velocities = getVelocities(rep, deltaTs, data);
-            const accelerations = getAccelerations(rep, velocities, deltaTs);
-            const forces = getForces(set, rep, accelerations, velocities);
-            const powers = getPowers(set, rep, forces, velocities);
-            return {
-                powers,
-                forces,
-            };
-        }
-    }
-    return {
-        powers: null,
-        forces: null,
-    };
 };
