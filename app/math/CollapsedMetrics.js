@@ -70,6 +70,14 @@ export const getDurations = (set) => {
     return getMetrics(set, r => r.duration);
 };
 
+export const getPeakForces = set => getMetrics(set, r => r.peakForce !== null && r.peakForce !== undefined ? r.peakForce : null);
+
+export const getAverageForces = set => getMetrics(set, r => r.averageForce !== null && r.averageForce !== undefined ? r.averageForce : null);
+
+export const getPeakPowers = set => getMetrics(set, r => r.peakPower !== null && r.peakPower !== undefined ? r.peakPower : null);
+
+export const getAveragePowers = set => getMetrics(set, r => r.averagePower !== null && r.averagePower !== undefined ? r.averagePower : null);
+
 export const getLinear3DAvgVelocities = set => getMetrics(set, r => r.linear3DAverageVelocity / 1000);
 
 export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
@@ -103,6 +111,26 @@ export const getAvgROM = (set) => {
 export const getAvgDuration = (set) => {
     const durations = getDurations(set);
     return getAvgOfMetrics(durations);
+};
+
+export const getAvgPeakForce = (set) => {
+    const peakForces = getPeakForces(set);
+    return getAvgOfMetrics(peakForces);
+};
+
+export const getAvgOfAvgForces = (set) => {
+    const averageForces = getAverageForces(set);
+    return getAvgOfMetrics(averageForces);
+};
+
+export const getAvgPeakPower = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getAvgOfMetrics(peakPowers);
+};
+
+export const getAvgOfAvgPowers = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getAvgOfMetrics(averagePowers);
 };
 
 export const getAvgOfLinear3DAvgVelocities = (set) => {
@@ -148,6 +176,26 @@ export const getAbsLossOfDurations = (set) => {
     return getAbsLossOfMetrics(durations);    
 };
 
+export const getAbsLossOfPeakForces = (set) => {
+    const peakForces = getPeakForces(set);
+    return getAbsLossOfMetrics(peakForces);
+};
+
+export const getAbsLossOfAvgForces = (set) => {
+    const averageForces = getAverageForces(set);
+    return getAbsLossOfMetrics(averageForces);
+};
+
+export const getAbsLossOfPeakPowers = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getAbsLossOfMetrics(peakPowers);
+};
+
+export const getAbsLossOfAvgPowers = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getAbsLossOfMetrics(averagePowers);
+};
+
 export const getAbsLossOfLinear3DAvgVelocities = (set) => {
     const velocities = getLinear3DAvgVelocities(set);
     return getAbsLossOfMetrics(velocities);
@@ -189,6 +237,26 @@ export const getPercentLossOfROMs = (set) => {
 export const getPercentLossOfDurations = (set) => {
     const durations = getDurations(set);
     return getPercentLossOfMetrics(durations);    
+};
+
+export const getPercentLossOfPeakForces = (set) => {
+    const peakForces = getPeakForces(set);
+    return getPercentLossOfMetrics(peakForces);
+};
+
+export const getPercentLossOfAvgForces = (set) => {
+    const averageForces = getAverageForces(set);
+    return getPercentLossOfMetrics(averageForces);
+};
+
+export const getPercentLossOfPeakPowers = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getPercentLossOfMetrics(peakPowers);
+};
+
+export const getPercentLossOfAvgPowers = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getPercentLossOfMetrics(averagePowers);
 };
 
 export const getPercentLossOfLinear3DAvgVelocities = (set) => {
@@ -236,6 +304,26 @@ export const getFirstDuration = (set) => {
     return getFirstRepOfMetrics(durations);
 };
 
+export const getFirstPeakForce = (set) => {
+    const peakForces = getPeakForces(set);
+    return getFirstRepOfMetrics(peakForces);
+};
+
+export const getFirstAvgForce = (set) => {
+    const averageForces = getAverageForces(set);
+    return getFirstRepOfMetrics(averageForces);
+};
+
+export const getFirstPeakPower = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getFirstRepOfMetrics(peakPowers);
+};
+
+export const getFirstAvgPower = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getFirstRepOfMetrics(averagePowers);
+};
+
 export const getFirstLinear3DAvgVelocity = (set) => {
     const velocities = getLinear3DAvgVelocities(set);
     return getFirstRepOfMetrics(velocities);
@@ -279,6 +367,26 @@ export const getLastROM = (set) => {
 export const getLastDuration = (set) => {
     const durations = getDurations(set);
     return getLastRepMetrics(durations);
+};
+
+export const getLastPeakForce = (set) => {
+    const peakForces = getPeakForces(set);
+    return getLastRepMetrics(peakForces);
+};
+
+export const getLastAvgForce = (set) => {
+    const averageForces = getAverageForces(set);
+    return getLastRepMetrics(averageForces);
+};
+
+export const getLastPeakPower = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getLastRepMetrics(peakPowers);
+};
+
+export const getLastAvgPower = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getLastRepMetrics(averagePowers);
 };
 
 export const getLastLinear3DAvgVelocity = (set) => {
@@ -326,6 +434,26 @@ export const getMinDuration = (set) => {
     return getMinMetrics(durations);
 };
 
+export const getMinPeakForce = (set) => {
+    const peakForces = getPeakForces(set);
+    return getMinMetrics(peakForces);
+};
+
+export const getMinAvgForce = (set) => {
+    const averageForces = getAverageForces(set);
+    return getMinMetrics(averageForces);
+};
+
+export const getMinPeakPower = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getMinMetrics(peakPowers);
+};
+
+export const getMinAvgPower = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getMinMetrics(averagePowers);
+};
+
 export const getMinLinear3DAvgVelocity = (set) => {
     const velocities = getLinear3DAvgVelocities(set);
     return getMinMetrics(velocities);
@@ -371,6 +499,26 @@ export const getMaxDuration = (set) => {
     return getMaxMetrics(durations);
 };
 
+export const getMaxPeakForce = (set) => {
+    const peakForces = getPeakForces(set);
+    return getMaxMetrics(peakForces);
+};
+
+export const getMaxAvgForce = (set) => {
+    const averageForces = getAverageForces(set);
+    return getMaxMetrics(averageForces);
+};
+
+export const getMaxPeakPower = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getMaxMetrics(peakPowers);
+};
+
+export const getMaxAvgPower = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getMaxMetrics(averagePowers);
+};
+
 export const getMaxLinear3DAvgVelocity = (set) => {
     const velocities = getLinear3DAvgVelocities(set);
     return getMaxMetrics(velocities);
@@ -414,6 +562,26 @@ export const getPeakEndOfDurations = (set) => {
     return getPeakEndMetrics(durations);
 };
 
+export const getPeakEndOfPeakForces = (set) => {
+    const peakForces = getPeakForces(set);
+    return getPeakEndMetrics(peakForces);
+};
+
+export const getPeakEndOfAvgForces = (set) => {
+    const averageForces = getAverageForces(set);
+    return getPeakEndMetrics(averageForces);
+};
+
+export const getPeakEndOfPeakPowers = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getPeakEndMetrics(peakPowers);
+};
+
+export const getPeakEndOfAvgPowers = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getPeakEndMetrics(averagePowers);
+};
+
 export const getPeakEndOfLinear3DAvgVelocities = (set) => {
     const velocities = getLinear3DAvgVelocities(set);
     return getPeakEndMetrics(velocities);
@@ -455,6 +623,26 @@ export const getSetLossOfROMs = (set) => {
 export const getSetLossOfDurations = (set) => {
     const durations = getDurations(set);
     return getSetLossMetrics(durations);
+};
+
+export const getSetLossOfPeakForces = (set) => {
+    const peakForces = getPeakForces(set);
+    return getSetLossMetrics(peakForces);
+};
+
+export const getSetLossOfAvgForces = (set) => {
+    const averageForces = getAverageForces(set);
+    return getSetLossMetrics(averageForces);
+};
+
+export const getSetLossOfPeakPowers = (set) => {
+    const peakPowers = getPeakPowers(set);
+    return getSetLossMetrics(peakPowers);
+};
+
+export const getSetLossOfAvgPowers = (set) => {
+    const averagePowers = getAveragePowers(set);
+    return getSetLossMetrics(averagePowers);
 };
 
 export const getSetLossOfLinear3DAvgVelocities = (set) => {
@@ -554,11 +742,8 @@ const getBestEverOfMetric = (set, allSets, metricFunction, isMax=true) => {
     metrics = metrics.reduce((a, b) => a.concat(b), []);
     
     if (metrics.length > 0) {
-        if (isMax) {
-            return Math.max(...metrics);
-        } else {
-            return Math.min(...metrics);
-        }
+        const result = isMax ? Math.max(...metrics) : Math.min(...metrics);
+        return result ? Number(result).toFixed(2) : null;
     } else {
         return null;
     }
@@ -602,35 +787,67 @@ const isSetComparable = (set) => {
 };
 
 export const getFastestAvgVelocityEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getAvgVelocities);
+    return getBestEverOfMetric(set, allSets, getAvgVelocities);
 };
 
 export const getFastestPKVEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getPKVs);
+    return getBestEverOfMetric(set, allSets, getPKVs);
 };
 
 export const getFastestDurationEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations, false);
+    return getBestEverOfMetric(set, allSets, getDurations, false);
+};
+
+export const getFastestPeakForceEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getPeakForces);
+};
+
+export const getFastestAvgForceEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getAverageForces);
+};
+
+export const getFastestPeakPowerEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getPeakPowers);
+};
+
+export const getFastestAvgPowerEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getAveragePowers);
 };
 
 export const getFastestLinear3DAvgVelocityEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getLinear3DAvgVelocities);
+    return getBestEverOfMetric(set, allSets, getLinear3DAvgVelocities);
 };
 
 export const getSlowestAvgVelocityEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getAvgVelocities, false);
+    return getBestEverOfMetric(set, allSets, getAvgVelocities, false);
 };
 
 export const getSlowestPKVEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getPKVs, false);
+    return getBestEverOfMetric(set, allSets, getPKVs, false);
 };
 
 export const getSlowestDurationEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getDurations);
+    return getBestEverOfMetric(set, allSets, getDurations);
+};
+
+export const getSlowestPeakForceEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getPeakForces, false);
+};
+
+export const getSlowestAvgForceEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getAverageForces, false);
+};
+
+export const getSlowestPeakPowerEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getPeakPowers, false);
+};
+
+export const getSlowestAvgPowerEver = (set, allSets) => {
+    return getBestEverOfMetric(set, allSets, getAveragePowers, false);
 };
 
 export const getSlowestLinear3DAvgVelocityEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, CollapsedMetrics.getLinear3DAvgVelocities, false);
+    return getBestEverOfMetric(set, allSets, getLinear3DAvgVelocities, false);
 };
 
 // To String

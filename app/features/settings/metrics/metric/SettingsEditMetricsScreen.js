@@ -11,6 +11,10 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
+    PEAK_FORCE_METRIC,
+    AVERAGE_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
 
@@ -48,6 +52,10 @@ const generateItems = (quantifier) => {
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(AVERAGE_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
+                pickerItem(AVERAGE_POWER_METRIC),
             ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
@@ -63,6 +71,10 @@ const generateItems = (quantifier) => {
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(AVERAGE_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
+                pickerItem(AVERAGE_POWER_METRIC),
             ];
         default:
             return [
@@ -75,6 +87,10 @@ const generateItems = (quantifier) => {
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(AVERAGE_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
+                pickerItem(AVERAGE_POWER_METRIC),
             ];
     };
 };
