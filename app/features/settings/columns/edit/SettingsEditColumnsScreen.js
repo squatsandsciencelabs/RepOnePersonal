@@ -32,13 +32,13 @@ const items = [
     pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
     pickerItem(PKV_METRIC),
     pickerItem(PKH_METRIC),
-    pickerItem(ROM_METRIC),
-    pickerItem(LINEAR_3D_ROM_METRIC),
-    pickerItem(DURATION_METRIC),
     pickerItem(PEAK_FORCE_METRIC),
     pickerItem(AVERAGE_FORCE_METRIC),
     pickerItem(PEAK_POWER_METRIC),
     pickerItem(AVERAGE_POWER_METRIC),
+    pickerItem(ROM_METRIC),
+    pickerItem(LINEAR_3D_ROM_METRIC),
+    pickerItem(DURATION_METRIC),
 ];
 
 const mapStateToPropsiOS = (state) => {
