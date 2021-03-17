@@ -193,10 +193,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfPKVs(set);
                     break; 
                 case FASTEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getFastestPKVEver(set, allSets);
+                    returnValue = CollapsedMetrics.getFastestPKVEver(set, allSets);
                     break;
                 case SLOWEST_EVER_QUANTIFIER:
-                    returnValue = SetsSelectors.getSlowestPKVEver(set, allSets);
+                    returnValue = CollapsedMetrics.getSlowestPKVEver(set, allSets);
                     break;
             }
             break;
