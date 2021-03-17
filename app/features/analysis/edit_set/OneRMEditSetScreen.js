@@ -5,25 +5,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import {
-    AVG_VELOCITY_METRIC,
-    PKV_METRIC,
-    PKH_METRIC,
-    ROM_METRIC,
-    DURATION_METRIC,
-} from 'app/configs+constants/CollapsedMetricTypes';
-import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
-
 import * as Actions from './OneRMEditSetActions';
 import OneRMEditSetView from './OneRMEditSetView';
 
+import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
 import * as SetUtils from 'app/utility/SetUtils';
-import * as DurationCalculator from 'app/utility/DurationCalculator';
 
 // assumes chronological sets
 const createViewModels = (sets, setID, columnsModel, metric) => {

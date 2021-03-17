@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import * as Actions from './3DActions';
 import View from './3DView';
 import * as VisualizationSelectors from 'app/redux/selectors/VisualizationSelectors';
+import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 
 const mapStateToProps = state => {
     return {
         // metadata
-        model: VisualizationSelectors.getRepModel(state),
+        repExists: VisualizationSelectors.getRepExists(state),
+        labels: ColumnsSettingsSelectors.getColumnAbbreviations(state),
+        metrics: VisualizationSelectors.getRepMetrics(state),
         exercise: VisualizationSelectors.getSetExercise(state),
         title: VisualizationSelectors.getRepTitleText(state),
         errorMessage: VisualizationSelectors.getErrorMessage(state),

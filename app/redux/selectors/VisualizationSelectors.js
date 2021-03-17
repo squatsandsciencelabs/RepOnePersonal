@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
-import * as DurationCalculator from 'app/utility/DurationCalculator';
+import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as SetUtils from 'app/utility/SetUtils';
 
 const stateRoot = (state) => state.visualization;
@@ -116,58 +116,14 @@ const getRep = createSelector(
     }
 );
 
-export const getRepModel = createSelector(
+export const getRepExists = (state) => getRep(state) !== null;
+
+export const getRepMetrics = createSelector(
+    getSet,
     getRep,
-    rep => {
-        if (!rep) {
-            return null;
-        }
-        
-        const vm = {
-            averageVelocity: "Invalid",
-            peakVelocity: "Invalid",
-            peakVelocityLocation: "Invalid",
-            linear3DAverageVelocity: "Invalid",
-            rangeOfMotion: "Invalid",
-            duration: "Invalid",
-        };
-
-        let avgVel = rep.averageVelocity;
-        if (avgVel !== null) {
-            vm.averageVelocity = Number(avgVel / 1000.0).toFixed(2);
-        }
-
-        let peakVel = rep.peakVelocity;
-        if (peakVel !== null) {
-            vm.peakVelocity = Number(peakVel / 1000).toFixed(2);
-        }
-
-        let peakVelLoc = Math.round(rep.peakHeight / rep.rom * 100);
-        if (peakVelLoc !== null) {
-            vm.peakVelocityLocation = peakVelLoc;
-        }
-
-        if (rep.linear3DAverageVelocity !== null && rep.linear3DAverageVelocity !== undefined) {
-            vm.linear3DAverageVelocity = Number(rep.linear3DAverageVelocity / 1000.0).toFixed(2);
-        }
-
-        let rom = rep.rom;
-        if (rom !== null) {
-            vm.rangeOfMotion = rom;
-        }
-
-        if (rep.linear3DROM !== null && rep.linear3DROM !== undefined) {
-            vm.linear3DROM = rep.linear3DROM;
-        }
-
-        let duration = rep.duration;
-        if (duration !== null) {
-            vm.duration = DurationCalculator.displayDuration(duration);
-        } else {
-            vm.duration = "-";
-        }
-
-        return vm;
+    ColumnsSettingsSelectors.getMetrics,
+    (set, rep, columnsModel) => {
+        return columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set)); 
     }
 );
 

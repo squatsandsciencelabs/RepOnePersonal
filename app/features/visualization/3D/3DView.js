@@ -102,7 +102,6 @@ const material = new THREE.ShaderMaterial({
 
 export default function App(props) {
     // pull from props
-    const model = props.model;
     const data = props.data;
     const colors = props.colors;
     const vertices = props.vertices;
@@ -110,7 +109,7 @@ export default function App(props) {
     const numPoints = props.numPoints;
 
     // helpers
-    const hasData = model && data.length > 0;
+    const hasData = props.repExists && data.length > 0;
     const initialX = hasData ? data[0].x / renderScale : 0;
     const initialY = hasData ? data[0].y / renderScale : 0;
     const initialZ = hasData ? data[0].z / renderScale : 0;
@@ -399,18 +398,10 @@ export default function App(props) {
         summary = (<React.Fragment>
             <View style={styles.column}>
                 <View>
-                    <Text style={styles.label}>AVG</Text>
-                    <Text style={styles.label}>PKV</Text>
-                    <Text style={styles.label}>PKH</Text>
-                    <Text style={styles.label}>ROM</Text>
-                    <Text style={styles.label}>DUR</Text>
+                    {props.labels.map(l => <Text style={styles.label}>{l}</Text>)}
                 </View>
                 <View>
-                    <Text style={styles.data}>{model.averageVelocity}</Text>
-                    <Text style={styles.data}>{model.peakVelocity}</Text>
-                    <Text style={styles.data}>{model.peakVelocityLocation}</Text>
-                    <Text style={styles.data}>{model.rangeOfMotion}</Text>
-                    <Text style={styles.data}>{model.duration}</Text>
+                    {props.metrics.map(m => <Text style={styles.data}>{m}</Text>)}
                 </View>
             </View>
             <TargetCircle style={styles.circle} color={data[state.currentIndex].color} size={10} />

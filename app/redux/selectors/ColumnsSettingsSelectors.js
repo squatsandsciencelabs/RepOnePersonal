@@ -1,3 +1,6 @@
+import { createSelector } from 'reselect';
+import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
+
 const stateRoot = (state) => state.columnsSettings;
 
 export const getMetric1 = (state) => stateRoot(state).metrics[0];
@@ -23,3 +26,10 @@ export const getCurrentMetric = (state) => {
     }
     return stateRoot(state).metrics[rank-1];
 };
+
+export const getColumnAbbreviations = createSelector(
+    getMetrics,
+    metrics => {
+        return metrics.map(metric => CollapsedMetrics.metricAbbreviation(metric));
+    }
+);

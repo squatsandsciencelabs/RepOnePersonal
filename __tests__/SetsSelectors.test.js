@@ -1,6 +1,5 @@
 import * as sut from 'app/redux/selectors/SetsSelectors';
 import * as SetUtils from 'app/utility/SetUtils';
-import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 
 describe('SetsSelectors', () => {
     describe('lastWorkoutRepTime', () => {
