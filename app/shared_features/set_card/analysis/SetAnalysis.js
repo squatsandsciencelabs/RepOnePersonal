@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         paddingBottom: 5,
         marginTop: -8,
-        marginLeft: 3,
-        marginRight: 3,
+        marginLeft: 1,
+        marginRight: 1,
         textAlign: 'center',
     },
     redMetric: {
