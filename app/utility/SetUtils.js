@@ -447,7 +447,7 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
     return accelerations;
 };
 
-const maxIndexFunction = (maxIndex, compareValue, index, array) => compareValue > array[maxIndex] ? index : maxIndex;
+const maxIndexFunction = (maxIndex, compareValue, compareIndex, array) => compareValue > array[maxIndex] ? compareIndex : maxIndex;
 
 export const getPeakAccelerationIndex = (rep, accelerations=null) => {
     // get arrays if needed

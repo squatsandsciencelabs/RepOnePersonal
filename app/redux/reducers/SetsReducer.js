@@ -572,9 +572,13 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
         const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
         const powers = SetUtils.getPowers(set, newRep, forces, velocities);
 
-        newRep.peakForce = SetUtils.getPeakForce(set, newRep, forces);
+        newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(newRep, accelerations);
+        newRep.peakAcceleration = accelerations[newRep.peakAccelerationIndex];
+        newRep.peakForceIndex = SetUtils.getPeakForceIndex(set, newRep, forces);
+        newRep.peakForce = forces[newRep.peakForceIndex];
         newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
-        newRep.peakPower = SetUtils.getPeakPower(set, newRep, powers);
+        newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(set, newRep, powers);
+        newRep.peakPower = powers[newRep.peakPowerIndex];
         newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
     }
     
