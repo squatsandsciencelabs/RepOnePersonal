@@ -556,7 +556,7 @@ export const getAveragePower = (set, rep, powers=null) => {
     return sum / powers.length;
 };
 
-export const getPeakLocation = (bulkDataArray, peakIndex) => {
+export const getPeakHeight = (bulkDataArray, peakIndex) => {
     if (!bulkDataArray || bulkDataArray.length <= 1) {
         return null;
     }
