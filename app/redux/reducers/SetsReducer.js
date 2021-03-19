@@ -565,43 +565,43 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
         newRep.removed = removed;
     }
 
-    // update bulk
+    // update bulk and computed properties
     if (bulkData !== undefined && bulkData !== null) {
         newRep.bulkData = {...bulkData};
-    }
 
-    // update computed properties
-    if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
-        // cannot process, null
-        newRep.peakAccelerationIndex = null;
-        newRep.peakAcceleration = null;
-        newRep.peakForceIndex = null;
-        newRep.peakForce = null;
-        newRep.peakForceHeight = null;
-        newRep.averageForce = null;
-        newRep.peakPowerIndex = null;
-        newRep.peakPower = null;
-        newRep.peakPowerHeight = null;
-        newRep.averagePower = null;
-    } else {
-        // can process, update it
-        const data = SetUtils.getBulkArray(newRep);
-        const deltaTs = SetUtils.getDeltaTimes(newRep, data);
-        const velocities = SetUtils.getVelocities(newRep, deltaTs, data);
-        const accelerations = SetUtils.getAccelerations(newRep, velocities, deltaTs);
-        const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
-        const powers = SetUtils.getPowers(set, newRep, forces, velocities);
+        // update computed properties
+        if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
+            // cannot process, null
+            newRep.peakAccelerationIndex = null;
+            newRep.peakAcceleration = null;
+            newRep.peakForceIndex = null;
+            newRep.peakForce = null;
+            newRep.peakForceHeight = null;
+            newRep.averageForce = null;
+            newRep.peakPowerIndex = null;
+            newRep.peakPower = null;
+            newRep.peakPowerHeight = null;
+            newRep.averagePower = null;
+        } else {
+            // can process, update it
+            const data = SetUtils.getBulkArray(newRep);
+            const deltaTs = SetUtils.getDeltaTimes(newRep, data);
+            const velocities = SetUtils.getVelocities(newRep, deltaTs, data);
+            const accelerations = SetUtils.getAccelerations(newRep, velocities, deltaTs);
+            const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
+            const powers = SetUtils.getPowers(set, newRep, forces, velocities);
 
-        newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(newRep, accelerations);
-        newRep.peakAcceleration = accelerations[newRep.peakAccelerationIndex];
-        newRep.peakForceIndex = SetUtils.getPeakForceIndex(set, newRep, forces);
-        newRep.peakForce = forces[newRep.peakForceIndex];
-        newRep.peakForceHeight = SetUtils.getPeakHeight(data, newRep.peakForceIndex);
-        newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
-        newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(set, newRep, powers);
-        newRep.peakPower = powers[newRep.peakPowerIndex];
-        newRep.peakPowerHeight = SetUtils.getPeakHeight(data, newRep.peakPowerIndex);
-        newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
+            newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(newRep, accelerations);
+            newRep.peakAcceleration = accelerations[newRep.peakAccelerationIndex];
+            newRep.peakForceIndex = SetUtils.getPeakForceIndex(set, newRep, forces);
+            newRep.peakForce = forces[newRep.peakForceIndex];
+            newRep.peakForceHeight = SetUtils.getPeakHeight(data, newRep.peakForceIndex);
+            newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
+            newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(set, newRep, powers);
+            newRep.peakPower = powers[newRep.peakPowerIndex];
+            newRep.peakPowerHeight = SetUtils.getPeakHeight(data, newRep.peakPowerIndex);
+            newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
+        }
     }
     
     // reps
