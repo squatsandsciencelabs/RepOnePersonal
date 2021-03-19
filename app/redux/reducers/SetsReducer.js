@@ -191,10 +191,14 @@ const saveWorkoutSet = (state, action) => {
                 const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
                 const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
                 const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
-                
-                rep.peakForce = SetUtils.getPeakForce(newSet, rep, forces);
+
+                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
+                rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
+                rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
+                rep.peakForce = forces[rep.peakForceIndex];
                 rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
-                rep.peakPower = SetUtils.getPeakPower(newSet, rep, powers);
+                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(newSet, rep, powers);
+                rep.peakPower = powers[rep.peakPowerIndex];
                 rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
 
                 return rep;
@@ -204,8 +208,12 @@ const saveWorkoutSet = (state, action) => {
                     // need to reset
                     return {
                         ...r,
+                        peakAccelerationIndex: null,
+                        peakAcceleration: null,
+                        peakForceIndex: null,
                         peakForce: null,
                         averageForce: null,
+                        peakPowerIndex: null,
                         peakPower: null,
                         averagePower: null,
                     };
@@ -318,9 +326,13 @@ const saveHistorySet = (state, action) => {
                 const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
                 const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
                 
-                rep.peakForce = SetUtils.getPeakForce(newSet, rep, forces);
+                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
+                rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
+                rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
+                rep.peakForce = forces[rep.peakForceIndex];
                 rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
-                rep.peakPower = SetUtils.getPeakPower(newSet, rep, powers);
+                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(newSet, rep, powers);
+                rep.peakPower = powers[rep.peakPowerIndex];
                 rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
 
                 return rep;
@@ -330,8 +342,12 @@ const saveHistorySet = (state, action) => {
                     // need to reset
                     return {
                         ...r,
+                        peakAccelerationIndex: null,
+                        peakAcceleration: null,
+                        peakForceIndex: null,
                         peakForce: null,
                         averageForce: null,
+                        peakPowerIndex: null,
                         peakPower: null,
                         averagePower: null,
                     };

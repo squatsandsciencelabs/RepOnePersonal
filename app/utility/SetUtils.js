@@ -447,6 +447,17 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
     return accelerations;
 };
 
+const maxIndexFunction = (maxIndex, compareValue, index, array) => compareValue > array[maxIndex] ? index : maxIndex;
+
+export const getPeakAccelerationIndex = (rep, accelerations=null) => {
+    // get arrays if needed
+    if (accelerations === null || accelerations === undefined) {
+        accelerations = getAccelerations(rep);
+    }
+
+    return accelerations.reduce(maxIndexFunction, 0);
+};
+
 const gravity = 9.80665;
 export const getForces = (set, rep, accelerations=null, velocities=null) => {
     if (!set || !rep || !rep.bulkData) {
@@ -495,7 +506,7 @@ export const getPowers = (set, rep, forces=null, velocities=null) => {
     return forces.map((f, i) => f * velocities[i]);
 };
 
-export const getPeakForce = (set, rep, forces=null) => {
+export const getPeakForceIndex = (set, rep, forces=null) => {
     // get forces if needed
     if (forces === null || forces === undefined) {
         forces = getForces(set, rep);
@@ -504,7 +515,7 @@ export const getPeakForce = (set, rep, forces=null) => {
         return null;
     }
 
-    return Math.max(...forces);
+    return forces.reduce(maxIndexFunction, 0);
 };
 
 export const getAverageForce = (set, rep, forces=null) => {
@@ -520,7 +531,7 @@ export const getAverageForce = (set, rep, forces=null) => {
     return sum / forces.length;
 };
 
-export const getPeakPower = (set, rep, powers=null) => {
+export const getPeakPowerIndex = (set, rep, powers=null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
@@ -529,7 +540,7 @@ export const getPeakPower = (set, rep, powers=null) => {
         return null;
     }
 
-    return Math.max(...powers);
+    return powers.reduce(maxIndexFunction, 0);
 };
 
 export const getAveragePower = (set, rep, powers=null) => {
