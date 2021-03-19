@@ -8,7 +8,9 @@ import {
     PKV_METRIC,
     PEAK_FORCE_METRIC,
     AVERAGE_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
     PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
@@ -870,12 +872,16 @@ export const metricAbbreviation = (metric) => {
             return 'PKV';
         case PEAK_FORCE_METRIC:
             return 'PKF';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'PKFH';
         case AVERAGE_FORCE_METRIC:
-            return 'AVF';
+            return 'AVGF';
         case PEAK_POWER_METRIC:
             return 'PKP';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'PKPH';
         case AVERAGE_POWER_METRIC:
-            return 'AVP';
+            return 'AVGP';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'VEL³';
         case LINEAR_3D_ROM_METRIC:
@@ -903,10 +909,14 @@ export const metricString = (metric) => {
             return 'Peak Velocity';
         case PEAK_FORCE_METRIC:
             return 'Peak Force';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'Peak Force Height';
         case AVERAGE_FORCE_METRIC:
             return 'Average Force';
         case PEAK_POWER_METRIC:
             return 'Peak Power';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'Peak Power Height';
         case AVERAGE_POWER_METRIC:
             return 'Average Power';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
@@ -929,6 +939,7 @@ export const metricUnit = (metric, quantifier) => {
             return '';
         case AVG_VELOCITY_METRIC:
         case LINEAR_3D_AVG_VELOCITY_METRIC:
+        case PKV_METRIC:
             return 'm/s';
         case DURATION_METRIC:
             return 'sec';
@@ -936,15 +947,13 @@ export const metricUnit = (metric, quantifier) => {
         case ROM_METRIC:
             return 'mm';
         case PKH_METRIC:
+        case PEAK_FORCE_HEIGHT_METRIC:
+        case PEAK_POWER_HEIGHT_METRIC:
             return '%';
-        case PKV_METRIC:
-            return 'm/s';
         case PEAK_FORCE_METRIC:
-            return 'N';
         case AVERAGE_FORCE_METRIC:
             return 'N';
         case PEAK_POWER_METRIC:
-            return 'W';
         case AVERAGE_POWER_METRIC:
             return 'W';
         default:
