@@ -245,7 +245,7 @@ const shouldResetMetric = (quantifier, metric) => {
     if ((quantifier === AVG_QUANTIFIER || quantifier === ABS_LOSS_QUANTIFIER || quantifier === PERCENT_LOSS_QUANTIFIER || quantifier === SET_LOSS_QUANTIFIER || quantifier === PEAK_END_QUANTIFIER) && (metric === PKH_METRIC || metric === PEAK_FORCE_HEIGHT_METRIC || metric === PEAK_POWER_HEIGHT_METRIC)) {
         return true;
     }
-    if ((quantifier === FASTEST_EVER_QUANTIFIER || quantifier === SLOWEST_EVER_QUANTIFIER) && (metric === PKH_METRIC || metric === ROM_METRIC || metric === LINEAR_3D_ROM_METRIC)) {
+    if ((quantifier === FASTEST_EVER_QUANTIFIER || quantifier === SLOWEST_EVER_QUANTIFIER) && (metric === PKH_METRIC || metric === PEAK_FORCE_HEIGHT_METRIC || metric === PEAK_POWER_HEIGHT_METRIC || metric === ROM_METRIC || metric === LINEAR_3D_ROM_METRIC)) {
         return true;
     }
     return false;
