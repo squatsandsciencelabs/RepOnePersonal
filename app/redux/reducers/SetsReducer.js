@@ -573,9 +573,15 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     // update computed properties
     if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
         // cannot process, null
+        newRep.peakAccelerationIndex = null;
+        newRep.peakAcceleration = null;
+        newRep.peakForceIndex = null;
         newRep.peakForce = null;
+        newRep.peakForceHeight = null;
         newRep.averageForce = null;
+        newRep.peakPowerIndex = null;
         newRep.peakPower = null;
+        newRep.peakPowerHeight = null;
         newRep.averagePower = null;
     } else {
         // can process, update it
