@@ -556,6 +556,18 @@ export const getAveragePower = (set, rep, powers=null) => {
     return sum / powers.length;
 };
 
+export const getPeakLocation = (bulkDataArray, peakIndex) => {
+    if (!bulkDataArray || bulkDataArray.length <= 1) {
+        return null;
+    }
+
+    const initial = bulkDataArray[0].z;
+    const peak = bulkDataArray[peakIndex].z;
+    const final = bulkDataArray[bulkDataArray.length-1].z;
+
+    return Math.round(100 * (peak - initial) / (final - initial));
+};
+
 // display helpers, mayb should go into another file honestly
 
 const INVALID = 'INV';
