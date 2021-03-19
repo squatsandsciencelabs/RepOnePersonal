@@ -10,8 +10,10 @@ import {
     PKH_METRIC,
     PKV_METRIC,
     PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
     AVERAGE_FORCE_METRIC,
     PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
@@ -240,6 +242,22 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
             }
             break;
+        case PEAK_FORCE_HEIGHT_METRIC:
+            switch (quantifier) {
+                case FIRST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFirstPeakForceHeight(set);
+                    break;
+                case LAST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getLastPeakForceHeight(set);
+                    break;
+                case MIN_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMinPeakForceHeight(set);
+                    break;
+                case MAX_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMaxPeakForceHeight(set);
+                    break;
+            }
+            break;
         case AVERAGE_FORCE_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
@@ -311,6 +329,22 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case SLOWEST_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestPeakPowerEver(set, allSets);
+                    break;
+            }
+            break;
+        case PEAK_POWER_HEIGHT_METRIC:
+            switch (quantifier) {
+                case FIRST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFirstPeakPowerHeight(set);
+                    break;
+                case LAST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getLastPeakPowerHeight(set);
+                    break;
+                case MIN_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMinPeakPowerHeight(set);
+                    break;
+                case MAX_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMaxPeakPowerHeight(set);
                     break;
             }
             break;
