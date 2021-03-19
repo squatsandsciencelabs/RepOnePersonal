@@ -8,8 +8,10 @@ import {
     ROM_METRIC,
     DURATION_METRIC,
     PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
     AVERAGE_FORCE_METRIC,
     PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     AVERAGE_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
@@ -594,10 +596,14 @@ export const getDisplayMetric = (metric, rep, set=null) => {
             return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
         case PEAK_FORCE_METRIC:
             return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case AVERAGE_FORCE_METRIC:
             return rep.averageForce ? Number(rep.averageForce).toFixed(2) : EMPTY;
         case PEAK_POWER_METRIC:
             return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+        case PEAK_POWER_HEIGHT_METRIC:
+            return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case AVERAGE_POWER_METRIC:
             return rep.averagePower ? Number(rep.averagePower).toFixed(2) : EMPTY;
         default:
