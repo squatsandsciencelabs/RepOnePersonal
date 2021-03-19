@@ -74,9 +74,13 @@ export const getDurations = (set) => {
 
 export const getPeakForces = set => getMetrics(set, r => r.peakForce !== null && r.peakForce !== undefined ? r.peakForce : null);
 
+export const getPeakForceHeights = set => getMetrics(set, r => r.peakForceHeight !== null && r.peakForceHeight !== undefined ? r.peakForceHeight : null);
+
 export const getAverageForces = set => getMetrics(set, r => r.averageForce !== null && r.averageForce !== undefined ? r.averageForce : null);
 
 export const getPeakPowers = set => getMetrics(set, r => r.peakPower !== null && r.peakPower !== undefined ? r.peakPower : null);
+
+export const getPeakPowerHeights = set => getMetrics(set, r => r.peakPowerHeight !== null && r.peakPowerHeight !== undefined ? r.peakPowerHeight : null);
 
 export const getAveragePowers = set => getMetrics(set, r => r.averagePower !== null && r.averagePower !== undefined ? r.averagePower : null);
 
@@ -311,6 +315,11 @@ export const getFirstPeakForce = (set) => {
     return getFirstRepOfMetrics(peakForces);
 };
 
+export const getFirstPeakForceHeight = (set) => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getFirstRepOfMetrics(peakForceHeights);
+};
+
 export const getFirstAvgForce = (set) => {
     const averageForces = getAverageForces(set);
     return getFirstRepOfMetrics(averageForces);
@@ -319,6 +328,11 @@ export const getFirstAvgForce = (set) => {
 export const getFirstPeakPower = (set) => {
     const peakPowers = getPeakPowers(set);
     return getFirstRepOfMetrics(peakPowers);
+};
+
+export const getFirstPeakPowerHeight = (set) => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getFirstRepOfMetrics(peakPowerHeights);
 };
 
 export const getFirstAvgPower = (set) => {
@@ -376,6 +390,11 @@ export const getLastPeakForce = (set) => {
     return getLastRepMetrics(peakForces);
 };
 
+export const getLastPeakForceHeight = (set) => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getLastRepMetrics(peakForceHeights);
+};
+
 export const getLastAvgForce = (set) => {
     const averageForces = getAverageForces(set);
     return getLastRepMetrics(averageForces);
@@ -384,6 +403,11 @@ export const getLastAvgForce = (set) => {
 export const getLastPeakPower = (set) => {
     const peakPowers = getPeakPowers(set);
     return getLastRepMetrics(peakPowers);
+};
+
+export const getLastPeakPowerHeight = (set) => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getLastRepMetrics(peakPowerHeights);
 };
 
 export const getLastAvgPower = (set) => {
@@ -441,6 +465,11 @@ export const getMinPeakForce = (set) => {
     return getMinMetrics(peakForces);
 };
 
+export const getMinPeakForceHeight = (set) => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getMinMetrics(peakForceHeights);
+};
+
 export const getMinAvgForce = (set) => {
     const averageForces = getAverageForces(set);
     return getMinMetrics(averageForces);
@@ -449,6 +478,11 @@ export const getMinAvgForce = (set) => {
 export const getMinPeakPower = (set) => {
     const peakPowers = getPeakPowers(set);
     return getMinMetrics(peakPowers);
+};
+
+export const getMinPeakPowerHeight = (set) => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getMinMetrics(peakPowerHeights);
 };
 
 export const getMinAvgPower = (set) => {
@@ -506,6 +540,11 @@ export const getMaxPeakForce = (set) => {
     return getMaxMetrics(peakForces);
 };
 
+export const getMaxPeakForceHeight = (set) => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getMaxMetrics(peakForceHeights);
+};
+
 export const getMaxAvgForce = (set) => {
     const averageForces = getAverageForces(set);
     return getMaxMetrics(averageForces);
@@ -514,6 +553,11 @@ export const getMaxAvgForce = (set) => {
 export const getMaxPeakPower = (set) => {
     const peakPowers = getPeakPowers(set);
     return getMaxMetrics(peakPowers);
+};
+
+export const getMaxPeakPowerHeight = (set) => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getMaxMetrics(peakPowerHeights);
 };
 
 export const getMaxAvgPower = (set) => {
