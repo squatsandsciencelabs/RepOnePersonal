@@ -396,7 +396,7 @@ export const getVelocities = (rep, times=null, bulkData=null) => {
         // calculate velocity
         const prevPoint = new THREE.Vector3(prev.x, prev.y, prev.z);
         const currentPoint = new THREE.Vector3(current.x, current.y, current.z);
-        const deltaD = prevPoint.distanceTo(currentPoint) / 100000.0; // 1/10 of a mm conversion
+        const deltaD = prevPoint.distanceTo(currentPoint) / 10000.0; // 1/10 of a mm conversion
         const velocity = Math.abs(parseFloat(deltaD / deltaT));
 
         // save values
