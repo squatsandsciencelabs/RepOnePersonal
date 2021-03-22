@@ -59,9 +59,8 @@ export const getPKVs = (set) => {
     return getMetrics(set, r => r.peakVelocity / 1000);
 };
 
-// TODO: may need to turn it into a %
 export const getPKHs = (set) => {
-    return getMetrics(set, r => r.peakHeight);
+    return getMetrics(set, r => 100 * r.peakHeight / r.rom);
 };
 
 export const getROMs = (set) => {
