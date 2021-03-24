@@ -32,6 +32,13 @@ if (Platform.OS === 'ios') {
   var thumbTintColor = '#368fff';
 }
 
+// actionsheet
+const actionsheetConfig = {
+    options: ['Peak Velocity', 'Peak Force', 'Peak Power', 'Cancel'],
+    cancelButtonIndex: 3,
+    destructiveButtonIndex: -1,
+};
+
 // default up
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
@@ -176,7 +183,7 @@ export default function App(props) {
     };
 
     const zoomTo = (newIndex, shouldRender=false) => {
-        if (newIndex < 0 || newIndex >= numPoints) {
+        if (newIndex !== undefined && newIndex < 0 || newIndex >= numPoints) {
             return;
         }
 
@@ -225,17 +232,20 @@ export default function App(props) {
     };
 
     const openPeakOptions = () => {
-        const options = ['Peak Velocity', 'Peak Force', 'Peak Power', 'Cancel'];
-        const destructiveButtonIndex = -1;
-        const cancelButtonIndex = 3;
         showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-                destructiveButtonIndex,
-            },
+            actionsheetConfig,
             buttonIndex => {
-                zoomTo(0, true);
+                switch (buttonIndex) {
+                    case 0:
+                        zoomTo(props.peakIndices.peakVelocityIndex, true);
+                        break;
+                    case 1:
+                        zoomTo(props.peakIndices.peakForceIndex, true);
+                        break;
+                    case 2:
+                        zoomTo(props.peakIndices.peakPowerIndex, true);
+                        break;
+                }
             },
         );
     };

@@ -127,6 +127,27 @@ export const getRepMetrics = createSelector(
     }
 );
 
+export const getRepPeakIndices = createSelector(
+    getRep,
+    rep => {
+        if (!rep) {
+            return {
+                peakVelocityIndex: null,
+                peakAccelerationIndex: null,
+                peakForceIndex: null,
+                peakPowerIndex: null,
+            };
+        } else {
+            return {
+                peakVelocityIndex: rep.peakVelocityIndex,
+                peakAccelerationIndex: rep.peakAccelerationIndex,
+                peakForceIndex: rep.peakForceIndex,
+                peakPowerIndex: rep.peakPowerIndex,
+            };
+        }
+    }
+);
+
 export const getData = createSelector(
     getRep,
     getSet,

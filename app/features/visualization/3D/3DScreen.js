@@ -15,6 +15,7 @@ const mapStateToProps = state => {
         exercise: VisualizationSelectors.getSetExercise(state),
         title: VisualizationSelectors.getRepTitleText(state),
         errorMessage: VisualizationSelectors.getErrorMessage(state),
+        peakIndices: VisualizationSelectors.getRepPeakIndices(state),
 
         // navigation
         navigationText: VisualizationSelectors.getRepNavigationText(state),
