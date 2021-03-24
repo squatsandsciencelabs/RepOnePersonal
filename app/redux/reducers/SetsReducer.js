@@ -192,6 +192,7 @@ const saveWorkoutSet = (state, action) => {
                 const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
                 const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
 
+                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(rep, velocities);
                 rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
                 rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
                 rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
@@ -210,6 +211,7 @@ const saveWorkoutSet = (state, action) => {
                     // need to reset
                     return {
                         ...r,
+                        peakVelocityIndex: null,
                         peakAccelerationIndex: null,
                         peakAcceleration: null,
                         peakForceIndex: null,
@@ -330,6 +332,7 @@ const saveHistorySet = (state, action) => {
                 const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
                 const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
                 
+                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(rep, velocities);
                 rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
                 rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
                 rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
@@ -348,6 +351,7 @@ const saveHistorySet = (state, action) => {
                     // need to reset
                     return {
                         ...r,
+                        peakVelocityIndex: null,
                         peakAccelerationIndex: null,
                         peakAcceleration: null,
                         peakForceIndex: null,
@@ -471,6 +475,7 @@ const addRepData = (state, action) => {
         duration: action.duration,
         linear3DAverageVelocity: action.linear3DAverageVelocity,
         linear3DROM: action.linear3DROM,
+        peakVelocityIndex: null,
         peakAcceleration: null,
         peakAccelerationIndex: null,
         peakForce: null,
@@ -572,6 +577,7 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
         // update computed properties
         if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
             // cannot process, null
+            newRep.peakVelocityIndex = null;
             newRep.peakAccelerationIndex = null;
             newRep.peakAcceleration = null;
             newRep.peakForceIndex = null;
@@ -591,6 +597,7 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
             const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
             const powers = SetUtils.getPowers(set, newRep, forces, velocities);
 
+            newRep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(newRep, velocities);
             newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(newRep, accelerations);
             newRep.peakAcceleration = accelerations[newRep.peakAccelerationIndex];
             newRep.peakForceIndex = SetUtils.getPeakForceIndex(set, newRep, forces);

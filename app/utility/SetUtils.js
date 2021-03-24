@@ -451,6 +451,18 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
 
 const maxIndexFunction = (maxIndex, compareValue, compareIndex, array) => compareValue > array[maxIndex] ? compareIndex : maxIndex;
 
+export const getPeakVelocityIndex = (rep, velocities=null) => {
+    // get velocities if needed
+    if (velocities === null || velocities === undefined) {
+        velocities = getVelocities(rep);
+    }
+    if (velocities.length <= 0) {
+        return null;
+    }
+
+    return velocities.reduce(maxIndexFunction, 0);
+};
+
 export const getPeakAccelerationIndex = (rep, accelerations=null) => {
     // get arrays if needed
     if (accelerations === null || accelerations === undefined) {
