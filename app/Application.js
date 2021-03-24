@@ -14,7 +14,7 @@ import Bluetooth from 'app/services/Bluetooth';
 import AppState from 'app/services/AppState';
 import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
-
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 // TODO: confirm font scaling disabled
 Text.defaultProps = Text.defaultProps || {};
@@ -48,10 +48,12 @@ class RepOnePersonal extends Component {
 
     render() {
         return (
-            <Provider store={store}>
-                <ApplicationScreen />
-                <VisualizationScreen />
-            </Provider>
+            <ActionSheetProvider>
+                <Provider store={store}>
+                    <ApplicationScreen />
+                    <VisualizationScreen />
+                </Provider>
+            </ActionSheetProvider>
         )
     }
 }

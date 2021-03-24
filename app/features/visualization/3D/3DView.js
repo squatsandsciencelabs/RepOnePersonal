@@ -19,6 +19,7 @@ import {
 } from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 import TargetCircle from 'app/shared_features/target/TargetCircle';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 // animations
 const renderScale = 100;
@@ -135,6 +136,9 @@ export default function App(props) {
         isLoaded: false,
     });
 
+    // actionsheet
+    const { showActionSheetWithOptions } = useActionSheet();
+
     // camera, separate from general state just in case as it's referenced directly in the render function
     const [camera, setCamera] = React.useState(null);
 
@@ -218,6 +222,22 @@ export default function App(props) {
         orbitControls.current.getControls().target.set( midX, midY, midZ );
         orbitControls.current.getControls().update();
         updateIndex(midpointIndex, true);
+    };
+
+    const openPeakOptions = () => {
+        const options = ['Peak Velocity', 'Peak Force', 'Peak Power', 'Cancel'];
+        const destructiveButtonIndex = -1;
+        const cancelButtonIndex = 3;
+        showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+                destructiveButtonIndex,
+            },
+            buttonIndex => {
+                zoomTo(0, true);
+            },
+        );
     };
 
     const onContextCreate = async (gl) => {
@@ -426,9 +446,10 @@ export default function App(props) {
         </React.Fragment>);
 
         cameraControls = (<View style={styles.presetCamera}>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookFront()}><Text style={styles.cameraText}>FRONT</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={()=> lookSide()}><Text style={styles.cameraText} >SIDE</Text></TouchableHighlight>
-            <TouchableHighlight style={[styles.cameraItem, styles.lastCameraItem]} onPress={()=> lookTop()}><Text style={styles.cameraText}>TOP</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={lookFront}><Text style={styles.cameraText}>FRONT</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.cameraItem} onPress={lookSide}><Text style={styles.cameraText} >SIDE</Text></TouchableHighlight>
+            <TouchableHighlight style={[styles.cameraItem, styles.lastCameraItem]} onPress={lookTop}><Text style={styles.cameraText}>TOP</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.peakItem} onPress={openPeakOptions}><Text style={styles.cameraText}>PEAK</Text></TouchableHighlight>
         </View>);
 
         sliderControls = (<React.Fragment>
@@ -508,7 +529,6 @@ export default function App(props) {
     </View>);
 }
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
@@ -590,7 +610,7 @@ const styles = StyleSheet.create({
         opacity: 0.5,
     },
     cameraItem: {
-        width: 80,
+        width: 75,
         paddingTop: 5,
         paddingBottom: 5,
         borderLeftWidth: 1,
@@ -604,6 +624,15 @@ const styles = StyleSheet.create({
     },
     cameraText: {
         color: 'rgba(51, 51, 51, 1)',
+    },
+    peakItem: {
+        width: 60,
+        paddingTop: 5,
+        paddingBottom: 5,
+        marginLeft: 15,
+        borderWidth: 1,
+        alignItems: 'center',
+        borderColor: 'rgba(51, 51, 51, 1)',
     },
 
     // nav
