@@ -29,7 +29,7 @@ class SetAnalysis extends Component {
 
             return (
                 <View style={{flex: 1, marginTop: -2, justifyContent: 'center'}}>
-                    <Text style={textStyle}>
+                    <Text style={textStyle} numberOfLines={1}>
                         {value}
                     </Text>
                     <Text style={metricStyle}>{text}</Text>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#4d4d4d',
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 'bold',
         marginLeft: 5,
         marginRight: 5,
