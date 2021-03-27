@@ -21,7 +21,7 @@ export default function * FetchConfigSaga() {
 
 function* fetchConfig() {
     try {
-        const fbconfig = firebase.config();
+        const fbconfig = firebase.remoteConfig();
         yield apply(fbconfig, fbconfig.fetch, [0]); // USE THIS INSTEAD FOR DEBUGGING AS IT REFRESHES INSTANTLY
         const activated = yield apply(fbconfig, fbconfig.activateFetched);
         yield put({

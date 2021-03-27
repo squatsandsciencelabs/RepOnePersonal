@@ -25,7 +25,7 @@ export const setInitialAnalytics = () => {
 // user ID defaults to the mobile identifier for anonymous users
 export const setUserID = (userID=DeviceInfo.getUniqueId()) => {
     firebase.app().analytics().setUserId(userID);
-    firebase.crashlytics().setUserIdentifier(userID);
+    firebase.crashlytics().setUserId(userID);
 
     console.tron.display({
         name: 'UserID',
@@ -39,7 +39,7 @@ export const setUserID = (userID=DeviceInfo.getUniqueId()) => {
 // Screens
 
 export const setCurrentScreen = (screen) => {
-    firebase.app().analytics().setCurrentScreen(screen);
+    firebase.app().analytics().logScreenView({ screen_name: screen });
 
     console.tron.display({
         name: 'SetScreen',
@@ -147,30 +147,33 @@ const addErrorToParams = (error, params) => {
     return params;
 };
 
-const getErrorCode = (error) => {
+// hacked migration to still allow for error code 9001
+const errorWithCode = (error) => {
     if (error && error.code && !isNaN(error.code)) {
-        return parseInt(error.code);
+        return error;
+    } else if (error) {
+        error.code = 9001;
+        return error;
     } else {
-        return 9001;
+        return error;
     }
 };
 
-const logCrashlyticsError = (code, event, params) => {
+const logCrashlyticsError = async (event, params) => {
     let message = JSON.stringify(params);
-    firebase.crashlytics().setStringValue("error_params", message);
-    firebase.crashlytics().recordError(code, JSON.stringify(event));
+    await firebase.crashlytics().setAttribute("error_params", message);
+
+    firebase.crashlytics().recordError(errorWithCode(event));
 };
 
 export const logError = (error, event, params) => {
     let errorParams = addErrorToParams(error, params);
-    let errorCode = getErrorCode(error);
-    logCrashlyticsError(errorCode, event, errorParams);
+    logCrashlyticsError(event, errorParams);
     logEvent(event, errorParams);
 };
 
 export const logErrorWithAppState = (error, event, params, state) => {
     let errorParams = addErrorToParams(error, params);
-    let errorCode = getErrorCode(error);
-    logCrashlyticsError(errorCode, event, errorParams);
+    logCrashlyticsError(event, errorParams);
     logEventWithAppState(event, errorParams, state);
 };

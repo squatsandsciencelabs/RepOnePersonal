@@ -13,17 +13,6 @@ target 'RepOnePersonal' do
   # Charts, as it doesn't seem to work normally
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
-  # Firebase Pods
-  pod 'Firebase/Core', '~> 6.3.0'
-  pod 'Firebase/Messaging', '~> 6.3.0'
-  pod 'Firebase/Analytics', '~> 6.3.0'
-  pod 'Firebase/RemoteConfig', '~> 6.3.0'
-
-  # Somehow these are automatically installed already, unlike the above ones, I don't know why
-  # pod 'Firebase/Crash', '~> 6.3.0' # not sure if still needed, does it fight crashlytics or fabric or work with it? also can't find it when i run it
-  # pod 'Fabric', '1.9.0' # used to be 1.7.2, not sure if still needed
-  # pod 'Crashlytics', '3.14.0' # used to be 3.9.3, not sure if still needed
-
   pod 'GoogleIDFASupport' # for firebase analytics audience
 
   # Permissions

@@ -27,7 +27,7 @@ const SurveySaga = function * SurveySaga() {
 };
 
 function* fetchAndUpdateSurveyURL() {
-    const fbconfig = firebase.config();
+    const fbconfig = firebase.remoteConfig();
     try {
         // fetch
         // yield apply(fbconfig, fbconfig.fetch, [0]); // USE THIS INSTEAD FOR DEBUGGING AS IT REFRESHES INSTANTLY
@@ -49,11 +49,11 @@ function* fetchAndUpdateSurveyURL() {
     }
 }
 function* updateSurveyURL() {
-    const fbconfig = firebase.config();
+    const fbconfig = firebase.remoteConfig();
     let state = null;
     try {
         // get url
-        const snapshot = yield apply(fbconfig, fbconfig.getValue, ['survey_url']);
+        const snapshot = fbconfig.getValue('survey_url');
         const url = snapshot.val();
         
         // analytics

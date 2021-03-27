@@ -211,7 +211,7 @@ function* executeReauthenticateLoggedInUser() {
             yield put(AuthActionCreators.logout(true)); // this will pop the alert
         } else {
             // actual error
-            logReauthenticateErrorAnalytics(state, JSON.stringify(error));
+            logReauthenticateErrorAnalytics(state, error);
             if (error.type === "401") {
                 // server rejected, NOW logout
                 yield put(AuthActionCreators.logout(true)); // this will pop the alert

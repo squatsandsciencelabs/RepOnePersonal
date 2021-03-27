@@ -1,12 +1,16 @@
-import firebase from 'react-native-firebase';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/analytics';
+import '@react-native-firebase/messaging';
+import '@react-native-firebase/crashlytics';
+import '@react-native-firebase/remote-config';
 
 export const configure = () => {
     if (__DEV__) {
-        firebase.config().enableDeveloperMode();
+        firebase.remoteConfig().setConfigSettings({ isDeveloperModeEnabled: true });
     }
     
     // Set default values
-    firebase.config().setDefaults({
+    firebase.remoteConfig().setDefaults({
         survey_url: '',
     });
 

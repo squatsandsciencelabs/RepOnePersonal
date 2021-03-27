@@ -224,14 +224,14 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation "com.google.android.gms:play-services-base:16.1.0" // react-native-firebase
-    implementation "com.google.firebase:firebase-core:16.0.9" // react-native-firebase
-    implementation "com.google.firebase:firebase-messaging:19.0.1" // react-native-firebase messaging, upgraded to 19.0.1 due to react-native-device-info's firebaseIidVersion
-    implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // react-native-firebase messaging
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') { // react-native-firebase crashlytics
-        transitive = true
-    }
-    implementation "com.google.firebase:firebase-config:17.0.0" // react-native-firebase config
+    // implementation "com.google.android.gms:play-services-base:16.1.0" // react-native-firebase
+    // implementation "com.google.firebase:firebase-core:16.0.9" // react-native-firebase
+    // implementation "com.google.firebase:firebase-messaging:19.0.1" // react-native-firebase messaging, upgraded to 19.0.1 due to react-native-device-info's firebaseIidVersion
+    // implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // react-native-firebase messaging
+    // implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') { // react-native-firebase crashlytics
+    //     transitive = true
+    // }
+    // implementation "com.google.firebase:firebase-config:17.0.0" // react-native-firebase config
 }
 
 // Run this once to be able to run the application with BUCK
