@@ -5,15 +5,6 @@ import '@react-native-firebase/crashlytics';
 import '@react-native-firebase/remote-config';
 
 export const configure = () => {
-    if (__DEV__) {
-        firebase.remoteConfig().setConfigSettings({ isDeveloperModeEnabled: true });
-    }
-    
-    // Set default values
-    firebase.remoteConfig().setDefaults({
-        survey_url: '',
-    });
-
     // firebase.crashlytics().crash();
 };
 

@@ -129,10 +129,14 @@ export const logEventWithAppState = (event, params, state) => {
 // auto adds error to the params
 // auto chooses the code from the error if it exists, else defaults to 9001 as it's unknown
 
-const addErrorToParams = (error, params) => {
+const addErrorToParams = (error, event, params) => {
     // parse error string
     if (error) {
-        var errorString = JSON.stringify(error);
+        if (error.message) {
+            var errorString = error.message;
+        } else {
+            var errorString = JSON.stringify(error);
+        }
     } else {
         var errorString = "";
     }
@@ -140,8 +144,9 @@ const addErrorToParams = (error, params) => {
     // create params
     if (params) {
         params.error = errorString;
+        params.event = event;
     } else {
-        params = {error: errorString};
+        params = {error: errorString, event};
     }
 
     return params;
@@ -167,13 +172,13 @@ const logCrashlyticsError = async (event, params) => {
 };
 
 export const logError = (error, event, params) => {
-    let errorParams = addErrorToParams(error, params);
-    logCrashlyticsError(event, errorParams);
+    let errorParams = addErrorToParams(error, event, params);
+    logCrashlyticsError(error, errorParams);
     logEvent(event, errorParams);
 };
 
 export const logErrorWithAppState = (error, event, params, state) => {
-    let errorParams = addErrorToParams(error, params);
-    logCrashlyticsError(event, errorParams);
+    let errorParams = addErrorToParams(error, event, params);
+    logCrashlyticsError(error, errorParams);
     logEventWithAppState(event, errorParams, state);
 };

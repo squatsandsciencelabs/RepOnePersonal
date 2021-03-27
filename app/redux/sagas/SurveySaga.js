@@ -18,15 +18,26 @@ import * as Analytics from 'app/services/Analytics';
 import * as SurveyActionCreators from 'app/redux/shared_actions/SurveyActionCreators';
 import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 
+var configReady = false;
+
 const SurveySaga = function * SurveySaga() {
     yield all([
-        takeEvery(CONFIG_READY, updateSurveyURL),
+        takeEvery(CONFIG_READY, onReady),
         takeEvery(CHANGE_TAB, fetchAndUpdateSurveyURL),
         takeEvery(END_WORKOUT, askSurvey),
     ]);
 };
 
+function *onReady() {
+    configReady = true;
+    yield call(updateSurveyURL);
+}
+
 function* fetchAndUpdateSurveyURL() {
+    if (!configReady) {
+        console.tron.log(`cannot fetch and update survey url as config isn't ready yet`);
+    }
+
     const fbconfig = firebase.remoteConfig();
     try {
         // fetch
@@ -34,7 +45,7 @@ function* fetchAndUpdateSurveyURL() {
         yield apply(fbconfig, fbconfig.fetch);
 
         // activate
-        const activated = yield apply(fbconfig, fbconfig.activateFetched);
+        const activated = yield apply(fbconfig, fbconfig.activate);
         if (!activated) {
             console.tron.log("Fetched data not activated");
             // NOTE: not logging this as it appears to still work regardless of activation?
@@ -49,12 +60,16 @@ function* fetchAndUpdateSurveyURL() {
     }
 }
 function* updateSurveyURL() {
+    if (!configReady) {
+        console.tron.log(`cannot update survey url as config isn't ready yet`);
+    }
+
     const fbconfig = firebase.remoteConfig();
     let state = null;
     try {
         // get url
         const snapshot = fbconfig.getValue('survey_url');
-        const url = snapshot.val();
+        const url = snapshot.asString();
         
         // analytics
         state = yield select();
