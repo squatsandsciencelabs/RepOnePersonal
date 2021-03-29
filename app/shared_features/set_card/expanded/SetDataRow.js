@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         height: 40,
         padding: 0,
         marginRight: 0,
-        overflow: 'hidden'
     },
     itemContainer: {
         width: 45,
@@ -78,11 +77,8 @@ const styles = StyleSheet.create({
         color: 'rgba(77, 77, 77, 1)',
     },
     removedData: {
-        width: 45,
-        height: 45,
         textAlign: 'center',
         color: 'lightgray',
-        overflow: 'hidden',
     }
 });
 
