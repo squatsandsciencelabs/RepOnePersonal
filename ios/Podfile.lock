@@ -488,6 +488,8 @@ PODS:
     - Charts (= 3.3.0)
     - React
     - SwiftyJSON (= 5.0)
+  - RNDateTimePicker (3.4.3):
+    - React-Core
   - RNDeviceInfo (5.6.5):
     - React
   - RNFBAnalytics (11.2.0):
@@ -620,6 +622,7 @@ DEPENDENCIES:
   - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNCharts (from `../node_modules/react-native-charts-wrapper`)
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -785,6 +788,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNCharts:
     :path: "../node_modules/react-native-charts-wrapper"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFBAnalytics:
@@ -921,6 +926,7 @@ SPEC CHECKSUMS:
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
+  RNDateTimePicker: d943800c936fb01c352fcfb70439550d2cb57092
   RNDeviceInfo: c5f8f3a456adcbba405ace475254b08febc4c095
   RNFBAnalytics: 11873c6dccab66da20fc1c75fc47c88244845410
   RNFBApp: d9ab9f2e63c70a9974294bb44c749b728cd4028f

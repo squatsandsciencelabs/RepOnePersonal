@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 class DatePicker extends Component {

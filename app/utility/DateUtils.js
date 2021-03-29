@@ -20,7 +20,7 @@ export const timerDurationDescription = (duration) => {
 };
 
 export const getDate = (date) => {
-    if (date === null) {
+    if (date === null || date === '') {
         return null;
     } else if (Object.prototype.toString.call(date) === '[object Date]') {
         return date;
