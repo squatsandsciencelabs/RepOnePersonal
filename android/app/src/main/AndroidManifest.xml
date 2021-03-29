@@ -19,6 +19,7 @@
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
     <application
+      android:largeHeap="true"
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
