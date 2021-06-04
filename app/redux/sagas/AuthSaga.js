@@ -215,7 +215,7 @@ function* executeReauthenticateLoggedInUser(manual = false) {
         if (error.code === statusCodes.SIGN_IN_CANCELLED || error.code === statusCodes.SIGN_IN_REQUIRED) {
             // previously -5 is iOS cancel and 12501 is Android cancel
             logCancelReauthenticateAnalytics(state);
-            yield put(AuthActionCreators.logout(true)); // this will pop the alert
+            // yield put(AuthActionCreators.logout(true)); // this will pop the alert
         } else {
             // actual error
             logReauthenticateErrorAnalytics(state, error);
