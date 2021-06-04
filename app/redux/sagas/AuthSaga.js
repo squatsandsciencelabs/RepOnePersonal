@@ -168,18 +168,25 @@ function* executeReauthenticateLoggedOutUser() {
     logReauthenticateAnonymousAnalytics(state);
 }
 
-function* executeReauthenticateLoggedInUser() {
+function* executeReauthenticateLoggedInUser(manual = false) {
+    let isSignedIn = false;
+
     try {
         // sign into google
         let state = yield select();
         logAttemptReauthenticateGoogleAnalytics(state);
         yield apply(GoogleSignin, GoogleSignin.hasPlayServices);
-        const isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
         let userInfo = null;
-        if (isSignedIn) {
-            userInfo = yield apply(GoogleSignin, GoogleSignin.signInSilently);
-        } else {
+
+        if (manual) {
             userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
+        } else {
+            isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
+            if (isSignedIn) {
+                userInfo = yield apply(GoogleSignin, GoogleSignin.signInSilently);
+            } else {
+                userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
+            }
         }
 
         // sign into our servers
@@ -212,9 +219,13 @@ function* executeReauthenticateLoggedInUser() {
         } else {
             // actual error
             logReauthenticateErrorAnalytics(state, JSON.stringify(error));
-            if (error.type === "401") {
-                // server rejected, NOW logout
-                yield put(AuthActionCreators.logout(true)); // this will pop the alert
+            // if (error.type === "401") {
+            //     // server rejected, NOW logout
+            //     yield put(AuthActionCreators.logout(true)); // this will pop the alert
+            // }
+            if (!manual && isSignedIn) {
+                // wasn't manual previously AND you did silent sign in, try again with manual sign in
+                yield call(executeReauthenticateLoggedInUser, true);
             }
         }
     }
