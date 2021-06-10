@@ -527,7 +527,7 @@
 				DEVELOPMENT_TEAM = NXXWS4F4KW;
 				INFOPLIST_FILE = OpenBarbellApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 1.0.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -553,7 +553,7 @@
 				DEVELOPMENT_TEAM = NXXWS4F4KW;
 				INFOPLIST_FILE = OpenBarbellApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 1.0.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
