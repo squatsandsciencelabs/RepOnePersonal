@@ -12,7 +12,6 @@ export default async function() {
     if (Platform.OS !== 'ios') {
         await requestMultiple([
             PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-            PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
             PERMISSIONS.ANDROID.CAMERA,
             PERMISSIONS.ANDROID.RECORD_AUDIO,
             PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
