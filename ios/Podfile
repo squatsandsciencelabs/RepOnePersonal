@@ -1,27 +1,32 @@
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 target 'RepOnePersonal' do
-  use_unimodules!
+  use_expo_modules!
+  post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+  end
   config = use_native_modules!
-
-  use_react_native!(:path => config["reactNativePath"])
-
-  # Charts, as it doesn't seem to work normally
-  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
-
-  pod 'GoogleIDFASupport' # for firebase analytics audience
 
   # Permissions
   permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral.podspec"
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
-  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
-  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
-  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
+  pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
 
   target 'RepOnePersonalTests' do
     inherit! :complete
@@ -31,9 +36,11 @@ target 'RepOnePersonal' do
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-  use_flipper!
+  # you should disable the next line.
+  use_flipper!()
+
   post_install do |installer|
-    flipper_post_install(installer)
+    react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end

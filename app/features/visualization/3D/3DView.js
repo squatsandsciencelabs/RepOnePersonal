@@ -3,20 +3,17 @@ import { Renderer, loadAsync } from 'expo-three';
 import OrbitControlsView from 'expo-three-orbit-controls';
 import * as React from 'react';
 import {
-  TouchableOpacity,
-  TouchableHighlight,
-  Text,
-  StyleSheet,
-  View,
-  Platform,
-  Dimensions,
-  Image,
+    TouchableOpacity,
+    TouchableHighlight,
+    Text,
+    StyleSheet,
+    View,
+    Platform,
+    Dimensions,
+    Image,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import {
-  PerspectiveCamera,
-  Scene,
-} from 'three';
+import * as THREE from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
 import TargetCircle from 'app/shared_features/target/TargetCircle';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -27,9 +24,9 @@ const zoomDistance = 50;
 
 // slider visuals
 if (Platform.OS === 'ios') {
-  var thumbTintColor = '#ffffff';
+    var thumbTintColor = '#ffffff';
 } else {
-  var thumbTintColor = '#368fff';
+    var thumbTintColor = '#368fff';
 }
 
 // actionsheet
@@ -46,8 +43,8 @@ THREE.Object3D.DefaultUp.set(0, 0, 1);
 const material = new THREE.ShaderMaterial({
     vertexColors: THREE.VertexColors,
     uniforms: {
-        size: {value: 20},
-        scale: {value: 10},
+        size: { value: 20 },
+        scale: { value: 10 },
     },
     defines: {
         USE_MAP: "",
@@ -162,18 +159,18 @@ export default function App(props) {
 
     console.tron.log(`initialize 3d mode, prev ${props.prevRepIndex} next ${props.nextRepIndex}`);
 
-    const rerender = () => setState({...state});
+    const rerender = () => setState({ ...state });
 
-    const updateIndex = (newIndex, shouldRender=false) => {
+    const updateIndex = (newIndex, shouldRender = false) => {
         // save it without re-rendering
         state.currentIndex = newIndex;
 
         // update target
         state.selected.length = 0;
-        for (let i=0; i<numPoints; i++) {
+        for (let i = 0; i < numPoints; i++) {
             state.selected.push(i === newIndex ? 1.0 : 0.0);
         }
-        state.points.geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) );
+        state.points.geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1));
 
         // rerender if needed
         // called on prev, next, and the default camera positions
@@ -182,7 +179,7 @@ export default function App(props) {
         }
     };
 
-    const zoomTo = (newIndex, shouldRender=false) => {
+    const zoomTo = (newIndex, shouldRender = false) => {
         if (newIndex !== undefined && newIndex < 0 || newIndex >= numPoints) {
             return;
         }
@@ -200,7 +197,7 @@ export default function App(props) {
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(() => {
                 camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
-                orbitControls.current.getControls().target.set( coords.x, coords.y, coords.z );
+                orbitControls.current.getControls().target.set(coords.x, coords.y, coords.z);
                 orbitControls.current.getControls().update();
             })
             .onComplete(() => {
@@ -211,22 +208,22 @@ export default function App(props) {
     };
 
     const lookTop = () => {
-        camera.position.set(initialX+.0000001, initialY, initialZ+zoomDistance+(initialZ-initialX));
-        orbitControls.current.getControls().target.set( initialX, initialY, initialZ );
+        camera.position.set(initialX + .0000001, initialY, initialZ + zoomDistance + (initialZ - initialX));
+        orbitControls.current.getControls().target.set(initialX, initialY, initialZ);
         orbitControls.current.getControls().update();
         updateIndex(0, true);
     };
 
     const lookFront = () => {
-        camera.position.set(midX+zoomDistance, midY, midZ);
-        orbitControls.current.getControls().target.set( midX, midY, midZ );
+        camera.position.set(midX + zoomDistance, midY, midZ);
+        orbitControls.current.getControls().target.set(midX, midY, midZ);
         orbitControls.current.getControls().update();
         updateIndex(midpointIndex, true);
     };
 
     const lookSide = () => {
-        camera.position.set(midX, midY+zoomDistance, midZ);
-        orbitControls.current.getControls().target.set( midX, midY, midZ );
+        camera.position.set(midX, midY + zoomDistance, midZ);
+        orbitControls.current.getControls().target.set(midX, midY, midZ);
         orbitControls.current.getControls().update();
         updateIndex(midpointIndex, true);
     };
@@ -260,12 +257,12 @@ export default function App(props) {
         renderer.setClearColor(0xffffff);
 
         // camera
-        const camera = new PerspectiveCamera(70, width / height, 0.01, 10000);
-        camera.position.set(midX, midY+zoomDistance, midZ);
+        const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10000);
+        camera.position.set(midX, midY + zoomDistance, midZ);
         setCamera(camera);
 
         // scene
-        const scene = new Scene();
+        const scene = new THERE.Scene();
         state.scene = scene;
         // scene.scale.set(-1, 1, 1); // depends on coordinate plane
 
@@ -274,7 +271,7 @@ export default function App(props) {
         // scene.add( ambientLight );
 
         // skysphere
-        const sphereGeometry = new THREE.SphereGeometry( 1000, 25, 25 );
+        const sphereGeometry = new THREE.SphereGeometry(1000, 25, 25);
         const sphereMaterial = new THREE.MeshBasicMaterial({
             color: new THREE.Color(0.8, 0.8, 0.8),
             side: THREE.BackSide,
@@ -282,7 +279,7 @@ export default function App(props) {
             opacity: 0,
             transparent: true,
         });
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         scene.add(sphere);
 
         // grid position helpers
@@ -306,23 +303,23 @@ export default function App(props) {
 
         // sensor
         const sensor = await loadAsync(require('app/appearance/models/sensor.obj'));
-        sensor.position.set(initialX, initialY, initialZ-10);
+        sensor.position.set(initialX, initialY, initialZ - 10);
         sensor.rotateX(Math.PI * 0.5);
         sensor.rotateY(Math.PI * 0.5);
         scene.add(sensor);
         state.sensor = sensor;
 
         // recalculate selected
-        for (let i=0; i<numPoints; i++) {
+        for (let i = 0; i < numPoints; i++) {
             state.selected.push(i === state.currentIndex ? 1.0 : 0.0);
         }
 
         // draw
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-        geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-        geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) );
-        const points = new THREE.Points( geometry, material );
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1));
+        const points = new THREE.Points(geometry, material);
         scene.add(points);
         state.points = points;
         state.vertices = vertices;
@@ -340,7 +337,7 @@ export default function App(props) {
             if (!state.isLoaded && controls) {
                 console.tron.log(`render initialize target ${state.isLoaded}`);
                 state.isLoaded = true;
-                controls.target.set( midX, midY, midZ );
+                controls.target.set(midX, midY, midZ);
                 controls.update();
             }
 
@@ -355,9 +352,9 @@ export default function App(props) {
 
                         if (state.sphereTween) { state.sphereTween.stop() }
 
-                        const opacity = {value: sphere.material.opacity};
+                        const opacity = { value: sphere.material.opacity };
                         state.sphereTween = new TWEEN.Tween(opacity)
-                            .to({value: 1.0}, 300)
+                            .to({ value: 1.0 }, 300)
                             .easing(TWEEN.Easing.Quadratic.In)
                             .onUpdate(() => {
                                 sphere.material.opacity = opacity.value;
@@ -372,9 +369,9 @@ export default function App(props) {
 
                     if (state.sphereTween) { state.sphereTween.stop() }
 
-                    const opacity = {value: sphere.material.opacity};
+                    const opacity = { value: sphere.material.opacity };
                     state.sphereTween = new TWEEN.Tween(opacity)
-                        .to({value: 0.0}, 300)
+                        .to({ value: 0.0 }, 300)
                         .easing(TWEEN.Easing.Quadratic.Out)
                         .onUpdate(() => {
                             sphere.material.opacity = opacity.value;
@@ -405,18 +402,18 @@ export default function App(props) {
 
         // recreate points
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-        geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-        geometry.setAttribute( 'selected', new THREE.Float32BufferAttribute( state.selected, 1 ) ); // selected will be recreate with look side, so no need to redo it here
-        const points = new THREE.Points( geometry, material );
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1)); // selected will be recreate with look side, so no need to redo it here
+        const points = new THREE.Points(geometry, material);
         state.scene.add(points);
         state.points = points;
 
         // reposition sensor
-        state.sensor.position.set(initialX, initialY, initialZ-10);
+        state.sensor.position.set(initialX, initialY, initialZ - 10);
 
         // reposition
-        lookSide(); 
+        lookSide();
     }
 
     // conditional renders
@@ -449,7 +446,7 @@ export default function App(props) {
                     <Text style={styles.data}>{data[state.currentIndex].displayAcceleration}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayForce}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayPower}</Text>
-                    <Text style={styles.data}>{state.currentIndex+1}</Text>
+                    <Text style={styles.data}>{state.currentIndex + 1}</Text>
                     <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
                 </View>
             </View>
@@ -467,17 +464,17 @@ export default function App(props) {
                 <View style={styles.sliderRotateContainer}>
                     <View style={styles.sliderLayout}>
                         {/* prev */}
-                        <TouchableOpacity style={styles.sliderPrev} onPress={()=> {
-                            zoomTo(state.currentIndex-1, true);
+                        <TouchableOpacity style={styles.sliderPrev} onPress={() => {
+                            zoomTo(state.currentIndex - 1, true);
                         }}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
 
                         {/* slider */}
                         <Slider
-                            value={state.currentIndex} 
+                            value={state.currentIndex}
                             style={styles.slider}
-                            onValueChange={(value) => zoomTo(value) }
+                            onValueChange={(value) => zoomTo(value)}
                             minimumValue={0}
-                            maximumValue={numPoints-1}
+                            maximumValue={numPoints - 1}
                             step={1}
                             thumbTintColor={thumbTintColor}
                             minimumTrackTintColor={'#D1D1D1'}
@@ -487,8 +484,8 @@ export default function App(props) {
                         />
 
                         {/* next */}
-                        <TouchableOpacity style={styles.sliderNext} onPress={()=> {
-                            zoomTo(state.currentIndex+1, true);
+                        <TouchableOpacity style={styles.sliderNext} onPress={() => {
+                            zoomTo(state.currentIndex + 1, true);
                         }}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
                     </View>
                 </View>
@@ -529,13 +526,13 @@ export default function App(props) {
         <View style={styles.navigation}><Text style={styles.navigationText}>{props.navigationText}</Text></View>
 
         {/* navigate prev */}
-        <TouchableOpacity style={styles.navPrevRep} onPress={()=> props.prevRepIndex !== -1 ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navPrevRep} onPress={() => props.prevRepIndex !== -1 ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
 
         {/* navigate next */}
-        <TouchableOpacity style={styles.navNextRep} onPress={()=> props.nextRepIndex !== -1 ? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navNextRep} onPress={() => props.nextRepIndex !== -1 ? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
 
         {/* close */}
-        <TouchableOpacity style={styles.close} onPress={()=> props.tappedClose()}><Image source={require('app/appearance/images/x.png')} /></TouchableOpacity>
+        <TouchableOpacity style={styles.close} onPress={() => props.tappedClose()}><Image source={require('app/appearance/images/x.png')} /></TouchableOpacity>
     </View>);
 }
 

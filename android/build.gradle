@@ -2,29 +2,29 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "29.0.2"
+        buildToolsVersion = "30.0.2"
         minSdkVersion = 21 // react-native-ble-manager wants >= 19, unimodules wants >= 21
-        compileSdkVersion = 29 // default but react-native-device-info wants 28 and react-native-charts-wrapper wants >= 28
-        targetSdkVersion = 29 // default but react-native-device-info wants 28
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+        ndkVersion = "21.4.7075529"
+        googlePlayServicesAuthVersion = "19.2.0" // react-native-google-signin
         firebaseIidVersion = "19.0.1" // react-native-device-info
-        googlePlayServicesAuthVersion = "16.0.1" // react-native-google-signin
     }
     repositories {
-        google() // required by react-native-firebase, must be above jcenter
-        jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.3") // default from install, react-native-google-signin needs >=3.1.2, react-native-firebase needs >=3.4.1
-        classpath('com.google.gms:google-services:4.2.0') // react-native-google-signin needed 4.1, react-native-firebase needed 4.2
-        classpath('com.google.firebase:firebase-crashlytics-gradle:2.5.1') // react-native
+        classpath("com.android.tools.build:gradle:4.2.2")
+        classpath 'com.google.gms:google-services:4.3.10' // react-native-google-signin
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1' // react-native-firebase crashlytics
     }
 }
 
 allprojects {
     repositories {
-        mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
@@ -33,9 +33,20 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
-
-        google() // default from install, needed for react-native-google-signin and react-native-firebase, must be above jcenter
-        jcenter()
-        maven { url 'https://www.jitpack.io' } // default, also needed for react-native-charts-wrapper
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
+        google()
+        maven { url 'https://www.jitpack.io' }
+        jcenter() {
+            // temporary for react-native-video, need to migrate away from jcenter at some point
+            content {
+                includeModule("com.yqritc", "android-scalablevideoview")
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ import {
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
+import THREE from 'three';
 
 export const isDeleted = (set) => {
     if (set.hasOwnProperty('deleted')) {

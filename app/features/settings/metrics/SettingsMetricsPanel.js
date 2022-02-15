@@ -3,24 +3,12 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Picker,
     Platform,
-    Switch,
     StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-import {
-    EMPTY_METRIC,
-    AVG_VELOCITY_METRIC,
-    RPE_METRIC,
-    DURATION_METRIC,
-    ROM_METRIC,
-    PKH_METRIC,
-    PKV_METRIC,
-} from 'app/configs+constants/CollapsedMetricTypes';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
-import * as DateUtils from 'app/utility/DateUtils';
 import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
 import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersScreen';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';

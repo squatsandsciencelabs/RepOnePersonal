@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { AppRegistry, Text, TextInput } from 'react-native';
 import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 // NOTE: Somehow importing this later causes animations to fail
 import VisualizationScreen from 'app/features/visualization/VisualizationScreen';
@@ -14,7 +16,6 @@ import Bluetooth from 'app/services/Bluetooth';
 import AppState from 'app/services/AppState';
 import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 // TODO: confirm font scaling disabled
 Text.defaultProps = Text.defaultProps || {};
@@ -49,10 +50,12 @@ class RepOnePersonal extends Component {
     render() {
         return (
             <ActionSheetProvider>
-                <Provider store={store}>
-                    <ApplicationScreen />
-                    <VisualizationScreen />
-                </Provider>
+                <RootSiblingParent>
+                    <Provider store={store}>
+                        <ApplicationScreen />
+                        <VisualizationScreen />
+                    </Provider>
+                </RootSiblingParent>
             </ActionSheetProvider>
         )
     }

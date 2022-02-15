@@ -6,7 +6,7 @@ import {
     Text,
     ActivityIndicator
 } from 'react-native';
-import { GoogleSigninButton } from '@react-native-community/google-signin';
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsAccountPanel extends Component {

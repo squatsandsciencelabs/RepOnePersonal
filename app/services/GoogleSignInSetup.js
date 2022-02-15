@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { GoogleSignin } from '@react-native-community/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';

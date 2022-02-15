@@ -27,7 +27,8 @@ import {
     TEST_1RM,
     ADD_3D_POSITIONS_TO_REP,
 } from 'app/configs+constants/ActionTypes';
-import uuidV4 from 'uuid/v4';
+import 'react-native-get-random-values';
+import { v4 as uuidV4 } from 'uuid';
 import { getVersion } from 'react-native-device-info';
 import { Platform } from 'react-native';
 import * as SetUtils from 'app/utility/SetUtils';

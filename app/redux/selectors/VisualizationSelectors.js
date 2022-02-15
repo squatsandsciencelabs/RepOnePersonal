@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as SetUtils from 'app/utility/SetUtils';
+import * as THREE from 'three';
 
 const stateRoot = (state) => state.visualization;
 

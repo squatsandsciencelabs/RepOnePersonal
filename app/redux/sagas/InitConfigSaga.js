@@ -24,11 +24,6 @@ function* fetchConfig() {
     try {
         const fbconfig = firebase.remoteConfig();
 
-        // debug mode
-        if (__DEV__) {
-            yield apply(fbconfig, fbconfig.setConfigSettings, [{ isDeveloperModeEnabled: true }]);
-        }
-
         // Set default values
         yield apply(fbconfig, fbconfig.setDefaults, [{ survey_url: '' }]);
     

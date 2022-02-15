@@ -11,7 +11,7 @@ import {
     select,
 } from 'redux-saga/effects';
 import { Alert, Platform } from 'react-native';
-import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 import {
     STORE_INITIALIZED,
@@ -128,7 +128,7 @@ function* executeLogin() {
         state = yield select();
         logLoginAnalytics(state);
     } catch(error) {
-        console.tron.log("ERROR CODE " + error.code + " ERROR " + error);
+        console.tron.log("ERROR CODE " + error.code + " ERROR " + JSON.stringify(error));
         let state = yield select();
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // previously -5 is iOS cancel and 12501 is Android cancel

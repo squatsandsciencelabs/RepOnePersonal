@@ -10,13 +10,14 @@ import {
     StyleSheet,
 }  from 'react-native';
 import Video from 'react-native-video';
-import KeepAwake from 'react-native-keep-awake';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
 
 class VideoPlayer extends Component {
 
     _renderVideo() {
         if (this.props.isModalShowing) {
+            activateKeepAwake();
             return (
                 <View style={[{flex: 1}, styles.container]}>                
                     <Video
@@ -41,10 +42,10 @@ class VideoPlayer extends Component {
                             <Text style={styles.deleteText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
-                    <KeepAwake />
                 </View>
             );
         } else {
+            deactivateKeepAwake();
             return null;
         }
     }

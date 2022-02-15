@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {
     View,
-    Text,
     Modal,
-    Picker,
     TouchableOpacity,
     Platform
  }  from 'react-native';
+ import {Picker} from '@react-native-picker/picker';
 
 class PickerModal extends Component {
 
