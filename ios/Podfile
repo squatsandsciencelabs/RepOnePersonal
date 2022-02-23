@@ -27,6 +27,9 @@ target 'RepOnePersonal' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+  
+  # Somehow this is still necessary
+  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
   target 'RepOnePersonalTests' do
     inherit! :complete
