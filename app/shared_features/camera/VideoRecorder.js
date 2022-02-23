@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import CameraRoll from "@react-native-community/cameraroll";
-import * as FileSystem from 'expo-file-system';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,18 +17,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 function record(props, camera) {
     camera.current.startRecording({
         onRecordingFinished: async (video) => {
-            console.tron.log(`have data, what do with it? ${JSON.stringify(video)}`);
+            try {
+                // save to gallery
+                const uri = await CameraRoll.save(video.path);
 
-            // save to gallery
-            const uri = await CameraRoll.save(video.path);
+                // delete from cache
+                await ReactNativeBlobUtil.fs.unlink(video.path);
 
-            // delete from cache
-            await FileSystem.deleteAsync(video.path);
-
-            // dispatch info
-            if (props.setID) {
-                console.tron.log(`should be saving to ${uri}`);
-                props.saveVideo(props.setID, uri, props.videoType);
+                // dispatch info
+                if (props.setID) {
+                    props.saveVideo(props.setID, uri, props.videoType);
+                }
+            } catch (err) {
+                console.tron.log(`error on recording stuff, ${err}`);
             }
         },
         onRecordingError: (err) => {
@@ -40,21 +41,19 @@ function record(props, camera) {
 }
 
 export default (props) => {
-    const camera = useRef < Camera > (null)
+    const camera = useRef(null);
     const devices = useCameraDevices();
     const device = devices[props.cameraType];
-    useEffect(async () => {
+    useEffect(() => {
         if (props.isRecording) {
             // start recording now
             record(props, camera);
         } else if (props.isModalShowing) {
             // stop recording if it's showing, as otherwise it's a cancel
-            await camera.current.stopRecording();
+            camera.current.stopRecording();
         }
     }, [props.isRecording]);
-
     if (device == null) return null;
-
     return (
         <Modal visible={props.isModalShowing} animationType='fade'>
             {renderCamera(props, camera, device)}
@@ -162,13 +161,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     cancelButton: {
-        marginTop: Device.isiPhoneX() ? 50 : 30,
-        marginLeft: 20,
+        position: 'absolute',
+        top: Device.isiPhoneX() ? 50 : 30,
+        left: 20,
         width: 100,
         backgroundColor: '#333333',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8
+        borderRadius: 8,
     },
     cancelText: {
         color: 'white',
