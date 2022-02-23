@@ -6,13 +6,13 @@ import {
     call,
     select,
 } from 'redux-saga/effects';
-import * as FileSystem from 'expo-file-system';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
 import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import DeviceInfo from 'react-native-device-info';
 
-import { 
+import {
     STORE_INITIALIZED,
     OTA_UPDATE_APP_REQUIRED,
     OTA_DOWNLOAD_READY,
@@ -35,9 +35,9 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/VersionComparison';
 
 let downloadTask = null;
-const filePath = `${FileSystem.documentDirectory}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
+const filePath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 
-export default function * OTASaga(dispatch) {
+export default function* OTASaga(dispatch) {
     yield all([
         takeEvery(STORE_INITIALIZED, dispatch, checkOTA),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
@@ -49,7 +49,7 @@ export default function * OTASaga(dispatch) {
     ]);
 };
 
-function *checkOTA(dispatch, action) {
+function* checkOTA(dispatch, action) {
     // listen for dfu
     DFUEmitter.addListener("DFUProgress", ({ percent }) => {
         dispatch({
@@ -126,7 +126,10 @@ function *checkOTA(dispatch, action) {
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
         if (currentVersion !== firmwareVersion) {
             try {
-                yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
+                // NOTE: This always runs as you aren't connected to a sensor at startup, so currentVersion defaults to 0.0.1
+                // Leaving it as it's fine
+                console.tron.log(`deleting on disk as curr ${currentVersion} !== firm ${firmwareVersion}`);
+                yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
             } catch (err) {
                 console.tron.log(`failed to delete download ${err}`);
             }
@@ -142,8 +145,8 @@ function *checkOTA(dispatch, action) {
 
         // TODO: confirm it works on iOS as this failed for the temp camera cache directory
         // check against disk
-        const fileInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [filePath]);
-        if (fileInfo.exists) {
+        const exists = yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.exists, [filePath]);
+        if (exists) {
             yield put({
                 type: OTA_DOWNLOAD_READY,
             });
@@ -158,18 +161,18 @@ function *checkOTA(dispatch, action) {
     }
 }
 
-function *startDownload(action) {
+function* startDownload(action) {
     try {
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
-        downloadTask = FileSystem.createDownloadResumable(
-            `https://firmware.reponestrength.com/${currentVersion}.zip`,
-            filePath,
-            {},
-            () => {},
-          );
-        const result = yield apply(downloadTask, downloadTask.downloadAsync);
+        downloadTask = ReactNativeBlobUtil
+            .config({
+                // response data will be saved to this path if it has access right.
+                path: filePath,
+            })
+            .fetch('GET', `https://firmware.reponestrength.com/${currentVersion}.zip`);
+        const result = yield downloadTask;
 
-        console.tron.log(`download should be finished to ${result.uri}`);
+        console.tron.log(`download should be finished to ${result.path()}`);
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
@@ -188,25 +191,24 @@ function *startDownload(action) {
     }
 }
 
-function *cancelDownload(action) {
+function* cancelDownload(action) {
     try {
-        yield apply(downloadTask, downloadTask.pauseAsync);
-        downloadTask = null;
-        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
+        yield apply(downloadTask, downloadTask.cancel);
+        yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
     } catch (err) {
         console.tron.log(`failed to cancel download ${err}`);
     }
 }
 
-function *deleteDownload(action) {
+function* deleteDownload(action) {
     try {
-        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
+        yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
     } catch (err) {
         console.tron.log(`failed to delete download ${err}`);
     }
 }
 
-function *startInstall(action) {
+function* startInstall(action) {
     const state = yield select();
     const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
@@ -232,7 +234,7 @@ function *startInstall(action) {
             try {
                 yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273']); // reps
                 yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
-            } catch(err) {
+            } catch (err) {
                 console.tron.log(`Error attempting to restart rep notifications after failed dfu ${err}`);
             }
         } else {
@@ -241,7 +243,7 @@ function *startInstall(action) {
     }
 }
 
-function *reboot(action) {
+function* reboot(action) {
     const state = yield select();
     const progress = OTASelectors.getProgress(state);
     if (progress === 100 && action.state === 'DEVICE_DISCONNECTING') {
@@ -265,7 +267,7 @@ function *reboot(action) {
     }
 }
 
-function *cancelInstall(action) {
+function* cancelInstall(action) {
     // TODO: activate nordic library
 }
 
@@ -340,7 +342,7 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
                 console.tron.log(`check firmware updates error, cannot process lack of min and max os`);
                 return null;
             }
-    
+
             if (app_config.min_os_version) {
                 if (!isVersionGreaterThanOrEqual(osVersion, app_config.min_os_version)) {
                     // no good
@@ -353,7 +355,7 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
                     continue;
                 }
             }
-    
+
             // passed
             nextAppVersion = app_config.app_version;
             break;
