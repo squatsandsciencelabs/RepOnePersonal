@@ -54,24 +54,27 @@ function* setupServices(action) {
             }
         }
 
-        // end cal on startup if it's format 2
-        writeData = stringToBytes('endcal');
-        while (true) {
-            try {
-                // fail out upon disconnect 
-                deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-                if (!deviceIdentifier) {
-                    console.tron.log(`not connected, giving up on sending endcal`);
-                    return;
-                }
-                
-                // write
-                yield apply(BleManager, BleManager.write, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
+        // calibration
+        if (OpenBarbellConfig.calibrationEnabled) {
+            // end cal on startup if it's format 2
+            writeData = stringToBytes('endcal');
+            while (true) {
+                try {
+                    // fail out upon disconnect 
+                    deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+                    if (!deviceIdentifier) {
+                        console.tron.log(`not connected, giving up on sending endcal`);
+                        return;
+                    }
 
-                // success, bail
-                break;
-            } catch (err) {
-                console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
+                    // write
+                    yield apply(BleManager, BleManager.write, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
+
+                    // success, bail
+                    break;
+                } catch (err) {
+                    console.tron.log(`Error writing endcal, trying again ${err.toString()}`);
+                }
             }
         }
     } catch (err) {

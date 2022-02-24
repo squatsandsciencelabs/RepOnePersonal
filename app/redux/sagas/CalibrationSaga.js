@@ -2,6 +2,7 @@ import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effec
 import BleManager from 'react-native-ble-manager';
 import Toast from 'react-native-root-toast';
 import { stringToBytes } from 'convert-string';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     START_CALIBRATION,
@@ -15,17 +16,19 @@ import * as CalibrationSelectors from 'app/redux/selectors/CalibrationSelectors'
 
 var calibrating = false;
 
-export default function *CalibrationSaga() {
-    yield all([
-        takeEvery(START_CALIBRATION, startCalibration),
-        takeEvery(FINISH_CALIBRATION, finishCalibration),
-        takeEvery(DISCONNECTED_FROM_DEVICE, forceEndCalibration),
-        takeEvery(RESET_CALIBRATION, resetCalibration),
-        // note: shoulnd't need cancel calibration as cancel is disabled once you tap start
-    ]);
+export default function* CalibrationSaga() {
+    if (OpenBarbellConfig.calibrationEnabled) {
+        yield all([
+            takeEvery(START_CALIBRATION, startCalibration),
+            takeEvery(FINISH_CALIBRATION, finishCalibration),
+            takeEvery(DISCONNECTED_FROM_DEVICE, forceEndCalibration),
+            takeEvery(RESET_CALIBRATION, resetCalibration),
+            // note: shoulnd't need cancel calibration as cancel is disabled once you tap start
+        ]);
+    }
 };
 
-function *startCalibration(action) {
+function* startCalibration(action) {
     calibrating = false;
     while (true) {
         try {
@@ -45,7 +48,7 @@ function *startCalibration(action) {
     }
 }
 
-function *finishCalibration(action) {
+function* finishCalibration(action) {
     while (true) {
         try {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
@@ -65,7 +68,7 @@ function *finishCalibration(action) {
     }
 }
 
-function *forceEndCalibration(action) {
+function* forceEndCalibration(action) {
     const isModalShowing = yield select(CalibrationSelectors.getIsModalShowing);
     if (!isModalShowing) {
         return;
@@ -76,7 +79,7 @@ function *forceEndCalibration(action) {
     yield put({ type: CANCEL_CALIBRATION });
 }
 
-function *resetCalibration(action) {
+function* resetCalibration(action) {
     while (true) {
         try {
             const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
@@ -93,7 +96,7 @@ function *resetCalibration(action) {
         } catch (err) {
             console.tron.log(`failed to end calibration ${err.toString()}, trying again`);
         }
-    } 
+    }
 }
 
 function toast(msg) {

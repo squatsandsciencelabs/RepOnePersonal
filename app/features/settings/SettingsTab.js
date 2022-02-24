@@ -7,6 +7,7 @@ import {
     View,
     ListView
 } from 'react-native';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import SettingsHelpScreen from './help/SettingsHelpScreen';
 import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
 import SettingsOTAScreen from './ota/SettingsOTAScreen';
@@ -33,7 +34,7 @@ class SettingsTab extends Component {
                     <SettingsColumnsScreen />
                     <SettingsApplicationScreen />
                     <SettingsFeedbackScreen />
-                    <SettingsCalibrationScreen />
+                    {OpenBarbellConfig.calibrationEnabled ? <SettingsCalibrationScreen /> : null}
                 </View>
             </ScrollView>
         );
