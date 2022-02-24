@@ -6,6 +6,7 @@ import {
     Modal,
     StyleSheet,
     Alert,
+    Platform,
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import CameraRoll from "@react-native-community/cameraroll";
@@ -40,6 +41,10 @@ function record(props, camera) {
     });
 }
 
+// TODO: look for a better place to store the timer
+// Just wasn't sure that timer could be declared within useEffect as it runs every time isRecording changes
+let timer = null;
+
 export default (props) => {
     const camera = useRef(null);
     const devices = useCameraDevices();
@@ -51,7 +56,24 @@ export default (props) => {
         } else if (props.isModalShowing) {
             // stop recording if it's showing, as otherwise it's a cancel
             camera.current.stopRecording();
+            
+            if (Platform.OS === 'ios') {
+                // TODO: remove timer hack, this was necessary to prevent weird behavior when ending too quickly
+                timer = setTimeout(() => {
+                    camera.current.stopRecording();
+                    clearTimeout(timer);
+                    timer = null;    
+                }, 1000);
+            } else {
+                this.camera.stopRecording();
+            }
         }
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
+            }
+        };
     }, [props.isRecording]);
     if (device == null) return null;
     return (
@@ -79,7 +101,11 @@ function renderCamera(props, camera, device) {
         />
         <View style={styles.cancelButton}>
             <View>
-                <TouchableOpacity onPress={() => props.closeModal(props.setID)}>
+                <TouchableOpacity onPress={() => {
+                    if (!timer) {
+                        props.closeModal(props.setID);
+                    }
+                }}>
                     <View><Text style={styles.cancelText}>Cancel</Text></View>
                 </TouchableOpacity>
             </View>
