@@ -31,10 +31,11 @@ function record(props, camera) {
                 }
             } catch (err) {
                 console.tron.log(`error on recording stuff, ${err}`);
+                props.saveVideoError(props.setID, err);
             }
         },
         onRecordingError: (err) => {
-            console.tron.log("ERROR " + err);
+            console.tron.log(`onRecordingError ${err}`);
             props.saveVideoError(props.setID, err);
             Alert.alert('There was an issue saving your video. Please try again');
         },
