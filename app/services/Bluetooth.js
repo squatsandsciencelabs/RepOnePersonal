@@ -11,6 +11,7 @@ import {
     SAVE_WORKOUT_REP,
     SAVE_HISTORY_REP,
 } from 'app/configs+constants/ActionTypes';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     getBulkData,
@@ -118,7 +119,7 @@ export default function (store) {
                     linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
                     linear3DROM: formatVersion === 1 ? null : data[9],
                 }));
-            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274') {
+            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274' && OpenBarbellConfig.bulkEnabled) {
                 // bulk data
 
                 try {

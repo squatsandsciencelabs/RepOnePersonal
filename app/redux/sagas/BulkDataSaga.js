@@ -1,6 +1,7 @@
 import { take, takeEvery, select, put, call, all, apply, spawn } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import Toast from 'react-native-root-toast';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     ADD_REP_DATA,
@@ -16,17 +17,19 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 var currentDeviceRepID = null;
 var map = {};
 
-export default function *BulkDataSaga() {
-    yield all([
-        takeEvery(ADD_REP_DATA, mapBulkData),
-        takeEvery(SAVE_WORKOUT_REP, completeCheck),
-        takeEvery(SAVE_HISTORY_REP, completeCheck),
-        takeEvery(DISCONNECTED_FROM_DEVICE, clearAll),
-        takeEvery(LOGOUT, clearAll),
-    ]);
+export default function* BulkDataSaga() {
+    if (OpenBarbellConfig.bulkEnabled) {
+        yield all([
+            takeEvery(ADD_REP_DATA, mapBulkData),
+            takeEvery(SAVE_WORKOUT_REP, completeCheck),
+            takeEvery(SAVE_HISTORY_REP, completeCheck),
+            takeEvery(DISCONNECTED_FROM_DEVICE, clearAll),
+            takeEvery(LOGOUT, clearAll),
+        ]);
+    }
 };
 
-function *mapBulkData(action) {
+function* mapBulkData(action) {
     if (!action.deviceRepID) {
         console.tron.log(`not updating bulk data logic as action lacks deviceRepID ${JSON.stringify(action)}`);
         return;
@@ -39,9 +42,9 @@ function *mapBulkData(action) {
 
     // get vars
     const workoutData = yield select(SetsSelectors.getWorkoutSets);
-    const set = workoutData[workoutData.length-1];
+    const set = workoutData[workoutData.length - 1];
     const setID = set.setID;
-    const repIndex = set.reps ? set.reps.length-1 : 0;
+    const repIndex = set.reps ? set.reps.length - 1 : 0;
 
     // map it
     map[action.deviceRepID] = {
@@ -59,7 +62,7 @@ function *mapBulkData(action) {
     }
 }
 
-function *completeCheck(action) {
+function* completeCheck(action) {
     // should complete check
     if (!action.bulkData) {
         return;
@@ -90,19 +93,19 @@ function *completeCheck(action) {
     yield spawn(notifyBulkDataReceived, rep.deviceRepID, true);
 }
 
-function *clearAll(action) {
+function* clearAll(action) {
     console.tron.log(`CLEARING bulk data mapping`);
     map = {};
     currentDeviceRepID = null;
 }
 
 // note, spawn this thing
-function *notifyBulkDataReceived(deviceRepID, completed=false) {
+function* notifyBulkDataReceived(deviceRepID, completed = false) {
     // generate byte array
     const data16 = new Uint16Array([deviceRepID]);
     const data8 = new Uint8Array(data16.buffer);
     const data = Array.from(data8);
-    
+
     while (true) {
         // fail out upon disconnect 
         let deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
@@ -116,7 +119,7 @@ function *notifyBulkDataReceived(deviceRepID, completed=false) {
             console.tron.log(`Attempt notify bulk data received for ${deviceRepID}`);
             yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
             console.tron.log(`Succeeded notify bulk data received for ${deviceRepID}`);
-            
+
             // success, bail
             const msg = completed ? `Bulk Data Received For ${deviceRepID}` : `Ignored bulk data for ${deviceRepID}`;
             Toast.show(msg, {

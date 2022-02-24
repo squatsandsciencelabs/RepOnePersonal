@@ -3,13 +3,14 @@
 import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import { stringToBytes } from 'convert-string';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 
-export default function *BluetoothSaga() {
+export default function* BluetoothSaga() {
     yield all([
         takeEvery(CONNECTED_TO_DEVICE, setupServices),
     ]);
@@ -25,28 +26,31 @@ function* setupServices(action) {
             return;
         }
 
-        // listen for bulk data
-        yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
+        // bulk
+        if (OpenBarbellConfig.bulkEnabled) {
+            // listen for bulk data
+            yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']);
 
-        // write 1 for bulk data
-        let writeData = stringToBytes('1');
-        let deviceIdentifier = null;
-        while (true) {
-            try {
-                // fail out upon disconnect 
-                deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-                if (!deviceIdentifier) {
-                    console.tron.log(`not connected, giving up on sending 1 to write data`);
-                    return;
+            // write 1 for bulk data
+            let writeData = stringToBytes('1');
+            let deviceIdentifier = null;
+            while (true) {
+                try {
+                    // fail out upon disconnect 
+                    deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+                    if (!deviceIdentifier) {
+                        console.tron.log(`not connected, giving up on sending 1 to write data`);
+                        return;
+                    }
+
+                    // write
+                    yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20276', writeData]);
+
+                    // success, bail
+                    break;
+                } catch (err) {
+                    console.tron.log(`Error writing 1, trying again ${err.toString()}`);
                 }
-
-                // write
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20276', writeData]);
-
-                // success, bail
-                break;
-            } catch (err) {
-                console.tron.log(`Error writing 1, trying again ${err.toString()}`);
             }
         }
 
