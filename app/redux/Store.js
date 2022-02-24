@@ -1,4 +1,5 @@
-import { AsyncStorage, Platform } from 'react-native';
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore, autoRehydrate, getStoredState} from 'redux-persist';
 import Reactotron from 'reactotron-react-native';
 import { createFilter } from 'redux-persist-transform-filter';

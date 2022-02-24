@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.13.0",
+    "@react-native-async-storage/async-storage": "^1.16.1",
     "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/slider": "^4.2.0",
@@ -44,7 +45,7 @@
     "react-native-get-random-values": "^1.7.2",
     "react-native-modal-datetime-picker": "^13.0.1",
     "react-native-nordic-dfu": "ThomasStubbe/react-native-nordic-dfu",
-    "react-native-pager-view": "5.4.9",
+    "react-native-pager-view": "5.4.11",
     "react-native-permissions": "^3.2.0",
     "react-native-progress": "^5.0.0",
     "react-native-root-toast": "^3.3.0",
