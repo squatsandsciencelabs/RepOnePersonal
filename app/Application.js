@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 // NOTE: Somehow importing this later causes animations to fail
 import VisualizationScreen from 'app/features/visualization/VisualizationScreen';
@@ -53,7 +54,7 @@ class RepOnePersonal extends Component {
                 <RootSiblingParent>
                     <Provider store={store}>
                         <ApplicationScreen />
-                        <VisualizationScreen />
+                        {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null}
                     </Provider>
                 </RootSiblingParent>
             </ActionSheetProvider>

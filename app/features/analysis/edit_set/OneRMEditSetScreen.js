@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import * as Actions from './OneRMEditSetActions';
 import OneRMEditSetView from './OneRMEditSetView';
@@ -87,7 +88,7 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
                 array.push(createTitleViewModel(set, setNumber));
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
-                if (SetUtils.hasUnremovedRepWith3D(set)) {
+                if (OpenBarbellConfig.visualizationEnabled && SetUtils.hasUnremovedRepWith3D(set)) {
                     array.push(createOpen3DButton(set));
                 } else {
                     array.push(createBorder(set));

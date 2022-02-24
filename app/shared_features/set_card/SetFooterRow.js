@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 const image = require('app/appearance/images/3d.png');
 

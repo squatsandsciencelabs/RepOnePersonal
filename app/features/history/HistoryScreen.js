@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 
@@ -90,7 +91,7 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
                     array.push(createAnalysisViewModel(set));
                 }
                 if ((shouldShowRemoved && !SetUtils.hasNoReps(set)) || (!shouldShowRemoved && SetUtils.numValidUnremovedReps(set) > 0)) { // TODO: might have bug where set has just 1 invalid rep?
-                    if (setHasUnremovedRepWith3D) {
+                    if (OpenBarbellConfig.visualizationEnabled && setHasUnremovedRepWith3D) {
                         array.push(createOpen3DButton(set));
                     } else {
                         array.push(createBorder(set));
@@ -291,7 +292,7 @@ const createFooterVM = (set, lastSetEndTime, isCollapsed, setHasRepWith3D) => {
         key: set.setID + 'rest',
         setID: set.setID,
         isCollapsed: isCollapsed,
-        show3D: isCollapsed && setHasRepWith3D,
+        show3D: OpenBarbellConfig.visualizationEnabled && isCollapsed && setHasRepWith3D,
     };
 };
 

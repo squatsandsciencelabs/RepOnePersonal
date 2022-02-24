@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 
@@ -73,7 +74,7 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
                     array.push(createAnalysisViewModel(set));
                 }
                 if (isLastSet || set.reps.length > 0) {
-                    if ((isLastSet && can3D) || setHasUnremovedRepWith3D) {
+                    if (OpenBarbellConfig.visualizationEnabled && ((isLastSet && can3D) || setHasUnremovedRepWith3D)) {
                         array.push(createOpen3DButton(set));
                     } else {
                         array.push(createBorder(set));
@@ -307,7 +308,7 @@ const createFooterVM = (set, lastSetEndTime, isCollapsed, isWorkingSet, setHasUn
         setID: set.setID,
         isCollapsed: isCollapsed,
         isWorkingSet: isWorkingSet,
-        show3D: isCollapsed && !isWorkingSet && setHasUnremovedRepWith3D,
+        show3D: OpenBarbellConfig.visualizationEnabled && isCollapsed && !isWorkingSet && setHasUnremovedRepWith3D,
     };
 };
 
