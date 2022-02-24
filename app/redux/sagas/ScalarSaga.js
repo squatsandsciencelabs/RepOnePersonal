@@ -2,6 +2,7 @@
 import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import { bytesToString } from 'convert-string';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     ATTEMPT_LOG_REP_START_POSITION,
@@ -11,14 +12,16 @@ import {
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 
-export default function *ScalarSaga() {
-    yield all([
-        takeEvery(ATTEMPT_LOG_REP_START_POSITION, logStart),
-        takeEvery(ATTEMPT_LOG_REP_END_POSITION, logEnd),
-    ]);
+export default function* ScalarSaga() {
+    if (OpenBarbellConfig.scalarEnabled) {
+        yield all([
+            takeEvery(ATTEMPT_LOG_REP_START_POSITION, logStart),
+            takeEvery(ATTEMPT_LOG_REP_END_POSITION, logEnd),
+        ]);
+    }
 };
 
-function *logStart(action) {
+function* logStart(action) {
     try {
         const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
         const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
@@ -28,9 +31,9 @@ function *logStart(action) {
             let responseString = bytesToString(response);
             responseString = responseString.replace(/\s+/g, "");
             const array = responseString.split(/,|:/);
-            const x = array[array.length-5];
-            const y = array[array.length-3];
-            const z = array[array.length-1];
+            const x = array[array.length - 5];
+            const y = array[array.length - 3];
+            const z = array[array.length - 1];
             if (x !== 'nan' && y !== 'nan' && z !== 'nan') {
                 yield put({
                     type: LOG_REP_START_POSITION,
@@ -49,7 +52,7 @@ function *logStart(action) {
     }
 }
 
-function *logEnd(action) {
+function* logEnd(action) {
     try {
         const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
         const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
@@ -59,9 +62,9 @@ function *logEnd(action) {
             let responseString = bytesToString(response);
             responseString = responseString.replace(/\s+/g, "");
             const array = responseString.split(/,|:/);
-            const x = array[array.length-5];
-            const y = array[array.length-3];
-            const z = array[array.length-1];
+            const x = array[array.length - 5];
+            const y = array[array.length - 3];
+            const z = array[array.length - 1];
             if (x !== 'nan' && y !== 'nan' && z !== 'nan') {
                 yield put({
                     type: LOG_REP_END_POSITION,

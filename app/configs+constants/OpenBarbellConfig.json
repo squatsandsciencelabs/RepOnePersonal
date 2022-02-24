@@ -13,6 +13,6 @@
     "bulkEnabled": false,
     "calibrationEnabled": false,
     "3dMetricsEnabled": false,
-    "scalarTestingEnabled": false,
+    "scalarEnabled": false,
     "3dGLEnabled": false
 }
