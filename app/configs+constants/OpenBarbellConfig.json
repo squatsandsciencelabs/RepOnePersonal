@@ -9,5 +9,10 @@
 	"webGoogleClientID" : "1095441496199-oqqb6fdoagjsrvgmp3ns1ps8mn7k8ec2.apps.googleusercontent.com",
     "endWorkoutTimer" : 3600000,
     "obtainTokenTimer": 1800000,
-    "apiWaitTimer": 1209600000    
+    "apiWaitTimer": 1209600000,
+    "bulkEnabled": false,
+    "calibrationEnabled": false,
+    "3dMetricsEnabled": false,
+    "scalarTestingEnabled": false,
+    "3dGLEnabled": false
 }
