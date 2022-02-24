@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-pager-view/ios/ReactNativePageView.m b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
+index 30e7565..3ca0f9f 100644
+--- a/node_modules/react-native-pager-view/ios/ReactNativePageView.m
++++ b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
+@@ -175,7 +175,7 @@ - (void)setReactViewControllers:(NSInteger)index
+                       direction:(UIPageViewControllerNavigationDirection)direction
+                        animated:(BOOL)animated
+                        shouldCallOnPageSelected:(BOOL)shouldCallOnPageSelected {
+-    if (self.reactPageViewController == nil) {
++    if (self.reactPageViewController == nil || self.currentIndex == index) {
+         return;
+     }
+     __weak ReactNativePageView *weakSelf = self;
