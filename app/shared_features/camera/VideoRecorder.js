@@ -56,12 +56,13 @@ export default (props) => {
             record(props, camera);
         } else if (props.isModalShowing) {
             // stop recording if it's showing, as otherwise it's a cancel
-            camera.current.stopRecording();
             
             if (Platform.OS === 'ios') {
                 // TODO: remove timer hack, this was necessary to prevent weird behavior when ending too quickly
                 timer = setTimeout(() => {
-                    camera.current.stopRecording();
+                    if (camera && camera.current) {
+                        camera.current.stopRecording();
+                    }
                     clearTimeout(timer);
                     timer = null;    
                 }, 1000);
