@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { createSelector } from 'reselect';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     AVG_VELOCITY_METRIC,
@@ -29,7 +30,7 @@ const pickerItem = (metric) => ({
     value: metric,
 });
 
-const items = [
+const items = OpenBarbellConfig.bulkMetricsEnabled ? [
     pickerItem(AVG_VELOCITY_METRIC),
     pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
     pickerItem(PKV_METRIC),
@@ -43,6 +44,12 @@ const items = [
     pickerItem(ROM_METRIC),
     pickerItem(LINEAR_3D_ROM_METRIC),
     pickerItem(DURATION_METRIC),
+] : [
+    pickerItem(AVG_VELOCITY_METRIC),
+    pickerItem(PKV_METRIC),
+    pickerItem(PKH_METRIC),
+    pickerItem(ROM_METRIC),
+    pickerItem(DURATION_METRIC) 
 ];
 
 const mapStateToPropsiOS = (state) => {

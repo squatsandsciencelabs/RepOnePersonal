@@ -12,7 +12,7 @@
     "apiWaitTimer": 1209600000,
     "bulkEnabled": false,
     "calibrationEnabled": false,
-    "3dMetricsEnabled": false,
+    "bulkMetricsEnabled": false,
     "scalarEnabled": false,
-    "3dGLEnabled": false
+    "visualizationEnabled": false
 }

@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { createSelector } from 'reselect';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import {
     EMPTY_METRIC,
@@ -47,7 +48,7 @@ const generateItems = (quantifier) => {
     switch (quantifier) {
         case FASTEST_EVER_QUANTIFIER:
         case SLOWEST_EVER_QUANTIFIER:
-            return [
+            return OpenBarbellConfig.bulkMetricsEnabled ? [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
@@ -58,13 +59,19 @@ const generateItems = (quantifier) => {
                 pickerItem(AVERAGE_POWER_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
+            ] : [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
             ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
         case PERCENT_LOSS_QUANTIFIER:
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
-            return [
+            return OpenBarbellConfig.bulkMetricsEnabled ? [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
@@ -77,9 +84,16 @@ const generateItems = (quantifier) => {
                 pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
+            ] : [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
             ];
         default:
-            return [
+            return OpenBarbellConfig.bulkMetricsEnabled ? [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
@@ -93,6 +107,14 @@ const generateItems = (quantifier) => {
                 pickerItem(AVERAGE_POWER_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(LINEAR_3D_ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ] : [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(PKH_METRIC),
+                pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),
             ];
