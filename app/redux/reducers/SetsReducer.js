@@ -32,11 +32,12 @@ import { v4 as uuidV4 } from 'uuid';
 import { getVersion } from 'react-native-device-info';
 import { Platform } from 'react-native';
 import * as SetUtils from 'app/utility/SetUtils';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 const SetsReducer = (state = createDefaultState(), action) => {
     switch (action.type) {
-        case SAVE_DEFAULT_METRIC: 
-            return saveDefaultMetric(state, action);        
+        case SAVE_DEFAULT_METRIC:
+            return saveDefaultMetric(state, action);
         case SAVE_WORKOUT_SET:
             return saveWorkoutSet(state, action);
         case DELETE_WORKOUT_SET:
@@ -79,8 +80,8 @@ const SetsReducer = (state = createDefaultState(), action) => {
         case FAILED_UPLOAD_SETS:
             return failedUploadSets(state, action);
         case UPDATE_SET_DATA_FROM_SERVER:
-            return updateSetDataFromServer(state, action);        
-        case LOGIN_SUCCESS:        
+            return updateSetDataFromServer(state, action);
+        case LOGIN_SUCCESS:
             return loginSuccess(state, action);
         case LOGOUT:
             return clearHistory(state, action);
@@ -108,7 +109,7 @@ const createSet = (setNumber = 1, metric = "kgs") => ({
     // endTime: null, // LEGACY - use rep time instead
     // removed: false, // LEGACY - use deleted instead, and removed / if the entire set is empty if deleted doesn't exist
     deleted: false,
-    reps : [],
+    reps: [],
     tags: [],
     videoFileURL: null,
     videoType: null
@@ -119,7 +120,7 @@ const createDefaultState = () => {
     let setID = set.setID;
 
     return {
-        workoutData : [ set ],
+        workoutData: [set],
         historyData: {},
         setIDsToUpload: [],
         setIDsBeingUploaded: [],
@@ -134,15 +135,15 @@ const saveDefaultMetric = (state, action) => {
 
     // update the working set's metric
     if (newWorkoutData.length > 0) {
-        let setIndex = newWorkoutData.length-1;
+        let setIndex = newWorkoutData.length - 1;
         let latestSet = newWorkoutData[setIndex];
         let changes = {};
-        
+
         // Check if set is empty before allowing metric to change
         if (SetUtils.isUntouched(latestSet)) {
             changes.metric = action.defaultMetric;
         }
-        
+
         newWorkoutData[setIndex] = Object.assign({}, latestSet, changes);
     }
     return Object.assign({}, state, {
@@ -155,7 +156,7 @@ const saveDefaultMetric = (state, action) => {
 // NOTE - using one slice to copy, then altering, as the spread operator + slice was buggy and deletes rows
 const saveWorkoutSet = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
 
     let changes = {};
@@ -183,9 +184,9 @@ const saveWorkoutSet = (state, action) => {
     if ('weight' in action || 'metric' in action) {
         // load changed, update computed properties
         newSet.reps = newSet.reps.map(r => {
-            if (SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+            if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getCanProcessForceOrMetric(newSet, r)) {
                 // can process
-                const rep = {...r};
+                const rep = { ...r };
                 const data = SetUtils.getBulkArray(rep);
                 const deltaTs = SetUtils.getDeltaTimes(rep, data);
                 const velocities = SetUtils.getVelocities(rep, deltaTs, data);
@@ -208,7 +209,7 @@ const saveWorkoutSet = (state, action) => {
                 return rep;
             } else {
                 // cannot process
-                if (SetUtils.getRepHasBulkComputedProperties(r)) {
+                if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getRepHasBulkComputedProperties(r)) {
                     // need to reset
                     return {
                         ...r,
@@ -231,7 +232,7 @@ const saveWorkoutSet = (state, action) => {
             }
         });
     }
-    
+
     newWorkoutData[setIndex] = newSet;
 
     return {
@@ -247,7 +248,7 @@ const deleteWorkoutSet = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
 
     // get set
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     newWorkoutData[setIndex].deleted = true;
 
     return {
@@ -263,7 +264,7 @@ const restoreWorkoutSet = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
 
     // get set
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     newWorkoutData[setIndex].deleted = false;
 
     return {
@@ -276,7 +277,7 @@ const restoreWorkoutSet = (state, action) => {
 
 const saveWorkoutSetTags = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
     let tags = action.hasOwnProperty('tags') && action.tags ? action.tags.map((tag) => tag.toLowerCase()) : [];
 
@@ -323,16 +324,16 @@ const saveHistorySet = (state, action) => {
     if ('weight' in action || 'metric' in action) {
         // load changed, update computed properties
         newSet.reps = newSet.reps.map(r => {
-            if (SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+            if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getCanProcessForceOrMetric(newSet, r)) {
                 // can process
-                const rep = {...r};
+                const rep = { ...r };
                 const data = SetUtils.getBulkArray(rep);
                 const deltaTs = SetUtils.getDeltaTimes(rep, data);
                 const velocities = SetUtils.getVelocities(rep, deltaTs, data);
                 const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
                 const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
                 const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
-                
+
                 rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(rep, velocities);
                 rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
                 rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
@@ -348,7 +349,7 @@ const saveHistorySet = (state, action) => {
                 return rep;
             } else {
                 // cannot process
-                if (SetUtils.getRepHasBulkComputedProperties(r)) {
+                if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getRepHasBulkComputedProperties(r)) {
                     // need to reset
                     return {
                         ...r,
@@ -457,7 +458,7 @@ const saveHistorySetTags = (state, action) => {
 
 const addRepData = (state, action) => {
     let workoutData = state.workoutData;
-    let set = workoutData[workoutData.length-1];
+    let set = workoutData[workoutData.length - 1];
     let rep = {
         isValid: action.isValid,
         removed: false,
@@ -474,23 +475,26 @@ const addRepData = (state, action) => {
         peakVelocity: action.peakVelocity,
         peakHeight: action.peakHeight,
         duration: action.duration,
-        linear3DAverageVelocity: action.linear3DAverageVelocity,
-        linear3DROM: action.linear3DROM,
-        peakVelocityIndex: null,
-        peakAcceleration: null,
-        peakAccelerationIndex: null,
-        peakForce: null,
-        peakForceIndex: null,
-        peakForceHeight: null,
-        averageForce: null,
-        peakPower: null,
-        peakPowerIndex: null,
-        peakPowerHeight: null,
-        averagePower: null,
     };
 
+    if (OpenBarbellConfig.bulkMetricsEnabled) {
+        rep.linear3DAverageVelocity = action.linear3DAverageVelocity;
+        rep.linear3DROM = action.linear3DROM;
+        rep.peakVelocityIndex = null;
+        rep.peakAcceleration = null;
+        rep.peakAccelerationIndex = null;
+        rep.peakForce = null;
+        rep.peakForceIndex = null;
+        rep.peakForceHeight = null;
+        rep.averageForce = null;
+        rep.peakPower = null;
+        rep.peakPowerIndex = null;
+        rep.peakPowerHeight = null;
+        rep.averagePower = null;
+    }
+
     let setChanges = {
-        reps: [...set.reps, rep ],
+        reps: [...set.reps, rep],
         removed: false
     };
 
@@ -500,7 +504,7 @@ const addRepData = (state, action) => {
 
     let newSet = Object.assign({}, set, setChanges);
     let newWorkoutData = [
-        ...workoutData.slice(0, workoutData.length-1), // copy all but the last element
+        ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
         newSet
     ];
 
@@ -516,7 +520,7 @@ const saveWorkoutRep = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
 
     // get set
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     if (setIndex === -1) {
         return state;
     }
@@ -572,8 +576,8 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     }
 
     // update bulk and computed properties
-    if (bulkData !== undefined && bulkData !== null) {
-        newRep.bulkData = {...bulkData};
+    if (OpenBarbellConfig.bulkEnabled && OpenBarbellConfig.bulkMetricsEnabled && bulkData !== undefined && bulkData !== null) {
+        newRep.bulkData = { ...bulkData };
 
         // update computed properties
         if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
@@ -611,12 +615,12 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
             newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
         }
     }
-    
+
     // reps
     let newReps = [
         ...set.reps.slice(0, repIndex),
         newRep,
-        ...set.reps.slice(repIndex+1)
+        ...set.reps.slice(repIndex + 1)
     ];
 
     // set 0 reps = removed check
@@ -635,8 +639,8 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
 
 const endSet = (state, action) => {
     let workoutData = state.workoutData;
-    let currentSet = workoutData[workoutData.length-1];
-    let newWorkoutData = [ ...workoutData, createSet(currentSet.setNumber+1, action.defaultMetric) ];
+    let currentSet = workoutData[workoutData.length - 1];
+    let newWorkoutData = [...workoutData, createSet(currentSet.setNumber + 1, action.defaultMetric)];
 
     return Object.assign({}, state, {
         workoutData: newWorkoutData
@@ -647,18 +651,18 @@ const endSet = (state, action) => {
 
 const saveWorkoutVideo = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
 
     let setChanges = {
         videoFileURL: action.videoFileURL,
-        videoType: action.videoType        
+        videoType: action.videoType
     };
     if (!set.initialStartTime) {
         setChanges.initialStartTime = new Date();
     }
     newWorkoutData[setIndex] = Object.assign({}, set, setChanges);
-    
+
     return Object.assign({}, state, {
         workoutData: newWorkoutData
     });
@@ -675,7 +679,7 @@ const saveHistoryVideo = (state, action) => {
         videoFileURL: action.videoFileURL,
         videoType: action.videoType
     });
-    
+
     // state changes
     let stateChanges = {};
     stateChanges.historyData = Object.assign({}, historyData, {
@@ -692,17 +696,17 @@ const saveHistoryVideo = (state, action) => {
 
 const deleteWorkoutVideo = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
-    let setIndex = newWorkoutData.findIndex( set => set.setID === action.setID );
+    let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
 
     newWorkoutData[setIndex] = Object.assign({}, set, {
         videoFileURL: null,
-        videoType: null        
+        videoType: null
     });
     return Object.assign({}, state, {
         workoutData: newWorkoutData
     });
-}    
+}
 
 // DELETE_HISTORY_VIDEO
 
@@ -726,7 +730,7 @@ const deleteHistoryVideo = (state, action) => {
     }
 
     return Object.assign({}, state, stateChanges);
-}    
+}
 
 // LOAD_PERSISTED_SET_DATA
 
@@ -744,7 +748,7 @@ const endWorkout = (state, action) => {
     let length = workoutData.length;
 
     // add all sets except the working set
-    for (let i=0; i<length-1; i++) {
+    for (let i = 0; i < length - 1; i++) {
         let set = workoutData[i];
         let setID = set.setID;
         set.workoutID = workoutID;
@@ -753,7 +757,7 @@ const endWorkout = (state, action) => {
     }
 
     // add working set
-    let lastSet = workoutData[length-1];
+    let lastSet = workoutData[length - 1];
     if (length > 0 && !SetUtils.isUntouched(lastSet)) {
         let setID = lastSet.setID;
         lastSet.workoutID = workoutID;
@@ -762,7 +766,7 @@ const endWorkout = (state, action) => {
     }
 
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [ createSet(1, action.defaultMetric) ];
+    let newWorkoutData = [createSet(1, action.defaultMetric)];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {
@@ -895,7 +899,7 @@ const overrideWithTestData = (state, action) => {
 
     return {
         ...state,
-        workoutData : [ createSet() ],
+        workoutData: [createSet()],
         setIDsToUpload: [],
         setIDsBeingUploaded: [],
         revision: 0,
@@ -911,10 +915,10 @@ const addTime = (origDate, dateDifference) => {
 
 const add3DPositionsToRep = (state, action) => {
     // get latest set in workout
-    let set = state.workoutData[state.workoutData.length-1];
+    let set = state.workoutData[state.workoutData.length - 1];
 
     // get latest rep in workout
-    let rep = set.reps[set.reps.length-1];
+    let rep = set.reps[set.reps.length - 1];
 
     // add data to rep
     rep = {
@@ -924,7 +928,7 @@ const add3DPositionsToRep = (state, action) => {
     };
 
     // add reps to set object
-    const reps = set.reps.slice(0, set.reps.length-1); // copy all but the last element
+    const reps = set.reps.slice(0, set.reps.length - 1); // copy all but the last element
     reps.push(rep); // add the updated rep
     set = {
         ...set,
@@ -932,7 +936,7 @@ const add3DPositionsToRep = (state, action) => {
     };
 
     // add set object to workout data
-    const workoutData = state.workoutData.slice(0, state.workoutData.length-1); // copy all but the last element
+    const workoutData = state.workoutData.slice(0, state.workoutData.length - 1); // copy all but the last element
     workoutData.push(set); // add the updated set
     return {
         ...state,
