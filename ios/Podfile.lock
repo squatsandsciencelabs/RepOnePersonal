@@ -456,7 +456,7 @@ PODS:
   - react-native-nordic-dfu (3.2.1):
     - iOSDFULibrary (~> 4.11.1)
     - React
-  - react-native-pager-view (5.4.9):
+  - react-native-pager-view (5.4.11):
     - React-Core
   - react-native-slider (4.2.0):
     - React-Core
@@ -944,7 +944,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
   react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
   react-native-nordic-dfu: 9a4cfa2b940cd12025616feed8271b7c5043113d
-  react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
+  react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
   react-native-slider: 37e1cf275dab20d3c015e40969aa9f5c309645a8
   react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
   react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
