@@ -69,10 +69,6 @@ class ApplicationView extends Component {
 
     // TAB BAR FUNCTIONS
 
-    _handleIndexChange(index) {
-        this.props.changeTab(index);
-    }
-
     _renderLabel({ route, focused, color }) {
         const dot = route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
         return (
