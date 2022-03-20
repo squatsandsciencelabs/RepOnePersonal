@@ -10,7 +10,6 @@ import {
     StatusBar,
     StyleSheet,
     View,
-    Dimensions,
     Alert,
     Platform,
 } from 'react-native';
