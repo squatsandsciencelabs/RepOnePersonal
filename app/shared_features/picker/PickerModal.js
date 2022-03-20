@@ -52,6 +52,7 @@ class PickerModal extends Component {
             return (
                 <Picker
                     style={{color: color}}
+                    dropdownIconColor={'white'}
                     selectedValue={this.props.selectedValue}
                     onValueChange={(value) => this._onValueChange(value)}>
                     { this._renderItems() }

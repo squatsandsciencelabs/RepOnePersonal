@@ -22,7 +22,7 @@
     "@react-native-firebase/messaging": "^14.3.3",
     "@react-native-firebase/remote-config": "^14.3.3",
     "@react-native-google-signin/google-signin": "^7.0.4",
-    "@react-native-picker/picker": "^2.2.1",
+    "@react-native-picker/picker": "1.16.5",
     "@tweenjs/tween.js": "^18.6.4",
     "convert-string": "^0.1.0",
     "expo": ">=44.0.0-0 <45.0.0",
