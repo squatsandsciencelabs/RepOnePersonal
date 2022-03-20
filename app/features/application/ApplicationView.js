@@ -123,7 +123,6 @@ class ApplicationView extends Component {
     // RENDER
 
     render() {
-        var { height, width } = Dimensions.get('window');
         var killSwitchStatus = this.props.killSwitch.status;
 
         if (killSwitchStatus == 'KILLED') {
