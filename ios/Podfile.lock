@@ -540,7 +540,7 @@ PODS:
     - Charts (= 3.3.0)
     - React
     - SwiftyJSON (= 5.0)
-  - RNCPicker (2.2.1):
+  - RNCPicker (1.16.5):
     - React-Core
   - RNDateTimePicker (5.1.0):
     - React-Core
@@ -963,7 +963,7 @@ SPEC CHECKSUMS:
   ReactCommon: d98c6c96b567f9b3a15f9fd4cc302c1eda8e3cf2
   RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
-  RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
+  RNCPicker: 28e41a58b79cd82cc639391bb99ca1b2489a3ea9
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
   RNFBAnalytics: 116099e22ace7e318dd6c10ddfc5ece783043e5b
