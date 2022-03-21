@@ -5,7 +5,9 @@ import '@react-native-firebase/crashlytics';
 import '@react-native-firebase/remote-config';
 
 export const configure = () => {
-    // firebase.crashlytics().crash();
+    // setTimeout(() => {
+    //     crashlytics().crash();
+    // }, 10000);
 };
 
 let app = firebase.app();
