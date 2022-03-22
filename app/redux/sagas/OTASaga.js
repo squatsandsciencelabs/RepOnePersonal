@@ -35,7 +35,7 @@ import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/
 
 let downloadTask = null;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
-const filePath = Platform.OS === 'ios' ? `file:///${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip` : `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`;
+const filePath =`${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
@@ -218,9 +218,10 @@ function* startInstall(action) {
         if (OpenBarbellConfig.bulkEnabled) {
             yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
         }
+        const path = Platform.OS === 'ios' ? `file://${filePath}` : filePath;
         yield apply(NordicDFU, NordicDFU.startDFU, [{
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
-            filePath,
+            filePath: path,
         }]);
     } catch (err) {
         const state = yield select();
