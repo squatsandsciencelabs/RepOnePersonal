@@ -58,7 +58,7 @@ function* checkOTA(dispatch, action) {
         });
     });
     DFUEmitter.addListener("DFUStateChanged", ({ state }) => {
-        console.tron.log("DFU state:", state);
+        console.tron.log(`DFU state: ${state}`);
         dispatch({
             type: INSTALL_OTA_DFU_STATE_CHANGED,
             state,
