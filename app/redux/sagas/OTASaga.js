@@ -3,7 +3,6 @@ import {
     put,
     apply,
     all,
-    call,
     select,
 } from 'redux-saga/effects';
 import ReactNativeBlobUtil from 'react-native-blob-util';
@@ -35,7 +34,8 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/VersionComparison';
 
 let downloadTask = null;
-const filePath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`; // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
+// TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
+const filePath = Platform.OS === 'ios' ? `file:///${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip` : `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
