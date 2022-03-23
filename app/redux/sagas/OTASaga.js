@@ -269,6 +269,15 @@ function* reboot(action) {
         console.tron.log(`Firmware install success`);
         // Alert.alert(`Firmware successfully installed`);
         logOTAAnalytics(state, 'firmware_install_succeeded');
+        
+        // disconnect attempt due to somehow it not disconnecting post reboot
+        // NOTE: NOT going through device action creators disconnect as I actually want it to reconnect
+        const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+        try {
+            yield apply(BleManager, BleManager.disconnect, [deviceIdentifier]);
+        } catch (err) {
+            console.tron.log(`Error attempt to disconnect during reboot ${err}`);
+        }
     }
 }
 
