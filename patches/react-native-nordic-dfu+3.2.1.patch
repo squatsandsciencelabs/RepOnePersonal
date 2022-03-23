@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
+index ed58530..04da8b4 100644
+--- a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
++++ b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
+@@ -207,6 +207,8 @@ - (void)logWith:(enum LogLevel)level message:(NSString * _Nonnull)message
+     } else {
+       NSUUID * uuid = [[NSUUID alloc] initWithUUIDString:deviceAddress];
+ 
++      [NSThread sleepForTimeInterval: 1]; //Work around for not finding the peripheral in iOS 13
++
+       NSArray<CBPeripheral *> * peripherals = [centralManager retrievePeripheralsWithIdentifiers:@[uuid]];
+ 
+       if ([peripherals count] != 1) {
+@@ -228,6 +230,8 @@ - (void)logWith:(enum LogLevel)level message:(NSString * _Nonnull)message
+         initiator.progressDelegate = self;
+         initiator.alternativeAdvertisingNameEnabled = alternativeAdvertisingNameEnabled;
+ 
++        [NSThread sleepForTimeInterval: 1]; //Work around for being stuck in iOS 13
++
+         DFUServiceController * controller = [initiator start];
+       }
+     }
