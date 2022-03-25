@@ -327,8 +327,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply plugin: 'com.google.gms.google-services' // react-native-google-signin and react-native-firebase, supposed to be last line, not sure if before or after native_modules.gradle
-apply plugin: 'com.google.firebase.crashlytics' // react-native-firebase, supposed to be after google-services but supposedly also at top of file, idk if rnfirebase and google-sign-in will conflict
+// apply plugin: 'com.google.gms.google-services' // react-native-google-signin and react-native-firebase, supposed to be last line, not sure if before or after native_modules.gradle
+// apply plugin: 'com.google.firebase.crashlytics' // react-native-firebase, supposed to be after google-services but supposedly also at top of file, idk if rnfirebase and google-sign-in will conflict
 
 def isNewArchitectureEnabled() {
     // To opt-in for the New Architecture, you can either:
