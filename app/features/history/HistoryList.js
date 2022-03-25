@@ -14,7 +14,7 @@ import HistoryLoadingFooterScreen from './loading/HistoryLoadingFooterScreen';
 import EditHistoryExerciseScreen from './exercise_name/EditHistoryExerciseScreen';
 import EditHistoryTagsScreen from './tags/EditHistoryTagsScreen';
 import EditHistoryFilterScreen from './history_filter/EditHistoryFilterScreen';
-import UserLoggedOutPanel from './logged_out/UserLoggedOutPanel';
+// import UserLoggedOutPanel from './logged_out/UserLoggedOutPanel';
 import ListLoadingFooter from '../history/loading/ListLoadingFooter';
 import SetData from 'app/shared_features/set_card/expanded/SetData';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
@@ -323,35 +323,35 @@ class HistoryList extends Component {
                 />
             );
         }
-        if (this.props.email !== undefined && this.props.email !== null) {
-            return (
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        backgroundColor: 'white',
-                    }}>
-                    <EditHistoryExerciseScreen />
-                    <EditHistoryTagsScreen />
-                    <HistoryVideoRecorderScreen />
-                    <HistoryVideoPlayerScreen />
-                    <EditHistoryFilterScreen />
-                    <EditHistoryKratosDiscsScreen />
-                    {this._renderFilterHeader()}
-                    <View style={{ flex: 1, backgroundColor: 'white' }}>
-                        {list}
-                    </View>
+        // if (this.props.email !== undefined && this.props.email !== null) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    backgroundColor: 'white',
+                }}>
+                <EditHistoryExerciseScreen />
+                <EditHistoryTagsScreen />
+                <HistoryVideoRecorderScreen />
+                <HistoryVideoPlayerScreen />
+                <EditHistoryFilterScreen />
+                <EditHistoryKratosDiscsScreen />
+                {this._renderFilterHeader()}
+                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                    {list}
                 </View>
-            );
-        } else {
-            return (
-                <ScrollView
-                    style={{ flex: 1, backgroundColor: '#f2f2f2' }}
-                    contentContainerStyle={{ flexGrow: 1 }}>
-                    <UserLoggedOutPanel />
-                </ScrollView>
-            );
-        }
+            </View>
+        );
+        // } else {
+        //     return (
+        //         <ScrollView
+        //             style={{ flex: 1, backgroundColor: '#f2f2f2' }}
+        //             contentContainerStyle={{ flexGrow: 1 }}>
+        //             <UserLoggedOutPanel />
+        //         </ScrollView>
+        //     );
+        // }
     }
 }
 
