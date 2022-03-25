@@ -16,7 +16,7 @@ import {
 import { TabView, TabBar } from 'react-native-tab-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
-import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
+// import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
 
 function ApplicationView(props) {
@@ -128,7 +128,7 @@ function ApplicationView(props) {
                         label: _renderLabel,
                     }}
                 />
-                <SurveyModalScreen />
+                {/* <SurveyModalScreen /> */}
             </View>
         );
     };
