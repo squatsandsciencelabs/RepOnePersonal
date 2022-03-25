@@ -3,7 +3,7 @@ import Expo
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
-import Firebase
+// import Firebase
 import RNBleManager
 import react_native_nordic_dfu
 
@@ -18,7 +18,7 @@ class AppDelegate: ExpoAppDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    FirebaseApp.configure()
+    // FirebaseApp.configure()
     
     RNNordicDfu.setCentralManagerGetter {
       return SwiftBleManager.getCentralManager()
