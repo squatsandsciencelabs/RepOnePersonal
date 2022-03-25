@@ -33,7 +33,7 @@ function AnalysisTab(props) {
         }
     }, [props.scroll, lastScroll]);
 
-    if (props.isLoggedIn) {
+    // if (props.isLoggedIn) {
         // TODO: test the hack still works on Android
         return (
             <ScrollView
@@ -54,9 +54,9 @@ function AnalysisTab(props) {
                 <OneRMProtocolView />
             </ScrollView>
         );
-    } else {
-        return <OneRMLoggedOutView />;
-    }
+    // } else {
+    //     return <OneRMLoggedOutView />;
+    // }
 }
 
 export default AnalysisTab;
