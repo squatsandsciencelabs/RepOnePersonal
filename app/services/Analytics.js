@@ -1,3 +1,4 @@
+/*
 import firebase from 'app/services/Firebase';
 import { AppState } from 'react-native';
 import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
@@ -199,3 +200,13 @@ const transformParameters = params => {
         }),
     );
 };
+*/
+
+export const setInitialAnalytics = () => {};
+export const setUserID = userID => {};
+export const setCurrentScreen = screen => {};
+export const setUserProp = (name, value) => {};
+export const logEvent = (event, params) => {};
+export const logEventWithAppState = (event, params, state) => {};
+export const logError = (error, event, params) => {};
+export const logErrorWithAppState = (error, event, params, state) => {};
