@@ -15,11 +15,11 @@ import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import Store from 'app/redux/Store';
 import ApplicationScreen from 'app/features/application/ApplicationScreen';
-import * as GoogleSignInSetup from 'app/services/GoogleSignInSetup';
-import * as Firebase from 'app/services/Firebase';
+// import * as GoogleSignInSetup from 'app/services/GoogleSignInSetup';
+// import * as Firebase from 'app/services/Firebase';
 import Bluetooth from 'app/services/Bluetooth';
 import AppState from 'app/services/AppState';
-import * as Analytics from 'app/services/Analytics';
+// import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
 import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 
@@ -33,13 +33,13 @@ TextInput.defaultProps.allowFontScaling = false;
 var store = Store();
 
 // initialize analytics
-Analytics.setInitialAnalytics();
+// Analytics.setInitialAnalytics();
 
 // configure google sign in
-GoogleSignInSetup.configure();
+// GoogleSignInSetup.configure();
 
 // configure firebase
-Firebase.configure();
+// Firebase.configure();
 
 // set up app state listeners
 AppState(store);
