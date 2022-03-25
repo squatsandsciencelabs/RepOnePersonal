@@ -5,7 +5,7 @@ buildscript {
         compileSdkVersion = 35 // what compile with, which means "maximum" as well as you must compile against new features
         targetSdkVersion = 35 // for forward compatibility, features in versions above this will be disabled
         // googlePlayServicesAuthVersion = "19.2.0" // react-native-google-signin, unsure if this is still needed
-        firebaseIidVersion = "19.0.1" // react-native-device-info
+        // firebaseIidVersion = "19.0.1" // react-native-device-info
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.0.21"
     }
@@ -16,8 +16,8 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath 'com.google.gms:google-services:4.4.4' // react-native-google-signin needed 4.4.0, react-native-firebase wanted 4.4.4
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.6' // react-native-firebase crashlytics
+        // classpath 'com.google.gms:google-services:4.4.4' // react-native-google-signin needed 4.4.0, react-native-firebase wanted 4.4.4
+        // classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.6' // react-native-firebase crashlytics
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
 }
