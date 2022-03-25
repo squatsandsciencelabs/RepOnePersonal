@@ -4,7 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import <Firebase.h>
+// #import <Firebase.h>
 #import "RNNordicDfu.h"
 #import <react-native-ble-manager/BleManager.h>
 
@@ -38,7 +38,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   RCTAppSetupPrepareApp(application);
 
   // config firebase
-  [FIRApp configure];
+  // [FIRApp configure];
   
   [RNNordicDfu setCentralManagerGetter:^() {
     return [BleManager getCentralManager];
