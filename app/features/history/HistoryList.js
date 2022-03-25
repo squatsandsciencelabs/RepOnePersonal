@@ -184,7 +184,7 @@ class HistoryList extends Component {
                 style = {{padding: 10, backgroundColor: '#f2f2f2'}}
             />);
         }
-        if (this.props.email !== undefined && this.props.email !== null) {
+        // if (this.props.email !== undefined && this.props.email !== null) {
             return (
                 <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                     <EditHistoryExerciseScreen />
@@ -198,13 +198,13 @@ class HistoryList extends Component {
                     </View>
                 </View>
             );
-        } else {
-            return (
-                <ScrollView style={{flex: 1, backgroundColor: '#f2f2f2'}} contentContainerStyle={{flexGrow: 1}}>
-                    <UserLoggedOutPanel />
-                </ScrollView>
-            );
-        }
+        // } else {
+        //     return (
+        //         <ScrollView style={{flex: 1, backgroundColor: '#f2f2f2'}} contentContainerStyle={{flexGrow: 1}}>
+        //             <UserLoggedOutPanel />
+        //         </ScrollView>
+        //     );
+        // }
     }
 }
 

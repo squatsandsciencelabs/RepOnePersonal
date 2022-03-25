@@ -1,4 +1,4 @@
-import firebase from 'app/services/Firebase';
+// import firebase from 'app/services/Firebase';
 import {
     AppState
 } from 'react-native';
@@ -9,6 +9,7 @@ import * as AppStateSelectors from 'app/redux/selectors/AppStateSelectors';
 import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 import DeviceInfo from 'react-native-device-info';
 
+/*
 //initial analytics and initial screen
 
 export const setInitialAnalytics = async () => {
@@ -185,3 +186,13 @@ export const logErrorWithAppState = (error, event, params, state) => {
     logCrashlyticsError(error, errorParams);
     logEventWithAppState(event, errorParams, state);
 };
+*/
+
+export const setInitialAnalytics = () => {};
+export const setUserID = (userID) => {};
+export const setCurrentScreen = (screen) => {};
+export const setUserProp = (name, value) => {};
+export const logEvent = (event, params) => {};
+export const logEventWithAppState = (event, params, state) => {};
+export const logError = (error, event, params) => {};
+export const logErrorWithAppState = (error, event, params, state) => {};

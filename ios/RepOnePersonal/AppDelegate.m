@@ -4,7 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import <Firebase.h>
+// #import <Firebase.h>
 #import "RNNordicDfu.h"
 #import "BleManager.h"
 
@@ -35,7 +35,7 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
   // config firebase
-  [FIRApp configure];
+  // [FIRApp configure];
   
   [RNNordicDfu setCentralManagerGetter:^() {
     return [BleManager getCentralManager];
