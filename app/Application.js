@@ -7,7 +7,9 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 // NOTE: Somehow importing this later causes animations to fail
-import VisualizationScreen from 'app/features/visualization/VisualizationScreen';
+// NOTE: Commenting out as this is crashing in release mode
+// https://github.com/expo/expo/issues/16057
+// import VisualizationScreen from 'app/features/visualization/VisualizationScreen';
 
 import Store from 'app/redux/Store';
 import ApplicationScreen from 'app/features/application/ApplicationScreen';
@@ -54,7 +56,7 @@ class RepOnePersonal extends Component {
                 <RootSiblingParent>
                     <Provider store={store}>
                         <ApplicationScreen />
-                        {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null}
+                        {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
                     </Provider>
                 </RootSiblingParent>
             </ActionSheetProvider>
