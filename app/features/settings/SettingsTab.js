@@ -3,10 +3,10 @@ import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import SettingsHelpScreen from './help/SettingsHelpScreen';
-import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
+// import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
 import SettingsOTAScreen from './ota/SettingsOTAScreen';
 import SettingsDeviceScreen from './device/SettingsDeviceScreen';
-import SettingsAccountScreen from './account/SettingsAccountScreen';
+// import SettingsAccountScreen from './account/SettingsAccountScreen';
 import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
 import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
@@ -28,11 +28,11 @@ function SettingsTab() {
                     marginBottom: 20,
                 }}>
                 <SettingsHelpScreen />
-                <SettingsSurveyScreen />
+                {/* <SettingsSurveyScreen /> */}
                 <SettingsOTAScreen />
                 <SettingsDeviceScreen />
                 <SettingsApplicationScreen />
-                <SettingsAccountScreen />
+                {/* <SettingsAccountScreen /> */}
                 <SettingsRepOnePanel />
                 <SettingsKratosScreen />
                 <SettingsFeedbackScreen />

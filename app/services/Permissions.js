@@ -4,7 +4,7 @@
 // TODO: Just use the library when they add Android requestMultiple permissions
 // TODO: Permissions alert wrapper so don't lose the first iOS permission request
 
-import firebase from 'app/services/Firebase';
+// import firebase from 'app/services/Firebase';
 import {
     request,
     requestMultiple,
