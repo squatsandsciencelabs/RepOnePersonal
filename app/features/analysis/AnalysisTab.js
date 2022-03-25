@@ -33,30 +33,27 @@ function AnalysisTab(props) {
         }
     }, [props.scroll, lastScroll]);
 
-    if (props.isLoggedIn) {
-        // TODO: test the hack still works on Android
-        return (
-            <ScrollView
-                style={{ flex: 1 }}
-                contentContainerStyle={{ paddingBottom: insets.bottom }}
-                keyboardDismissMode="on-drag"
-                keyboardShouldPersistTaps="always"
-                onScrollBeginDrag={() => props.dragged()}
-                ref={scrollViewRef}>
-                <OneRMDebugScreen />
-                <OneRMCalculateScreen />
-                <View
-                    ref={resultsRef}
-                    onLayout={() => {}}
-                    collapsable={false}>
-                    <OneRMResultsScreen />
-                </View>
-                <OneRMProtocolView />
-            </ScrollView>
-        );
-    } else {
-        return <OneRMLoggedOutView />;
-    }
+    // if (props.isLoggedIn) {
+    // TODO: test the hack still works on Android
+    return (
+        <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: insets.bottom }}
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="always"
+            onScrollBeginDrag={() => props.dragged()}
+            ref={scrollViewRef}>
+            <OneRMDebugScreen />
+            <OneRMCalculateScreen />
+            <View ref={resultsRef} onLayout={() => {}} collapsable={false}>
+                <OneRMResultsScreen />
+            </View>
+            <OneRMProtocolView />
+        </ScrollView>
+    );
+    // } else {
+    //     return <OneRMLoggedOutView />;
+    // }
 }
 
 export default AnalysisTab;
