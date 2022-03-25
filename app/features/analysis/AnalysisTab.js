@@ -40,33 +40,33 @@ class AnalysisTab extends Component {
     }
 
     render() {
-        if (this.props.isLoggedIn) {
-            // TODO: test the hack still works on Android
-            return (
-                <ScrollView
-                    style={{ flex: 1 }}
-                    keyboardDismissMode="on-drag"
-                    keyboardShouldPersistTaps="always"
-                    onScrollBeginDrag={() => this.props.dragged()}
+        // if (this.props.isLoggedIn) {
+        // TODO: test the hack still works on Android
+        return (
+            <ScrollView
+                style={{ flex: 1 }}
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps="always"
+                onScrollBeginDrag={() => this.props.dragged()}
+                ref={ref => {
+                    this.scrollView = ref;
+                }}>
+                <OneRMDebugScreen />
+                <OneRMCalculateScreen />
+                <View
                     ref={ref => {
-                        this.scrollView = ref;
-                    }}>
-                    <OneRMDebugScreen />
-                    <OneRMCalculateScreen />
-                    <View
-                        ref={ref => {
-                            this.results = ref;
-                        }}
-                        onLayout={() => {}}
-                        collapsable={false}>
-                        <OneRMResultsScreen />
-                    </View>
-                    <OneRMProtocolView />
-                </ScrollView>
-            );
-        } else {
-            return <OneRMLoggedOutView />;
-        }
+                        this.results = ref;
+                    }}
+                    onLayout={() => {}}
+                    collapsable={false}>
+                    <OneRMResultsScreen />
+                </View>
+                <OneRMProtocolView />
+            </ScrollView>
+        );
+        // } else {
+        //     return <OneRMLoggedOutView />;
+        // }
     }
 }
 
