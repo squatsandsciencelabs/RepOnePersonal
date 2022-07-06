@@ -55,6 +55,9 @@
     "react-native-vision-camera": "^2.13.0",
     "react-native-webview": "^11.17.2",
     "react-redux": "^7.2.6",
+    "reactotron-react-native": "^4.0.2",
+    "reactotron-redux": "^3.1.2",
+    "reactotron-redux-saga": "^4.2.3",
     "redux": "^4.1.2",
     "redux-persist": "4.10.2",
     "redux-persist-filesystem-storage": "^4.0.0",
@@ -75,9 +78,6 @@
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.66.2",
     "react-test-renderer": "17.0.2",
-    "reactotron-react-native": "^4.0.2",
-    "reactotron-redux": "^3.1.2",
-    "reactotron-redux-saga": "^4.2.3",
     "redux-mock-store": "^1.5.4"
   },
   "jest": {
