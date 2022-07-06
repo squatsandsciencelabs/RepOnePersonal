@@ -16,18 +16,24 @@ import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 function record(props, camera) {
+    console.tron.log(`function record called, attempting camera.current.startrecording`);
     camera.current.startRecording({
         onRecordingFinished: async (video) => {
             try {
                 // save to gallery
+                console.tron.log(`recording finished, attempting to save to camera roll`);
                 const uri = await CameraRoll.save(video.path);
 
                 // delete from cache
+                console.tron.log(`recording finished to uri ${uri}, attempting to delete from cache`);
                 await ReactNativeBlobUtil.fs.unlink(video.path);
 
                 // dispatch info
                 if (props.setID) {
+                    console.tron.log(`recording finished, sending save video action for set ${props.setID} uri ${uri} and video type ${props.videoType}`);
                     props.saveVideo(props.setID, uri, props.videoType);
+                } else {
+                    console.tron.log(`no props.setID set ${props.setID}, cannot pass along saveVideo with uri ${uri} and video type ${props.videoType}`);
                 }
             } catch (err) {
                 console.tron.log(`error on recording stuff, ${err}`);
@@ -39,11 +45,13 @@ function record(props, camera) {
             if (!(err instanceof Error)) {
                 error = new Error(err.message, {cause: err.cause});
             }
-            console.tron.log(`onRecordingError ${JSON.stringify(error)}`);
+            console.tron.log(`onRecordingError attempting to send action for set ${props.setID} err ${JSON.stringify(error)}`);
             props.saveVideoError(props.setID, error);
+            console.tron.log(`onRecordingError, alerting message`);
             Alert.alert('There was an issue saving your video. Please try again');
         },
     });
+    console.tron.log(`function record finished, recording should be in progress`);
 }
 
 // TODO: look for a better place to store the timer
@@ -57,20 +65,27 @@ export default (props) => {
     useEffect(() => {
         if (props.isRecording) {
             // start recording now
+            console.tron.log(`props isRecording just changed to ${props.isRecording}, attempting to begin recording`);
             record(props, camera);
         } else if (props.isModalShowing) {
             // stop recording if it's showing, as otherwise it's a cancel
             
             if (Platform.OS === 'ios') {
+                console.tron.log(`modal is showing ${props.isModalShowing}, attempt to stop recording after a delay due to iOS issues`);
                 // TODO: remove timer hack, this was necessary to prevent weird behavior when ending too quickly
                 timer = setTimeout(() => {
                     if (camera && camera.current) {
+                        console.tron.log(`timer finished, calling camera.current.stopRecording`);
                         camera.current.stopRecording();
+                    } else {
+                        console.tron.log(`timer finished, but no camera exists so cannot stop recording`);
                     }
                     clearTimeout(timer);
-                    timer = null;    
+                    timer = null;
+                    console.tron.log(`cleared timer used to delay ending recording`);
                 }, 1000);
             } else {
+                console.tron.log(`modal is showing ${props.isModalShowing}, attempt to stop recording immediately for Android`);
                 this.camera.stopRecording();
             }
         }
@@ -78,6 +93,9 @@ export default (props) => {
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
+                console.tron.log(`unmounting camera, cleared timer`);
+            } else {
+                console.tron.log(`unmounting camera, no timer to clear`);
             }
         };
     }, [props.isRecording]);
@@ -91,9 +109,11 @@ export default (props) => {
 
 function renderCamera(props, camera, device) {
     if (props.isModalShowing === false || !device) {
+        console.tron.log(`deactivate keep awake`);
         deactivateKeepAwake();
         return null;
     }
+    console.tron.log(`activate keep awaie`);
     activateKeepAwake();
 
     return (<View style={[{ flex: 1 }, styles.container]}>
@@ -109,7 +129,11 @@ function renderCamera(props, camera, device) {
             <View>
                 <TouchableOpacity onPress={() => {
                     if (!timer) {
+                        console.tron.log(`closing modal for set ${props.setID}`);
                         props.closeModal(props.setID);
+                        console.tron.log(`closed modal for set ${props.setID}`);
+                    } else {
+                        console.tron.log(`denie canceling video recordering, timer is still active ${timer}`);
                     }
                 }}>
                     <View><Text style={styles.cancelText}>Cancel</Text></View>
