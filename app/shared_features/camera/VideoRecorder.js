@@ -15,11 +15,17 @@ import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+// NOTE: possible that can promisify setTimeout, but not sure it's available in RN so just hacking it for speed
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 function record(props, camera) {
     console.tron.log(`function record called, attempting camera.current.startrecording`);
     camera.current.startRecording({
         onRecordingFinished: async (video) => {
             try {
+                // delay another second, see if that resolves anything
+                await delay(1000);
+
                 // save to gallery
                 console.tron.log(`recording finished, attempting to save to camera roll`);
                 const uri = await CameraRoll.save(video.path);
