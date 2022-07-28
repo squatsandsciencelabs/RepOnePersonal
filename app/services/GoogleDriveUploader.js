@@ -1,8 +1,28 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Platform } from 'react-native';
+
 // TODO: refactor this into a saga
 // TODO: tweak this so setting up upload is separate from actually uploading
 // Also split it up so resume is doable
 
+// hack call addScopes if it wasn't properly granted initially
 export const upload = async (accessToken, name, content, completionHandler) => {
+    try {
+        await executeUpload(accessToken, name, content, completionHandler);
+    } catch (err) {
+        if (Platform.OS === 'ios' && err.code === 403 && err.message.includes('nsufficient')) {
+            await GoogleSignin.addScopes({
+                scopes: ["https://www.googleapis.com/auth/drive.file"],
+            });
+            const result = await GoogleSignin.getTokens();
+            await executeUpload(result.accessToken, name, content, completionHandler);
+        } else {
+            throw err;
+        }
+    }
+}
+
+const executeUpload = async (accessToken, name, content, completionHandler) => {
     // length
     let length = getByteLen(content);
 
