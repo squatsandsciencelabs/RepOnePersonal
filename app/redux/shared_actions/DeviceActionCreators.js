@@ -46,7 +46,7 @@ const clearTimers = () => {
 
 // SCANNING
 export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
-    // TODO: re-enable this
+    // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
     // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
     BleManager.scan([], 99999, false);
 
