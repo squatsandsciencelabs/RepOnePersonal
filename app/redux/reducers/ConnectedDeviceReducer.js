@@ -23,6 +23,7 @@ const defaultState = {
     status: DISCONNECTED,
     deviceName: null,
     deviceIdentifier: null,
+    deviceFamily: null,
     isReconnecting: false,
     numDisconnects: 0,
     numReconnects: 0,
@@ -88,6 +89,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 status: CONNECTED,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
+                deviceFamily: action.deviceName.startsWith('Kratos') ? 'KRATOS' : 'REP_ONE', // TODO: have this be from device info instead of string parsing from the name
                 isReconnecting: false,
                 apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,

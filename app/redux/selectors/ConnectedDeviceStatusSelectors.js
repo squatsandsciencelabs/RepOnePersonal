@@ -20,6 +20,8 @@ export const getConnectedDeviceName = (state) => stateRoot(state).deviceName;
 
 export const getConnectedDeviceIdentifier = (state) => stateRoot(state).deviceIdentifier;
 
+export const getConnectedDeviceFamily = (state) => stateRoot(state).deviceFamily;
+
 export const getNumDisconnects = (state) => stateRoot(state).numDisconnects;
 
 export const getNumReconnects = (state) => stateRoot(state).numReconnects;
@@ -29,3 +31,5 @@ export const getFirmwareVersion = (state) => stateRoot(state).firmwareVersion;
 export const getAPIFormatVersion = (state) => stateRoot(state).apiFormatVersion;
 
 export const getCan3D = state => true; // getConnectedDeviceStatus(state) === 'CONNECTED'; // TODO: have this actually be set properly based on sensor capabilities
+
+export const getConnectedDeviceRepCharacteristic = (state) => stateRoot(state).deviceFamily === 'KRATOS' ? 'A5183278-CA65-45B7-B6C3-A68552F20284': 'A5183278-CA65-45B7-B6C3-A68552F20273';

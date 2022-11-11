@@ -28,7 +28,7 @@ const ScannedDevicesReducer = ( state = defaultState, action) => {
                 isManualScan: false,
             });
         case FOUND_DEVICE:
-            if(!action.deviceName || state.devices.includes(action.deviceName) || !action.deviceName.startsWith("RepOne")) {
+            if(!action.deviceName || state.devices.includes(action.deviceName) || (!action.deviceName.startsWith("RepOne") && !action.deviceName.startsWith("Kratos"))) {
                 //duplicate entry
                 return state;
             } else {

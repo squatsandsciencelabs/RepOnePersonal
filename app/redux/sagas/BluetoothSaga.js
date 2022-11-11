@@ -19,7 +19,8 @@ export default function* BluetoothSaga() {
 function* setupServices(action) {
     try {
         // listen for reps
-        yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273']);
+        const repCharacteristic = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic);
+        yield apply(BleManager, BleManager.startNotification, [action.deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', repCharacteristic]);
 
         // api format 2 check
         if (action.apiFormatVersion < 2) {

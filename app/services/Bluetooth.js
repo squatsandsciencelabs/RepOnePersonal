@@ -99,7 +99,7 @@ export default function (store) {
             // done here instead of actions to a saga to save on number of actions
             // especially important for bulk data as it gets spammed
             if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273') {
-                // reps
+                // RepOne reps
 
                 // variables
                 const typedArray = new Uint8Array(args.value);
@@ -119,6 +119,42 @@ export default function (store) {
                     linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
                     linear3DROM: formatVersion === 1 ? null : data[9],
                 }));
+            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284') {
+                // Kratos Reps
+
+                // variables
+                const typedArray = new Uint8Array(args.value);
+                const data = new Uint16Array(typedArray.buffer);
+
+                const json = {
+                    repId: data[0],
+                    repNumber: data[1],
+                    cRom: data[2],
+                    cAvgLinearVelocity: data[3],
+                    cAvgAngularVelocity: data[4],
+                    cPeakLinearVelocity: data[5],
+                    cPeakAngularVelocity: data[6],
+                    cPeakVelocityLocation: data[7],
+                    cDuration: data[8],
+                    cMeanAcceleration: data[9],
+                    cPeakLinearAcceleration: data[10],
+                    cPeakAngularAcceleration: data[11],
+                    cPeakPower: data[12],
+                    eRom: data[13],
+                    eAvgLinearVelocity: data[14],
+                    eAvgAngularVelocity: data[15],
+                    ePeakLinearVelocity: data[16],
+                    ePeakAngularVelocity: data[17],
+                    ePeakVelocityLocation: data[18],
+                    eDuration: data[19],
+                    eMeanAcceleration: data[20],
+                    ePeakLinearAcceleration: data[21],
+                    ePeakAngularAcceleration: data[22],
+                    ePeakPower: data[23],
+                };
+
+                // TODO: Remove this logging statement once kratos reps are properly stored in the codebase
+                console.tron.log(`got kratos reps ${JSON.stringify(json)}`);
             } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274' && OpenBarbellConfig.bulkEnabled) {
                 // bulk data
 

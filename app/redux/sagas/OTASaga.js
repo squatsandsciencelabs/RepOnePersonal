@@ -212,9 +212,10 @@ function* startInstall(action) {
     const state = yield select();
     const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
+    const repCharacteristic = ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic(state);
 
     try {
-        yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273']); // reps
+        yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', repCharacteristic]); // reps
         if (OpenBarbellConfig.bulkEnabled) {
             yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
         }
@@ -235,7 +236,7 @@ function* startInstall(action) {
                 type: OTA_DOWNLOAD_READY,
             });
             try {
-                yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20273']); // reps
+                yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', repCharacteristic]); // reps
                 if (OpenBarbellConfig.bulkEnabled) {
                     yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
                 }
