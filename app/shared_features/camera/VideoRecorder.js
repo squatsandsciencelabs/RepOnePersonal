@@ -52,7 +52,7 @@ let timer = null;
 
 export default (props) => {
     const camera = useRef(null);
-    const devices = useCameraDevices(`wide-angle-camera`);
+    const devices = useCameraDevices();
     const device = devices[props.cameraType];
     useEffect(() => {
         if (props.isRecording) {
@@ -71,7 +71,7 @@ export default (props) => {
                     timer = null;    
                 }, 1000);
             } else {
-                this.camera.stopRecording();
+                camera.current.stopRecording();
             }
         }
         return () => {

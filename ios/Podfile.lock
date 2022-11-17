@@ -594,7 +594,7 @@ PODS:
   - SocketRocket (0.6.0)
   - SwiftAlgorithms (1.0.0)
   - SwiftyJSON (5.0.0)
-  - VisionCamera (2.14.0):
+  - VisionCamera (2.15.2):
     - React
     - React-callinvoker
     - React-Core
@@ -994,7 +994,7 @@ SPEC CHECKSUMS:
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  VisionCamera: 2ab4473b8394baf4703c7ad93e823013e213bde4
+  VisionCamera: 4cfd685b1e671fea4aa0400905ab397f0e972210
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197

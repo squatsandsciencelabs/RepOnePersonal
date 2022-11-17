@@ -16,6 +16,7 @@ export default async function() {
             PERMISSIONS.ANDROID.RECORD_AUDIO,
             PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
             PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+            PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
         ]);
     } else {
         // TODO: analytics as a user prop

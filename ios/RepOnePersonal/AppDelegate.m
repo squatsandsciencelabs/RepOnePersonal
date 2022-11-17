@@ -36,6 +36,7 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
   // config firebase
   [FIRApp configure];
+  
   [RNNordicDfu setCentralManagerGetter:^() {
     return [BleManager getCentralManager];
   }];
