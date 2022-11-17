@@ -28,9 +28,6 @@ target 'RepOnePersonal' do
     :hermes_enabled => false
   )
   
-  # Somehow this is still necessary
-  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
-
   target 'RepOnePersonalTests' do
     inherit! :complete
     # Pods for testing
