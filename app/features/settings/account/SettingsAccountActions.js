@@ -23,7 +23,7 @@ export const signIn = () => (dispatch, getState) => {
 export const signOut = () => (dispatch, getState) => {
     const state = getState();
     logAttemptLogoutAnalytics(state);
-    
+
     dispatch(AuthActionCreators.logout());
 };
 
@@ -53,7 +53,6 @@ export const exportCSV = () => async (dispatch, getState) => {
         if (result === null) {
             dispatch({ type: EXPORTING_CSV_ERROR });
             dispatch(AuthActionCreators.requestReauthenticate());
-            // Alert.alert('Error Exporting CSV', 'Tip: Is your internet connection working?\n\nTip: Try Logging out then logging in again as this feature may require updated Google Drive permissions.');
         } else {
             //ATTEMPT
             logAttemptCSVAnalytics(state);
@@ -79,7 +78,6 @@ export const exportCSV = () => async (dispatch, getState) => {
                 console.tron.log("Error uploading csv file " + typeof err + " " + JSON.stringify(err));
                 if (err.message == 'Insufficient Permission' || err.message == 'Invalid Credentials') { // TODO: should do typeof check but it's not working
                     dispatch(AuthActionCreators.requestReauthenticate());
-                    // Alert.alert('Google Drive Permissions Error', 'Please log out and log in again. This feature requires additional Google Drive permissions.');
                 } else {
                     Alert.alert('Error exporting CSV', 'Please try again later.\n\nTip: Is your internet connection working?');
                 }
@@ -109,7 +107,7 @@ const getTimeSinceLastExport = (state) => {
 
 const logTapGoogleSignInAnalytics = (state) => {
     Analytics.logEventWithAppState('tap_google_sign_in', {
-    }, state);    
+    }, state);
 };
 
 const logAttemptCSVAnalytics = (state) => {
