@@ -52,8 +52,13 @@ let timer = null;
 
 export default (props) => {
     const camera = useRef(null);
-    const devices = useCameraDevices(`wide-angle-camera`);
-    const device = devices[props.cameraType];
+    const wideAngleDevices = useCameraDevices(`wide-angle-camera`);
+    // We want the default to be wide-camera-angle but it's causing an android camera issue as
+    // not all devices have wide-camera-angle camera type. 
+    const devices = useCameraDevices();
+    // If there is no wide-camera-angle, use the default one
+    const device = wideAngleDevices[props.cameraType] || devices[props.cameraType];
+
     useEffect(() => {
         if (props.isRecording) {
             // start recording now
@@ -71,7 +76,7 @@ export default (props) => {
                     timer = null;    
                 }, 1000);
             } else {
-                this.camera.stopRecording();
+                camera.current.stopRecording();
             }
         }
         return () => {
