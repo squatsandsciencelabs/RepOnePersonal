@@ -4,7 +4,7 @@
 // TODO: Kill switch should link to the app store to make it easier to update
 // TODO: recommended but NOT required update
 
-import React, {Component} from 'react';
+import React, { Component, Fragment } from 'react';
 import {
     Text,
     StatusBar,
@@ -18,6 +18,7 @@ import * as Device from 'app/utility/Device';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class ApplicationView extends Component {
     state = {
@@ -27,7 +28,7 @@ class ApplicationView extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.tabIndex !== this.state.index) {
-            this.setState({index: nextProps.tabIndex});
+            this.setState({ index: nextProps.tabIndex });
         }
     }
 
@@ -39,28 +40,46 @@ class ApplicationView extends Component {
 
     _checkIfOutdated() {
         if (this.props.killSwitch.status == 'OUTDATED') {
-            Alert.alert(
-                "Application Outdated",
-                'Update to latest?',
-                [
-                    {text: 'Later', onPress: () => console.tron.log('\'Later\' pressed')},
-                    {text: 'Update', onPress: () => console.tron.log('\'Update\' Pressed')}
-                ]
-            );
+            Alert.alert('Application Outdated', 'Update to latest?', [
+                {
+                    text: 'Later',
+                    onPress: () => console.tron.log("'Later' pressed"),
+                },
+                {
+                    text: 'Update',
+                    onPress: () => console.tron.log("'Update' Pressed"),
+                },
+            ]);
         }
     }
 
     _renderKillSwitch() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                    }}>
                     <Text style={{ textAlign: 'center' }}>
                         ᕦ[ . ◕ ͜ ʖ ◕ . ]ᕤ
                     </Text>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
                     <Text style={{ textAlign: 'center' }}>
-                        Please update to the latest version! This version is no longer supported.
+                        Please update to the latest version! This version is no
+                        longer supported.
                     </Text>
                 </View>
             </View>
@@ -70,48 +89,59 @@ class ApplicationView extends Component {
     // TAB BAR FUNCTIONS
 
     _renderLabel({ route, focused, color }) {
-        const dot = route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
+        const dot =
+            route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
         return (
-            <Text style={{ color, fontWeight: '500', fontSize: 10, padding: 0, marginLeft: 0, marginRight: 0 }}>
-                {dot}{route.title}
+            <Text
+                style={{
+                    color,
+                    fontWeight: '500',
+                    fontSize: 10,
+                    padding: 0,
+                    marginLeft: 0,
+                    marginRight: 0,
+                }}>
+                {dot}
+                {route.title}
             </Text>
         );
     }
 
-    _renderHeader = props => <TabBar
-        indicatorStyle={{backgroundColor: '#eb5757', height: 2}}
-        style={{backgroundColor: '#333333'}}
-        labelStyle={{fontWeight: '500', fontSize: 10, padding: 0, marginLeft: 0, marginRight: 0 }}
-        renderLabel={this._renderLabel.bind(this)}
-        {...props} />;
+    _renderHeader = props => (
+        <TabBar
+            indicatorStyle={{ backgroundColor: '#eb5757', height: 2 }}
+            style={{ backgroundColor: '#333333' }}
+            labelStyle={{
+                fontWeight: '500',
+                fontSize: 10,
+                padding: 0,
+                marginLeft: 0,
+                marginRight: 0,
+            }}
+            renderLabel={this._renderLabel.bind(this)}
+            {...props}
+        />
+    );
 
     _renderApplication() {
-        if (Platform.OS === 'ios') {
-            var statusBarBG = (
-                <View style={[{width: 9001}, styles.statusBar]}></View>
-            );
-        } else {
-            var statusBarBG = null;
-        }
-
         return (
-            <View style={[{flex: 1}, styles.container]}>
-                <StatusBar
-                    backgroundColor="black"
-                    barStyle="light-content"
-                />
-                { statusBarBG }
-                <TabView
-                    style={{flex: 1}}
-                    navigationState={this.state}
-                    renderScene={NavigationConfig.sceneMap}
-                    renderTabBar={this._renderHeader}
-                    onIndexChange={(index) => this.props.changeTab(index) }
-                />
+            <Fragment>
+                <SafeAreaView style={styles.statusBar} edges={['top']} />
+                <StatusBar backgroundColor="#333333" barStyle="light-content" />
+                <SafeAreaView style={styles.container} edges={['bottom']}>
+                    <View style={styles.container}>
+                        <TabView
+                            style={{ flex: 1 }}
+                            navigationState={this.state}
+                            renderScene={NavigationConfig.sceneMap}
+                            renderTabBar={this._renderHeader}
+                            onIndexChange={index => this.props.changeTab(index)}
+                        />
 
-                <SurveyModalScreen />
-
-            </View>
+                        <SurveyModalScreen />
+                    </View>
+                </SafeAreaView>
+            </Fragment>
         );
     }
 
@@ -130,12 +160,13 @@ class ApplicationView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f2f2f2'
+        flex: 1,
+        backgroundColor: '#f2f2f2',
     },
     statusBar: {
-        height: Device.isiPhoneX() ? 30 : 20,
-        backgroundColor: Device.isiPhoneX() ? '#333333' : 'black'
-    }
+        backgroundColor: '#333333',
+        flex: 0,
+    },
 });
 
 export default ApplicationView;
