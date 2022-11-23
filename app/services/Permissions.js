@@ -5,19 +5,32 @@
 // TODO: Permissions alert wrapper so don't lose the first iOS permission request
 
 import firebase from 'app/services/Firebase';
-import {request, requestMultiple, PERMISSIONS} from 'react-native-permissions';
+import {
+    request,
+    requestMultiple,
+    PERMISSIONS,
+} from 'react-native-permissions';
 import { Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
-export default async function() {
+export default async function () {
     if (Platform.OS !== 'ios') {
-        await requestMultiple([
-            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-            PERMISSIONS.ANDROID.CAMERA,
-            PERMISSIONS.ANDROID.RECORD_AUDIO,
-            PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-            PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
-            PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-        ]);
+        DeviceInfo.getApiLevel().then(async apiLevel => {
+            if (apiLevel <= 30) {
+                await requestMultiple([
+                    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+                    PERMISSIONS.ANDROID.BLUETOOTH,
+                ]);
+            } else {
+                await requestMultiple([PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
+            }
+            await requestMultiple([
+                PERMISSIONS.ANDROID.CAMERA,
+                PERMISSIONS.ANDROID.RECORD_AUDIO,
+                PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+                PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+            ]);
+        });
     } else {
         // TODO: analytics as a user prop
         // result can have granted true/false or status unknown based on iOS version
@@ -28,4 +41,4 @@ export default async function() {
         await request(PERMISSIONS.IOS.MICROPHONE);
         await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
     }
-};
+}
