@@ -2,7 +2,6 @@
 // Services do not have "Actions" they're directly associated with, so they use the shared creator
 
 import { NativeModules } from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
 import BleManager from 'react-native-ble-manager';
 
 import {
@@ -36,9 +35,10 @@ var connectTimeoutTimer = null;
 var reconnectTimeoutTimer = null;
 var reconnectTimer = null;
 const clearTimers = () => {
-    BackgroundTimer.clearTimeout(connectTimeoutTimer);
-    BackgroundTimer.clearTimeout(reconnectTimeoutTimer);
-    BackgroundTimer.clearTimeout(reconnectTimer);
+    clearTimeout(connectTimeoutTimer);
+    clearTimeout(reconnectTimeoutTimer);
+    clearTimeout(reconnectTimer);
+
     connectTimeoutTimer = null;
     reconnectTimeoutTimer = null;
     reconnectTimer = null;
@@ -73,7 +73,7 @@ export const stopDeviceScan = () => (dispatch, getState) => {
 export const foundDevice = (deviceName, deviceIdentifier) => ({
     type: FOUND_DEVICE,
     deviceName,
-    deviceIdentifier, 
+    deviceIdentifier,
 });
 
 // DEVICE
@@ -87,13 +87,13 @@ export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getSta
     // HACK: ideally this is a connect timeout saga
     // but it requires both background timer and access to actions
     // therefore putting it here
-    connectTimeoutTimer = BackgroundTimer.setTimeout(() => {
+    connectTimeoutTimer = setTimeout(() => {
         // check to see if stuck connecting
         const state = getState();
         const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
         if (status === CONNECTING) {
             // disconnect
-            logConnectedToDeviceTimedOutAnalytics(false, state);            
+            logConnectedToDeviceTimedOutAnalytics(false, state);
             dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
             dispatch(disconnectedFromDevice()); // in case it can never find it, visually update
         }
@@ -111,7 +111,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
     logAttemptConnectDeviceAnalytics(true, state);
 
     // reconnect after a second as V2s have issues
-    reconnectTimer = BackgroundTimer.setTimeout(() => {
+    reconnectTimer = setTimeout(() => {
         BleManager.connect(deviceIdentifier); // TODO: should this be device?
         console.tron.log(`reconnect device called with ${deviceName} and ${deviceIdentifier}`);
         dispatch(connectingToDevice(deviceName, deviceIdentifier));
@@ -120,7 +120,7 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
     // HACK: ideally this is a connect timeout saga
     // but it requires both background timer and access to actions
     // therefore putting it here
-    reconnectTimeoutTimer = BackgroundTimer.setTimeout(() => {
+    reconnectTimeoutTimer = setTimeout(() => {
         // check to see if stuck connecting
         const state = getState();
         const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
@@ -186,7 +186,7 @@ export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dis
     dispatch({
         type: DISCONNECTED_FROM_DEVICE,
         deviceName: name,
-        deviceIdentifier, 
+        deviceIdentifier,
     });
 };
 
@@ -194,7 +194,7 @@ export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dis
 export const connectingToDevice = (name, deviceIdentifier) => ({
     type: CONNECTING_TO_DEVICE,
     deviceName: name,
-    deviceIdentifier, 
+    deviceIdentifier,
 });
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
@@ -245,7 +245,7 @@ export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) 
         time: time,
     });
     dispatch(TimerActionCreators.startEndSetTimer());
-
+    
 };
 
 // ANALYTICS
@@ -263,15 +263,15 @@ const logAddRepAnalytics = (state) => {
     let end_set_time_left = SettingsSelectors.getEndSetTimeLeft(state);
 
     Analytics.logEventWithAppState('add_rep', {
-        set_id: set_id,
-        rep_count: rep_count,
-        has_exercise_name: has_exercise_name,
-        has_weight: has_weight,
-        has_rpe: has_rpe,
-        has_tags: has_tags,
-        has_video: has_video,
-        has_reps: has_reps,
-        end_set_time_left: end_set_time_left,
+            set_id: set_id,
+            rep_count: rep_count,
+            has_exercise_name: has_exercise_name,
+            has_weight: has_weight,
+            has_rpe: has_rpe,
+            has_tags: has_tags,
+            has_video: has_video,
+            has_reps: has_reps,
+            end_set_time_left: end_set_time_left,
     }, state);
 };
 
@@ -286,8 +286,8 @@ const logCompletedScanAnalytics = (state) => {
     const manualScannedNone = ScannedDevicesSelectors.getManualScannedNone(state);
 
     Analytics.logEventWithAppState('completed_scan', {
-        is_manual: isManualScan,
-        manual_scanned_none: manualScannedNone,
+            is_manual: isManualScan,
+            manual_scanned_none: manualScannedNone,
     }, state);
 };
 
