@@ -2,24 +2,18 @@
 // leaving this here for dev speed purposes
 import BleManager from 'react-native-ble-manager';
 
-import {
-    NativeModules,
-    NativeEventEmitter,
-    Alert,
-} from 'react-native';
+import { NativeModules, NativeEventEmitter, Alert } from 'react-native';
 import {
     SAVE_WORKOUT_REP,
     SAVE_HISTORY_REP,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
-import {
-    getBulkData,
-    addBulkData,
-} from 'app/redux/sagas/BulkDataSaga';
+import { getBulkData, addBulkData } from 'app/redux/sagas/BulkDataSaga';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
+import { KratosEnabled } from '../configs+constants/KratosConfig';
 
 const maxFormatVersion = 2;
 
@@ -119,7 +113,7 @@ export default function (store) {
                     linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
                     linear3DROM: formatVersion === 1 ? null : data[9],
                 }));
-            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284') {
+            } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284' && KratosEnabled) {
                 // Kratos Reps
 
                 // variables

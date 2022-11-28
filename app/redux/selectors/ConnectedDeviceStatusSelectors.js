@@ -1,4 +1,5 @@
 import { RECONNECTING } from 'app/configs+constants/SensorStatus';
+import { KratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const stateRoot = (state) => state.connectedDevice;
 
@@ -32,4 +33,16 @@ export const getAPIFormatVersion = (state) => stateRoot(state).apiFormatVersion;
 
 export const getCan3D = state => true; // getConnectedDeviceStatus(state) === 'CONNECTED'; // TODO: have this actually be set properly based on sensor capabilities
 
-export const getConnectedDeviceRepCharacteristic = (state) => stateRoot(state).deviceFamily === 'KRATOS' ? 'A5183278-CA65-45B7-B6C3-A68552F20284': 'A5183278-CA65-45B7-B6C3-A68552F20273';
+const RepOneCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20273';
+const KratosCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20284';
+
+export const getConnectedDeviceRepCharacteristic = state => {
+    if (KratosEnabled) {
+        return stateRoot(state).deviceFamily === 'KRATOS'
+            ? KratosCharacteristic
+            : RepOneCharacteristic;
+    }
+
+    return RepOneCharacteristic;
+};
+

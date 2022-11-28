@@ -25,8 +25,10 @@ function* fetchConfig() {
         const fbconfig = firebase.remoteConfig();
 
         // Set default values
-        yield apply(fbconfig, fbconfig.setDefaults, [{ survey_url: '' }]);
-    
+        yield apply(fbconfig, fbconfig.setDefaults, [
+            { survey_url: '', kratos_enabled: false },
+        ]);
+
         // initial fetch
         yield apply(fbconfig, fbconfig.fetch, [0]); // USE THIS INSTEAD FOR DEBUGGING AS IT REFRESHES INSTANTLY
         const activated = yield apply(fbconfig, fbconfig.activate);
