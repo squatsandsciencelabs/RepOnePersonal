@@ -3,6 +3,7 @@ import {
     STOP_DEVICE_SCAN,
     FOUND_DEVICE,
 } from 'app/configs+constants/ActionTypes';
+import { KratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const defaultState = {
     devices: [],
@@ -28,7 +29,12 @@ const ScannedDevicesReducer = ( state = defaultState, action) => {
                 isManualScan: false,
             });
         case FOUND_DEVICE:
-            if(!action.deviceName || state.devices.includes(action.deviceName) || (!action.deviceName.startsWith("RepOne") && !action.deviceName.startsWith("Kratos"))) {
+            if (
+                !action.deviceName ||
+                state.devices.includes(action.deviceName) ||
+                (!action.deviceName.startsWith('RepOne') &&
+                    !(KratosEnabled && action.deviceName.startsWith('Kratos')))
+            ) {
                 //duplicate entry
                 return state;
             } else {
