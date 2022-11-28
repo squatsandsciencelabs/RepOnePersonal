@@ -31,19 +31,6 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as Analytics from 'app/services/Analytics';
 import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
 
-var connectTimeoutTimer = null;
-var reconnectTimeoutTimer = null;
-var reconnectTimer = null;
-const clearTimers = () => {
-    clearTimeout(connectTimeoutTimer);
-    clearTimeout(reconnectTimeoutTimer);
-    clearTimeout(reconnectTimer);
-
-    connectTimeoutTimer = null;
-    reconnectTimeoutTimer = null;
-    reconnectTimer = null;
-};
-
 // SCANNING
 export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
     // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
@@ -84,21 +71,6 @@ export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getSta
     logAttemptConnectDeviceAnalytics(false, state);
     dispatch(connectingToDevice(deviceName, deviceIdentifier));
 
-    // HACK: ideally this is a connect timeout saga
-    // but it requires both background timer and access to actions
-    // therefore putting it here
-    connectTimeoutTimer = setTimeout(() => {
-        // check to see if stuck connecting
-        const state = getState();
-        const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-        if (status === CONNECTING) {
-            // disconnect
-            logConnectedToDeviceTimedOutAnalytics(false, state);
-            dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
-            dispatch(disconnectedFromDevice()); // in case it can never find it, visually update
-        }
-    }, 10000);
-
     dispatch({
         type: CONNECT_DEVICE,
         deviceName,
@@ -110,27 +82,9 @@ export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getS
     const state = getState();
     logAttemptConnectDeviceAnalytics(true, state);
 
-    // reconnect after a second as V2s have issues
-    reconnectTimer = setTimeout(() => {
-        BleManager.connect(deviceIdentifier); // TODO: should this be device?
-        console.tron.log(`reconnect device called with ${deviceName} and ${deviceIdentifier}`);
-        dispatch(connectingToDevice(deviceName, deviceIdentifier));
-    }, 2000);
-
-    // HACK: ideally this is a connect timeout saga
-    // but it requires both background timer and access to actions
-    // therefore putting it here
-    reconnectTimeoutTimer = setTimeout(() => {
-        // check to see if stuck connecting
-        const state = getState();
-        const status = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-        if (status !== CONNECTED) {
-            // disconnect
-            dispatch(disconnectDevice(false)); // in case it's trying to connect, ensure it's actually disconnecting
-            dispatch(disconnectedFromDevice(deviceName, deviceIdentifier)); // in case it can never find it, visually update and trigger another reconnect
-            logConnectedToDeviceTimedOutAnalytics(true, state);
-        }
-    }, 7000);
+    BleManager.connect(deviceIdentifier); // TODO: should this be device?
+    console.tron.log(`reconnect device called with ${deviceName} and ${deviceIdentifier}`);
+    dispatch(connectingToDevice(deviceName, deviceIdentifier));
 
     dispatch({
         type: RECONNECT_DEVICE,
@@ -171,8 +125,6 @@ export const bluetoothIsOff = () => ({
 });
 
 export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dispatch, getState) => {
-    clearTimers();
-
     Analytics.setUserProp('connected_device_id', null);
     Analytics.setUserProp('device_version', null);
 
@@ -199,8 +151,6 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
 export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVersion) => (dispatch, getState) => {
-    clearTimers();
-
     // analytics
     const state = getState();
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting" 
