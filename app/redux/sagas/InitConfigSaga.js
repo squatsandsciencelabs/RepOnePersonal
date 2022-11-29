@@ -13,6 +13,7 @@ import {
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
 import * as Analytics from 'app/services/Analytics';
+import { kratosEnabled } from 'app/configs+constants/KratosConfig';
 
 export default function * FetchConfigSaga() {
     yield all([
@@ -26,7 +27,7 @@ function* fetchConfig() {
 
         // Set default values
         yield apply(fbconfig, fbconfig.setDefaults, [
-            { survey_url: '', kratos_enabled: false },
+            { survey_url: '', kratos_enabled: kratosEnabled },
         ]);
 
         // initial fetch

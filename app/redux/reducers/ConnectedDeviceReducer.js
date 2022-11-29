@@ -18,8 +18,7 @@ import {
     DISCONNECTING,
     RECONNECTING,
 } from 'app/configs+constants/SensorStatus';
-import { KratosEnabled } from 'app/configs+constants/KratosConfig';
-
+import { kratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const defaultState = {
     status: DISCONNECTED,
@@ -91,7 +90,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 status: CONNECTED,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
-                deviceFamily: KratosEnabled
+                deviceFamily: kratosEnabled
                     ? action.deviceName.startsWith('Kratos')
                         ? 'KRATOS'
                         : 'REP_ONE'
