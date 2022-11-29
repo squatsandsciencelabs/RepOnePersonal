@@ -1,4 +1,4 @@
-import { all, call } from 'redux-saga/effects';
+import { all } from 'redux-saga/effects';
 
 import KillSwitchSaga from './KillSwitchSaga';
 import InitConfigSaga from './InitConfigSaga';
@@ -19,6 +19,7 @@ import OTASaga from './OTASaga';
 import BulkDataSaga from './BulkDataSaga';
 import CalibrationSaga from './CalibrationSaga';
 import ScalarSaga from './ScalarSaga';
+import KratosSaga from './KratosSaga';
 
 const Sagas = function* Sagas(dispatch) {
     yield all([
@@ -40,6 +41,7 @@ const Sagas = function* Sagas(dispatch) {
         BulkDataSaga(),
         CalibrationSaga(),
         ScalarSaga(),
+        KratosSaga(),
         // VelocityThresholdSaga(),
     ]);
 };

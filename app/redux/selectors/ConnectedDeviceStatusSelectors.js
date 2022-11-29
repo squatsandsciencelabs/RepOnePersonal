@@ -1,5 +1,5 @@
 import { RECONNECTING } from 'app/configs+constants/SensorStatus';
-import { KratosEnabled } from 'app/configs+constants/KratosConfig';
+import { kratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const stateRoot = (state) => state.connectedDevice;
 
@@ -37,7 +37,7 @@ const RepOneCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20273';
 const KratosCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20284';
 
 export const getConnectedDeviceRepCharacteristic = state => {
-    if (KratosEnabled) {
+    if (kratosEnabled) {
         return stateRoot(state).deviceFamily === 'KRATOS'
             ? KratosCharacteristic
             : RepOneCharacteristic;
