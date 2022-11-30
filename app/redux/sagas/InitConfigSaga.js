@@ -27,7 +27,7 @@ function* fetchConfig() {
 
         // Set default values
         yield apply(fbconfig, fbconfig.setDefaults, [
-            { survey_url: '', kratos_enabled: kratosEnabled },
+            { survey_url: '', kratos_enabled: false },
         ]);
 
         // initial fetch
