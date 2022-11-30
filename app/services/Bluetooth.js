@@ -114,8 +114,8 @@ export default function (store) {
                     linear3DROM: formatVersion === 1 ? null : data[9],
                 }));
             } else if (
-                characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284' &&
-                kratosEnabled
+                kratosEnabled &&
+                characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284'
             ) {
                 // Kratos Reps
 
