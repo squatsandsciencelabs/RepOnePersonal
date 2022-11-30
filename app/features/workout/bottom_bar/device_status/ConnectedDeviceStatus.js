@@ -15,12 +15,20 @@ import {
 import * as Device from 'app/utility/Device';
 
 class ConnectedDeviceStatus extends Component {
+    _renderConnectedIcon() {
+        const deviceName = this.props.deviceName;
+        var img = deviceName.startsWith('Kratos')
+            ? require('app/appearance/images/icon_connected_kratos.png')
+            : require('app/appearance/images/icon_connected.png');
+
+        return <Image style={styles.imageStyle} source={img} />;
+    }
 
     render() {
         if (this.props.deviceStatus === CONNECTED) {
             var statusView = (
                 <View style={styles.statusBar}>
-                    <Image style={styles.imageStyle} source={require('app/appearance/images/icon_connected.png')} />
+                    {this._renderConnectedIcon()}
                     <Text style={styles.textStyle}> {this.props.deviceName} </Text>
                 </View>);
         } else if (this.props.deviceStatus === RECONNECTING) {
