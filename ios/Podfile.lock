@@ -473,12 +473,6 @@ PODS:
     - React
   - react-native-pager-view (5.4.15):
     - React-Core
-  - react-native-safe-area-context (4.4.1):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - ReactCommon/turbomodule/core
   - react-native-slider (4.2.1):
     - React-Core
   - react-native-version-check (3.4.2):
@@ -673,7 +667,6 @@ DEPENDENCIES:
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-nordic-dfu (from `../node_modules/react-native-nordic-dfu`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -829,8 +822,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-nordic-dfu"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
-  react-native-safe-area-context:
-    :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-version-check:
@@ -970,7 +961,6 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
   react-native-nordic-dfu: 9a4cfa2b940cd12025616feed8271b7c5043113d
   react-native-pager-view: b1914469643f40042e65d78cbf3d3dfebd6fb0d9
-  react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
   react-native-slider: 241935e3ea8e47599c317f512f96ee8de607d4cb
   react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253

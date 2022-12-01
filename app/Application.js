@@ -5,7 +5,6 @@ import 'app/configs+constants/ReactotronConfig';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // NOTE: Somehow importing this later causes animations to fail
 // NOTE: Commenting out as this is crashing in release mode
@@ -55,10 +54,8 @@ class RepOnePersonal extends Component {
             <ActionSheetProvider>
                 <RootSiblingParent>
                     <Provider store={store}>
-                        <SafeAreaProvider>
-                            <ApplicationScreen />
-                            {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
-                        </SafeAreaProvider>
+                        <ApplicationScreen />
+                        {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
                     </Provider>
                 </RootSiblingParent>
             </ActionSheetProvider>
