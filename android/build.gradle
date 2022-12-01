@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "30.0.2"
-        minSdkVersion = 21 // react-native-ble-manager wants >= 19, unimodules wants >= 21
+        minSdkVersion = 28 // react-native-ble-manager wants >= 19, unimodules wants >= 21
         compileSdkVersion = 31
         targetSdkVersion = 31
         ndkVersion = "21.4.7075529"
