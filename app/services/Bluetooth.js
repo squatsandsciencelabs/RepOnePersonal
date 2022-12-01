@@ -13,7 +13,7 @@ import { getBulkData, addBulkData } from 'app/redux/sagas/BulkDataSaga';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
-import { kratosEnabled } from 'app/configs+constants/KratosConfig';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const maxFormatVersion = 2;
 
@@ -114,7 +114,7 @@ export default function (store) {
                     linear3DROM: formatVersion === 1 ? null : data[9],
                 }));
             } else if (
-                kratosEnabled &&
+                getKratosEnabled() &&
                 characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284'
             ) {
                 // Kratos Reps
