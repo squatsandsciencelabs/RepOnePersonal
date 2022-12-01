@@ -13,7 +13,6 @@ import {
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
 import * as Analytics from 'app/services/Analytics';
-import { kratosEnabled } from 'app/configs+constants/KratosConfig';
 
 export default function * FetchConfigSaga() {
     yield all([
