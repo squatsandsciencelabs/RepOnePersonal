@@ -9,7 +9,7 @@ import {
     Platform,
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
-import CameraRoll from "@react-native-community/cameraroll";
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
@@ -65,7 +65,7 @@ export default (props) => {
             record(props, camera);
         } else if (props.isModalShowing) {
             // stop recording if it's showing, as otherwise it's a cancel
-            
+
             if (Platform.OS === 'ios') {
                 // TODO: remove timer hack, this was necessary to prevent weird behavior when ending too quickly
                 timer = setTimeout(() => {
@@ -73,7 +73,7 @@ export default (props) => {
                         camera.current.stopRecording();
                     }
                     clearTimeout(timer);
-                    timer = null;    
+                    timer = null;
                 }, 1000);
             } else {
                 camera.current.stopRecording();
