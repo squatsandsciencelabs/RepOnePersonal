@@ -11,14 +11,13 @@ import {
     StyleSheet,
     View,
     Alert,
-    Platform,
+    SafeAreaView,
 } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import * as Device from 'app/utility/Device';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 class ApplicationView extends Component {
     state = {
@@ -126,9 +125,9 @@ class ApplicationView extends Component {
     _renderApplication() {
         return (
             <Fragment>
-                <SafeAreaView style={styles.statusBar} edges={['top']} />
+                <SafeAreaView style={styles.statusBar} />
                 <StatusBar backgroundColor="#333333" barStyle="light-content" />
-                <SafeAreaView style={styles.container} edges={['bottom']}>
+                <SafeAreaView style={styles.container}>
                     <View style={styles.container}>
                         <TabView
                             style={{ flex: 1 }}
