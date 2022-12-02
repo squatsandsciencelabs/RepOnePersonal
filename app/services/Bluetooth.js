@@ -2,7 +2,12 @@
 // leaving this here for dev speed purposes
 import BleManager from 'react-native-ble-manager';
 
-import { NativeModules, NativeEventEmitter, Alert } from 'react-native';
+import {
+    NativeModules,
+    NativeEventEmitter,
+    Alert,
+    Platform,
+} from 'react-native';
 import {
     SAVE_WORKOUT_REP,
     SAVE_HISTORY_REP,
@@ -16,6 +21,7 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const maxFormatVersion = 2;
+const MTU_SIZE = 185;
 
 export default function (store) {
     //native bluetooth
@@ -69,6 +75,17 @@ export default function (store) {
             //     console.tron.log(`api version mismatch`);
             //     Alert.alert(`Please update your RepOne app to use this device.`);
             // }
+            if (Platform.OS !== 'ios') {
+                try {
+                    const mtu = BleManager.requestMTU(
+                        args.peripheral,
+                        MTU_SIZE,
+                    );
+                    console.tron.log(`MTU size changed to ${mtu} bytes`);
+                } catch (err) {
+                    console.tron.log(`Couldn't change MTU size ${err}`);
+                }
+            }
 
             // connected
             store.dispatch(DeviceActionCreators.connectedToDevice(args.peripheral, apiFormatVersion, `${data16[1]}.${data16[2]}.${data16[3]}`));
