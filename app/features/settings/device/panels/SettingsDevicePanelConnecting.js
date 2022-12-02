@@ -6,15 +6,17 @@ import {
 } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import { kratosEnabled } from 'app/configs+constants/KratosConfig';
 
 // displays connecting device info
 class SettingsDevicePanelConnecting extends Component {
 
     _renderConnectingIcon() {
         const device = this.props.device;
-        var img = device.startsWith('Kratos')
-            ? require('app/appearance/images/icon_bluetooth_kratos_connecting.png')
-            : require('app/appearance/images/icon_bluetooth_connecting.png');
+        var img =
+            kratosEnabled && device.startsWith('Kratos')
+                ? require('app/appearance/images/icon_bluetooth_kratos_connecting.png')
+                : require('app/appearance/images/icon_bluetooth_connecting.png');
 
         return <Image source={img} />;
     }
