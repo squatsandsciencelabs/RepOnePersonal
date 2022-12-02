@@ -10,6 +10,15 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 // displays connected device info, allows disconnect from device
 class SettingsDevicePanelConnected extends Component {
 
+    _renderConnectedIcon() {
+        const device = this.props.device;
+        var img = device.startsWith('Kratos')
+            ? require('app/appearance/images/icon_bluetooth_kratos_connected.png')
+            : require('app/appearance/images/icon_bluetooth_connected.png');
+
+        return <Image source={img} />;
+    }
+
     render() {
         // hide disconnect mid install to prevent the weird bugs
         const disconnectOption = this.props.isInstalling ? null : <View style={ SETTINGS_PANEL_STYLES.footer }>
@@ -26,8 +35,8 @@ class SettingsDevicePanelConnected extends Component {
                         Connected to { this.props.device }
                     </Text>
                 </View>
-                <View style={ SETTINGS_PANEL_STYLES.content }>
-                    <Image source={require('app/appearance/images/icon_bluetooth_connected.png')} />
+                <View style={SETTINGS_PANEL_STYLES.content}>
+                    {this._renderConnectedIcon()}
                 </View>
                 {disconnectOption}
             </View>
