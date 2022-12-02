@@ -13,13 +13,13 @@ import {
     RECONNECTING,
 } from 'app/configs+constants/SensorStatus';
 import * as Device from 'app/utility/Device';
-import { kratosEnabled } from 'app/configs+constants/KratosConfig';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 class ConnectedDeviceStatus extends Component {
     _renderConnectedIcon() {
         const deviceName = this.props.deviceName;
         var img =
-            kratosEnabled && deviceName.startsWith('Kratos')
+            getKratosEnabled() && deviceName.startsWith('Kratos')
                 ? require('app/appearance/images/icon_connected_kratos.png')
                 : require('app/appearance/images/icon_connected.png');
 
