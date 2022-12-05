@@ -6,12 +6,40 @@ import {
     StyleSheet,
     TouchableHighlight,
     Platform,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import Video from 'react-native-video';
+import * as VideoThumbnails from 'expo-video-thumbnails';
 
 class SetTitleRowCollapsed extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { uri: null };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log('prevProps', prevProps);
+        console.log('prevState', prevState);
+        if (this.props.videoFileURL !== prevProps.videoFileURL) {
+            console.log('this props', this.props.videoFileURL);
+            this._generateThumbnail(this.props.videoFileURL);
+        }
+    }
+
+    _generateThumbnail = async videoPath => {
+        try {
+            const { uri } = await VideoThumbnails.getThumbnailAsync(videoPath);
+
+            this.setState({
+                uri,
+            });
+
+            console.tron.log('uri for thumbnail', uri);
+        } catch (err) {
+            console.tron.log('Error generating video thumbnail ' + err);
+        }
+    };
 
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
@@ -67,9 +95,11 @@ class SetTitleRowCollapsed extends Component {
             return (
                 <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
                     <View style={styles.videoButton}>
-                        <Image
-                            style={[{flex:1, flexDirection:'column'}, styles.videoPlayer]}
-                            source={{uri: this.props.videoFileURL}} />
+                        {this.state.uri && (
+                            <Image
+                                style={[{ flex: 1, flexDirection: 'column' }, styles.videoPlayer]}
+                                source={{ uri: this.state.uri }} />)
+                        }
                     </View>
                 </TouchableOpacity>
             );

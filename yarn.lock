@@ -4629,6 +4629,11 @@ expo-modules-core@1.0.3:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
+expo-video-thumbnails@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-video-thumbnails/-/expo-video-thumbnails-7.0.0.tgz#a98c726d529372153161735794ccf6bd9ba925f2"
+  integrity sha512-QTifwHjz1VL+nXX39lSZHJtbHKI8a/DVCVk6iT/WQZG1JmZdeUHObrcWlIKeDsTCB5fQWIfOmin+N9hbe4n0qw==
+
 expo@^47.0.6:
   version "47.0.6"
   resolved "https://registry.yarnpkg.com/expo/-/expo-47.0.6.tgz#4436bf0f667b6282f9189e987ddf67cd64807140"
