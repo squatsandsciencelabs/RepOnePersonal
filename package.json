@@ -38,7 +38,7 @@
     "react-native-ble-manager": "^8.0.2",
     "react-native-blob-util": "^0.14.1",
     "react-native-charts-wrapper": "^0.5.10",
-    "react-native-device-info": "^8.5.1",
+    "react-native-device-info": "^10.3.0",
     "react-native-get-random-values": "^1.7.2",
     "react-native-modal-datetime-picker": "^13.1.0",
     "react-native-nordic-dfu": "^3.2.1",

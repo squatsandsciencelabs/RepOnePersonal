@@ -1,4 +1,5 @@
 import { Dimensions, Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 export const isSmallDevice = () => {
     const { width } = Dimensions.get('window');
@@ -6,11 +7,8 @@ export const isSmallDevice = () => {
     return (width <= 350);
 };
 
-export const isiPhoneX = () => {
-    const { width, height } = Dimensions.get('window');
-  
-    return (
-        Platform.OS === 'ios' && (height === 812 || width === 812)
-    );
-};
 
+export const hasNotch = () => Platform.OS === 'ios' && DeviceInfo.hasNotch();
+
+export const hasDynamicIsland = () =>
+    Platform.OS === 'ios' && DeviceInfo.hasDynamicIsland();

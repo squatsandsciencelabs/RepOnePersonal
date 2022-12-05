@@ -22,7 +22,7 @@ import {
 
     // TODO: grab the blue color for cancel from a global stylesheet
     _renderNavigation() {
-        if (Device.isiPhoneX()) {
+        if (Device.hasNotch()) {
             var statusBar = (
                 <View>
                     <StatusBar
@@ -65,7 +65,7 @@ import {
                 transparent={true}
                 visible={this.props.isModalShowing} >
 
-                <View style={{flex: 1, paddingTop: Device.isiPhoneX() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
+                <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
                     {this._renderNavigation()}
 
                     <WebView

@@ -30,7 +30,7 @@ export default function (props) {
 }
 
 const renderNavigation = (props) => {
-    if (Device.isiPhoneX()) {
+    if (Device.hasNotch()) {
         var statusBar = (
             <View>
                 <StatusBar
@@ -128,11 +128,11 @@ const renderStep2 = props => {
 
 const styles = StyleSheet.create({
     container: {
-        height: Platform.OS === 'ios' && !Device.isiPhoneX() ? 70 : 50,
+        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
         alignItems: 'center'
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.isiPhoneX() ? 35 : 15,
+        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10
