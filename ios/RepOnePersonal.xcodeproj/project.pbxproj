@@ -562,7 +562,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RepOnePersonal/RepOnePersonal.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JFG545R28J;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RepOnePersonal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -577,7 +577,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength.personal.staging;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength;
 				PRODUCT_NAME = RepOnePersonal;
 				SWIFT_OBJC_BRIDGING_HEADER = "RepOnePersonal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

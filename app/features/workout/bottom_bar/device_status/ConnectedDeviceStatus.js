@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingLeft: 10,
-        marginBottom: Device.isiPhoneX() ? 25 : 0
+        marginBottom: Device.hasNotch() ? 25 : 0
     },
     textStyle: {
         color: 'white',

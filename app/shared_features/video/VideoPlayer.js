@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         position: 'absolute',
         left: 20,
-        top: Device.isiPhoneX() ? 50 : 30,
+        top: Device.hasNotch() ? 50 : 30,
         width: 100,
         backgroundColor: '#333333',
         justifyContent: 'center',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     deleteButton: {
         position: 'absolute',
         right: 20,
-        top: Device.isiPhoneX() ? 50 : 30,
+        top: Device.hasNotch() ? 50 : 30,
         width: 100,
         backgroundColor: 'red',
         justifyContent: 'center',

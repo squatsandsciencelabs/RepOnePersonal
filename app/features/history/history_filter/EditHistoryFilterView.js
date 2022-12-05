@@ -325,7 +325,7 @@ class EditHistoryFilterView extends Component {
     }
 
     _renderNavigation() {
-        if (Device.isiPhoneX()) {
+        if (Device.hasNotch()) {
             var statusBar = (
                 <View>
                     <StatusBar
@@ -370,7 +370,7 @@ class EditHistoryFilterView extends Component {
     render() {
         return (
             <Modal visible={this.props.isModalShowing} animationType='fade'>
-                    <View style={{flex: 1, paddingTop: Device.isiPhoneX() ? 40 : 0, flexDirection: 'column' }}>
+                    <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column' }}>
                         {this._renderNavigation()}
                         <ScrollView
                             keyboardDismissMode='on-drag'
@@ -394,11 +394,11 @@ const styles = StyleSheet.create({
         paddingBottom: Platform.os === 'ios' ? 0 : 10,
     },
     container: {
-        height: Platform.OS === 'ios' && !Device.isiPhoneX() ? 70 : 50,
+        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
         alignItems: 'center'
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.isiPhoneX() ? 35 : 15,
+        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10

@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         position: 'absolute',
-        top: Device.isiPhoneX() ? 50 : 30,
+        top: Device.hasNotch() ? 50 : 30,
         left: 20,
         width: 100,
         backgroundColor: '#333333',

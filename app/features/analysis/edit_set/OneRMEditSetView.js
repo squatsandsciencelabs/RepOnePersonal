@@ -40,7 +40,7 @@ class OneRMEditSetView extends Component {
     // RENDER
 
     _renderNavigation() {
-        if (Device.isiPhoneX()) {
+        if (Device.hasNotch()) {
             var statusBar = (
                 <View>
                     <StatusBar
@@ -173,7 +173,7 @@ class OneRMEditSetView extends Component {
         }
         return (
             <Modal visible={this.props.isModalShowing} animationType='fade'>
-                <View style={{flex: 1, paddingTop: Device.isiPhoneX() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
+                <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
                     <OneRMEditSetExerciseScreen />
                     <OneRMEditSetTagsScreen />
                     <OneRMEditSetVideoRecorderScreen />
@@ -192,13 +192,13 @@ class OneRMEditSetView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: Platform.OS === 'ios' && !Device.isiPhoneX() ? 70 : 50,
+        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
         alignItems: 'center',
         borderColor: '#e0e0e0',
         borderBottomWidth: 1,
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.isiPhoneX() ? 35 : 15,
+        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10

@@ -11,19 +11,22 @@ import DeviceInfo from 'react-native-device-info';
 
 //initial analytics and initial screen
 
-export const setInitialAnalytics = () => {
-    const mobileID = DeviceInfo.getUniqueId();
+export const setInitialAnalytics = async () => {
+    const mobileID = await DeviceInfo.getUniqueId();
     // set initial user props analytics
-    setUserProp('connected_device_id', null);
+    setUserProp('connected_device_id', '');
     setUserProp('mobile_identifier', mobileID);
-    setUserProp('device_version', null);
+    setUserProp('device_version', '');
     setCurrentScreen('settings');
 };
 
 // User ID
 
 // user ID defaults to the mobile identifier for anonymous users
-export const setUserID = (userID=DeviceInfo.getUniqueId()) => {
+export const setUserID = async userID => {
+    if (!userID) {
+        userID = await DeviceInfo.getUniqueId();
+    }
     firebase.app().analytics().setUserId(userID);
     firebase.crashlytics().setUserId(userID);
 
@@ -53,6 +56,8 @@ export const setCurrentScreen = (screen) => {
 // User Properties
 
 export const setUserProp = (name, value) => {
+    console.log('name', name);
+    console.log('value', value);
     firebase.app().analytics().setUserProperty(name, value);
 
     console.tron.display({

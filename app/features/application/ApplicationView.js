@@ -4,14 +4,14 @@
 // TODO: Kill switch should link to the app store to make it easier to update
 // TODO: recommended but NOT required update
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
     Text,
     StatusBar,
     StyleSheet,
     View,
     Alert,
-    SafeAreaView,
+    Platform,
 } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import * as Device from 'app/utility/Device';
@@ -123,24 +123,27 @@ class ApplicationView extends Component {
     );
 
     _renderApplication() {
-        return (
-            <Fragment>
-                <SafeAreaView style={styles.statusBar} />
-                <StatusBar backgroundColor="#333333" barStyle="light-content" />
-                <SafeAreaView style={styles.container}>
-                    <View style={styles.container}>
-                        <TabView
-                            style={{ flex: 1 }}
-                            navigationState={this.state}
-                            renderScene={NavigationConfig.sceneMap}
-                            renderTabBar={this._renderHeader}
-                            onIndexChange={index => this.props.changeTab(index)}
-                        />
+         if (Platform.OS === 'ios') {
+            var statusBarBG = (
+                <View style={[{ width: 9001 }, styles.statusBar]} />
+            );
+        } else {
+            var statusBarBG = null;
+         }
 
-                        <SurveyModalScreen />
-                    </View>
-                </SafeAreaView>
-            </Fragment>
+        return (
+            <View style={[{ flex: 1 }, styles.container]}>
+                <StatusBar backgroundColor="#333333" barStyle="light-content" />
+                {statusBarBG}
+                    <TabView
+                        style={{ flex: 1 }}
+                        navigationState={this.state}
+                        renderScene={NavigationConfig.sceneMap}
+                        renderTabBar={this._renderHeader}
+                        onIndexChange={index => this.props.changeTab(index)}
+                    />
+                    <SurveyModalScreen />
+            </View>
         );
     }
 
@@ -159,12 +162,11 @@ class ApplicationView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#f2f2f2',
     },
     statusBar: {
-        backgroundColor: '#333333',
-        flex: 0,
+        height: Device.hasDynamicIsland() ? 50 : Device.hasNotch() ? 30 : 20,
+        backgroundColor: Device.hasNotch() ? '#333333' : 'black'
     },
 });
 
