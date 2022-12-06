@@ -10,8 +10,41 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Video from 'react-native-video';
+import * as VideoThumbnails from 'expo-video-thumbnails';
 
 class VideoButton extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { uri: null };
+    }
+
+    async componentDidMount() {
+        this.props.videoFileURL &&
+            (await this._generateThumbnail(this.props.videoFileURL));
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        if (
+            this.props.isSaving != prevProps.isSaving &&
+            !this.props.isSaving &&
+            this.props.videoFileURL
+        ) {
+            await this._generateThumbnail(this.props.videoFileURL);
+        }
+    }
+
+    _generateThumbnail = async videoPath => {
+        try {
+            const { uri } = await VideoThumbnails.getThumbnailAsync(videoPath);
+            this.setState({
+                uri,
+            });
+        } catch (err) {
+            console.tron.log(
+                'Error generating video thumbnail VideoButton ' + err,
+            );
+        }
+    };
 
     _tappedWatchVideo() {
         this.props.tappedWatch(this.props.setID, this.props.videoFileURL);
@@ -26,6 +59,7 @@ class VideoButton extends Component {
     }
 
     render() {
+        console.log('counter VideoButton', this.state);
         switch (this.props.mode) {
             case 'record':
                 return (
@@ -66,15 +100,20 @@ class VideoButton extends Component {
                         return (
                             <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
                                 <View style={[{flex: 1}, styles.button, styles.blackButton]}>
-                                    <Video
-                                        ref={(ref) => {
-                                            this.player = ref
-                                        }}
-                                        style={styles.button}
-                                        source={{uri: this.props.videoFileURL}}
-                                        paused={true}
-                                        repeat={true}
-                                    />
+                                    {this.state.uri && (
+                                        <Image
+                                            style={[
+                                                {
+                                                    flex: 1,
+                                                    flexDirection: 'column',
+                                                },
+                                                styles.imagePreview,
+                                            ]}
+                                            source={{
+                                                uri: this.state.uri,
+                                            }}
+                                        />
+                                    )}
                                 </View>
                             </TouchableOpacity>
                         );
@@ -83,9 +122,20 @@ class VideoButton extends Component {
                     return (
                         <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
                             <View style={[styles.button, styles.blackButton]}>
-                                <Image
-                                    style={[{flex:1, flexDirection:'column'}, styles.imagePreview]}
-                                    source={{uri: this.props.videoFileURL}} />
+                                {this.state.uri && (
+                                    <Image
+                                        style={[
+                                            {
+                                                flex: 1,
+                                                flexDirection: 'column',
+                                            },
+                                            styles.imagePreview,
+                                        ]}
+                                        source={{
+                                            uri: this.state.uri,
+                                        }}
+                                    />
+                                )}
                             </View>
                         </TouchableOpacity>
                     );

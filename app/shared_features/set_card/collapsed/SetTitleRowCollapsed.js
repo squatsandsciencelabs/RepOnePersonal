@@ -18,12 +18,15 @@ class SetTitleRowCollapsed extends Component {
         this.state = { uri: null };
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log('prevProps', prevProps);
-        console.log('prevState', prevState);
-        if (this.props.videoFileURL !== prevProps.videoFileURL) {
-            console.log('this props', this.props.videoFileURL);
-            this._generateThumbnail(this.props.videoFileURL);
+    async componentDidMount() {
+        await this._generateThumbnail(this.props.videoFileURL);
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        if (!this.props.isSaving) {
+            if (this.props.videoFileURL !== prevProps.videoFileURL) {
+                await this._generateThumbnail(this.props.videoFileURL);
+            }
         }
     }
 
@@ -34,10 +37,10 @@ class SetTitleRowCollapsed extends Component {
             this.setState({
                 uri,
             });
-
-            console.tron.log('uri for thumbnail', uri);
         } catch (err) {
-            console.tron.log('Error generating video thumbnail ' + err);
+            console.tron.log(
+                'Error generating video thumbnail setTitleRowCollapsed' + err,
+            );
         }
     };
 
@@ -78,15 +81,11 @@ class SetTitleRowCollapsed extends Component {
                 return (
                     <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
                         <View style={styles.videoButton}>
-                            <Video
-                                ref={(ref) => {
-                                    this.player = ref
-                                }}
-                                style={styles.videoPlayer}
-                                source={{uri: this.props.videoFileURL}}
-                                paused={true}
-                                repeat={true}
-                            />
+                            {this.state.uri && (
+                                <Image
+                                    style={[{ flex: 1, flexDirection: 'column' }, styles.videoPlayer]}
+                                    source={{ uri: this.state.uri }} />
+                            )}
                         </View>
                     </TouchableOpacity>
                 );
