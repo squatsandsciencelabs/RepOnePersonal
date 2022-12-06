@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import VideoButton from 'app/shared_features/set_card/expanded/VideoButton';
 import * as Actions from './EditWorkoutSetFormActions';
+import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -12,8 +13,14 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch);
 };
 
+const mapStateToProps = (state) => ({
+    isSaving: WorkoutSelectors.getIsSavingVideo(state),
+    isModalShowing: WorkoutSelectors.getIsCameraVisible(state),
+    isRecording: WorkoutSelectors.getIsRecording(state),
+});
+
 const WorkoutVideoButtonScreen = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(VideoButton);
 

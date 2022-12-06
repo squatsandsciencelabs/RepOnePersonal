@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import SetTitleRowCollapsed from 'app/shared_features/set_card/collapsed/SetTitleRowCollapsed';
 import * as Actions from './EditWorkoutTitleCollapsedActions';
+import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -12,9 +13,15 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch);
 };
 
+const mapStateToProps = (state) => ({
+    isSaving: WorkoutSelectors.getIsSavingVideo(state),
+    isModalShowing: WorkoutSelectors.getIsCameraVisible(state),
+    isRecording: WorkoutSelectors.getIsRecording(state),
+});
+
 const EditWorkoutTitleExpandedScreen = connect(
-    null,
-    mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(SetTitleRowCollapsed);
 
 export default EditWorkoutTitleExpandedScreen;
