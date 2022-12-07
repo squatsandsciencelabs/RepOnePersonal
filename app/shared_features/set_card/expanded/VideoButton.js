@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Video from 'react-native-video';
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 class VideoButton extends Component {
     constructor(props) {
@@ -19,26 +20,29 @@ class VideoButton extends Component {
     }
 
     async componentDidMount() {
-        this.props.videoFileURL &&
-            (await this._generateThumbnail(this.props.videoFileURL));
+        this.props.videoFileURL && (await this._generateThumbnail());
     }
 
     async componentDidUpdate(prevProps, prevState) {
         if (
-            this.props.isSaving != prevProps.isSaving &&
             !this.props.isSaving &&
+            this.props.isSaving !== prevProps.isSaving &&
+            this.props.videoFileURL !== prevProps.videoFileURL &&
             this.props.videoFileURL
         ) {
-            await this._generateThumbnail(this.props.videoFileURL);
+            // TODO: should set state uri null?
+            this.setState({ uri: null });
+            await waitUntilFileExists(this.props.videoFileURL);
+            await this._generateThumbnail();
         }
     }
 
-    _generateThumbnail = async videoPath => {
+    _generateThumbnail = async () => {
         try {
-            const { uri } = await VideoThumbnails.getThumbnailAsync(videoPath);
-            this.setState({
-                uri,
-            });
+            const { uri } = await VideoThumbnails.getThumbnailAsync(
+                this.props.videoFileURL,
+            );
+            this.setState({ uri });
         } catch (err) {
             console.tron.log(
                 'Error generating video thumbnail VideoButton ' + err,
@@ -59,7 +63,6 @@ class VideoButton extends Component {
     }
 
     render() {
-        console.log('counter VideoButton', this.state);
         switch (this.props.mode) {
             case 'record':
                 return (
@@ -100,7 +103,7 @@ class VideoButton extends Component {
                         return (
                             <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
                                 <View style={[{flex: 1}, styles.button, styles.blackButton]}>
-                                    {this.state.uri && (
+                                    {this.state.uri !== null && (
                                         <Image
                                             style={[
                                                 {
@@ -110,8 +113,8 @@ class VideoButton extends Component {
                                                 styles.imagePreview,
                                             ]}
                                             source={{
-                                                uri: this.state.uri,
-                                            }}
+                                            uri: this.state.uri,
+                                        }}
                                         />
                                     )}
                                 </View>
@@ -122,7 +125,7 @@ class VideoButton extends Component {
                     return (
                         <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
                             <View style={[styles.button, styles.blackButton]}>
-                                {this.state.uri && (
+                                {this.state.uri !== null && (
                                     <Image
                                         style={[
                                             {
@@ -188,5 +191,18 @@ const styles = StyleSheet.create({
         fontSize: 11
     },
 });
+
+// HELPERS
+async function waitUntilFileExists(filePath) {
+    return await new Promise(resolve => {
+        const interval = setInterval(async () => {
+            const exists = await ReactNativeBlobUtil.fs.exists(filePath);
+            if (exists) {
+                resolve(true);
+                clearInterval(interval);
+            }
+        }, 1000);
+    });
+}
 
 export default VideoButton;
