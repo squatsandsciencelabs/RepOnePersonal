@@ -6,12 +6,11 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     Image,
-    Platform
+    Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Video from 'react-native-video';
-import * as VideoThumbnails from 'expo-video-thumbnails';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import { generateThumbnail } from 'app/utility/VideoThumbnailGenerator';
 
 class VideoButton extends Component {
     constructor(props) {
@@ -20,35 +19,30 @@ class VideoButton extends Component {
     }
 
     async componentDidMount() {
-        this.props.videoFileURL && (await this._generateThumbnail());
+        if (this.props.videoFileURL) {
+            await this._generateThumbnail();
+        }
     }
 
     async componentDidUpdate(prevProps, prevState) {
         if (
-            !this.props.isSaving &&
             this.props.isSaving !== prevProps.isSaving &&
             this.props.videoFileURL !== prevProps.videoFileURL &&
-            this.props.videoFileURL
+            this.props.videoFileURL &&
+            !this.props.isSaving
         ) {
-            // TODO: should set state uri null?
             this.setState({ uri: null });
             await waitUntilFileExists(this.props.videoFileURL);
             await this._generateThumbnail();
         }
     }
 
-    _generateThumbnail = async () => {
-        try {
-            const { uri } = await VideoThumbnails.getThumbnailAsync(
-                this.props.videoFileURL,
-            );
-            this.setState({ uri });
-        } catch (err) {
-            console.tron.log(
-                'Error generating video thumbnail VideoButton ' + err,
-            );
+    async _generateThumbnail() {
+        const uri = await generateThumbnail(this.props.videoFileURL);
+        if (uri) {
+            this.setState({ uri: uri });
         }
-    };
+    }
 
     _tappedWatchVideo() {
         this.props.tappedWatch(this.props.setID, this.props.videoFileURL);
@@ -113,8 +107,8 @@ class VideoButton extends Component {
                                                 styles.imagePreview,
                                             ]}
                                             source={{
-                                            uri: this.state.uri,
-                                        }}
+                                                uri: this.state.uri,
+                                            }}
                                         />
                                     )}
                                 </View>
@@ -193,15 +187,17 @@ const styles = StyleSheet.create({
 });
 
 // HELPERS
+
 async function waitUntilFileExists(filePath) {
     return await new Promise(resolve => {
         const interval = setInterval(async () => {
             const exists = await ReactNativeBlobUtil.fs.exists(filePath);
+
             if (exists) {
-                resolve(true);
+                resolve();
                 clearInterval(interval);
             }
-        }, 1000);
+        }, 500);
     });
 }
 

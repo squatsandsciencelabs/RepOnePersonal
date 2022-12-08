@@ -15,8 +15,6 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => ({
     isSaving: WorkoutSelectors.getIsSavingVideo(state),
-    isModalShowing: WorkoutSelectors.getIsCameraVisible(state),
-    isRecording: WorkoutSelectors.getIsRecording(state),
 });
 
 const EditWorkoutTitleExpandedScreen = connect(
