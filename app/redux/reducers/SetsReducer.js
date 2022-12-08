@@ -26,6 +26,7 @@ import {
     RESTORE_HISTORY_SET,
     TEST_1RM,
     ADD_3D_POSITIONS_TO_REP,
+    CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -33,6 +34,7 @@ import { getVersion } from 'react-native-device-info';
 import { Platform } from 'react-native';
 import * as SetUtils from 'app/utility/SetUtils';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const SetsReducer = (state = createDefaultState(), action) => {
     switch (action.type) {
@@ -91,12 +93,26 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return overrideWithTestData(state, action);
         case ADD_3D_POSITIONS_TO_REP:
             return add3DPositionsToRep(state, action);
+        case CONNECTED_TO_DEVICE:
+            return setDeviceType(state, action);
         default:
             return state;
     }
 };
 
-const createSet = (setNumber = 1, metric = "kgs") => ({
+const setDeviceType = (state, action) => {
+    const deviceType = getKratosEnabled()
+        ? action.deviceName.startsWith('Kratos')
+            ? 'Kratos'
+            : 'RepOne'
+        : 'RepOne';
+
+    return Object.assign({}, state, {
+        deviceType,
+    });
+};
+
+const createSet = (setNumber = 1, metric = "kgs", deviceType = '') => ({
     exercise: null,
     setNumber: setNumber,
     setID: uuidV4(),
@@ -112,7 +128,8 @@ const createSet = (setNumber = 1, metric = "kgs") => ({
     reps: [],
     tags: [],
     videoFileURL: null,
-    videoType: null
+    videoType: null,
+    deviceType,
 });
 
 const createDefaultState = () => {
@@ -459,6 +476,13 @@ const saveHistorySetTags = (state, action) => {
 const addRepData = (state, action) => {
     let workoutData = state.workoutData;
     let set = workoutData[workoutData.length - 1];
+
+    const deviceFamily = getKratosEnabled()
+        ? action.deviceName.startsWith('Kratos')
+            ? 'Kratos'
+            : 'RepOne'
+        : 'RepOne';
+
     let rep = {
         isValid: action.isValid,
         removed: false,
@@ -475,6 +499,7 @@ const addRepData = (state, action) => {
         peakVelocity: action.peakVelocity,
         peakHeight: action.peakHeight,
         duration: action.duration,
+        deviceFamily,
     };
 
     if (OpenBarbellConfig.bulkMetricsEnabled) {
@@ -640,7 +665,14 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
 const endSet = (state, action) => {
     let workoutData = state.workoutData;
     let currentSet = workoutData[workoutData.length - 1];
-    let newWorkoutData = [...workoutData, createSet(currentSet.setNumber + 1, action.defaultMetric)];
+    let newWorkoutData = [
+        ...workoutData,
+        createSet(
+            currentSet.setNumber + 1,
+            action.defaultMetric,
+            state.deviceType,
+        ),
+    ];
 
     return Object.assign({}, state, {
         workoutData: newWorkoutData
@@ -766,7 +798,7 @@ const endWorkout = (state, action) => {
     }
 
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [createSet(1, action.defaultMetric)];
+    let newWorkoutData = [createSet(1, action.defaultMetric, state.deviceType)];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {
@@ -899,7 +931,7 @@ const overrideWithTestData = (state, action) => {
 
     return {
         ...state,
-        workoutData: [createSet()],
+        workoutData: [createSet(undefined, undefined, state.deviceType)],
         setIDsToUpload: [],
         setIDsBeingUploaded: [],
         revision: 0,
