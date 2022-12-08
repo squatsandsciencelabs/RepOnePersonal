@@ -27,6 +27,7 @@ import {
     TEST_1RM,
     ADD_3D_POSITIONS_TO_REP,
     CONNECTED_TO_DEVICE,
+    ADD_KRATOS_REP_DATA,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -57,6 +58,7 @@ const SetsReducer = (state = createDefaultState(), action) => {
         case SAVE_HISTORY_SET_TAGS:
             return saveHistorySetTags(state, action);
         case ADD_REP_DATA:
+        case ADD_KRATOS_REP_DATA:
             return addRepData(state, action);
         case SAVE_WORKOUT_REP:
             return saveWorkoutRep(state, action);
@@ -112,7 +114,12 @@ const setDeviceType = (state, action) => {
     });
 };
 
-const createSet = (setNumber = 1, metric = "kgs", deviceType = '') => ({
+const createSet = (
+    setNumber = 1,
+    metric = 'kgs',
+    deviceType = null,
+    kratosDiscs = null,
+) => ({
     exercise: null,
     setNumber: setNumber,
     setID: uuidV4(),
@@ -129,7 +136,8 @@ const createSet = (setNumber = 1, metric = "kgs", deviceType = '') => ({
     tags: [],
     videoFileURL: null,
     videoType: null,
-    deviceType,
+    deviceType: deviceType,
+    kratosDiscs: kratosDiscs,
 });
 
 const createDefaultState = () => {
