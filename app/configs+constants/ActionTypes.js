@@ -16,6 +16,7 @@ export const TROUBLESHOOTING_TIPS = 'TROUBLESHOOTING_TIPS';
 
 // connected
 export const ADD_REP_DATA = 'ADD_REP_DATA';
+export const ADD_KRATOS_REP_DATA = 'ADD_KRATOS_REP_DATA';
 export const DISCONNECT_DEVICE = 'DISCONNECT_DEVICE';
 
 // auth

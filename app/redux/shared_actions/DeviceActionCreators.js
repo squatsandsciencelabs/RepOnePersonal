@@ -18,6 +18,7 @@ import {
     CONNECT_DEVICE,
     RECONNECT_DEVICE,
     VELOCITY_DROPPED,
+    ADD_KRATOS_REP_DATA,
 } from 'app/configs+constants/ActionTypes';
 import {
     CONNECTING,
@@ -197,6 +198,31 @@ export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) 
     dispatch(TimerActionCreators.startEndSetTimer());
     
 };
+
+export const receivedKratosLiftData =
+    (json, time = new Date()) =>
+    (dispatch, getState) => {
+        const state = getState();
+
+        logAddRepAnalytics(state);
+
+        dispatch(TimerActionCreators.sanityCheckTimer());
+        dispatch({
+            ...json,
+            type: ADD_KRATOS_REP_DATA,
+            deviceName:
+                ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
+            deviceIdentifier:
+                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(
+                    state,
+                ),
+            firmwareVersion:
+                ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+            time: time,
+        });
+
+        dispatch(TimerActionCreators.startEndSetTimer());
+    };
 
 // ANALYTICS
 

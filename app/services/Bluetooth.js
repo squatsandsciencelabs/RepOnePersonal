@@ -167,6 +167,10 @@ export default function (store) {
                     ePeakPower: data[23],
                 };
 
+                store.dispatch(
+                    DeviceActionCreators.receivedKratosLiftData(json),
+                );
+
                 // TODO: Remove this logging statement once kratos reps are properly stored in the codebase
                 console.tron.log(`got kratos reps ${JSON.stringify(json)}`);
             } else if (characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274' && OpenBarbellConfig.bulkEnabled) {
