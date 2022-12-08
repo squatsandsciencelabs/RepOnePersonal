@@ -9,8 +9,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import Video from 'react-native-video';
-import * as VideoThumbnails from 'expo-video-thumbnails';
+import { generateThumbnail } from 'app/utility/VideoThumbnailGenerator';
 
 class SetTitleRowCollapsed extends Component {
     constructor(props) {
@@ -19,30 +18,26 @@ class SetTitleRowCollapsed extends Component {
     }
 
     async componentDidMount() {
-        await this._generateThumbnail(this.props.videoFileURL);
+        if (this.props.videoFileURL) {
+            await this._generateThumbnail();
+        }
     }
 
     async componentDidUpdate(prevProps, prevState) {
-        if (!this.props.isSaving) {
-            if (this.props.videoFileURL !== prevProps.videoFileURL) {
-                await this._generateThumbnail(this.props.videoFileURL);
-            }
+        if (
+            !this.props.isSaving &&
+            this.props.videoFileURL !== prevProps.videoFileURL
+        ) {
+            await this._generateThumbnail();
         }
     }
 
-    _generateThumbnail = async videoPath => {
-        try {
-            const { uri } = await VideoThumbnails.getThumbnailAsync(videoPath);
-
-            this.setState({
-                uri,
-            });
-        } catch (err) {
-            console.tron.log(
-                'Error generating video thumbnail setTitleRowCollapsed' + err,
-            );
+    async _generateThumbnail() {
+        const uri = await generateThumbnail(this.props.videoFileURL);
+        if (uri) {
+            this.setState({ uri: uri });
         }
-    };
+    }
 
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
@@ -108,7 +103,7 @@ class SetTitleRowCollapsed extends Component {
     _renderChevron() {
         return (
             <TouchableOpacity style={styles.chevronContainer}
-                onPress={() => this.props.tappedExpand(this.props.setID)}>            
+                onPress={() => this.props.tappedExpand(this.props.setID)}>
                     <View>
                         <Icon name="chevron-with-circle-down" size={20} color='rgba(170, 170, 170, 1)' />
                     </View>
@@ -139,7 +134,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         paddingLeft: 12,
-        paddingRight: 10,        
+        paddingRight: 10,
         paddingTop: 15,
         paddingBottom: 15,
         flex: 1,
