@@ -9,8 +9,10 @@ import {
     Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ReactNativeBlobUtil from 'react-native-blob-util';
-import { generateThumbnail } from 'app/utility/VideoThumbnailGenerator';
+import {
+    generateThumbnail,
+    waitUntilFileExists,
+} from 'app/utility/VideoThumbnailGenerator';
 
 class VideoButton extends Component {
     constructor(props) {
@@ -83,60 +85,26 @@ class VideoButton extends Component {
                     </View>
                 );
             case 'watch':
-                // TODO: see if can make this a true image preview instead of a full video
-                // probably requires RCTCameraRoll
-                if (Platform.OS === 'ios') {
-                    if (!this.props.videoFileURL) {
-                        return (
-                            <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
-                                <View style={styles.videoButton}>
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    } else {
-                        return (
-                            <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
-                                <View style={[{flex: 1}, styles.button, styles.blackButton]}>
-                                    {this.state.uri !== null && (
-                                        <Image
-                                            style={[
-                                                {
-                                                    flex: 1,
-                                                    flexDirection: 'column',
-                                                },
-                                                styles.imagePreview,
-                                            ]}
-                                            source={{
-                                                uri: this.state.uri,
-                                            }}
-                                        />
-                                    )}
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    }
-                } else {
-                    return (
-                        <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
-                            <View style={[styles.button, styles.blackButton]}>
-                                {this.state.uri !== null && (
-                                    <Image
-                                        style={[
-                                            {
-                                                flex: 1,
-                                                flexDirection: 'column',
-                                            },
-                                            styles.imagePreview,
-                                        ]}
-                                        source={{
-                                            uri: this.state.uri,
-                                        }}
-                                    />
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                    );
-                }
+                return (
+                    <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
+                        <View style={[styles.button, styles.blackButton]}>
+                            {this.state.uri !== null && (
+                                <Image
+                                    style={[
+                                        {
+                                            flex: 1,
+                                            flexDirection: 'column',
+                                        },
+                                        styles.imagePreview,
+                                    ]}
+                                    source={{
+                                        uri: this.state.uri,
+                                    }}
+                                />
+                            )}
+                        </View>
+                    </TouchableOpacity>
+                );
             default:
                 console.tron.log("video button props failed with mode " + this.props.mode);
                 return null;
@@ -185,20 +153,5 @@ const styles = StyleSheet.create({
         fontSize: 11
     },
 });
-
-// HELPERS
-
-async function waitUntilFileExists(filePath) {
-    return await new Promise(resolve => {
-        const interval = setInterval(async () => {
-            const exists = await ReactNativeBlobUtil.fs.exists(filePath);
-
-            if (exists) {
-                resolve();
-                clearInterval(interval);
-            }
-        }, 500);
-    });
-}
 
 export default VideoButton;

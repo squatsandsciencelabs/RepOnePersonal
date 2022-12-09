@@ -9,7 +9,11 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import { generateThumbnail } from 'app/utility/VideoThumbnailGenerator';
+import * as FileSystem from 'expo-file-system';
+import {
+    generateThumbnail,
+    waitUntilFileExists,
+} from 'app/utility/VideoThumbnailGenerator';
 
 class SetTitleRowCollapsed extends Component {
     constructor(props) {
@@ -25,7 +29,7 @@ class SetTitleRowCollapsed extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (
-            !this.props.isSaving &&
+            !this.props.isSavingVideo &&
             this.props.videoFileURL !== prevProps.videoFileURL
         ) {
             await this._generateThumbnail();
@@ -33,6 +37,13 @@ class SetTitleRowCollapsed extends Component {
     }
 
     async _generateThumbnail() {
+        const fileInfo = await FileSystem.getInfoAsync(this.props.videoFileURL);
+        const { exists } = fileInfo;
+
+        if (!exists) {
+            await waitUntilFileExists(this.props.videoFileURL);
+        }
+
         const uri = await generateThumbnail(this.props.videoFileURL);
         if (uri) {
             this.setState({ uri: uri });
@@ -64,41 +75,30 @@ class SetTitleRowCollapsed extends Component {
             return null;
         }
 
-        if (Platform.OS === 'ios') {
-            if (!this.props.videoFileURL) {
-                return (
-                    <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
-                        <View style={styles.videoButton}>
-                        </View>
-                    </TouchableOpacity>
-                );
-            } else {
-                return (
-                    <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
-                        <View style={styles.videoButton}>
-                            {this.state.uri && (
-                                <Image
-                                    style={[{ flex: 1, flexDirection: 'column' }, styles.videoPlayer]}
-                                    source={{ uri: this.state.uri }} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-                );
-            }
-        } else {
-            return (
-                <TouchableOpacity style={styles.videoButtonContainer} onPress={()=> this.props.tappedWatch(this.props.setID, this.props.videoFileURL) }>
-                    <View style={styles.videoButton}>
-                        {this.state.uri && (
-                            <Image
-                                style={[{ flex: 1, flexDirection: 'column' }, styles.videoPlayer]}
-                                source={{ uri: this.state.uri }} />)
-                        }
-                    </View>
-                </TouchableOpacity>
-            );
-        }
+        return (
+            <TouchableOpacity
+                style={styles.videoButtonContainer}
+                onPress={() =>
+                    this.props.tappedWatch(
+                        this.props.setID,
+                        this.props.videoFileURL,
+                    )
+                }>
+                <View style={styles.videoButton}>
+                    {this.state.uri && (
+                        <Image
+                            style={[
+                                { flex: 1, flexDirection: 'column' },
+                                styles.videoPlayer,
+                            ]}
+                            source={{ uri: this.state.uri }}
+                        />
+                    )}
+                </View>
+            </TouchableOpacity>
+        );
     }
+    // }
 
     _renderChevron() {
         return (
