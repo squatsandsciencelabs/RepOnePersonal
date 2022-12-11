@@ -1,4 +1,3 @@
-import firebase from 'app/services/Firebase';
+// import firebase from 'app/services/Firebase';
 
-export const getKratosEnabled = () =>
-    firebase.remoteConfig().getValue('kratos_enabled').asBoolean();
+export const getKratosEnabled = () => false; // hack, ensure kratos never gets enabled

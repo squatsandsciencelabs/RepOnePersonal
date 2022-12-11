@@ -19,7 +19,7 @@ import OTASaga from './OTASaga';
 import BulkDataSaga from './BulkDataSaga';
 import CalibrationSaga from './CalibrationSaga';
 import ScalarSaga from './ScalarSaga';
-import KratosSaga from './KratosSaga';
+// import KratosSaga from './KratosSaga';
 
 const Sagas = function* Sagas(dispatch) {
     yield all([
@@ -41,7 +41,7 @@ const Sagas = function* Sagas(dispatch) {
         BulkDataSaga(),
         CalibrationSaga(),
         ScalarSaga(),
-        KratosSaga(),
+        // KratosSaga(),
         // VelocityThresholdSaga(),
     ]);
 };
