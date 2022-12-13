@@ -6,6 +6,7 @@ import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapseExpandWorkoutActions from 'app/redux/shared_actions/CollapseExpandWorkoutActions';
+import { Alert } from 'react-native';
 
 export const expandCard = (setID) => (dispatch, getState) => {
     const state = getState();
@@ -19,7 +20,12 @@ export const presentWatchVideo = (setID, videoFileURL) => (dispatch, getState) =
         const state = getState();
         Analytics.setCurrentScreen('workout_watch_video');
         logWatchVideoAnalytics(setID, state);
-        
+
+        if (!videoFileURL) {
+            console.tron.log('No video file URL provided');
+            return Alert.alert('Oops!', "Couldn't open video file");
+        }
+
         dispatch({
             type: PRESENT_WORKOUT_VIDEO_PLAYER,
             setID: setID,

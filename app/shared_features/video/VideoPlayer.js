@@ -19,17 +19,19 @@ class VideoPlayer extends Component {
         if (this.props.isModalShowing) {
             activateKeepAwake();
             return (
-                <View style={[{flex: 1}, styles.container]}>                
-                    <Video
-                        ref={(ref) => {
-                            this.player = ref
-                        }}
-                        style={[{flex:1}, styles.button, styles.blackButton]}
-                        source={{uri: this.props.video}}
-                        paused={false}
-                        resizeMode="contain"
-                        repeat={true}
-                    />
+                <View style={[{ flex: 1 }, styles.container]}>      
+                    {this.props.video && (
+                        <Video
+                            ref={(ref) => {
+                                this.player = ref
+                            }}
+                            style={[{ flex: 1 }, styles.button, styles.blackButton]}
+                            source={{ uri: this.props.video }}
+                            paused={false}
+                            resizeMode="contain"
+                            repeat={true}
+                        />
+                    )}
 
                     <View style={styles.cancelButton}>
                         <TouchableOpacity onPress={()=>this.props.closeModal(this.props.setID)}>

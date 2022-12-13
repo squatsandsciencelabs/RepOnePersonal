@@ -37,16 +37,20 @@ class SetTitleRowCollapsed extends Component {
     }
 
     async _generateThumbnail() {
-        const fileInfo = await FileSystem.getInfoAsync(this.props.videoFileURL);
-        const { exists } = fileInfo;
+        try {
+            const fileInfo = await FileSystem.getInfoAsync(this.props.videoFileURL);
+            const { exists } = fileInfo;
 
-        if (!exists) {
-            await waitUntilFileExists(this.props.videoFileURL);
-        }
+            if (!exists) {
+                await waitUntilFileExists(this.props.videoFileURL);
+            }
 
-        const uri = await generateThumbnail(this.props.videoFileURL);
-        if (uri) {
-            this.setState({ uri: uri });
+            const uri = await generateThumbnail(this.props.videoFileURL);
+            if (uri) {
+                this.setState({ uri: uri });
+            }
+        } catch (err) {
+            console.tron.log('Error while generating thumbnail: ' + err);
         }
     }
 

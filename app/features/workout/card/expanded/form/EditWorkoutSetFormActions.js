@@ -13,6 +13,7 @@ import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
+import { Alert } from 'react-native';
 
 export const toggleMetric = (setID) => (dispatch, getState) => {
     const state = getState();
@@ -112,6 +113,11 @@ export const presentWatchVideo = (setID, videoFileURL) => (dispatch, getState) =
         Analytics.setCurrentScreen('workout_watch_video');
         logWatchVideoAnalytics(setID, state);
         
+        if (!videoFileURL) {
+            console.tron.log('no video file URL provided');
+            return Alert.alert('Oops!', "Couldn't open video file");
+        }
+
         dispatch({
             type: PRESENT_WORKOUT_VIDEO_PLAYER,
             setID: setID,

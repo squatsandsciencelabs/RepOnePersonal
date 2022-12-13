@@ -33,9 +33,13 @@ class VideoButton extends Component {
             this.props.videoFileURL &&
             !this.props.isSaving
         ) {
-            this.setState({ uri: null });
-            await waitUntilFileExists(this.props.videoFileURL);
-            await this._generateThumbnail();
+            try {
+                this.setState({ uri: null });
+                await waitUntilFileExists(this.props.videoFileURL);
+                await this._generateThumbnail();
+            } catch (err) {
+                console.tron.log('Error while generating thumbnail: ' + err);
+            }
         }
     }
 
