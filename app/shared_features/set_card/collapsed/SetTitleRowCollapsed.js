@@ -27,25 +27,8 @@ class SetTitleRowCollapsed extends Component {
         }
     }
 
-    async componentDidUpdate(prevProps, prevState) {
-        if (
-            !this.props.isSavingVideo &&
-            this.props.videoFileURL !== prevProps.videoFileURL &&
-            this.props.videoFileURL
-        ) {
-            await this._generateThumbnail();
-        }
-    }
-
     async _generateThumbnail() {
         try {
-            const fileInfo = await FileSystem.getInfoAsync(this.props.videoFileURL);
-            const { exists } = fileInfo;
-
-            if (!exists) {
-                await waitUntilFileExists(this.props.videoFileURL);
-            }
-
             const uri = await generateThumbnail(this.props.videoFileURL);
             if (uri) {
                 this.setState({ uri: uri });
