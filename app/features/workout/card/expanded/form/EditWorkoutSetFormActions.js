@@ -114,8 +114,11 @@ export const presentWatchVideo = (setID, videoFileURL) => (dispatch, getState) =
         logWatchVideoAnalytics(setID, state);
         
         if (!videoFileURL) {
-            console.tron.log('no video file URL provided');
-            return Alert.alert('Oops!', "Couldn't open video file");
+            console.tron.log('No video file URL provided');
+                    return Alert.alert(
+                        'Video not Found',
+                        'The video might be located on another mobile device, or you may deleted it from your photos gallery.',
+                    );
         }
 
         dispatch({
