@@ -30,7 +30,8 @@ class SetTitleRowCollapsed extends Component {
     async componentDidUpdate(prevProps, prevState) {
         if (
             !this.props.isSavingVideo &&
-            this.props.videoFileURL !== prevProps.videoFileURL
+            this.props.videoFileURL !== prevProps.videoFileURL &&
+            this.props.videoFileURL
         ) {
             await this._generateThumbnail();
         }
