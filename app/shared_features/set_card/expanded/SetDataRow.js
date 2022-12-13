@@ -37,7 +37,7 @@ class SetDataRow extends PureComponent {
                 <TouchableOpacity style={{flex:1}} onPress={ () => this._onPressRow() } >
                     <View style={styles.bar}>
                         <View style={styles.itemContainer}><Text style={dataStyle}> { this.props.item.repDisplay } </Text></View>
-                        {this.props.item.columns.map(i => <View style={styles.itemContainer}><Text style={dataStyle}> { i } </Text></View>)}
+                        {this.props.item.columns.map((i, index) => <View style={styles.itemContainer} key={i.toString() + index}><Text style={dataStyle}> { i } </Text></View>)}
                         {button}
                     </View>
                 </TouchableOpacity>
