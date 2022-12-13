@@ -13,7 +13,7 @@ export const generateThumbnail = async (videoPath) => {
 };
 
 export const waitUntilFileExists = async (filePath, ms = 500) => {
-    return await new Promise(resolve => {
+    return await new Promise((resolve, reject) => {
         const interval = setInterval(async () => {
             const fileInfo = await FileSystem.getInfoAsync(filePath);
             const { exists } = fileInfo;
@@ -23,5 +23,10 @@ export const waitUntilFileExists = async (filePath, ms = 500) => {
                 clearInterval(interval);
             }
         }, ms);
+        // clear interval if the file does not exist after 5s
+        setTimeout(function () {
+            reject('File does not exist');
+            clearInterval(interval);
+        }, 5000);
     });
 };

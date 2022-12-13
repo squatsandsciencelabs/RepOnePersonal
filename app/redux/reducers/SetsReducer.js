@@ -695,6 +695,7 @@ const saveHistoryVideo = (state, action) => {
 // DELETE_WORKOUT_VIDEO
 
 const deleteWorkoutVideo = (state, action) => {
+
     let newWorkoutData = state.workoutData.slice(0);
     let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
