@@ -181,11 +181,7 @@ class HistoryList extends Component {
                 renderSectionFooter={({section}) => this._renderSectionFooter(section)}              
                 sections={this.props.sections}
                 onEndReached={() => this.props.finishLoading() }
-                style={{ padding: 10, backgroundColor: '#f2f2f2' }}
-                keyExtractor={(item, index) => {
-                    const key = Object.values(item).join('-');
-                    return key;
-                }}
+                style = {{padding: 10, backgroundColor: '#f2f2f2'}}
             />);
         }
         if (this.props.email !== undefined && this.props.email !== null) {
