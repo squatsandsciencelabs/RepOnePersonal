@@ -21,9 +21,9 @@ class SettingsMetricsPanel extends Component {
 
     // RENDER
 
-    _renderRow(row) {
+    _renderRow(row, metric) {
         return (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }} key={`${metric}-${row - 1}`}>
                 <View style={styles.numberBackground}>
                     <Text style={styles.numberLabel}>{row}</Text>
                 </View>
@@ -35,8 +35,8 @@ class SettingsMetricsPanel extends Component {
                     </Text>
                     <Icon name="caret-down" size={10} color='white' style={{right: 5, position:'absolute'}} />
                 </TouchableOpacity>
-            </View>            
-        ); 
+            </View>
+        );
     }
 
     render() {
@@ -45,11 +45,9 @@ class SettingsMetricsPanel extends Component {
                 <View style={ [SETTINGS_PANEL_STYLES.panel, { flexDirection: 'column' }] }>
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
-                        {this.props.metrics.map((m, i) => (
-                            <Fragment key={`${m}-${i}`}>
-                                {this._renderRow(i + 1)}
-                            </Fragment>
-                        ))}
+                        {this.props.metrics.map((m, i) =>
+                            this._renderRow(i + 1, m),
+                        )}
                     </View>
                     <SettingsEditColumnsScreen />
                 </View>
