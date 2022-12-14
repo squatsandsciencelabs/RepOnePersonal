@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import VideoButton from 'app/shared_features/set_card/expanded/VideoButton';
 import * as Actions from './EditHistorySetFormActions';
+import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -12,9 +13,13 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch);
 };
 
+const mapStateToProps = state => ({
+    isSaving: HistorySelectors.getIsSavingVideo(state),
+});
+
 const HistoryVideoButtonScreen = connect(
-    null,
-    mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(VideoButton);
 
 export default HistoryVideoButtonScreen;

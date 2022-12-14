@@ -28,6 +28,7 @@ class VideoButton extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (
+            this.props.isSaving !== prevProps.isSaving &&
             this.props.videoFileURL !== prevProps.videoFileURL &&
             this.props.videoFileURL &&
             !this.props.isSaving
