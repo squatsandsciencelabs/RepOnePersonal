@@ -11,7 +11,7 @@ export default props => {
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={styles.headerLabel}><Text style={styles.text}>REP</Text></View>
                 {props.item.labels.map((l, index) => (
-                    <View style={styles.headerLabel} key={`${l}-${index}`}>
+                    <View style={styles.headerLabel} key={`data-label-column-${index}`}>
                         <Text style={styles.text}>{l}</Text>
                     </View>
                 ))}
@@ -19,7 +19,7 @@ export default props => {
             <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
                 <View style={styles.headerLabel}><Text style={styles.text}>#</Text></View>
                 {props.item.units.map((u, index) => (
-                    <View style={styles.headerLabel} key={`${u}-${index}`}>
+                    <View style={styles.headerLabel} key={`data-label-column-${index}`}>
                         <Text style={styles.text}>{u}</Text>
                     </View>
                 ))}

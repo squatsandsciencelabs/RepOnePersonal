@@ -225,7 +225,7 @@ class EditTextModal extends Component {
             let text = input;
             pills.push(
                 <TouchableOpacity
-                    key={`${text}-${index}`}
+                    key={`pill-${index}`}
                     onPress={() => this._tappedPill(position)}>
                     <Pill
                         text={text}
