@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {
     Text,
     View,
@@ -45,7 +45,11 @@ class SettingsMetricsPanel extends Component {
                 <View style={ [SETTINGS_PANEL_STYLES.panel, { flexDirection: 'column' }] }>
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
-                        {this.props.metrics.map((m, i) => this._renderRow(i+1))}
+                        {this.props.metrics.map((m, i) => (
+                            <Fragment key={`${m}-${i}`}>
+                                {this._renderRow(i + 1)}
+                            </Fragment>
+                        ))}
                     </View>
                     <SettingsEditColumnsScreen />
                 </View>
@@ -55,7 +59,7 @@ class SettingsMetricsPanel extends Component {
                 <View style={ [SETTINGS_PANEL_STYLES.panel, { flexDirection: 'column' }] }>
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
-                        {this.props.metrics.map((m, i) => <View style={{flex: 1, flexDirection: 'row'}}>
+                        {this.props.metrics.map((m, i) => <View style={{flex: 1, flexDirection: 'row'}} key={`${m}-${i}`}>
                             <View style={styles.numberBackground}><Text style={styles.numberLabel}>{i+1}</Text></View>
                             <View style={[{flex: 1}, styles.dropdownButton]}><SettingsEditColumnsScreen color={'white'} rank={i+1} /></View>
                         </View>)}

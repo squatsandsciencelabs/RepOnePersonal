@@ -220,12 +220,17 @@ class EditTextModal extends Component {
         }
 
         var pills = [];
-        this.state.inputs.map((input) => {
+        this.state.inputs.map((input, index) => {
             let position = pills.length;
             let text = input;
             pills.push(
-                <TouchableOpacity key={position} onPress={() => this._tappedPill(position) }>
-                    <Pill text={text} style={{paddingRight: 5, paddingBottom: 3}} />
+                <TouchableOpacity
+                    key={`${text}-${index}`}
+                    onPress={() => this._tappedPill(position)}>
+                    <Pill
+                        text={text}
+                        style={{ paddingRight: 5, paddingBottom: 3 }}
+                    />
                 </TouchableOpacity>
             );
         });
