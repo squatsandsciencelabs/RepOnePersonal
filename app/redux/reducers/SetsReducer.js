@@ -109,9 +109,7 @@ const setDeviceType = (state, action) => {
             : 'RepOne'
         : 'RepOne';
 
-    return Object.assign({}, state, {
-        deviceType,
-    });
+    return { ...state, deviceType };
 };
 
 const createSet = (
