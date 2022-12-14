@@ -21,9 +21,11 @@ class SettingsMetricsPanel extends Component {
 
     // RENDER
 
-    _renderRow(row, metric) {
+    _renderRow(row) {
         return (
-            <View style={{ flexDirection: 'row' }} key={`${metric}-${row - 1}`}>
+            <View
+                style={{ flexDirection: 'row' }}
+                key={`settings-column-metric-${row - 1}`}>
                 <View style={styles.numberBackground}>
                     <Text style={styles.numberLabel}>{row}</Text>
                 </View>
@@ -46,7 +48,7 @@ class SettingsMetricsPanel extends Component {
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
                         {this.props.metrics.map((m, i) =>
-                            this._renderRow(i + 1, m),
+                            this._renderRow(i + 1),
                         )}
                     </View>
                     <SettingsEditColumnsScreen />
@@ -57,7 +59,7 @@ class SettingsMetricsPanel extends Component {
                 <View style={ [SETTINGS_PANEL_STYLES.panel, { flexDirection: 'column' }] }>
                     <Text style={[{marginBottom: 20}, styles.titleText]}>Set Columns</Text>
                     <View style={{marginBottom: 15}}>
-                        {this.props.metrics.map((m, i) => <View style={{flex: 1, flexDirection: 'row'}} key={`${m}-${i}`}>
+                        {this.props.metrics.map((m, i) => <View style={{flex: 1, flexDirection: 'row'}} key={`settings-column-metric-${i}`}>
                             <View style={styles.numberBackground}><Text style={styles.numberLabel}>{i+1}</Text></View>
                             <View style={[{flex: 1}, styles.dropdownButton]}><SettingsEditColumnsScreen color={'white'} rank={i+1} /></View>
                         </View>)}
