@@ -109,7 +109,19 @@ const setDeviceType = (state, action) => {
             : 'RepOne'
         : 'RepOne';
 
-    return { ...state, deviceType };
+    const workoutData = state.workoutData;
+    const set = workoutData[workoutData.length - 1];
+    const newSet = { ...set, deviceType };
+
+    const newWorkoutData = [
+        ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
+        newSet,
+    ];
+
+    return {
+        ...state,
+        workoutData: newWorkoutData,
+    };
 };
 
 const createSet = (
