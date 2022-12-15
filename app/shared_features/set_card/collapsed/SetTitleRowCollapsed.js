@@ -29,6 +29,14 @@ class SetTitleRowCollapsed extends Component {
 
     async _generateThumbnail() {
         try {
+            const fileInfo = await FileSystem.getInfoAsync(
+                this.props.videoFileURL,
+            );
+            const { exists } = fileInfo;
+
+            if (!exists) {
+                await waitUntilFileExists(this.props.videoFileURL);
+            }
             const uri = await generateThumbnail(this.props.videoFileURL);
             if (uri) {
                 this.setState({ uri: uri });
