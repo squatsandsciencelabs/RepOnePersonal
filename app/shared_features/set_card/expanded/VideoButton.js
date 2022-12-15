@@ -35,7 +35,6 @@ class VideoButton extends Component {
         ) {
             try {
                 this.setState({ uri: null });
-                await waitUntilFileExists(this.props.videoFileURL);
                 await this._generateThumbnail();
             } catch (err) {
                 console.tron.log('Error while generating thumbnail: ' + err);
@@ -44,9 +43,16 @@ class VideoButton extends Component {
     }
 
     async _generateThumbnail() {
-        const uri = await generateThumbnail(this.props.videoFileURL);
-        if (uri) {
-            this.setState({ uri: uri });
+        try {
+            await waitUntilFileExists(this.props.videoFileURL);
+
+            const uri = await generateThumbnail(this.props.videoFileURL);
+
+            if (uri) {
+                this.setState({ uri: uri });
+            }
+        } catch (err) {
+            console.tron.log('Error while generating thumbnail: ' + err);
         }
     }
 
