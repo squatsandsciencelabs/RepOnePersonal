@@ -276,13 +276,58 @@ const createRowViewModels = (set, columnsModel) => {
         };
 
         // update vm
-        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set));
+        if (rep.deviceFamily === 'RepOne') {
+            // update vm
+            vm.columns = columnsModel.map(m =>
+                SetUtils.getDisplayMetric(m, rep, set),
+            );
 
-        // add obj
-        array.splice(0, 0, vm); // insert at beginning
+            // add obj
+            array.splice(0, 0, vm); // insert at beginning
+        } else {
+            const letters = { eccentric: 'e', concentric: 'c' };
+            let resultReps = { eccentric: {}, concentric: {} };
+
+            for (const [key, value] of Object.entries(rep)) {
+                if (
+                    key[0].toLowerCase() === key[0] &&
+                    Object.values(letters).includes(key[0]) &&
+                    key[1].toUpperCase() === key[1]
+                ) {
+                    const letterKey = Object.keys(letters).find(
+                        k => letters[k] === key[0],
+                    );
+
+                    const res = {};
+                    const repProperty = key.charAt(1).toLowerCase() + key.slice(2);
+                    res[repProperty] = value;
+                    resultReps[letterKey] = {
+                        ...resultReps[letterKey],
+                        ...res,
+                    };
+                } else {
+                    for (const entry of Object.entries(resultReps)) {
+                        const obj = {};
+                        obj[key] = value;
+                        resultReps[entry[0]] = {
+                            ...resultReps[entry[0]],
+                            ...obj,
+                        };
+                    }
+                }
+            }
+            vm.columns = Object.entries(resultReps).map(([key, value]) => {
+                const model = columnsModel.map(m =>
+                    SetUtils.getKratosDisplayMetric(m, value, set),
+                );
+                model.push(key);
+                return model;
+            });
+
+            // add obj
+            array.splice(0, 0, vm); // insert at beginning
+        }
     }
-
-    // return
     return array;
 };
 

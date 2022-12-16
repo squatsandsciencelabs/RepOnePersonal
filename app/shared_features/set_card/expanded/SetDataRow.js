@@ -1,14 +1,8 @@
-import React, {PureComponent} from 'react';
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    Text
-} from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class SetDataRow extends PureComponent {
-
     _onPressRow() {
         // temp just toggle remove
         if (this.props.item.removed) {
@@ -22,35 +16,103 @@ class SetDataRow extends PureComponent {
         var button = null;
         if (!this.props.item.removed) {
             button = (
-                <Icon name="close" size={20} color="lightgray" style={{marginTop: -1, marginRight: 3}} />
+                <Icon
+                    name="close"
+                    size={20}
+                    color="lightgray"
+                    style={{ marginTop: -1, marginRight: 3 }}
+                />
             );
         } else {
             button = (
-                <Icon name="undo" size={20} color="lightgray" style={{marginTop: -1, marginRight: 3}} />
+                <Icon
+                    name="undo"
+                    size={20}
+                    color="lightgray"
+                    style={{ marginTop: -1, marginRight: 3 }}
+                />
             );
         }
 
-        const dataStyle = this.props.item.removed ? styles.removedData : styles.data;
-        
-        return (
-            <View style={[styles.border, {flex:1, alignItems:'stretch', backgroundColor:'white'}]}>
-                <TouchableOpacity style={{flex:1}} onPress={ () => this._onPressRow() } >
-                    <View style={styles.bar}>
-                        <View style={styles.itemContainer}><Text style={dataStyle}> { this.props.item.repDisplay } </Text></View>
-                        {this.props.item.columns.map((i, index) => (
-                            <View
-                                style={styles.itemContainer}
-                                key={`data-column-${index}`}>
-                                <Text style={dataStyle}> {i} </Text>
-                            </View>
-                        ))}
-                        {button}
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+        const dataStyle = this.props.item.removed
+            ? styles.removedData
+            : styles.data;
 
+        if (is2dArray(this.props.item.columns)) {
+            return this.props.item.columns.map((data, index) => {
+                const type = data[data.length - 1][0].toUpperCase();
+                const displayData = data.slice(0, -1);
+
+                return (
+                    <View key={index}
+                        style={[
+                            styles.border,
+                            {
+                                flex: 1,
+                                alignItems: 'stretch',
+                                backgroundColor: 'white',
+                            },
+                        ]}>
+                        <TouchableOpacity
+                            style={{ flex: 1 }}
+                            onPress={() => this._onPressRow()}>
+                            <View style={styles.bar}>
+                                <View style={styles.itemContainer}>
+                                    <Text style={dataStyle}>
+                                        {this.props.item.repDisplay} {type}
+                                    </Text>
+                                </View>
+                                {displayData.map((item, index) => {
+                                    return (
+                                        <View
+                                            style={styles.itemContainer}
+                                            key={`data-column-${index}`}>
+                                            <Text style={dataStyle}>
+                                                {item}
+                                            </Text>
+                                        </View>
+                                    );
+                                })}
+                                {button}
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                );
+            });
+        } else {
+            return (
+                <View
+                    style={[
+                        styles.border,
+                        {
+                            flex: 1,
+                            alignItems: 'stretch',
+                            backgroundColor: 'white',
+                        },
+                    ]}>
+                    <TouchableOpacity
+                        style={{ flex: 1 }}
+                        onPress={() => this._onPressRow()}>
+                        <View style={styles.bar}>
+                            <View style={styles.itemContainer}>
+                                <Text style={dataStyle}>
+                                    {this.props.item.repDisplay}
+                                </Text>
+                            </View>
+                            {this.props.item.columns.map((i, index) => (
+                                <View
+                                    style={styles.itemContainer}
+                                    key={`data-column-${index}`}>
+                                    <Text style={dataStyle}> {i} </Text>
+                                </View>
+                            ))}
+                            {button}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -85,7 +147,11 @@ const styles = StyleSheet.create({
     removedData: {
         textAlign: 'center',
         color: 'lightgray',
-    }
+    },
 });
+
+// HELPERS
+
+const is2dArray = array => array.every(item => Array.isArray(item));
 
 export default SetDataRow;

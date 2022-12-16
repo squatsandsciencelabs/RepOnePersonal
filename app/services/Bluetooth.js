@@ -141,6 +141,7 @@ export default function (store) {
                 const data = new Uint16Array(typedArray.buffer);
 
                 const json = {
+                    isValid: true,
                     repId: data[0],
                     repNumber: data[1],
                     cRom: data[2],
