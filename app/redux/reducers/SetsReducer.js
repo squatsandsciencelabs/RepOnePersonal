@@ -58,8 +58,9 @@ const SetsReducer = (state = createDefaultState(), action) => {
         case SAVE_HISTORY_SET_TAGS:
             return saveHistorySetTags(state, action);
         case ADD_REP_DATA:
-        case ADD_KRATOS_REP_DATA:
             return addRepData(state, action);
+        case ADD_KRATOS_REP_DATA:
+            return addKratosRepData(state, action);
         case SAVE_WORKOUT_REP:
             return saveWorkoutRep(state, action);
         case SAVE_HISTORY_REP:
@@ -495,11 +496,7 @@ const addRepData = (state, action) => {
     let workoutData = state.workoutData;
     let set = workoutData[workoutData.length - 1];
 
-    const deviceFamily = getKratosEnabled()
-        ? action.deviceName.startsWith('Kratos')
-            ? 'Kratos'
-            : 'RepOne'
-        : 'RepOne';
+    const deviceFamily = 'RepOne';
 
     let rep = {
         isValid: action.isValid,
@@ -517,6 +514,78 @@ const addRepData = (state, action) => {
         peakVelocity: action.peakVelocity,
         peakHeight: action.peakHeight,
         duration: action.duration,
+        deviceFamily,
+    };
+
+    if (OpenBarbellConfig.bulkMetricsEnabled) {
+        rep.linear3DAverageVelocity = action.linear3DAverageVelocity;
+        rep.linear3DROM = action.linear3DROM;
+        rep.peakVelocityIndex = null;
+        rep.peakAcceleration = null;
+        rep.peakAccelerationIndex = null;
+        rep.peakForce = null;
+        rep.peakForceIndex = null;
+        rep.peakForceHeight = null;
+        rep.averageForce = null;
+        rep.peakPower = null;
+        rep.peakPowerIndex = null;
+        rep.peakPowerHeight = null;
+        rep.averagePower = null;
+    }
+
+    let setChanges = {
+        reps: [...set.reps, rep],
+        removed: false
+    };
+
+    if (!set.initialStartTime) {
+        setChanges.initialStartTime = new Date();
+    }
+
+    let newSet = Object.assign({}, set, setChanges);
+    let newWorkoutData = [
+        ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
+        newSet
+    ];
+
+    return Object.assign({}, state, {
+        workoutData: newWorkoutData
+    });
+};
+
+
+const addKratosRepData = (state, action) => {
+    let workoutData = state.workoutData;
+    let set = workoutData[workoutData.length - 1];
+
+    const deviceFamily = 'Kratos';
+
+    const rep = {
+        isValid: action.isValid,
+        repId: action.repId,
+        repNumber: action.repNumber,
+        cRom: action.cRom,
+        cAvgLinearVelocity: action.cAvgLinearVelocity,
+        cAvgAngularVelocity: action.cAvgAngularVelocity,
+        cPeakLinearVelocity: action.cPeakLinearVelocity,
+        cPeakAngularVelocity: action.cPeakAngularVelocity,
+        cPeakVelocityLocation: action.cPeakVelocityLocation,
+        cDuration: action.cDuration,
+        cMeanAcceleration: action.cMeanAcceleration,
+        cPeakLinearAcceleration: action.cPeakLinearAcceleration,
+        cPeakAngularAcceleration: action.cPeakAngularAcceleration,
+        cPeakPower: action.cPeakPower,
+        eRom: action.eRom,
+        eAvgLinearVelocity: action.eAvgLinearVelocity,
+        eAvgAngularVelocity: action.eAvgAngularVelocity,
+        ePeakLinearVelocity: action.ePeakLinearVelocity,
+        ePeakAngularVelocity: action.ePeakAngularVelocity,
+        ePeakVelocityLocation: action.ePeakVelocityLocation,
+        eDuration: action.eDuration,
+        eMeanAcceleration: action.eMeanAcceleration,
+        ePeakLinearAcceleration: action.ePeakLinearAcceleration,
+        ePeakAngularAcceleration: action.ePeakAngularAcceleration,
+        ePeakPower: action.ePeakPower,
         deviceFamily,
     };
 

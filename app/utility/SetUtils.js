@@ -624,6 +624,57 @@ export const getDisplayMetric = (metric, rep, set=null) => {
     }
 };
 
+export const getKratosDisplayMetric = (metric, rep, set = null) => {
+    if (!rep || !rep.isValid) {
+        return INVALID;
+    }
+
+    switch (metric) {
+        case AVG_VELOCITY_METRIC:
+            return rep.avgLinearVelocity
+                ? rep.avgLinearVelocity / 1000
+                : INVALID;
+        case LINEAR_3D_AVG_VELOCITY_METRIC:
+            return rep.linear3DAverageVelocity
+                ? rep.linear3DAverageVelocity / 1000
+                : INVALID;
+        case PKV_METRIC:
+            return rep.peakLinearVelocity
+                ? rep.peakLinearVelocity / 1000
+                : INVALID;
+        case PKH_METRIC:
+            return rep.peakVelocityLocation && rep.rom
+                ? Math.round((rep.peakVelocityLocation / rep.rom) * 100)
+                : INVALID;
+        case ROM_METRIC:
+            return rep.rom ? rep.rom : INVALID;
+        case LINEAR_3D_ROM_METRIC:
+            return rep.linear3DROM ? rep.linear3DROM : INVALID;
+        case DURATION_METRIC:
+            return rep.duration
+                ? DurationCalculator.displayDuration(rep.duration)
+                : INVALID;
+        case PEAK_FORCE_METRIC:
+            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
+        case AVERAGE_FORCE_METRIC:
+            return rep.averageForce
+                ? Number(rep.averageForce).toFixed(2)
+                : EMPTY;
+        case PEAK_POWER_METRIC:
+            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+        case PEAK_POWER_HEIGHT_METRIC:
+            return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
+        case AVERAGE_POWER_METRIC:
+            return rep.averagePower
+                ? Number(rep.averagePower).toFixed(2)
+                : EMPTY;
+        default:
+            return INVALID;
+    }
+};
+
 export const getRepHasBulkComputedProperties = r => {
     return (r.peakForce !== null && r.peakForce !== undefined)
         || (r.averageForce !== null && r.averageForce !== undefined)
