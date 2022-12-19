@@ -285,17 +285,17 @@ const createRowViewModels = (set, columnsModel) => {
             // add obj
             array.splice(0, 0, vm); // insert at beginning
         } else {
-            const letters = { eccentric: 'e', concentric: 'c' };
-            let resultReps = { eccentric: {}, concentric: {} };
+            const kratosTypeKeys = { concentric: 'c', eccentric: 'e' };
+            let resultReps = { concentric: {}, eccentric: {} };
 
             for (const [key, value] of Object.entries(rep)) {
                 if (
                     key[0].toLowerCase() === key[0] &&
-                    Object.values(letters).includes(key[0]) &&
+                    Object.values(kratosTypeKeys).includes(key[0]) &&
                     key[1].toUpperCase() === key[1]
                 ) {
-                    const letterKey = Object.keys(letters).find(
-                        k => letters[k] === key[0],
+                    const letterKey = Object.keys(kratosTypeKeys).find(
+                        k => kratosTypeKeys[k] === key[0],
                     );
 
                     const res = {};

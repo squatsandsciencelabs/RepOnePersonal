@@ -39,46 +39,73 @@ class SetDataRow extends PureComponent {
             : styles.data;
 
         if (is2dArray(this.props.item.columns)) {
-            return this.props.item.columns.map((data, index) => {
-                const type = data[data.length - 1][0].toUpperCase();
-                const displayData = data.slice(0, -1);
+            return (
+                <View
+                    style={[
+                        styles.border,
+                        {
+                            flex: 1,
+                            alignItems: 'stretch',
+                            backgroundColor: 'white',
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        },
+                    ]}>
+                    <TouchableOpacity
+                        style={{ flex: 1, flexDirection: 'row' }}
+                        onPress={() => this._onPressRow()}>
+                        <View style={{ flex: 1, flexDirection: 'column' }}>
+                            {this.props.item.columns.map((data, index) => {
+                                const type =
+                                    data[data.length - 1][0].toUpperCase();
 
-                return (
-                    <View key={index}
-                        style={[
-                            styles.border,
-                            {
-                                flex: 1,
-                                alignItems: 'stretch',
-                                backgroundColor: 'white',
-                            },
-                        ]}>
-                        <TouchableOpacity
-                            style={{ flex: 1 }}
-                            onPress={() => this._onPressRow()}>
-                            <View style={styles.bar}>
-                                <View style={styles.itemContainer}>
-                                    <Text style={dataStyle}>
-                                        {this.props.item.repDisplay} {type}
-                                    </Text>
-                                </View>
-                                {displayData.map((item, index) => {
-                                    return (
-                                        <View
-                                            style={styles.itemContainer}
-                                            key={`data-column-${index}`}>
-                                            <Text style={dataStyle}>
-                                                {item}
+                                const itemNumber =
+                                    index === 0
+                                        ? this.props.item.repDisplay
+                                        : '';
+                                const displayData = data.slice(0, -1);
+
+                                return (
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                        <View style={styles.itemContainer}>
+                                            <Text
+                                                style={[
+                                                    dataStyle,
+                                                    { textAlign: 'right' },
+                                                ]}>
+                                                {`${itemNumber}${type}`}
                                             </Text>
                                         </View>
-                                    );
-                                })}
-                                {button}
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                );
-            });
+                                        {displayData.map(item => {
+                                            const displayItem =
+                                                item < 1
+                                                    ? item.toString().slice(1)
+                                                    : item;
+                                            return (
+                                                <View
+                                                    style={
+                                                        styles.itemContainer
+                                                    }>
+                                                    <Text style={dataStyle}>
+                                                        {displayItem}
+                                                    </Text>
+                                                </View>
+                                            );
+                                        })}
+                                    </View>
+                                );
+                            })}
+                        </View>
+                        <View style={{ alignSelf: 'center', marginLeft: 10 }}>
+                            {button}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
         } else {
             return (
                 <View
