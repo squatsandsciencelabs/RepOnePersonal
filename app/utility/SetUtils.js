@@ -624,6 +624,8 @@ export const getDisplayMetric = (metric, rep, set=null) => {
     }
 };
 
+// NOTE: This expects a normalized Kratos rep where it only shows either eccentric or concentric
+// See workoutscreen, historyscreen, and onermeditscreen for conversion logic
 export const getKratosDisplayMetric = (metric, rep, set = null) => {
     if (!rep || !rep.isValid) {
         return INVALID;
