@@ -83,6 +83,7 @@ class SetDataRow extends PureComponent {
                                             </Text>
                                         </View>
                                         {displayData.map((item, itemIndex) => {
+                                            // NOTE: If this is a pure decimal, remove the starting 0 so it's just .25 instead of 0.25
                                             const displayItem =
                                                 item < 1
                                                     ? item.toString().slice(1)
