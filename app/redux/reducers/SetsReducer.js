@@ -589,22 +589,6 @@ const addKratosRepData = (state, action) => {
         deviceFamily,
     };
 
-    if (OpenBarbellConfig.bulkMetricsEnabled) {
-        rep.linear3DAverageVelocity = action.linear3DAverageVelocity;
-        rep.linear3DROM = action.linear3DROM;
-        rep.peakVelocityIndex = null;
-        rep.peakAcceleration = null;
-        rep.peakAccelerationIndex = null;
-        rep.peakForce = null;
-        rep.peakForceIndex = null;
-        rep.peakForceHeight = null;
-        rep.averageForce = null;
-        rep.peakPower = null;
-        rep.peakPowerIndex = null;
-        rep.peakPowerHeight = null;
-        rep.averagePower = null;
-    }
-
     let setChanges = {
         reps: [...set.reps, rep],
         removed: false

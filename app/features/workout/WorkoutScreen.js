@@ -285,41 +285,46 @@ const createRowViewModels = (set, columnsModel) => {
             // add obj
             array.splice(0, 0, vm); // insert at beginning
         } else {
-            const kratosTypeKeys = { concentric: 'c', eccentric: 'e' };
             let resultReps = { concentric: {}, eccentric: {} };
 
             for (const [key, value] of Object.entries(rep)) {
                 if (
-                    key[0].toLowerCase() === key[0] &&
-                    Object.values(kratosTypeKeys).includes(key[0]) &&
-                    key[1].toUpperCase() === key[1]
+                    /([a-z])([A-Z])/.test(key) &&
+                    (key[0] === 'c' || key[0] === 'e')
                 ) {
-                    const letterKey = Object.keys(kratosTypeKeys).find(
-                        k => kratosTypeKeys[k] === key[0],
-                    );
-
                     const res = {};
-                    const repProperty = key.charAt(1).toLowerCase() + key.slice(2);
+                    const repProperty =
+                        key.charAt(1).toLowerCase() + key.slice(2);
                     res[repProperty] = value;
-                    resultReps[letterKey] = {
-                        ...resultReps[letterKey],
-                        ...res,
-                    };
-                } else {
-                    for (const entry of Object.entries(resultReps)) {
-                        const obj = {};
-                        obj[key] = value;
-                        resultReps[entry[0]] = {
-                            ...resultReps[entry[0]],
-                            ...obj,
+
+                    if (key[0] === 'c') {
+                        resultReps.concentric = {
+                            ...resultReps.concentric,
+                            ...res,
+                        };
+                    } else {
+                        resultReps.eccentric = {
+                            ...resultReps.eccentric,
+                            ...res,
                         };
                     }
+                } else {
+                    Object.keys(resultReps).forEach(k => {
+                        const repData = {};
+
+                        repData[key] = value;
+                        resultReps[k] = {
+                            ...resultReps[k],
+                            ...repData,
+                        };
+                    });
                 }
             }
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
                 const model = columnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
                 );
+                // last element of the array is rowType - eccentric || concentric
                 model.push(key);
                 return model;
             });
