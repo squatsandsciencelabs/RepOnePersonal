@@ -56,9 +56,10 @@ class SetDataRow extends PureComponent {
                         onPress={() => this._onPressRow()}>
                         <View style={{ flex: 1, flexDirection: 'column' }}>
                             {this.props.item.columns.map((data, index) => {
-                                const type =
+                                const rowType =
                                     data[data.length - 1][0].toUpperCase();
 
+                                // showing number only for the first of the double height row
                                 const itemNumber =
                                     index === 0
                                         ? this.props.item.repDisplay
@@ -67,6 +68,7 @@ class SetDataRow extends PureComponent {
 
                                 return (
                                     <View
+                                        key={`row-${itemNumber}-${rowType}`}
                                         style={{
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
@@ -77,16 +79,17 @@ class SetDataRow extends PureComponent {
                                                     dataStyle,
                                                     { textAlign: 'right' },
                                                 ]}>
-                                                {`${itemNumber}${type}`}
+                                                {`${itemNumber}${rowType}`}
                                             </Text>
                                         </View>
-                                        {displayData.map(item => {
+                                        {displayData.map((item, itemIndex) => {
                                             const displayItem =
                                                 item < 1
                                                     ? item.toString().slice(1)
                                                     : item;
                                             return (
                                                 <View
+                                                    key={`row-item-${itemIndex}`}
                                                     style={
                                                         styles.itemContainer
                                                     }>
