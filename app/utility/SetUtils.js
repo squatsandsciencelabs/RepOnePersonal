@@ -675,6 +675,41 @@ export const getKratosDisplayMetric = (metric, rep, set = null) => {
     }
 };
 
+export const getKratosRepRows = rep => {
+    let resultReps = { concentric: {}, eccentric: {} };
+
+    for (const [key, value] of Object.entries(rep)) {
+        if (/([a-z])([A-Z])/.test(key) && (key[0] === 'c' || key[0] === 'e')) {
+            const res = {};
+            const repProperty = key.charAt(1).toLowerCase() + key.slice(2);
+            res[repProperty] = value;
+
+            if (key[0] === 'c') {
+                resultReps.concentric = {
+                    ...resultReps.concentric,
+                    ...res,
+                };
+            } else {
+                resultReps.eccentric = {
+                    ...resultReps.eccentric,
+                    ...res,
+                };
+            }
+        } else {
+            Object.keys(resultReps).forEach(k => {
+                const repData = {};
+
+                repData[key] = value;
+                resultReps[k] = {
+                    ...resultReps[k],
+                    ...repData,
+                };
+            });
+        }
+    }
+    return resultReps;
+};
+
 export const getRepHasBulkComputedProperties = r => {
     return (r.peakForce !== null && r.peakForce !== undefined)
         || (r.averageForce !== null && r.averageForce !== undefined)
