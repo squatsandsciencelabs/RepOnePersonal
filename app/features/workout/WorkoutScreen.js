@@ -275,51 +275,9 @@ const createRowViewModels = (set, columnsModel) => {
             key: set.setID+i,
         };
 
-        // update vm
-        if (rep.deviceFamily === 'RepOne') {
-            // update vm
-            vm.columns = columnsModel.map(m =>
-                SetUtils.getDisplayMetric(m, rep, set),
-            );
+        if (rep.deviceFamily === 'Kratos') {
+            const resultReps = SetUtils.getKratosRepRows(rep);
 
-            // add obj
-            array.splice(0, 0, vm); // insert at beginning
-        } else {
-            let resultReps = { concentric: {}, eccentric: {} };
-
-            for (const [key, value] of Object.entries(rep)) {
-                if (
-                    /([a-z])([A-Z])/.test(key) &&
-                    (key[0] === 'c' || key[0] === 'e')
-                ) {
-                    const res = {};
-                    const repProperty =
-                        key.charAt(1).toLowerCase() + key.slice(2);
-                    res[repProperty] = value;
-
-                    if (key[0] === 'c') {
-                        resultReps.concentric = {
-                            ...resultReps.concentric,
-                            ...res,
-                        };
-                    } else {
-                        resultReps.eccentric = {
-                            ...resultReps.eccentric,
-                            ...res,
-                        };
-                    }
-                } else {
-                    Object.keys(resultReps).forEach(k => {
-                        const repData = {};
-
-                        repData[key] = value;
-                        resultReps[k] = {
-                            ...resultReps[k],
-                            ...repData,
-                        };
-                    });
-                }
-            }
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
                 const model = columnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
@@ -328,6 +286,14 @@ const createRowViewModels = (set, columnsModel) => {
                 model.push(key);
                 return model;
             });
+
+            // add obj
+            array.splice(0, 0, vm); // insert at beginning
+        } else {
+            // update vm
+            vm.columns = columnsModel.map(m =>
+                SetUtils.getDisplayMetric(m, rep, set),
+            );
 
             // add obj
             array.splice(0, 0, vm); // insert at beginning

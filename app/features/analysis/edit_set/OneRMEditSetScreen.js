@@ -237,11 +237,29 @@ const createRowViewModels = (set, columnsModel) => {
             key: set.setID+i,
         };
 
-        // update vm
-        vm.columns = columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set));
+        if (rep.deviceFamily === 'Kratos') {
+            const resultReps = SetUtils.getKratosRepRows(rep);
 
-        // add obj
-        array.push(vm);
+            vm.columns = Object.entries(resultReps).map(([key, value]) => {
+                const model = columnsModel.map(m =>
+                    SetUtils.getKratosDisplayMetric(m, value, set),
+                );
+                // last element of the array is rowType - eccentric || concentric
+                model.push(key);
+                return model;
+            });
+
+            // add obj
+            array.push(vm);
+        } else {
+            // update vm
+            vm.columns = columnsModel.map(m =>
+                SetUtils.getDisplayMetric(m, rep, set),
+            );
+
+            // add obj
+            array.push(vm); // insert at beginning
+        }
     }
 
     // return
