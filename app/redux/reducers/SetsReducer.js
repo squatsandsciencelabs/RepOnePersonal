@@ -27,6 +27,7 @@ import {
     TEST_1RM,
     ADD_3D_POSITIONS_TO_REP,
     CONNECTED_TO_DEVICE,
+    DISCONNECTED_FROM_DEVICE,
     ADD_KRATOS_REP_DATA,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
@@ -98,17 +99,22 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return add3DPositionsToRep(state, action);
         case CONNECTED_TO_DEVICE:
             return setDeviceType(state, action);
+        case DISCONNECTED_FROM_DEVICE:
+            return setDeviceType(state, action);
         default:
             return state;
     }
 };
 
 const setDeviceType = (state, action) => {
-    const deviceType = getKratosEnabled()
-        ? action.deviceName.startsWith('Kratos')
-            ? 'Kratos'
-            : 'RepOne'
-        : 'RepOne';
+    let deviceType = 'RepOne';
+    if (action.deviceName) {
+        deviceType = getKratosEnabled()
+            ? action.deviceName.startsWith('Kratos')
+                ? 'Kratos'
+                : 'RepOne'
+            : 'RepOne';
+    }
 
     const workoutData = state.workoutData;
     const set = workoutData[workoutData.length - 1];
@@ -128,7 +134,7 @@ const setDeviceType = (state, action) => {
 const createSet = (
     setNumber = 1,
     metric = 'kgs',
-    deviceType = null,
+    deviceType = 'RepOne',
     kratosDiscs = null,
 ) => ({
     exercise: null,
@@ -741,7 +747,7 @@ const endSet = (state, action) => {
         createSet(
             currentSet.setNumber + 1,
             action.defaultMetric,
-            state.deviceType,
+            currentSet.deviceType,
         ),
     ];
 
@@ -870,7 +876,7 @@ const endWorkout = (state, action) => {
     }
 
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [createSet(1, action.defaultMetric, state.deviceType)];
+    let newWorkoutData = [createSet(1, action.defaultMetric)];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {
@@ -1003,7 +1009,7 @@ const overrideWithTestData = (state, action) => {
 
     return {
         ...state,
-        workoutData: [createSet(undefined, undefined, state.deviceType)],
+        workoutData: [createSet()],
         setIDsToUpload: [],
         setIDsBeingUploaded: [],
         revision: 0,
