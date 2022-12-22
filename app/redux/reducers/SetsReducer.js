@@ -29,6 +29,7 @@ import {
     CONNECTED_TO_DEVICE,
     DISCONNECTED_FROM_DEVICE,
     ADD_KRATOS_REP_DATA,
+    SET_DEVICE_TYPE,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -37,6 +38,7 @@ import { Platform } from 'react-native';
 import * as SetUtils from 'app/utility/SetUtils';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import { getDeviceType } from 'app/utility/SensorUtils';
 
 const SetsReducer = (state = createDefaultState(), action) => {
     switch (action.type) {
@@ -98,26 +100,37 @@ const SetsReducer = (state = createDefaultState(), action) => {
         case ADD_3D_POSITIONS_TO_REP:
             return add3DPositionsToRep(state, action);
         case CONNECTED_TO_DEVICE:
-            return setDeviceType(state, action);
         case DISCONNECTED_FROM_DEVICE:
+            return connectedDisconnectedDevice(state, action);
+        case SET_DEVICE_TYPE:
             return setDeviceType(state, action);
         default:
             return state;
     }
 };
 
+const connectedDisconnectedDevice = (state, action) => {
+    const workoutData = state.workoutData;
+    const set = workoutData[workoutData.length - 1];
+
+    if (set.reps.length > 0) {
+        return state;
+    } else {
+        return setDeviceType(state, action);
+    }
+};
+
 const setDeviceType = (state, action) => {
+    const workoutData = state.workoutData;
+    const set = workoutData[workoutData.length - 1];
+
     let deviceType = 'RepOne';
     if (action.deviceName) {
         deviceType = getKratosEnabled()
-            ? action.deviceName.startsWith('Kratos')
-                ? 'Kratos'
-                : 'RepOne'
+            ? getDeviceType(action.deviceName)
             : 'RepOne';
     }
 
-    const workoutData = state.workoutData;
-    const set = workoutData[workoutData.length - 1];
     const newSet = { ...set, deviceType };
 
     const newWorkoutData = [

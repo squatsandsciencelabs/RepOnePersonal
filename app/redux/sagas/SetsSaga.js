@@ -1,44 +1,31 @@
-import {
-    take,
-    takeEvery,
-    select,
-    put,
-    call,
-    all,
-    apply,
-} from 'redux-saga/effects';
+import { takeEvery, select, put, all } from 'redux-saga/effects';
 import {
     CONNECTED_TO_DEVICE,
-    DISCONNECTED_FROM_DEVICE,
     END_SET,
-    ADD_REP_DATA,
-    ADD_KRATOS_REP_DATA,
+    SET_DEVICE_TYPE,
 } from 'app/configs+constants/ActionTypes';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
+import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import { getDeviceType } from 'app/utility/SensorUtils';
 
 export default function* SetsSaga() {
     yield all([
         takeEvery(CONNECTED_TO_DEVICE, connectedToDevice),
-        takeEvery(DISCONNECTED_FROM_DEVICE, disconnectedFromDevice),
-        takeEvery(ADD_REP_DATA, addRepData),
-        takeEvery(ADD_KRATOS_REP_DATA, addKratosRepData),
+        takeEvery(END_SET, endSet),
     ]);
-};
+}
 
 function* connectedToDevice(action) {
     const workingSet = yield select(SetsSelectors.getWorkingSet);
-    // TODO: specify deviceType based on deviceName and then compare
-    // TODO: check if workingSet has deviceType?
-    if (action.deviceName !== workingSet.deviceType) {
-        // TODO: also check for reps deviceFamily?
-        // TODO: add case for end_set
+    const deviceType = getKratosEnabled()
+        ? getDeviceType(action.deviceName)
+        : 'RepOne';
+
+    if (deviceType !== workingSet.deviceType && workingSet.reps.length > 0) {
         const state = yield select();
         const defaultMetric = state.settings.defaultMetric;
-        console.log(
-            'state.settings.defaultMetric',
-            state.settings.defaultMetric,
-        );
-        // ! use getConnectedDeviceName
+
         yield put({
             type: END_SET,
             defaultMetric,
@@ -46,8 +33,10 @@ function* connectedToDevice(action) {
     }
 }
 
-function* disconnectedFromDevice(action) {}
+function* endSet(action) {
+    const device = yield select(
+        ConnectedDeviceStatusSelectors.getConnectedDeviceName,
+    );
 
-function* addRepData(action) {}
-
-function* addKratosRepData(action) {}
+    yield put({ type: SET_DEVICE_TYPE, deviceName: device ?? 'RepOne' });
+}
