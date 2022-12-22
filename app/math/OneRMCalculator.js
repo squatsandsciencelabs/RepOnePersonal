@@ -25,8 +25,9 @@ export const calculate1RM = (exercise, tagsToInclude, tagsToExclude, daysRange, 
     let unused = [];
     let active = [];
 
+    const sets = allSets.filter(set => set.deviceType !== 'Kratos');
     // Step 1: Extract a chronological pool of relevant (check all sets against rep/weight/tag/date/exercise check)
-    let pool = getSetsFor1RM(exercise, tagsToInclude, tagsToExclude, daysRange, velocity, allSets);
+    let pool = getSetsFor1RM(exercise, tagsToInclude, tagsToExclude, daysRange, velocity, sets);
 
     // Step 2A: Remove based on ROM Check
     const romResults = romCheck(pool);
