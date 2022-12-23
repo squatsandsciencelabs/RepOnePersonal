@@ -23,8 +23,8 @@ import {
     AVG_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
     PERCENT_LOSS_QUANTIFIER,
-    FASTEST_EVER_QUANTIFIER,
-    SLOWEST_EVER_QUANTIFIER,
+    MAX_EVER_QUANTIFIER,
+    MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
 } from 'app/configs+constants/CollapsedMetricTypes';
@@ -148,6 +148,21 @@ export const getAvgLinear3DROM = (set) => {
     return getAvgOfMetrics(roms);
 };
 
+export const getAvgPKH = set => {
+    const pkhs = getPKHs(set);
+    return getAvgOfMetrics(pkhs);
+};
+
+export const getAvgPeakForceHeight = set => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getAvgOfMetrics(peakForceHeights);
+};
+
+export const getAvgPeakPowerHeight = set => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getAvgOfMetrics(peakPowerHeights);
+};
+
 // Absolute Loss Quantifiers
 
 const getAbsLossOfMetrics = (metrics) => {
@@ -211,6 +226,21 @@ export const getAbsLossOfLinear3DROMs = (set) => {
     return getAbsLossOfMetrics(roms);
 };
 
+export const getAbsLossOfPKHs = set => {
+    const pkhs = getPKHs(set);
+    return getAbsLossOfMetrics(pkhs);
+};
+
+export const getAbsLossOfPeakForceHeights = set => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getAbsLossOfMetrics(peakForceHeights);
+};
+
+export const getAbsLossOfPeakPowerHeights = set => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getAbsLossOfMetrics(peakPowerHeights);
+};
+
 // Percent Loss Quantifiers
 
 const getPercentLossOfMetrics = (metrics) => {
@@ -272,6 +302,21 @@ export const getPercentLossOfLinear3DAvgVelocities = (set) => {
 export const getPercentLossOfLinear3DROMs = (set) => {
     const roms = getLinear3DROMs(set);
     return getPercentLossOfMetrics(roms);
+};
+
+export const getPercentLossOfPKHs = set => {
+    const pkhs = getPKHs(set);
+    return getPercentLossOfMetrics(pkhs);
+};
+
+export const getPercentLossOfPeakForceHeights = set => {
+    const peakForceHeights = getPeakForceHeights(set);
+    return getPercentLossOfMetrics(peakForceHeights);
+};
+
+export const getPercentLossOfPeakPowerHeights = set => {
+    const peakPowerHeights = getPeakPowerHeights(set);
+    return getPercentLossOfMetrics(peakPowerHeights);
 };
 
 // First Rep Quantifiers
@@ -1022,10 +1067,10 @@ export const quantifierAbbreviation = (quantifier) => {
             return 'A. LOSS';
         case PERCENT_LOSS_QUANTIFIER:
             return '% LOSS';
-        case FASTEST_EVER_QUANTIFIER:
-            return 'FASTEST';
-        case SLOWEST_EVER_QUANTIFIER:
-            return 'SLOWEST';
+        case MAX_EVER_QUANTIFIER:
+            return 'MAXEVER';
+        case MIN_EVER_QUANTIFIER:
+            return 'MINEVER';
         case SET_LOSS_QUANTIFIER:
             return 'S. LOSS';
         case PEAK_END_QUANTIFIER: 
@@ -1053,10 +1098,10 @@ export const quantifierString = (quantifier) => {
             return 'Absolute Loss';
         case PERCENT_LOSS_QUANTIFIER:
             return 'Percent Loss';
-        case FASTEST_EVER_QUANTIFIER:
-            return 'Fastest Ever';
-        case SLOWEST_EVER_QUANTIFIER:
-            return 'Slowest Ever';
+        case MAX_EVER_QUANTIFIER:
+            return 'Maximum Ever';
+        case MIN_EVER_QUANTIFIER:
+            return 'Minimum Ever';
         case SET_LOSS_QUANTIFIER:
             return 'Set Loss';
         case PEAK_END_QUANTIFIER: 

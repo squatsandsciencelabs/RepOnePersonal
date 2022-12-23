@@ -26,8 +26,8 @@ import {
     AVG_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
     PERCENT_LOSS_QUANTIFIER,
-    FASTEST_EVER_QUANTIFIER,
-    SLOWEST_EVER_QUANTIFIER,
+    MAX_EVER_QUANTIFIER,
+    MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
 } from 'app/configs+constants/CollapsedMetricTypes';
@@ -70,10 +70,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfAvgVelocities(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestAvgVelocityEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestAvgVelocityEver(set, allSets);
                     break;
             }
@@ -107,10 +107,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfDurations(set);
                     break; 
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestDurationEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestDurationEver(set, allSets);
                     break;
             }
@@ -163,6 +163,15 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case MAX_QUANTIFIER:
                     returnValue = CollapsedMetrics.getMaxPKH(set);
                     break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgPKH(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAbsLossOfPKHs(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPercentLossOfPKHs(set);
+                    break;
             }
             break;
         case PKV_METRIC:
@@ -194,10 +203,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPKVs(set);
                     break; 
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestPKVEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestPKVEver(set, allSets);
                     break;
             }
@@ -234,10 +243,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPeakForces(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestPeakForceEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestPeakForceEver(set, allSets);
                     break;
             }
@@ -255,6 +264,17 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case MAX_QUANTIFIER:
                     returnValue = CollapsedMetrics.getMaxPeakForceHeight(set);
+                    break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgPeakForceHeight(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue =
+                        CollapsedMetrics.getAbsLossOfPeakForceHeights(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfPeakForceHeights(set);
                     break;
             }
             break;
@@ -287,10 +307,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfAvgForces(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestAvgForceEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestAvgForceEver(set, allSets);
                     break;
             }
@@ -324,10 +344,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPeakPowers(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestPeakPowerEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestPeakPowerEver(set, allSets);
                     break;
             }
@@ -345,6 +365,17 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case MAX_QUANTIFIER:
                     returnValue = CollapsedMetrics.getMaxPeakPowerHeight(set);
+                    break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgPeakPowerHeight(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue =
+                        CollapsedMetrics.getAbsLossOfPeakPowerHeights(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfPeakPowerHeights(set);
                     break;
             }
             break;
@@ -377,10 +408,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfAvgPowers(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestAvgPowerEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestAvgPowerEver(set, allSets);
                     break;
             }
@@ -414,10 +445,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfLinear3DAvgVelocities(set);
                     break;                    
-                case FASTEST_EVER_QUANTIFIER:
+                case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestLinear3DAvgVelocityEver(set, allSets);
                     break;
-                case SLOWEST_EVER_QUANTIFIER:
+                case MIN_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSlowestLinear3DAvgVelocityEver(set, allSets);
                     break;
             }

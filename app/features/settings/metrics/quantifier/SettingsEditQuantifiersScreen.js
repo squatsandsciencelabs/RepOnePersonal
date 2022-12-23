@@ -11,8 +11,8 @@ import {
     AVG_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
     PERCENT_LOSS_QUANTIFIER,
-    FASTEST_EVER_QUANTIFIER,
-    SLOWEST_EVER_QUANTIFIER,
+    MAX_EVER_QUANTIFIER,
+    MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
 } from 'app/configs+constants/CollapsedMetricTypes';
@@ -29,8 +29,8 @@ const pickerItem = (quantifier) => ({
 const items = [
     pickerItem(EMPTY_QUANTIFIER),
     pickerItem(AVG_QUANTIFIER), // vel, pkv, dur
-    pickerItem(FASTEST_EVER_QUANTIFIER), // vel, pkv, dur
-    pickerItem(SLOWEST_EVER_QUANTIFIER), // vel, pkv, dur
+    pickerItem(MAX_EVER_QUANTIFIER), // vel, pkv, dur
+    pickerItem(MIN_EVER_QUANTIFIER), // vel, pkv, dur
     pickerItem(ABS_LOSS_QUANTIFIER), // vel, pkv, dur, rom
     pickerItem(PERCENT_LOSS_QUANTIFIER), // vel, pkv, dur, rom
     pickerItem(SET_LOSS_QUANTIFIER), // vel, pkv, dur, rom
