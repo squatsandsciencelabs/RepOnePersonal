@@ -16,8 +16,8 @@ import {
     MAX_QUANTIFIER,
     AVG_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
-    FASTEST_EVER_QUANTIFIER,
-    SLOWEST_EVER_QUANTIFIER,
+    MAX_EVER_QUANTIFIER,
+    MIN_EVER_QUANTIFIER,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import * as Analytics from 'app/services/Analytics';

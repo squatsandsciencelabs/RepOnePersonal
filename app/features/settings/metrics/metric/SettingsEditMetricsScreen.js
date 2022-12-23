@@ -22,8 +22,8 @@ import {
     LINEAR_3D_ROM_METRIC,
 
     AVG_QUANTIFIER,
-    FASTEST_EVER_QUANTIFIER,
-    SLOWEST_EVER_QUANTIFIER,
+    MAX_EVER_QUANTIFIER,
+    MIN_EVER_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
     PERCENT_LOSS_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
@@ -46,8 +46,8 @@ const pickerItem = (metric) => ({
 // Once the bug is resolved, can redo the order into something that makes more sense
 const generateItems = (quantifier) => {
     switch (quantifier) {
-        case FASTEST_EVER_QUANTIFIER:
-        case SLOWEST_EVER_QUANTIFIER:
+        case MAX_EVER_QUANTIFIER:
+        case MIN_EVER_QUANTIFIER:
             return OpenBarbellConfig.bulkMetricsEnabled ? [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
@@ -69,6 +69,30 @@ const generateItems = (quantifier) => {
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
         case PERCENT_LOSS_QUANTIFIER:
+            return OpenBarbellConfig.bulkMetricsEnabled ? [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(AVERAGE_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
+                pickerItem(AVERAGE_POWER_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+                pickerItem(PKH_METRIC),
+                pickerItem(PEAK_FORCE_HEIGHT_METRIC),
+                pickerItem(PEAK_POWER_HEIGHT_METRIC),
+            ] : [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
             return OpenBarbellConfig.bulkMetricsEnabled ? [
