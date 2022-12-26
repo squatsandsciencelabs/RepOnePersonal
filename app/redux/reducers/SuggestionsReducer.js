@@ -29,7 +29,14 @@ const createDefaultState = () => ({
     },
     tagsModel: {
         'warmup': {suggestion: 'warmup', seed: 5}
-    }
+    },
+    kratosDiscsModel: {
+        XS: { suggestion: 'XS', seed: 5 },
+        S: { suggestion: 'S', seed: 5 },
+        M: { suggestion: 'M', seed: 5 },
+        L: { suggestion: 'L', seed: 5 },
+        XL: { suggestion: 'XL', seed: 5 },
+    },
 });
 
 const generateAutocompleteExerciseModel = (workoutData, historyData) => {
@@ -91,6 +98,10 @@ const generateAutocompleteTagsModel = (workoutData, historyData) => {
     // return
     return model;
 };
+
+const generateAutocompleteKratosDiscsModel = () => {
+    
+}
 
 // TODO: consider moving this to a utility class as logic is duplicated from Set Selectors
 const dictToArray = (dictionary) => {

@@ -4,6 +4,8 @@ const exerciseNameModel = (state) => stateRoot(state).exerciseModel;
 
 const tagsModel = (state) => stateRoot(state).tagsModel;
 
+const kratosDiscsModel = (state) => stateRoot(state).kratosDiscsModel;
+
 // not memoizing anything here as generation is called only when needed
 // if i want to tweak this, it would have to be on a screen level so it wouldn't need to call it an extra time on mount, but even that idk is worth
 
@@ -14,6 +16,16 @@ export const generateExerciseNameSuggestions = (state, input, bias = null) => {
 
 export const generateTagsSuggestions = (state, input, ignore = []) => {
     return generateSuggestions(tagsModel(state), input, null, true, ignore);
+};
+
+export const generateKratosDiscsSuggestions = (state, input, ignore = []) => {
+    return generateSuggestions(
+        kratosDiscsModel(state),
+        input,
+        null,
+        true,
+        ignore,
+    );
 };
 
 const generateSuggestions = (model, input, bias, showBug=false, ignore = []) => {
