@@ -138,9 +138,22 @@ const setDeviceType = (state, action) => {
         newSet,
     ];
 
+    let discs = null;
+
+    if (set.deviceType !== deviceType && deviceType === 'Kratos') {
+        discs = {
+            XS: null,
+            S: null,
+            M: null,
+            L: null,
+            XL: null,
+        };
+    }
+
     return {
         ...state,
         workoutData: newWorkoutData,
+        kratosDiscs: discs,
     };
 };
 
