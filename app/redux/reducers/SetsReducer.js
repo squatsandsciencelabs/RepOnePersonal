@@ -131,17 +131,10 @@ const setDeviceType = (state, action) => {
             : 'RepOne';
     }
 
-    const newSet = { ...set, deviceType };
+    let kratosDiscs = null;
 
-    const newWorkoutData = [
-        ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
-        newSet,
-    ];
-
-    let discs = null;
-
-    if (set.deviceType !== deviceType && deviceType === 'Kratos') {
-        discs = {
+    if (deviceType === 'Kratos') {
+        kratosDiscs = {
             XS: null,
             S: null,
             M: null,
@@ -150,10 +143,16 @@ const setDeviceType = (state, action) => {
         };
     }
 
+    const newSet = { ...set, deviceType, kratosDiscs };
+
+    const newWorkoutData = [
+        ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
+        newSet,
+    ];
+
     return {
         ...state,
         workoutData: newWorkoutData,
-        kratosDiscs: discs,
     };
 };
 

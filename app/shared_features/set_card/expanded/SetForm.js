@@ -251,6 +251,46 @@ class SetForm extends Component {
         );
     }
 
+    _renderKratosDiscs() {
+
+        if (!this.props.kratosDiscs) {
+            return null;
+        }
+
+        var pills = [];
+
+        Object.entries(this.props.kratosDiscs).map(([key, value], index) => {
+            if (value) {
+                pills.push(
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            backgroundColor: '#eeeee',
+                            paddingRight: 10,
+                        }}>
+                        <Pill
+                            key={index}
+                            text={key}
+                            noTextTransform
+                            style={{
+                                paddingRight: 3,
+                            }}
+                        />
+                        <Text style={{color: 'blue'}}>{value}</Text>
+                    </View>,
+                );
+            }
+
+        });
+
+        return (
+            <View style={[styles.field, { flex: 1 }]}>
+                <View style={styles.tagField}>{pills}</View>
+            </View>
+        );
+    }
+
     render() {
         return (
             <View style={[{flex: 1, flexDirection: 'column'}, styles.border]}>
@@ -261,6 +301,7 @@ class SetForm extends Component {
                                 { this._renderWeight() }
                                 { this._renderRPE() }
                             </View>
+                            <View>{this._renderKratosDiscs()}</View>
                             <View>{ this._renderTags() }</View>
                         </View>
 

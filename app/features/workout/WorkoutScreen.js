@@ -207,7 +207,7 @@ const createTitleViewModel = (set, setNumber, bias=null, isLastSet=false, isColl
 
 const createFormViewModel = (set, setNumber, isRemoved) => ({
     type: 'form',
-    key: set.setID+'form',
+    key: set.setID + 'form',
     setID: set.setID,
     removed: isRemoved,
     setNumber: setNumber,
@@ -217,6 +217,8 @@ const createFormViewModel = (set, setNumber, isRemoved) => ({
     rpe: set.rpe,
     videoFileURL: getVideoFileURL(set),
     videoType: set.videoType,
+    kratosDiscs: set.kratosDiscs,
+    deviceType: set.deviceType,
 });
 
 const createSummaryViewModel = (set) => {
