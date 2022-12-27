@@ -31,6 +31,7 @@ class SetForm extends Component {
             rpe: this.props.rpe,
             rpeFocused: false,
             removed: this.props.removed,
+            kratosDiscs: this.props.kratosDiscs,
         };
     }
 
@@ -253,13 +254,28 @@ class SetForm extends Component {
 
     _renderKratosDiscs() {
 
-        if (!this.props.kratosDiscs) {
+        if (!this.state.kratosDiscs) {
             return null;
         }
-
+        if (
+            Object.values(this.state.kratosDiscs).every(disc => disc === null)
+        ) {
+            return (
+                <View style={[styles.field, { flex: 1 }]}>
+                    <TouchableOpacity
+                        onPress={() =>
+                            this.props.tapKratosDiscs(this.props.setID)
+                        }>
+                        <Text style={[styles.tagText, styles.placeholderText]}>
+                            Discs
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
         var pills = [];
 
-        Object.entries(this.props.kratosDiscs).map(([key, value], index) => {
+        Object.entries(this.state.kratosDiscs).map(([key, value], index) => {
             if (value) {
                 pills.push(
                     <View
@@ -286,7 +302,15 @@ class SetForm extends Component {
 
         return (
             <View style={[styles.field, { flex: 1 }]}>
-                <View style={styles.tagField}>{pills}</View>
+                <TouchableOpacity
+                    onPress={() =>
+                        this.props.tapKratosDiscs(
+                            this.props.setID,
+                            Object.keys(this.state.kratosDiscs),
+                        )
+                    }>
+                    <View style={styles.tagField}>{pills}</View>
+                </TouchableOpacity>
             </View>
         );
     }

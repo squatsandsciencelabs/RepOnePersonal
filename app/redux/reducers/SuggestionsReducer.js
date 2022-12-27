@@ -31,11 +31,11 @@ const createDefaultState = () => ({
         'warmup': {suggestion: 'warmup', seed: 5}
     },
     kratosDiscsModel: {
-        XS: { suggestion: 'XS', seed: 5 },
-        S: { suggestion: 'S', seed: 5 },
-        M: { suggestion: 'M', seed: 5 },
-        L: { suggestion: 'L', seed: 5 },
-        XL: { suggestion: 'XL', seed: 5 },
+        XS: { suggestion: 'XS', details: '2.65lbs', seed: 5 },
+        S: { suggestion: 'S', details: '4.16lbs', seed: 5 },
+        M: { suggestion: 'M', details: '5.88lbs', seed: 5 },
+        L: { suggestion: 'L', details: '8.3lbs', seed: 5 },
+        XL: { suggestion: 'XL', details: '11.94lbs', seed: 5 },
     },
 });
 
