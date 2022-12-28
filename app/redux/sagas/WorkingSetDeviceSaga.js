@@ -9,7 +9,7 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getDeviceType } from 'app/utility/SensorUtils';
 
-export default function* SetsSaga() {
+export default function* WorkingSetDeviceSaga() {
     yield all([
         takeEvery(CONNECTED_TO_DEVICE, connectedToDevice),
         takeEvery(END_SET, endSet),
