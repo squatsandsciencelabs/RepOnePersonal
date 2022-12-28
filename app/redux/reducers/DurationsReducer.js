@@ -18,7 +18,6 @@ import {
     END_EDITING_HISTORY_RPE,
     END_EDITING_WORKOUT_WEIGHT,
     END_EDITING_HISTORY_WEIGHT,
-    PRESENT_WORKOUT_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -34,7 +33,6 @@ const defaultState = {
     historyVideoRecorderStart: null,
     workoutVideoPlayerStart: null,
     historyVideoPlayerStart: null,
-    editWorkoutKratosDiscsStart: null,
 };
 
 const DurationsReducer = (state = defaultState, action) => {
@@ -87,11 +85,6 @@ const DurationsReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 historyVideoPlayerStart: Date.now()
             });
-        case PRESENT_WORKOUT_KRATOS_DISCS:
-            return {
-                ...state,
-                editWorkoutKratosDiscsStart: Date.now(),
-            };
         default:
             return state;                                                                                                                                  
     }

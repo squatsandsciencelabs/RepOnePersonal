@@ -124,7 +124,7 @@ class SetForm extends Component {
     componentDidUpdate(nextProps, nextState) {
         if (nextState.metric !== this.state.metric) {
             this._save();
-        } 
+        }
     }
 
     _save() {
@@ -260,15 +260,14 @@ class SetForm extends Component {
         if (!this.state.kratosDiscs) {
             return null;
         }
-        if (
-            Object.values(this.state.kratosDiscs).every(disc => disc === null)
-        ) {
+        const discsHaveNoData = Object.values(this.state.kratosDiscs).every(
+            disc => disc === null,
+        );
+
+        if (discsHaveNoData) {
             return (
                 <View style={[styles.field, { flex: 1 }]}>
-                    <TouchableOpacity
-                        onPress={() =>
-                            this.props.tapKratosDiscs(this.props.setID)
-                        }>
+                    <TouchableOpacity>
                         <Text style={[styles.tagText, styles.placeholderText]}>
                             Discs
                         </Text>
@@ -288,7 +287,7 @@ class SetForm extends Component {
                             backgroundColor: '#eeeee',
                             paddingRight: 10,
                         }}
-                        key={index}>
+                        key={`kratos-pill-${index}`}>
                         <Pill
                             text={key}
                             noTextTransform
@@ -305,13 +304,7 @@ class SetForm extends Component {
 
         return (
             <View style={[styles.field, { flex: 1 }]}>
-                <TouchableOpacity
-                    onPress={() =>
-                        this.props.tapKratosDiscs(
-                            this.props.setID,
-                            Object.keys(this.state.kratosDiscs),
-                        )
-                    }>
+                <TouchableOpacity>
                     <View style={styles.tagField}>{pills}</View>
                 </TouchableOpacity>
             </View>
