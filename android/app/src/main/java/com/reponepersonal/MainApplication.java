@@ -12,7 +12,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
-import com.reponepersonal.newarchitecture.MainApplicationReactNativeHost;
+// import com.reponepersonal.newarchitecture.MainApplicationReactNativeHost; // NOTE: Disabling as new architecture only files were not added to the repo
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -44,11 +44,12 @@ public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public ReactNativeHost getReactNativeHost() {
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      return mNewArchitectureNativeHost;
-    } else {
+    // NOTE: Disabling as new architecture only files were not added to the repo
+    // if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+    //   return mNewArchitectureNativeHost;
+    // } else {
       return mReactNativeHost;
-    }
+    // }
   }
 
   @Override
