@@ -24,6 +24,8 @@ class EditTextModal extends Component {
         this.state = {
             text: this.props.text,
             inputs: [],
+            // TODO: switch to array instead
+            stackedInputs: {},
         };
     }
 
@@ -67,7 +69,10 @@ class EditTextModal extends Component {
 
     _addNewPill(input, resetText=false) {
         // valid check
-        if (this.state.inputs.includes(input) || input == '') {
+        if (
+            (this.state.inputs.includes(input) && !this.props.stackValues) ||
+            input == ''
+        ) {
             return;
         }
 
@@ -82,18 +87,58 @@ class EditTextModal extends Component {
             var text = this.state.text;
         }
 
-        let inputs = [...this.state.inputs, input];
-        this.setState({
-            inputs: inputs
-        });
-        this._updateSuggestions(text, inputs);
+        if (this.props.stackValues) {
+            let indexOfInput = Object.keys(this.state.stackedInputs).indexOf(input);
+            let stackedInputs;
+            if (indexOfInput > -1) {
+                stackedInputs = {
+                    ...this.state.stackedInputs,
+                    [input]: this.state.stackedInputs[input] + 1,
+                };
+            } else {
+                stackedInputs = {
+                    ...this.state.stackedInputs,
+                    [input]: 1,
+                };
+            }
+
+            this.setState({
+                stackedInputs: stackedInputs,
+            });
+        } else {
+            let inputs = [...this.state.inputs, input];
+            this.setState({
+                inputs: inputs,
+            });
+            this._updateSuggestions(text, inputs);
+        }
     }
 
     _removePill(index) {
+        if (this.props.stackValues) {
+            const key = Object.keys(this.state.stackedInputs)[index];
+            const newValue = this.state.stackedInputs[key] - 1;
+            if (newValue <= 0) {
+                const stackedInputs = { ...this.state.stackedInputs };
+
+                delete stackedInputs[key];
+
+                this.setState({
+                    stackedInputs,
+                });
+            } else {
+                this.setState({
+                    stackedInputs: {
+                        ...this.state.stackedInputs,
+                        [key]: this.state.stackedInputs[key] - 1,
+                    },
+                });
+            }
+        }
         let inputsCopy = [...this.state.inputs];
         inputsCopy.splice(index, 1);
         this.setState({
-            inputs: inputsCopy
+            inputs: inputsCopy,
         });
         this._updateSuggestions(this.state.text, inputsCopy);
     }
@@ -111,7 +156,7 @@ class EditTextModal extends Component {
         } else {
             var suggestions = this.props.generateSingleInputSuggestions(input, bias);
         }
-        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion}} );
+        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion.suggestion, value: suggestion.details}} );
         this.setState({
             suggestions: suggestionsVM,
         });
@@ -220,20 +265,58 @@ class EditTextModal extends Component {
         }
 
         var pills = [];
-        this.state.inputs.map((input, index) => {
-            let position = pills.length;
-            let text = input;
-            pills.push(
-                <TouchableOpacity
-                    key={`pill-${index}`}
-                    onPress={() => this._tappedPill(position)}>
-                    <Pill
-                        text={text}
-                        style={{ paddingRight: 5, paddingBottom: 3 }}
-                    />
-                </TouchableOpacity>
-            );
-        });
+        if (this.props.stackValues) {
+            const inputValues = Object.entries(this.state.stackedInputs);
+            if (inputValues.length > 0) {
+                inputValues.map(([key, value], index) => {
+                    let position = pills.length;
+                    let text = key;
+                    pills.push(
+                        <TouchableOpacity
+                            key={`pill-${index}`}
+                            onPress={() => this._tappedPill(position)}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    backgroundColor: '#eeeee',
+                                    marginRight: 10,
+                                }}>
+                                <Pill
+                                    noTextTransform={this.props.noTextTransform}
+                                    text={text}
+                                    style={{
+                                        paddingRight: 4,
+                                        paddingBottom: 3,
+                                    }}
+                                />
+                                {value > 1 && (
+                                    <Text style={{ color: 'blue' }}>
+                                        {value}
+                                    </Text>
+                                )}
+                            </View>
+                        </TouchableOpacity>,
+                    );
+                });
+            }
+        } else {
+            this.state.inputs.map((input, index) => {
+                let position = pills.length;
+                let text = input;
+                pills.push(
+                    <TouchableOpacity
+                        key={`pill-${index}`}
+                        onPress={() => this._tappedPill(position)}>
+                        <Pill
+                            noTextTransform={this.props.noTextTransform}
+                            text={text}
+                            style={{ paddingRight: 5, paddingBottom: 3 }}
+                        />
+                    </TouchableOpacity>
+                );
+            });
+        }
 
         if (pills.length === 0) {
             return;
@@ -329,8 +412,14 @@ class EditTextModal extends Component {
         } else {
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center'}, styles.rowBorders]}>
-                        <Text style={{marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)'}}>{item.key}</Text>
+                    <View style={[{flexDirection: 'row', backgroundColor: 'white', height: 50, justifyContent: 'space-between', alignItems: 'center'}, styles.rowBorders]}>
+                        <Text style={{ marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)' }}>{item.key}</Text>
+                        {item.value && (
+                            <Text
+                                style={{ marginHorizontal: 10, color: 'rgba(130, 130, 130, 1)' }}>
+                                {item.value}
+                            </Text>
+                        )}
                     </View>
                 </TouchableHighlight>
             );
@@ -365,7 +454,7 @@ class EditTextModal extends Component {
                 <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
                     {this._renderNavigation()}
                     {this._renderHeader()}
-                    {this._renderTextField()}
+                    {!this.props.noTextField && this._renderTextField()}
                     {this._renderList()}
                 </View>
             </Modal>

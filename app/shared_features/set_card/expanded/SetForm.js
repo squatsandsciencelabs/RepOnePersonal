@@ -124,7 +124,7 @@ class SetForm extends Component {
     componentDidUpdate(nextProps, nextState) {
         if (nextState.metric !== this.state.metric) {
             this._save();
-        }
+        } 
     }
 
     _save() {
@@ -267,7 +267,10 @@ class SetForm extends Component {
         if (discsHaveNoData) {
             return (
                 <View style={[styles.field, { flex: 1 }]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() =>
+                            this.props.tapKratosDiscs(this.props.setID)
+                        }>
                         <Text style={[styles.tagText, styles.placeholderText]}>
                             Discs
                         </Text>
@@ -304,7 +307,13 @@ class SetForm extends Component {
 
         return (
             <View style={[styles.field, { flex: 1 }]}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() =>
+                        this.props.tapKratosDiscs(
+                            this.props.setID,
+                            Object.keys(this.state.kratosDiscs),
+                        )
+                    }>
                     <View style={styles.tagField}>{pills}</View>
                 </TouchableOpacity>
             </View>
