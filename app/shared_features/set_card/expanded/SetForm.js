@@ -32,6 +32,7 @@ class SetForm extends Component {
             rpeFocused: false,
             removed: this.props.removed,
             kratosDiscs: this.props.kratosDiscs,
+            deviceType: this.props.deviceType,
         };
     }
 
@@ -42,7 +43,9 @@ class SetForm extends Component {
             weight: this.state.weightFocused ? this.state.weight : nextProps.weight,
             metric: nextProps.metric,
             rpe: this.state.rpeFocused ? this.state.rpe : nextProps.rpe,
-            removed: nextProps.removed
+            removed: nextProps.removed,
+            kratosDiscs: nextProps.kratosDiscs,
+            deviceType: nextProps.deviceType,
         });
     }
 
@@ -121,7 +124,7 @@ class SetForm extends Component {
     componentDidUpdate(nextProps, nextState) {
         if (nextState.metric !== this.state.metric) {
             this._save();
-        }
+        } 
     }
 
     _save() {
@@ -284,9 +287,9 @@ class SetForm extends Component {
                             alignItems: 'center',
                             backgroundColor: '#eeeee',
                             paddingRight: 10,
-                        }}>
+                        }}
+                        key={index}>
                         <Pill
-                            key={index}
                             text={key}
                             noTextTransform
                             style={{
@@ -320,11 +323,13 @@ class SetForm extends Component {
             <View style={[{flex: 1, flexDirection: 'column'}, styles.border]}>
                 <View style={[{flex: 1, flexDirection: 'column', paddingLeft: 12, paddingRight: 12, paddingTop: 0, paddingBottom: 7}]}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flex: 1}}>
-                            <View style={{flex: 1, flexDirection: 'row'}}>
-                                { this._renderWeight() }
-                                { this._renderRPE() }
-                            </View>
+                        <View style={{ flex: 1 }}>
+                            {this.state.deviceType !== 'Kratos' && (
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    {this._renderWeight()}
+                                    {this._renderRPE()}
+                                </View>
+                            )}
                             <View>{this._renderKratosDiscs()}</View>
                             <View>{ this._renderTags() }</View>
                         </View>
