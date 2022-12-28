@@ -8,6 +8,7 @@ import {
     PRESENT_WORKOUT_VIDEO_RECORDER,
     PRESENT_WORKOUT_VIDEO_PLAYER,
     DELETE_WORKOUT_VIDEO,
+    PRESENT_WORKOUT_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
@@ -72,6 +73,21 @@ export const presentTags = (setID, tags) => (dispatch, getState) => {
         tags: tags
     });
 };
+
+export const presentKratosDiscs =
+    (setID, kratosDiscs) => (dispatch, getState) => {
+        var state = getState();
+
+        Analytics.setCurrentScreen('edit_workout_kratos_discs');
+
+        logEditTagsAnalytics(setID, state);
+
+        dispatch({
+            type: PRESENT_WORKOUT_KRATOS_DISCS,
+            setID: setID,
+            kratosDiscs: kratosDiscs,
+        });
+    };
 
 export const saveSet = (setID, weight = null, metric = null, rpe = null) => {    
     return SetsActionCreators.saveWorkoutForm(setID, weight, metric, rpe);
