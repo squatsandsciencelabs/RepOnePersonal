@@ -89,6 +89,7 @@ const generateItems = (quantifier) => {
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(PKV_METRIC),
+                pickerItem(PKH_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(RPE_METRIC),

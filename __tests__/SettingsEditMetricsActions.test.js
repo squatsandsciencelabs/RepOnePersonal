@@ -2,7 +2,6 @@ jest.mock('app/services/Firebase', () => {});
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import {
-    EMPTY_METRIC,
     AVG_VELOCITY_METRIC,
     RPE_METRIC,
     DURATION_METRIC,
@@ -10,18 +9,12 @@ import {
     PKH_METRIC,
     PKV_METRIC,
     EMPTY_QUANTIFIER,
-    FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
     MIN_QUANTIFIER,
-    MAX_QUANTIFIER,
-    AVG_QUANTIFIER,
     ABS_LOSS_QUANTIFIER,
-    MAX_EVER_QUANTIFIER,
-    MIN_EVER_QUANTIFIER,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import * as Analytics from 'app/services/Analytics';
-import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
 import * as sut from 'app/features/settings/metrics/metric/SettingsEditMetricsActions';
 
 const middlewares = [ thunk ];
