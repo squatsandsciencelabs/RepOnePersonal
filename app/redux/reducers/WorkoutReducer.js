@@ -22,8 +22,6 @@ import {
     SAVE_WORKOUT_REP,
     END_WORKOUT,
     TOGGLE_WORKOUT_CAMERA_TYPE,
-    PRESENT_WORKOUT_KRATOS_DISCS,
-    DISMISS_WORKOUT_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -34,8 +32,6 @@ const defaultState = {
     editingExerciseBias: null,
     editingTagsSetID: null,
     editingTags: [],
-    editingKratosDiscsSetID: null,
-    editingKratosDiscs: [],
 
     // video
     recordingSetID: null,
@@ -82,20 +78,6 @@ const WorkoutReducer = (state = defaultState, action) => {
                 editingTags: [],
                 isEditing: false
             });
-        case PRESENT_WORKOUT_KRATOS_DISCS:
-            return {
-                ...state,
-                editingKratosDiscsSetID: action.setID,
-                editingKratosDiscs: action.kratosDiscs,
-                isEditing: true,
-            };
-        case DISMISS_WORKOUT_KRATOS_DISCS:
-            return {
-                ...state,
-                editingKratosDiscsSetID: null,
-                editingKratosDiscs: [],
-                isEditing: false,
-            };
         case PRESENT_WORKOUT_VIDEO_RECORDER:
             return Object.assign({}, state, {
                 recordingSetID: action.setID,
@@ -211,13 +193,7 @@ const WorkoutReducer = (state = defaultState, action) => {
 };
 
 const isModalVisible = (state) => {
-    return (
-        state.editingExerciseSetID !== null ||
-        state.editingTagsSetID !== null ||
-        state.recordingSetID !== null ||
-        state.watchSetID !== null ||
-        state.editingKratosDiscsSetID !== null
-    );
+    return (state.editingExerciseSetID !== null || state.editingTagsSetID !== null || state.recordingSetID !== null || state.watchSetID !== null);
 };
 
 export default WorkoutReducer;

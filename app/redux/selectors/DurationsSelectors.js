@@ -41,10 +41,6 @@ export const getWorkoutVideoRecorderStart = (state) => stateRoot(state).workoutV
 
 export const getWorkoutVideoRecorderDuration = (state) => DurationCalculator.getDurationBetween(getWorkoutVideoRecorderStart(state), Date.now());
 
-export const getEditWorkoutKratosDiscsStart = (state) => stateRoot(state).editWorkoutKratosDiscsStart;
-
-export const getEditWorkoutKratosDiscsDuration = (state) => DurationCalculator.getDurationBetween(getEditWorkoutKratosDiscsStart(state), Date.now());
-
 // history video recorder
 
 export const getHistoryVideoRecorderStart = (state) => stateRoot(state).historyVideoRecorderStart;

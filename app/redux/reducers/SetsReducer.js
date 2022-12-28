@@ -30,7 +30,6 @@ import {
     DISCONNECTED_FROM_DEVICE,
     ADD_KRATOS_REP_DATA,
     SET_DEVICE_TYPE,
-    SAVE_WORKOUT_SET_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -75,8 +74,6 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return saveWorkoutVideo(state, action);
         case SAVE_HISTORY_VIDEO:
             return saveHistoryVideo(state, action);
-        case SAVE_WORKOUT_SET_KRATOS_DISCS:
-            return saveWorkoutSetKratosDiscs(state, action);
         case DELETE_WORKOUT_VIDEO:
             return deleteWorkoutVideo(state, action);
         case DELETE_HISTORY_VIDEO:
@@ -362,13 +359,6 @@ const saveWorkoutSetTags = (state, action) => {
     return Object.assign({}, state, {
         workoutData: newWorkoutData
     });
-};
-
-// SAVE_WORKOUT_SET_KRATOS_DISCS
-
-const saveWorkoutSetKratosDiscs = (state, action) => {
-    // TODO: save discs
-    return state;
 };
 
 // SAVE_HISTORY_SET

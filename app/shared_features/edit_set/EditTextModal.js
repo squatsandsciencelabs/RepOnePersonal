@@ -67,10 +67,7 @@ class EditTextModal extends Component {
 
     _addNewPill(input, resetText=false) {
         // valid check
-        if (
-            (this.state.inputs.includes(input) && !this.props.stackValues) ||
-            input == ''
-        ) {
+        if (this.state.inputs.includes(input) || input == '') {
             return;
         }
 
@@ -114,7 +111,7 @@ class EditTextModal extends Component {
         } else {
             var suggestions = this.props.generateSingleInputSuggestions(input, bias);
         }
-        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion.suggestion, value: suggestion.details}} );
+        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion}} );
         this.setState({
             suggestions: suggestionsVM,
         });
@@ -231,7 +228,6 @@ class EditTextModal extends Component {
                     key={`pill-${index}`}
                     onPress={() => this._tappedPill(position)}>
                     <Pill
-                        noTextTransform={this.props.noTextTransform}
                         text={text}
                         style={{ paddingRight: 5, paddingBottom: 3 }}
                     />
@@ -333,14 +329,8 @@ class EditTextModal extends Component {
         } else {
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View style={[{flexDirection: 'row', backgroundColor: 'white', height: 50, justifyContent: 'space-between', alignItems: 'center'}, styles.rowBorders]}>
-                        <Text style={{ marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)' }}>{item.key}</Text>
-                        {item.value && (
-                            <Text
-                                style={{ marginHorizontal: 10, color: 'rgba(130, 130, 130, 1)' }}>
-                                {item.value}
-                            </Text>
-                        )}
+                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center'}, styles.rowBorders]}>
+                        <Text style={{marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)'}}>{item.key}</Text>
                     </View>
                 </TouchableHighlight>
             );
@@ -375,7 +365,7 @@ class EditTextModal extends Component {
                 <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
                     {this._renderNavigation()}
                     {this._renderHeader()}
-                    {!this.props.noTextField && this._renderTextField()}
+                    {this._renderTextField()}
                     {this._renderList()}
                 </View>
             </Modal>
