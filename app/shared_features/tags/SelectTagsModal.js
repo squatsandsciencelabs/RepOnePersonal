@@ -90,10 +90,12 @@ class SelectTagsModal extends Component {
         this._updateSuggestions(input);
     }
 
-    _updateSuggestions(input=this.state.text, inputs=this.state.inputs) {
+    _updateSuggestions(input = this.state.text, inputs = this.state.inputs) {
         var suggestions = this.props.generateSuggestions(input, inputs);
 
-        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion}} );
+        let suggestionsVM = suggestions.map(suggestion => {
+            return { key: suggestion.suggestion };
+        });
         this.setState({
             suggestions: suggestionsVM,
         });
@@ -287,8 +289,8 @@ class SelectTagsModal extends Component {
         } else {
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center'}, styles.rowBorders]}>
-                        <Text style={{marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)'}}>{item.key}</Text>
+                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center', }, styles.rowBorders]}>
+                        <Text style={{ marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)' }}>{item.key}</Text>
                     </View>
                 </TouchableHighlight>
             );
