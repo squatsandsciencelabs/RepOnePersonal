@@ -17,7 +17,9 @@ import {
     DISMISS_WORKOUT_VIDEO_PLAYER,
     STOP_RECORDING_WORKOUT,
     END_SET,
-    END_WORKOUT
+    END_WORKOUT,
+    PRESENT_WORKOUT_KRATOS_DISCS,
+    DISMISS_WORKOUT_KRATOS_DISCS
 } from 'app/configs+constants/ActionTypes';
 
 import * as TimerActionCreators from 'app/redux/shared_actions/TimerActionCreators';
@@ -32,12 +34,14 @@ const TimerSaga = function * TimerSaga() {
         takeEvery(PRESENT_WORKOUT_VIDEO_RECORDER, pauseTimer),
         takeEvery(PRESENT_WORKOUT_VIDEO_PLAYER, pauseTimer),
         takeEvery(START_RECORDING_WORKOUT, pauseTimer),
+        takeEvery(PRESENT_WORKOUT_KRATOS_DISCS, pauseTimer),
         takeEvery(DISMISS_WORKOUT_EXERCISE, resumeTimer),
         takeEvery(DISMISS_WORKOUT_TAGS, resumeTimer),
         takeEvery(END_EDITING_WORKOUT_RPE, resumeTimer),
         takeEvery(END_EDITING_WORKOUT_WEIGHT, resumeTimer),
         takeEvery(DISMISS_WORKOUT_VIDEO_RECORDER, resumeTimer),
         takeEvery(DISMISS_WORKOUT_VIDEO_PLAYER, resumeTimer),
+        takeEvery(DISMISS_WORKOUT_KRATOS_DISCS, resumeTimer),
         takeEvery(STOP_RECORDING_WORKOUT, resumeTimer),
         takeEvery(END_SET, stopTimer),
         takeEvery(END_WORKOUT, stopTimer)

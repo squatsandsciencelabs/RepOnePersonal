@@ -1,33 +1,47 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
+import EditModal from 'app/shared_features/edit_set/EditModal';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditWorkoutKratosDiscsActions';
+import {
+    KratosDiscFullNames,
+    KratosDiscSizes,
+} from 'app/configs+constants/KratosConfig';
 
 const title = 'Choose Flywheels';
 const stackValues = true;
 const noTextTransform = true;
-const noTextField = true;
 const text = '';
+
+const getKratosDiscFullName = acronym => {
+    return KratosDiscFullNames[acronym];
+};
+
+const getKratosDiscOrder = acronym => {
+    return KratosDiscSizes[acronym];
+};
+
+const mapKratosDiscToArray = kratosDiscs => {
+    return Object.keys(kratosDiscs)
+        .filter(key => !!kratosDiscs[key])
+        .map(key => {
+            return { [key]: kratosDiscs[key] };
+        });
+};
 
 const mapStateToProps = state => ({
     title,
     text,
     multipleInput: true,
     setID: state.workout.editingKratosDiscsSetID,
-    inputs: state.workout.editingKratosDiscs,
-    generateMultipleInputSuggestions: (input, ignore) => {
-        return SuggestionsSelectors.generateKratosDiscsSuggestions(
-            state,
-            input,
-            ignore,
-        );
-    },
+    stackedInputs: mapKratosDiscToArray(state.workout.editingKratosDiscs),
+    options: SuggestionsSelectors.generateKratosDiscsSuggestions(state, '', []),
     isModalShowing: state.workout.editingKratosDiscsSetID !== null,
+    nameTransform: getKratosDiscFullName,
+    getComparatorValue: getKratosDiscOrder,
     stackValues,
     noTextTransform,
-    noTextField,
 });
 
 const mapDispatchToProps = dispatch => {
@@ -46,6 +60,6 @@ const mapDispatchToProps = dispatch => {
 const EditWorkoutKratosDiscsScreen = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(EditTextModal);
+)(EditModal);
 
 export default EditWorkoutKratosDiscsScreen;

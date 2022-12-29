@@ -367,8 +367,30 @@ const saveWorkoutSetTags = (state, action) => {
 // SAVE_WORKOUT_SET_KRATOS_DISCS
 
 const saveWorkoutSetKratosDiscs = (state, action) => {
-    // TODO: save discs
-    return state;
+    const newWorkoutData = state.workoutData.slice(0);
+    const setIndex = newWorkoutData.findIndex(
+        set => set.setID === action.setID,
+    );
+    const set = newWorkoutData[setIndex];
+
+    const kratosDiscs = action.kratosDiscs.reduce(
+        (obj, item) => Object.assign(obj, item),
+        {},
+    );
+
+    const changes = {
+        kratosDiscs,
+    };
+
+    if (!set.initialStartTime) {
+        changes.initialStartTime = new Date();
+    }
+    newWorkoutData[setIndex] = Object.assign({}, set, changes);
+
+    return {
+        ...state,
+        workoutData: newWorkoutData,
+    };
 };
 
 // SAVE_HISTORY_SET
