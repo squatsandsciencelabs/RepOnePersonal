@@ -269,7 +269,10 @@ class SetForm extends Component {
                 <View style={[styles.field, { flex: 1 }]}>
                     <TouchableOpacity
                         onPress={() =>
-                            this.props.tapKratosDiscs(this.props.setID)
+                            this.props.tapKratosDiscs(
+                                this.props.setID,
+                                this.state.kratosDiscs,
+                            )
                         }>
                         <Text style={[styles.tagText, styles.placeholderText]}>
                             Discs
@@ -298,7 +301,9 @@ class SetForm extends Component {
                                 paddingRight: 3,
                             }}
                         />
-                        <Text style={{color: 'blue'}}>{value}</Text>
+                        {value > 1 && (
+                            <Text style={{ color: 'blue' }}>{value}</Text>
+                        )}
                     </View>,
                 );
             }
@@ -311,7 +316,7 @@ class SetForm extends Component {
                     onPress={() =>
                         this.props.tapKratosDiscs(
                             this.props.setID,
-                            Object.keys(this.state.kratosDiscs),
+                            this.state.kratosDiscs,
                         )
                     }>
                     <View style={styles.tagField}>{pills}</View>
