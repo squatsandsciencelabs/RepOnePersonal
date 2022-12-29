@@ -35,7 +35,7 @@ const defaultState = {
     editingTagsSetID: null,
     editingTags: [],
     editingKratosDiscsSetID: null,
-    editingKratosDiscs: [],
+    editingKratosDiscs: {},
 
     // video
     recordingSetID: null,
@@ -93,7 +93,7 @@ const WorkoutReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 editingKratosDiscsSetID: null,
-                editingKratosDiscs: [],
+                editingKratosDiscs: {},
                 isEditing: false,
             };
         case PRESENT_WORKOUT_VIDEO_RECORDER:
