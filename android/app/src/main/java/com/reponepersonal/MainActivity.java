@@ -1,4 +1,5 @@
 package com.reponestrength.personal.staging;
+import expo.modules.ReactActivityDelegateWrapper;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
