@@ -650,6 +650,7 @@ const addKratosRepData = (state, action) => {
         ePeakAngularAcceleration: action.ePeakAngularAcceleration,
         ePeakPower: action.ePeakPower,
         deviceFamily,
+        deleted: set.reps.length < action.kratosAutoDeleteReps,
     };
 
     let setChanges = {

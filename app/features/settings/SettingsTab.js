@@ -1,12 +1,5 @@
-import React, {Component} from 'react';
-import {
-    TouchableHighlight,
-    Text,
-    StyleSheet,
-    ScrollView,
-    View,
-    ListView
-} from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, View } from 'react-native';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import SettingsHelpScreen from './help/SettingsHelpScreen';
 import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
@@ -20,11 +13,16 @@ import SettingsColumnsScreen from './columns/SettingsColumnsScreen';
 import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 
 class SettingsTab extends Component {
-            
     render() {
         return (
-            <ScrollView style={{flex: 1}}>
-                <View style={{ flex: 1, flexDirection: 'column', justifyContent:'flex-start', marginBottom: 20 }}>
+            <ScrollView style={{ flex: 1 }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        marginBottom: 20,
+                    }}>
                     <SettingsHelpScreen />
                     <SettingsSurveyScreen />
                     <SettingsOTAScreen />
@@ -34,7 +32,9 @@ class SettingsTab extends Component {
                     <SettingsColumnsScreen />
                     <SettingsApplicationScreen />
                     <SettingsFeedbackScreen />
-                    {OpenBarbellConfig.calibrationEnabled ? <SettingsCalibrationScreen /> : null}
+                    {OpenBarbellConfig.calibrationEnabled ? (
+                        <SettingsCalibrationScreen />
+                    ) : null}
                 </View>
             </ScrollView>
         );
