@@ -39,8 +39,9 @@ public class MainApplication extends Application implements ReactApplication {
         }
       });
 
-  private final ReactNativeHost mNewArchitectureNativeHost =
-      new ReactNativeHostWrapper(this, new MainApplicationReactNativeHost(this));
+  // NOTE: Disabling as new architecture only files were not added to the repo
+  // private final ReactNativeHost mNewArchitectureNativeHost =
+  //     new ReactNativeHostWrapper(this, new MainApplicationReactNativeHost(this));
 
   @Override
   public ReactNativeHost getReactNativeHost() {
