@@ -227,7 +227,7 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVersion) => (dispatch, getState) => {
     // analytics
     const state = getState();
-    const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting" 
+    const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting"
     console.tron.log(`got name ${name} and trying to set user prop with it`);
     Analytics.setUserProp('connected_device_name', name);
     Analytics.setUserProp('connected_device_id', deviceIdentifier);
@@ -269,7 +269,7 @@ export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) 
         time: time,
     });
     dispatch(TimerActionCreators.startEndSetTimer());
-    
+
 };
 
 export const receivedKratosLiftData =
@@ -292,6 +292,8 @@ export const receivedKratosLiftData =
             firmwareVersion:
                 ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
             time: time,
+            kratosAutoDeleteReps:
+                SettingsSelectors.getKratosAutoDeleteReps(state),
         });
 
         dispatch(TimerActionCreators.startEndSetTimer());
