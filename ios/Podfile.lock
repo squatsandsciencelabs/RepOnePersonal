@@ -480,7 +480,7 @@ PODS:
     - React-Core
   - react-native-ble-manager (8.5.0):
     - React-Core
-  - react-native-blob-util (0.14.1):
+  - react-native-blob-util (0.17.0):
     - React-Core
   - react-native-cameraroll (5.2.0):
     - React-Core
@@ -995,7 +995,7 @@ SPEC CHECKSUMS:
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
   react-native-ble-manager: e1184e064e170de242ca12648ac31f8fcdc6ecab
-  react-native-blob-util: 7ac01cd4a4ba81016864727a756ce2c1af995e35
+  react-native-blob-util: f9dfda9077e57129b444a33e3c51f7785b2a075f
   react-native-cameraroll: 0ff04cc4e0ff5f19a94ff4313e5c8bc4503cd86d
   react-native-charts-wrapper: 4461b72f48e737a490e968bf2468cc0fd2281681
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
