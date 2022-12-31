@@ -1,7 +1,6 @@
 import firebase from 'app/services/Firebase';
 
-export const getKratosEnabled = () =>
-    firebase.remoteConfig().getValue('kratos_enabled').asBoolean();
+export const getKratosEnabled = () => false;
 
 export const kratosDiscsOptions = [
     { key: 'XS', fullName: 'Extra Small', description: '2.65lbs' },
