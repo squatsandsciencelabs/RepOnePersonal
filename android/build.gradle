@@ -8,7 +8,7 @@ buildscript {
         targetSdkVersion = 31
         googlePlayServicesAuthVersion = "19.2.0" // react-native-google-signin
         firebaseIidVersion = "19.0.1" // react-native-device-info
-        kotlinVersion = '1.6.20' // TODO: Confirm if this is needed 
+        kotlinVersion = '1.6.20' // expo needs this, https://github.com/expo/expo/issues/19338
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
@@ -30,7 +30,7 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:4.3.14' // react-native-google-signin
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1' // react-native-firebase crashlytics
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" // TODO: Confirm if this is needed 
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" // expo needs this, https://github.com/expo/expo/issues/19338 
     }
 }
 
