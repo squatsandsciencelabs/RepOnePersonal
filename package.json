@@ -37,7 +37,7 @@
     "react-native": "0.70.6",
     "react-native-background-timer": "^2.4.1",
     "react-native-ble-manager": "^8.0.2",
-    "react-native-blob-util": "^0.14.1",
+    "react-native-blob-util": "^0.17.0",
     "react-native-charts-wrapper": "^0.5.10",
     "react-native-device-info": "^10.3.0",
     "react-native-get-random-values": "^1.7.2",

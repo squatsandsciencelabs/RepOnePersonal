@@ -7692,18 +7692,18 @@ react-native-ble-manager@^8.0.2:
   resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-8.5.0.tgz#62527d93e0a96185d0a2c16bab1cada79bcd5dcc"
   integrity sha512-SDwuk+aVSlM0IL7vjsUzS1/YeB6AxsCo7M3sDH79+XKK5zB9474NJi2Gqi6KpLmjNCii13K5kz6uxikphANxgA==
 
-react-native-blob-util@^0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.14.1.tgz#2c75816888439d8062b46dd6d703f5f41e38d35a"
-  integrity sha512-Rf2aURRqM7j96fFdO5tbiVlAsfLOkSyBqrAPlG4VcJj9jT6G7bVHebwJg7BBfTKWTFwPjiOIAdUjsjkGaUUOyQ==
-  dependencies:
-    base-64 "0.1.0"
-    glob "^7.1.6"
-
 react-native-blob-util@^0.16.0:
   version "0.16.4"
   resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.16.4.tgz#eeb0e28f6fa6ecb357c10f154be3d2e66c010f62"
   integrity sha512-rNKMcVsrVn+l6PQVrCIJy3N2t9zEpXP1yrP3CdnWNHh9Dsup7tJMcoun4S1Cz869L0acx4LiM40XdqqfLyqrDw==
+  dependencies:
+    base-64 "0.1.0"
+    glob "^7.2.3"
+
+react-native-blob-util@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.17.0.tgz#c336ca9ad5629ab3bbdb5becb56744bae8cb63ad"
+  integrity sha512-aCyBu3+Q11+DAA/AccMXgISP+D2bG+jcJ1a4atJs3Xr4/v2LMh9NgLUCkPdK9VH4kCh9YPnuf/YI0jeXZ4rYfw==
   dependencies:
     base-64 "0.1.0"
     glob "^7.2.3"
