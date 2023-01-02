@@ -273,7 +273,7 @@ const createRowViewModels = (set, columnsModel) => {
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
-            removed: rep.removed,
+            removed: rep.deleted,
             key: set.setID+i,
         };
 

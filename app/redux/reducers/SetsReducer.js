@@ -32,6 +32,7 @@ import {
     SET_DEVICE_TYPE,
     SAVE_WORKOUT_SET_KRATOS_DISCS,
     SAVE_HISTORY_SET_KRATOS_DISCS,
+    SAVE_KRATOS_AUTO_DELETE_REPS,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -74,6 +75,8 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return saveHistoryRep(state, action);
         case END_SET:
             return endSet(state, action);
+        case SAVE_KRATOS_AUTO_DELETE_REPS:
+            return updateKratosAutoDeletedReps(state, action);
         case SAVE_WORKOUT_VIDEO:
             return saveWorkoutVideo(state, action);
         case SAVE_HISTORY_VIDEO:
@@ -850,6 +853,56 @@ const endSet = (state, action) => {
     return Object.assign({}, state, {
         workoutData: newWorkoutData
     });
+};
+
+// UPDATE_KRATOS_AUTO_DELETED_REPS
+
+const calculateAutoDeletedReps = (reps, autoDeleteReps) =>
+    reps.map((rep, i) => ({
+        ...rep,
+        deleted: i + 1 <= autoDeleteReps,
+    }));
+
+const updateKratosAutoDeletedReps = (state, action) => {
+    const autoDeleteReps = action.autoDeleteReps;
+
+    const workoutData = state.workoutData;
+    const newWorkoutData = workoutData.map(set => {
+        if (set.deviceType === 'Kratos') {
+            return {
+                ...set,
+                reps: calculateAutoDeletedReps(set.reps, autoDeleteReps),
+            };
+        }
+
+        return set;
+    });
+
+    const historyData = state.historyData;
+    const newHistoryData = Object.fromEntries(
+        Object.entries(historyData).map(([id, set]) => {
+            if (set.deviceType === 'Kratos') {
+                return [
+                    id,
+                    {
+                        ...set,
+                        reps: calculateAutoDeletedReps(
+                            set.reps,
+                            autoDeleteReps,
+                        ),
+                    },
+                ];
+            }
+
+            return [id, set];
+        }),
+    );
+
+    return {
+        ...state,
+        workoutData: newWorkoutData,
+        historyData: newHistoryData,
+    };
 };
 
 // SAVE_WORKOUT_VIDEO
