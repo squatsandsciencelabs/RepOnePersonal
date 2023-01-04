@@ -45,6 +45,8 @@ import {
     CLEAR_HISTORY_FILTER_END_DATE,
     DISMISS_HISTORY_FILTER_START_DATE,
     DISMISS_HISTORY_FILTER_END_DATE,
+    PRESENT_HISTORY_KRATOS_DISCS,
+    DISMISS_HISTORY_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 
 // isEditing for analytics
@@ -62,6 +64,8 @@ const defaultState = {
     watchSetID: null,
     watchFileURL: null,
     viewedCounter: 0,
+    editingKratosDiscsSetID: null,
+    editingKratosDiscs: {},
 
     // filter
     exercise: null,
@@ -132,6 +136,12 @@ const HistoryReducer = (state = defaultState, action) => {
                 editingTagsSetID: action.setID,
                 editingTags: action.tags
             });
+        case PRESENT_HISTORY_KRATOS_DISCS:
+            return {
+                ...state,
+                editingKratosDiscsSetID: action.setID,
+                editingKratosDiscs: action.kratosDiscs,
+            }
         case DISMISS_HISTORY_EXERCISE:
             return Object.assign({}, state, {
                 editingExerciseSetID: null,
@@ -142,6 +152,12 @@ const HistoryReducer = (state = defaultState, action) => {
                 editingTagsSetID: null,
                 editingTags: []
             });
+        case DISMISS_HISTORY_KRATOS_DISCS:
+            return{
+                ...state,
+                editingKratosDiscsSetID: null,
+                editingKratosDiscs: {}
+            }
         case PRESENT_HISTORY_VIDEO_RECORDER:
             return Object.assign({}, state, {
                 recordingSetID: action.setID,

@@ -111,9 +111,7 @@ class EditTextModal extends Component {
         } else {
             var suggestions = this.props.generateSingleInputSuggestions(input, bias);
         }
-        let suggestionsVM = suggestions.map(suggestion => {
-            return { key: suggestion.suggestion, value: suggestion.details };
-        });
+        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion}} );
         this.setState({
             suggestions: suggestionsVM,
         });

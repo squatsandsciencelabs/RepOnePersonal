@@ -19,6 +19,7 @@ import {
     END_EDITING_WORKOUT_WEIGHT,
     END_EDITING_HISTORY_WEIGHT,
     PRESENT_WORKOUT_KRATOS_DISCS,
+    PRESENT_HISTORY_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -35,6 +36,7 @@ const defaultState = {
     workoutVideoPlayerStart: null,
     historyVideoPlayerStart: null,
     editWorkoutKratosDiscsStart: null,
+    editHistoryKratosDiscsStart: null,
 };
 
 const DurationsReducer = (state = defaultState, action) => {
@@ -71,6 +73,11 @@ const DurationsReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 editHistoryTagsStart: Date.now()
             });
+        case PRESENT_HISTORY_KRATOS_DISCS:
+            return {
+                ...state,
+                editHistoryKratosDiscsStart: Date.now(),
+            };
         case PRESENT_WORKOUT_VIDEO_RECORDER:
             return Object.assign({}, state, {
                 workoutVideoRecorderStart: Date.now()

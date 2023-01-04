@@ -8,6 +8,7 @@ import {
     END_EDITING_HISTORY_RPE,
     END_EDITING_HISTORY_WEIGHT,
     DELETE_HISTORY_VIDEO,
+    PRESENT_HISTORY_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
@@ -66,6 +67,20 @@ export const presentTags = (setID, tags) => (dispatch, getState) => {
         type: PRESENT_HISTORY_TAGS,
         setID: setID,
         tags: tags
+    });
+};
+
+export const presentKratosDiscs = (setID, kratosDiscs) => (dispatch, getState) => {
+    var state = getState();
+
+    Analytics.setCurrentScreen('edit_history_kratos_discs');
+
+    logEditKratosDiscsAnalytics(setID, state);
+
+    dispatch({
+        type: PRESENT_HISTORY_KRATOS_DISCS,
+        setID: setID,
+        kratosDiscs: kratosDiscs,
     });
 };
 
@@ -190,6 +205,12 @@ const logEditWeightAnalytics = (setID, state) => {
 
 const logEditTagsAnalytics = (setID, state) => {
     Analytics.logEventWithAppState('edit_tags', {
+        is_working_set: false
+    }, state);
+};
+
+const logEditKratosDiscsAnalytics = (setID, state) => {
+    Analytics.logEventWithAppState('edit_kratos_discs', {
         is_working_set: false
     }, state);
 };
