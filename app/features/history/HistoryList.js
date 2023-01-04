@@ -26,6 +26,7 @@ import SetSummary from 'app/shared_features/set_card/collapsed/SetSummary';
 import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysisScreen';
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
+import EditHistoryKratosDiscsScreen from './kratos_discs/EditHistoryKratosDiscsScreen';
 
 class HistoryList extends Component {
 
@@ -194,6 +195,7 @@ class HistoryList extends Component {
                     <HistoryVideoRecorderScreen />
                     <HistoryVideoPlayerScreen />
                     <EditHistoryFilterScreen />
+                    <EditHistoryKratosDiscsScreen />
                     {this._renderFilterHeader()}
                     <View style={{ flex: 1, backgroundColor: 'white' }}>
                         {list}

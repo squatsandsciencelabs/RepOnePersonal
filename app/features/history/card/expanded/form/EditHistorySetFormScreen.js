@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch) => {
         dismissRPE: Actions.dismissRPE,
         dismissWeight: Actions.dismissWeight,
         toggleMetric: Actions.toggleMetric,
+        tapKratosDiscs: Actions.presentKratosDiscs,
     }, dispatch);
 };
 

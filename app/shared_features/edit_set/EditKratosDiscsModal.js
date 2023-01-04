@@ -15,15 +15,22 @@ import {
 import * as Device from 'app/utility/Device';
 import Pill from 'app/shared_features/pill/Pill';
 
-class EditModal extends Component {
+// EditKratosDiscsModal is basically a EditTextModal component, but without text input logic
+
+// To allow dupe values provide stackValues = true prop
+// When dupe values are allowed, for pills with value > 1 the number of items is also displayed
+
+class EditKratosDiscsModal extends Component {
     constructor(props) {
         super(props);
 
 
         this.state = {
+            // for regular inputs (each value is unique)
             inputs: [],
+            // for dupe values
             stackedInputs: [],
-            suggestions: this.props.options,
+            options: this.props.options,
         };
     }
 
@@ -52,22 +59,12 @@ class EditModal extends Component {
             var stackedInputs = [];
         }
 
-        this.setState({ inputs, stackedInputs });
+        this.setState({ inputs, stackedInputs, options: nextProps.options });
 
         // save set id
         if (usesSetID && nextProps.setID !== null) {
             this.setState({ setID: nextProps.setID });
         }
-
-        const suggestions = nextProps.options.map(suggestion => {
-            return {
-                key: suggestion.suggestion,
-                value: suggestion.details,
-            };
-        });
-        this.setState({
-            suggestions,
-        });
     }
 
     // HELPERS
@@ -98,18 +95,18 @@ class EditModal extends Component {
             } else {
                 stackedInputs.push({ [input]: 1 });
             }
+            
+            // sorting the pills to appear in the same order as the options
+            stackedInputs.sort((a, b) => {
+                const keyA = Object.keys(a)[0];
+                const keyB = Object.keys(b)[0];
 
-            if (this.props.getComparatorValue) {
+                return (
+                    this.state.options.findIndex(option => option.key === keyA) -
+                    this.state.options.findIndex(option => option.key === keyB)
+                );
+            });
 
-                stackedInputs.sort((a, b) => {
-                    const keyA = Object.keys(a)[0];
-                    const keyB = Object.keys(b)[0];
-                    return (
-                        this.props.getComparatorValue(keyA) -
-                        this.props.getComparatorValue(keyB)
-                    );
-                });
-            }
             this.setState({
                 stackedInputs: stackedInputs,
             });
@@ -279,6 +276,7 @@ class EditModal extends Component {
                                         paddingBottom: 3,
                                     }}
                                 />
+                                {/* show the number of items if amount > 1 */}
                                 {value > 1 && (
                                     <Text style={{ color: 'blue' }}>
                                         {value}
@@ -326,7 +324,7 @@ class EditModal extends Component {
     }
 
     _renderList() {
-        let data = this.state.suggestions;
+        let data = this.state.options;
 
         if (data && data.length === 0) {
             return null;
@@ -369,7 +367,9 @@ class EditModal extends Component {
                 </TouchableHighlight>
             );
         } else {
-            const text = this._getName(item.key);
+            // Show item.key if the full name is not provided
+            const text = item.fullName || item.key;
+
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
                     <View
@@ -390,13 +390,13 @@ class EditModal extends Component {
                             }}>
                             {text}
                         </Text>
-                        {item.value && (
+                        {item.description && (
                             <Text
                                 style={{
                                     marginHorizontal: 10,
                                     color: 'rgba(130, 130, 130, 1)',
                                 }}>
-                                {item.value}
+                                {item.description}
                             </Text>
                         )}
                     </View>
@@ -499,4 +499,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EditModal;
+export default EditKratosDiscsModal;

@@ -80,7 +80,7 @@ export const presentKratosDiscs =
 
         Analytics.setCurrentScreen('edit_workout_kratos_discs');
 
-        logEditTagsAnalytics(setID, state);
+        logEditKratosDiscsAnalytics(setID, state);
 
         dispatch({
             type: PRESENT_WORKOUT_KRATOS_DISCS,
@@ -224,6 +224,14 @@ const logEditTagsAnalytics = (setID, state) => {
     let is_working_set = SetsSelectors.getIsWorkingSet(state, setID);
 
     Analytics.logEventWithAppState('edit_tags', {
+        is_working_set: is_working_set
+    }, state);
+};
+
+const logEditKratosDiscsAnalytics = (setID, state) => {
+    let is_working_set = SetsSelectors.getIsWorkingSet(state, setID);
+
+    Analytics.logEventWithAppState('edit_kratos_discs', {
         is_working_set: is_working_set
     }, state);
 };

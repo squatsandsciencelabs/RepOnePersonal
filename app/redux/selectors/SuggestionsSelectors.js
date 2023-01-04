@@ -4,8 +4,6 @@ const exerciseNameModel = (state) => stateRoot(state).exerciseModel;
 
 const tagsModel = (state) => stateRoot(state).tagsModel;
 
-const kratosDiscsModel = (state) => stateRoot(state).kratosDiscsModel;
-
 // not memoizing anything here as generation is called only when needed
 // if i want to tweak this, it would have to be on a screen level so it wouldn't need to call it an extra time on mount, but even that idk is worth
 
@@ -16,16 +14,6 @@ export const generateExerciseNameSuggestions = (state, input, bias = null) => {
 
 export const generateTagsSuggestions = (state, input, ignore = []) => {
     return generateSuggestions(tagsModel(state), input, null, true, ignore);
-};
-
-export const generateKratosDiscsSuggestions = (state, input, ignore = []) => {
-    return generateSuggestions(
-        kratosDiscsModel(state),
-        input,
-        null,
-        false,
-        ignore,
-    );
 };
 
 const generateSuggestions = (model, input, bias, showBug = false, ignore = []) => {
@@ -66,29 +54,26 @@ const generateSuggestions = (model, input, bias, showBug = false, ignore = []) =
     }
 
     // just the suggestions
-    matches = matches.map(match => {
-        const { seed, ...rawSuggestion } = match;
-        return rawSuggestion;
-    });
+    matches = matches.map((match) => match.suggestion);
 
     // hack - ensure bug is last
     // TODO: if we do more than just the special bug tag, make this a generic system instead so you can add more types
     if (showBug) {
         // remove all bugs from suggestions so you can re-add it at the end
-        matches = matches.filter((e) => e.suggestion !== 'bug');
+        matches = matches.filter((e) => e !== 'bug');
 
         // add Bug if possible
-        if (ignore.filter((e) => e.suggestion === 'bug').length <= 0) {
+        if (ignore.filter((e) => e === 'bug').length <= 0) {
             if (matches.length === 10) {
-                matches[9].suggestion = 'bug';
+                matches[9] = 'bug';
             } else {
-                matches[matches.length] = { suggestion: 'bug' };
+                matches[matches.length] = 'bug';
             }
         }
     }
 
     // remove if it's exactly equal
-    if (matches.length > 0 && matches[0].suggestion === input) {
+    if (matches.length > 0 && matches[0] === input) {
         matches.shift();
     }
 

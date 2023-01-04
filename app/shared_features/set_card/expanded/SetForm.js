@@ -124,7 +124,7 @@ class SetForm extends Component {
     componentDidUpdate(nextProps, nextState) {
         if (nextState.metric !== this.state.metric) {
             this._save();
-        } 
+        }
     }
 
     _save() {

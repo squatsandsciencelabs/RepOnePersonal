@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import EditKratosDiscsModal from 'app/shared_features/edit_set/EditKratosDiscsModal';
-import * as Actions from './EditWorkoutKratosDiscsActions';
+import * as Actions from './EditHistoryKratosDiscsActions';
 import {
     kratosDiscsOptions,
 } from 'app/configs+constants/KratosConfig';
@@ -12,7 +12,6 @@ const stackValues = true;
 const noTextTransform = true;
 const text = '';
 
-
 const mapKratosDiscToArray = kratosDiscs => {
     return Object.keys(kratosDiscs)
         .filter(key => !!kratosDiscs[key])
@@ -21,19 +20,19 @@ const mapKratosDiscToArray = kratosDiscs => {
         });
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     title,
     text,
     multipleInput: true,
-    setID: state.workout.editingKratosDiscsSetID,
-    stackedInputs: mapKratosDiscToArray(state.workout.editingKratosDiscs),
+    setID: state.history.editingKratosDiscsSetID,
+    stackedInputs: mapKratosDiscToArray(state.history.editingKratosDiscs),
     options: kratosDiscsOptions,
-    isModalShowing: state.workout.editingKratosDiscsSetID !== null,
+    isModalShowing: state.history.editingKratosDiscsSetID !== null,
     stackValues,
     noTextTransform,
 });
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(
         {
             saveSetMultipleInput: Actions.saveKratosDiscs,
@@ -46,9 +45,9 @@ const mapDispatchToProps = dispatch => {
     );
 };
 
-const EditWorkoutKratosDiscsScreen = connect(
+const EditHistoryKratosDiscsScreen = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(EditKratosDiscsModal);
 
-export default EditWorkoutKratosDiscsScreen;
+export default EditHistoryKratosDiscsScreen;

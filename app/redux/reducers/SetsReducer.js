@@ -31,6 +31,7 @@ import {
     ADD_KRATOS_REP_DATA,
     SET_DEVICE_TYPE,
     SAVE_WORKOUT_SET_KRATOS_DISCS,
+    SAVE_HISTORY_SET_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -61,6 +62,8 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return saveHistorySet(state, action);
         case SAVE_HISTORY_SET_TAGS:
             return saveHistorySetTags(state, action);
+        case SAVE_HISTORY_SET_KRATOS_DISCS:
+            return saveHistorySetKratosDiscs(state, action);
         case ADD_REP_DATA:
             return addRepData(state, action);
         case ADD_KRATOS_REP_DATA:
@@ -552,6 +555,45 @@ const saveHistorySetTags = (state, action) => {
 
     return Object.assign({}, state, stateChanges);
 };
+
+// SAVE_HISTORY_SET_KRATOS_DISCS
+
+const saveHistorySetKratosDiscs = (state, action) => {
+    console.log('action: ' + JSON.stringify(action));
+    let setID = action.setID;
+    let historyData = state.historyData;
+    let set = historyData[setID];
+
+    console.log('historyData: ' + JSON.stringify(historyData));
+    console.log('set: '+ JSON.stringify(set));
+    
+        // new set
+
+    const kratosDiscs = action.kratosDiscs.reduce(
+        (obj, item) => Object.assign(obj, item),
+        {},
+    );
+    // new set
+    const changes = {
+        kratosDiscs,
+    };
+
+    let newSet = Object.assign({}, set, changes);
+
+    // state changes
+    let stateChanges = {};
+    stateChanges.historyData = Object.assign({}, historyData, {
+        [setID]: newSet
+    });
+    if (!state.setIDsToUpload.includes(setID)) {
+        stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
+    }
+
+    return {
+        ...state,
+        ...stateChanges
+    };
+}
 
 // ADD_REP_DATA
 
