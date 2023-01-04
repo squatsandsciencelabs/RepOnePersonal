@@ -206,6 +206,8 @@ const createFormViewModel = (set, setNumber, isRemoved) => ({
     rpe: set.rpe,
     videoFileURL: getVideoFileURL(set),
     videoType: set.videoType,
+    kratosDiscs: set.kratosDiscs,
+    deviceType: set.deviceType,
 });
 
 const createSummaryViewModel = (set) => {

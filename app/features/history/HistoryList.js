@@ -115,6 +115,8 @@ class HistoryList extends Component {
                                 weight={item.weight}
                                 metric={item.metric}
                                 rpe={item.rpe}
+                                kratosDiscs={item.kratosDiscs}
+                                deviceType={item.deviceType}
                                 renderDetailComponent={()=> {
                                     if (item.videoFileURL !== null && item.videoFileURL !== undefined) {
                                         return (<HistoryVideoButtonScreen setID={item.setID} mode='watch' videoFileURL={item.videoFileURL} />);
