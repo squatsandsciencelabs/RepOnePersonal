@@ -5,7 +5,7 @@ import {
     all,
     select,
 } from 'redux-saga/effects';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import * as FileSystem from 'expo-file-system';
 import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
 import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
@@ -35,7 +35,7 @@ import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/
 
 let downloadTask = null;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
-const filePath =`${ReactNativeBlobUtil.fs.dirs.DocumentDir}/firmware.zip`;
+const filePath =`${FileSystem.documentDirectory}/firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
@@ -129,7 +129,7 @@ function* checkOTA(dispatch, action) {
                 // NOTE: This always runs as you aren't connected to a sensor at startup, so currentVersion defaults to 0.0.1
                 // Leaving it as it's fine
                 console.tron.log(`deleting on disk as curr ${currentVersion} !== firm ${firmwareVersion}`);
-                yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
+                yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
             } catch (err) {
                 console.tron.log(`failed to delete download ${err}`);
             }
@@ -145,8 +145,8 @@ function* checkOTA(dispatch, action) {
 
         // TODO: confirm it works on iOS as this failed for the temp camera cache directory
         // check against disk
-        const exists = yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.exists, [filePath]);
-        if (exists) {
+        const dirInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [filePath]);
+        if (dirInfo.exists) {
             yield put({
                 type: OTA_DOWNLOAD_READY,
             });
@@ -164,15 +164,10 @@ function* checkOTA(dispatch, action) {
 function* startDownload(action) {
     try {
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
-        downloadTask = ReactNativeBlobUtil
-            .config({
-                // response data will be saved to this path if it has access right.
-                path: filePath,
-            })
-            .fetch('GET', `https://firmware.reponestrength.com/${currentVersion}.zip`);
-        const result = yield downloadTask;
+        downloadTask = FileSystem.createDownloadResumable(`https://firmware.reponestrength.com/${currentVersion}.zip`, filePath)
+        const result = yield apply(downloadTask, downloadTask.downloadAsync);
 
-        console.tron.log(`download should be finished to ${result.path()}`);
+        console.tron.log(`download should be finished to ${result.uri}`);
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
@@ -193,8 +188,8 @@ function* startDownload(action) {
 
 function* cancelDownload(action) {
     try {
-        yield apply(downloadTask, downloadTask.cancel);
-        yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
+        yield apply(downloadTask, downloadTask.cancelAsync);
+        yield apply(FileSystem, FileSystem.deleteAsync , [filePath]);
     } catch (err) {
         console.tron.log(`failed to cancel download ${err}`);
     }
@@ -202,7 +197,7 @@ function* cancelDownload(action) {
 
 function* deleteDownload(action) {
     try {
-        yield apply(ReactNativeBlobUtil, ReactNativeBlobUtil.fs.unlink, [filePath]);
+        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
     } catch (err) {
         console.tron.log(`failed to delete download ${err}`);
     }
