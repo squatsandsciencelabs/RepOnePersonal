@@ -866,42 +866,20 @@ const calculateAutoDeletedReps = (reps, autoDeleteReps) =>
 const updateKratosAutoDeletedReps = (state, action) => {
     const autoDeleteReps = action.autoDeleteReps;
 
-    const workoutData = state.workoutData;
-    const newWorkoutData = workoutData.map(set => {
-        if (set.deviceType === 'Kratos') {
-            return {
-                ...set,
-                reps: calculateAutoDeletedReps(set.reps, autoDeleteReps),
-            };
-        }
+    const workoutData = state.workoutData.slice(0);
 
-        return set;
-    });
+    const set = state.workoutData[state.workoutData.length - 1];
 
-    const historyData = state.historyData;
-    const newHistoryData = Object.fromEntries(
-        Object.entries(historyData).map(([id, set]) => {
-            if (set.deviceType === 'Kratos') {
-                return [
-                    id,
-                    {
-                        ...set,
-                        reps: calculateAutoDeletedReps(
-                            set.reps,
-                            autoDeleteReps,
-                        ),
-                    },
-                ];
-            }
+    const newSet = {
+        ...set,
+        reps: calculateAutoDeletedReps(set.reps, autoDeleteReps),
+    }
+    workoutData[workoutData.length - 1] = newSet;
 
-            return [id, set];
-        }),
-    );
 
     return {
         ...state,
-        workoutData: newWorkoutData,
-        historyData: newHistoryData,
+        workoutData: workoutData,
     };
 };
 
@@ -1024,8 +1002,16 @@ const endWorkout = (state, action) => {
         historyChanges[setID] = lastSet;
     }
 
+    const kratosDiscs = {
+        XS: null,
+        S: null,
+        M: null,
+        L: null,
+        XL: null,
+    };
+
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [createSet(1, action.defaultMetric)];
+    let newWorkoutData = [createSet(1, action.defaultMetric, lastSet.deviceType, kratosDiscs)];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {
