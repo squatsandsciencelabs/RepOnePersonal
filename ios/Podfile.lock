@@ -490,7 +490,7 @@ PODS:
     - SwiftyJSON (= 5.0)
   - react-native-get-random-values (1.8.0):
     - React-Core
-  - react-native-nordic-dfu (3.2.1):
+  - react-native-nordic-dfu (3.3.0):
     - iOSDFULibrary (~> 4.11.1)
     - React
   - react-native-pager-view (5.4.25):
@@ -999,7 +999,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 0ff04cc4e0ff5f19a94ff4313e5c8bc4503cd86d
   react-native-charts-wrapper: 4461b72f48e737a490e968bf2468cc0fd2281681
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
-  react-native-nordic-dfu: 9a4cfa2b940cd12025616feed8271b7c5043113d
+  react-native-nordic-dfu: c65357a9802f28bd3bd85f7cb9f0cdf4e8280297
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-slider: d2938a12c4e439a227c70eec65d119136eb4aeb5
   react-native-version-check: e85c2e21d0955b7cdfd91c0ddacc3edf14b7abd7

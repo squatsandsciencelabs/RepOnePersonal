@@ -7756,10 +7756,9 @@ react-native-modal-datetime-picker@^13.1.0:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-nordic-dfu@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-nordic-dfu/-/react-native-nordic-dfu-3.2.1.tgz#8b15a1f51cb6e4a33cb4477e8eb4308845cef008"
-  integrity sha512-07PWXhqYAmYMwvh8l6sYCytCuh48R+3MH20k39gASSzNZCRUcucA1x6l18ymAJ+lgCxauiTkkCbVuN+8yXeKYA==
+"react-native-nordic-dfu@git+https://github.com/Salt-PepperEngineering/react-native-nordic-dfu.git#9ca23e46b8570e42eb0e5d15791a855666fb9ddf":
+  version "3.3.0"
+  resolved "git+https://github.com/Salt-PepperEngineering/react-native-nordic-dfu.git#9ca23e46b8570e42eb0e5d15791a855666fb9ddf"
 
 react-native-pager-view@^5.4.15:
   version "5.4.25"
