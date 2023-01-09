@@ -559,15 +559,11 @@ const saveHistorySetTags = (state, action) => {
 // SAVE_HISTORY_SET_KRATOS_DISCS
 
 const saveHistorySetKratosDiscs = (state, action) => {
-    console.log('action: ' + JSON.stringify(action));
     let setID = action.setID;
     let historyData = state.historyData;
     let set = historyData[setID];
 
-    console.log('historyData: ' + JSON.stringify(historyData));
-    console.log('set: '+ JSON.stringify(set));
-    
-        // new set
+    // new set
 
     const kratosDiscs = action.kratosDiscs.reduce(
         (obj, item) => Object.assign(obj, item),

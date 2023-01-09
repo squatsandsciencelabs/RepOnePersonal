@@ -24,7 +24,6 @@ class EditKratosDiscsModal extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
             // for regular inputs (each value is unique)
             inputs: [],
@@ -54,7 +53,7 @@ class EditKratosDiscsModal extends Component {
         }
 
         if (nextProps.stackedInputs !== undefined) {
-            var stackedInputs = [...nextProps.stackedInputs]
+            var stackedInputs = [...nextProps.stackedInputs];
         } else {
             var stackedInputs = [];
         }
@@ -95,14 +94,16 @@ class EditKratosDiscsModal extends Component {
             } else {
                 stackedInputs.push({ [input]: 1 });
             }
-            
+
             // sorting the pills to appear in the same order as the options
             stackedInputs.sort((a, b) => {
                 const keyA = Object.keys(a)[0];
                 const keyB = Object.keys(b)[0];
 
                 return (
-                    this.state.options.findIndex(option => option.key === keyA) -
+                    this.state.options.findIndex(
+                        option => option.key === keyA,
+                    ) -
                     this.state.options.findIndex(option => option.key === keyB)
                 );
             });
@@ -139,12 +140,13 @@ class EditKratosDiscsModal extends Component {
                     stackedInputs: stackedInputs,
                 });
             }
+        } else {
+            let inputsCopy = [...this.state.inputs];
+            inputsCopy.splice(index, 1);
+            this.setState({
+                inputs: inputsCopy,
+            });
         }
-        let inputsCopy = [...this.state.inputs];
-        inputsCopy.splice(index, 1);
-        this.setState({
-            inputs: inputsCopy,
-        });
     }
 
     _getName = acronym => {
@@ -346,63 +348,41 @@ class EditKratosDiscsModal extends Component {
     }
 
     _renderRow(item) {
-        if (item.key === 'bug') {
-            // hack to get bug pill working
-            // TODO: make this generic rather than specific so you can have multiple pill types
-            return (
-                <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View
-                        style={[
-                            {
-                                backgroundColor: 'white',
-                                height: 50,
-                                justifyContent: 'center',
-                            },
-                            styles.rowBorders,
-                        ]}>
-                        <Text style={{ marginHorizontal: 10, color: 'red' }}>
-                            {item.key}
-                        </Text>
-                    </View>
-                </TouchableHighlight>
-            );
-        } else {
-            // Show item.key if the full name is not provided
-            const text = item.fullName || item.key;
+        // Show item.key if the full name is not provided
+        const text = item.fullName || item.key;
 
-            return (
-                <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View
-                        style={[
-                            {
-                                flexDirection: 'row',
-                                backgroundColor: 'white',
-                                height: 50,
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            },
-                            styles.rowBorders,
-                        ]}>
+        return (
+            <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
+                <View
+                    style={[
+                        {
+                            flexDirection: 'row',
+                            backgroundColor: 'white',
+                            height: 50,
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        },
+                        styles.rowBorders,
+                    ]}>
+                    <Text
+                        style={{
+                            marginHorizontal: 10,
+                            color: 'rgba(77, 77, 77, 1)',
+                        }}>
+                        {text}
+                    </Text>
+                    {item.description && (
                         <Text
                             style={{
                                 marginHorizontal: 10,
-                                color: 'rgba(77, 77, 77, 1)',
+                                color: 'rgba(130, 130, 130, 1)',
                             }}>
-                            {text}
+                            {item.description}
                         </Text>
-                        {item.description && (
-                            <Text
-                                style={{
-                                    marginHorizontal: 10,
-                                    color: 'rgba(130, 130, 130, 1)',
-                                }}>
-                                {item.description}
-                            </Text>
-                        )}
-                    </View>
-                </TouchableHighlight>
-            );
-        }
+                    )}
+                </View>
+            </TouchableHighlight>
+        );
     }
 
     // TODO: move 242 gray from global stylesheet
