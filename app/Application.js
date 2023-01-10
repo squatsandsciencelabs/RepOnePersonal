@@ -29,9 +29,6 @@ TextInput.defaultProps.allowFontScaling = false;
 // initialize the store
 var store = Store();
 
-// request permissions
-Permissions();
-
 // initialize analytics
 Analytics.setInitialAnalytics();
 
@@ -41,14 +38,18 @@ GoogleSignInSetup.configure();
 // configure firebase
 Firebase.configure();
 
-// start the bluetooth
-Bluetooth(store);
-
 // set up app state listeners
 AppState(store);
 
 // render
 class RepOnePersonal extends Component {
+    async componentDidMount() {
+        // request permissions
+        await Permissions();
+        // start the bluetooth
+        await Bluetooth(store);
+    }
+
     render() {
         return (
             <ActionSheetProvider>

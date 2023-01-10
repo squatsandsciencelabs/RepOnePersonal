@@ -23,7 +23,7 @@ import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
 
-export default function (store) {
+export default async function (store) {
     //native bluetooth
     const Emitter = new NativeEventEmitter(NativeModules.BleManager);
 
@@ -231,7 +231,7 @@ export default function (store) {
 
     try {
         // start the manager
-        BleManager.start({
+        await BleManager.start({
             showAlert: false,
             // disabled for now, more useful for individual mode not kiosk mode
             // restoreIdentifierKey: 'RepOneKioskRestoreIdentifier',
