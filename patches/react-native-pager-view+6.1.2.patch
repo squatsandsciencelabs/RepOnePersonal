@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-native-pager-view/ios/ReactNativePageView.m b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
-index 8f20bf8..2424f3f 100644
+index cf2bd57..c37a09e 100644
 --- a/node_modules/react-native-pager-view/ios/ReactNativePageView.m
 +++ b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
 @@ -1,6 +1,6 @@
@@ -10,7 +10,7 @@ index 8f20bf8..2424f3f 100644
  #import <React/RCTViewManager.h>
  
  #import "UIViewController+CreateExtension.h"
-@@ -188,6 +188,9 @@ - (void)setReactViewControllers:(NSInteger)index
+@@ -167,6 +167,9 @@ - (void)setReactViewControllers:(NSInteger)index
      uint16_t coalescingKey = _coalescingKey++;
      
      if (animated == YES) {
