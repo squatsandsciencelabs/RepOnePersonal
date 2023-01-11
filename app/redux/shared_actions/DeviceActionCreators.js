@@ -1,7 +1,7 @@
 // These exist in shared because the Bluetooth service needs access to them
 // Services do not have "Actions" they're directly associated with, so they use the shared creator
 
-import { NativeModules } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
 import {
@@ -31,21 +31,80 @@ import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as Analytics from 'app/services/Analytics';
 import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
+import {
+    check,
+    PERMISSIONS,
+    RESULTS,
+    openSettings,
+    requestMultiple,
+} from 'react-native-permissions';
 
 // SCANNING
-export const startDeviceScan = (isManualScan = false) => (dispatch, getState) => {
-    // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
-    // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
-    BleManager.scan([], 99999, false);
+export const startDeviceScan =
+    (isManualScan = false) =>
+    async (dispatch, getState) => {
+        // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
+        // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
+        if (Platform.OS !== 'ios') {
+            const apiLevel = Platform.Version;
 
-    const state = getState();
-    logAttemptScanAnalytics(state, isManualScan);
+            const permissions =
+                apiLevel >= 31
+                    ? [
+                          PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+                          PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+                      ]
+                    : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
 
-    dispatch({
-        type: START_DEVICE_SCAN,
-        isManualScan: isManualScan,
-    });
-};
+            let allPermissionsGranted = await areAllPermissionsGranted(
+                permissions,
+            );
+
+            if (!isManualScan && !allPermissionsGranted) {
+                return;
+            }
+
+            if (isManualScan && !allPermissionsGranted) {
+                await requestMultiple([
+                    PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+                    PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+                ]);
+
+                allPermissionsGranted = await areAllPermissionsGranted(
+                    permissions,
+                );
+
+                if (!allPermissionsGranted) {
+                    Alert.alert(
+                        'RepOne would like to use Bluetooth for discovering devices',
+                        'You can allow RepOne to use Bluetooth in Settings.',
+                        [
+                            {
+                                text: 'Cancel',
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'Open Settings',
+                                style: 'default',
+                                onPress: openSettings,
+                            },
+                        ],
+                    );
+                    return;
+                }
+            }
+        }
+
+        BleManager.scan([], 99999, false);
+
+        const state = getState();
+        logAttemptScanAnalytics(state, isManualScan);
+
+        dispatch({
+            type: START_DEVICE_SCAN,
+            isManualScan: isManualScan,
+        });
+    };
 
 export const stopDeviceScan = () => (dispatch, getState) => {
     BleManager.stopScan();
@@ -289,3 +348,18 @@ const logDisconnectedFromDeviceAnalytics = (isIntentional, state) => {
         is_intentional: isIntentional
     }, state);
 };
+
+// HELPERS
+
+const asyncEvery = async (arr, predicate) => {
+    for (let e of arr) {
+        if (!(await predicate(e))) return false;
+    }
+    return true;
+};
+
+const areAllPermissionsGranted = async permissions =>
+    await asyncEvery(permissions, async permission => {
+        const permissionStatus = await check(permission);
+        return permissionStatus === RESULTS.GRANTED;
+    });
