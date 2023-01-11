@@ -20,6 +20,8 @@ function record(props, camera) {
             try {
                 // save to gallery
                 const uri = await CameraRoll.save(video.path);
+                // Note: can't delete the video file from cache as it's stored in the readonly tmp folder
+                // After each app reload the tmp folder is cleared so shouldn't cause problems
 
                 // dispatch info
                 if (props.setID) {
