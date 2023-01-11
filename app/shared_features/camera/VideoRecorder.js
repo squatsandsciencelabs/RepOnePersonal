@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import * as MediaLibrary from 'expo-media-library';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,9 +20,6 @@ function record(props, camera) {
             try {
                 // save to gallery
                 const uri = await CameraRoll.save(video.path);
-
-                // delete from cache
-                await MediaLibrary.deleteAssetsAsync(video.path);
 
                 // dispatch info
                 if (props.setID) {
