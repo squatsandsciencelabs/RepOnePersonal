@@ -38,6 +38,7 @@ import {
     openSettings,
     requestMultiple,
 } from 'react-native-permissions';
+import * as BluetoothUtils from 'app/utility/BluetoothUtlis';
 
 // SCANNING
 export const startDeviceScan =
@@ -46,31 +47,31 @@ export const startDeviceScan =
         // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
         // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
         if (Platform.OS !== 'ios') {
-            const apiLevel = Platform.Version;
+            const permissions = BluetoothUtils.getBluetoothPermissionsAndroid();
 
-            const permissions =
-                apiLevel >= 31
-                    ? [
-                          PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-                          PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-                      ]
-                    : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
-
-            let allPermissionsGranted = await areAllPermissionsGranted(
+            let allPermissionsGranted = await BluetoothUtils.areAllPermissionsGranted(
                 permissions,
             );
+
+            const bleManagerStarted = BluetoothUtils.getDidBleManagerStart();
 
             if (!isManualScan && !allPermissionsGranted) {
                 return;
             }
 
-            if (isManualScan && !allPermissionsGranted) {
-                await requestMultiple([
-                    PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-                    PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-                ]);
+            if((!isManualScan && allPermissionsGranted && !bleManagerStarted) || isManualScan && allPermissionsGranted && !bleManagerStarted) {
+                try{
+                    await BleManager.start({showAlert: false})
+                    BluetoothUtils.setDidBleManagerStart(true);
+                } catch (e) {
+                    console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
+                }
+            }
 
-                allPermissionsGranted = await areAllPermissionsGranted(
+            if (isManualScan && !allPermissionsGranted) {
+                await requestMultiple(permissions);
+
+                allPermissionsGranted = await BluetoothPermissionsUtils.areAllPermissionsGranted(
                     permissions,
                 );
 
@@ -91,6 +92,13 @@ export const startDeviceScan =
                         ],
                     );
                     return;
+                } else {
+                    try{
+                        await BleManager.start({showAlert: false})
+                        BluetoothUtils.setDidBleManagerStart(true);
+                    } catch (e) {
+                        console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
+                    }
                 }
             }
         }
@@ -348,18 +356,3 @@ const logDisconnectedFromDeviceAnalytics = (isIntentional, state) => {
         is_intentional: isIntentional
     }, state);
 };
-
-// HELPERS
-
-const asyncEvery = async (arr, predicate) => {
-    for (let e of arr) {
-        if (!(await predicate(e))) return false;
-    }
-    return true;
-};
-
-const areAllPermissionsGranted = async permissions =>
-    await asyncEvery(permissions, async permission => {
-        const permissionStatus = await check(permission);
-        return permissionStatus === RESULTS.GRANTED;
-    });

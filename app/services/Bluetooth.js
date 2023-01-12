@@ -19,6 +19,7 @@ import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCrea
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import * as BluetoothUtlis from 'app/utility/BluetoothUtlis';
 
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
@@ -230,12 +231,20 @@ export default async function (store) {
     });
 
     try {
+        if(Platform.OS !== 'ios'){
+            const allBluetoothPermissionGranted = await BluetoothUtlis.checkBluetoothPermissionsAndroid();
+
+            if(!allBluetoothPermissionGranted) {
+                throw new Error('Bluetooth permissions are missing');
+            }
+        }
         // start the manager
         await BleManager.start({
             showAlert: false,
             // disabled for now, more useful for individual mode not kiosk mode
             // restoreIdentifierKey: 'RepOneKioskRestoreIdentifier',
         });
+        BluetoothUtlis.setDidBleManagerStart(true);
     } catch(err) {
         // TODO: add error logging here
         console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
