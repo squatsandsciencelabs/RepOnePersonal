@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, TextInput } from 'react-native';
+import { AppRegistry, Platform, Text, TextInput } from 'react-native';
 import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
@@ -19,6 +19,7 @@ import Bluetooth from 'app/services/Bluetooth';
 import AppState from 'app/services/AppState';
 import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
+import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 
 // TODO: confirm font scaling disabled
 Text.defaultProps = Text.defaultProps || {};
@@ -46,8 +47,18 @@ class RepOnePersonal extends Component {
     async componentDidMount() {
         // request permissions
         await Permissions();
-        // start the bluetooth
-        await Bluetooth(store);
+
+        if (Platform.OS !== 'ios') {
+            let allPermissionsGranted =
+                await BluetoothUtils.checkBluetoothPermissionsAndroid();
+
+            if (allPermissionsGranted) {
+                await Bluetooth(store);
+            }
+        } else {
+            // start the bluetooth
+            await Bluetooth(store);
+        }
     }
 
     render() {
