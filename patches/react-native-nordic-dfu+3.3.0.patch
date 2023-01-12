@@ -1,3 +1,16 @@
+diff --git a/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java b/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
+index 5d54214..997a271 100644
+--- a/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
++++ b/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
+@@ -38,7 +38,7 @@ public class RNNordicDfuModule extends ReactContextBaseJavaModule implements Lif
+         if (name != null) {
+             starter.setDeviceName(name);
+         }
+-        starter.setPacketsReceiptNotificationsValue(1);
++        // starter.setPacketsReceiptNotificationsValue(1);
+         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
+         starter.setZip(filePath);
+         final DfuServiceController controller = starter.start(this.reactContext, DfuService.class);
 diff --git a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
 index dd68681..9e00fa8 100644
 --- a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
