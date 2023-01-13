@@ -19,7 +19,7 @@ import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCrea
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
-import * as BluetoothUtils from 'app/utility/BluetoothUtlis';
+import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
