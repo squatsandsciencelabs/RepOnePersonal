@@ -38,7 +38,7 @@ import {
     openSettings,
     requestMultiple,
 } from 'react-native-permissions';
-import * as BluetoothUtils from 'app/utility/BluetoothUtlis';
+import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 
 // SCANNING
 export const startDeviceScan =
