@@ -56,7 +56,7 @@ function* finishCalibration(action) {
             if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('endcal');
                 yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
-                toast('Your RepOne device is now calibrated for accurate 3D readings.');
+                toast('Your RepOne Sensor is now calibrated for accurate 3D readings.');
             } else {
                 console.tron.log(`skipping finish calibration as format version ${formatVersion} is not >= 2`);
             }
@@ -87,7 +87,7 @@ function* resetCalibration(action) {
             if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('reset');
                 yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
-                toast('Your RepOne device has reset its calibration for 3D readings.');
+                toast('Your RepOne Sensor has reset its calibration for 3D readings.');
             } else {
                 console.tron.log(`skipping reset calibration as format version ${formatVersion} is not >= 2`);
             }

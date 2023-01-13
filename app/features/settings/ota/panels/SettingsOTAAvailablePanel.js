@@ -5,9 +5,9 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 class SettingsOTAAvailablePanel extends Component {
 
     render() {
-        let deviceFirmwareText = <Text style={ styles.description }>Connect a RepOne unit to compare versions.</Text>;
+        let deviceFirmwareText = <Text style={ styles.description }>Connect a RepOne Sensor to compare versions.</Text>;
         if (this.props.deviceFirmwareVersion) {
-            deviceFirmwareText = <Text style={ styles.description }>The connected RepOne unit is <Text style={{fontWeight: "bold"}}>Version {this.props.deviceFirmwareVersion}</Text></Text>;
+            deviceFirmwareText = <Text style={ styles.description }>The connected RepOne Sensor is <Text style={{fontWeight: "bold"}}>Version {this.props.deviceFirmwareVersion}</Text></Text>;
         }
         return (
             <View>
