@@ -108,17 +108,16 @@ export const startDeviceScan =
             console.tron.log(`start device scan failed to start blemanager`);
             const state = getState();
             logFailedAttemptScanAnalytics(state, isManualScan);
-            return;
         } else {
             BleManager.scan([], 99999, false);
             const state = getState();
             logAttemptScanAnalytics(state, isManualScan);
-        }
 
-        dispatch({
-            type: START_DEVICE_SCAN,
-            isManualScan: isManualScan,
-        });
+            dispatch({
+                type: START_DEVICE_SCAN,
+                isManualScan: isManualScan,
+            });
+        }
     };
 
 export const stopDeviceScan = () => (dispatch, getState) => {
