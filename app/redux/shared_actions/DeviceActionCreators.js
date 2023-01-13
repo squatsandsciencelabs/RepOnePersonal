@@ -63,7 +63,7 @@ export const startDeviceScan =
                 try{
                     await BleManager.start({showAlert: false})
                     BluetoothUtils.setDidBleManagerStart(true);
-                } catch (e) {
+                } catch (err) {
                     console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
                     const state = getState();
                     logFailedAttemptScanAnalytics(state, isManualScan);
@@ -99,7 +99,7 @@ export const startDeviceScan =
                     try{
                         await BleManager.start({showAlert: false})
                         BluetoothUtils.setDidBleManagerStart(true);
-                    } catch (e) {
+                    } catch (err) {
                         console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
                         const state = getState();
                         logFailedAttemptScanAnalytics(state, isManualScan);
@@ -111,7 +111,7 @@ export const startDeviceScan =
 
         if (BluetoothUtils.getDidBleManagerStart() === false) {
             // sanity check start failed, exit
-            console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+            console.tron.log(`start device scan failed to start blemanager`);
             const state = getState();
             logFailedAttemptScanAnalytics(state, isManualScan);
             return;
