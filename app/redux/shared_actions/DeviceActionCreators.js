@@ -65,9 +65,6 @@ export const startDeviceScan =
                     BluetoothUtils.setDidBleManagerStart(true);
                 } catch (err) {
                     console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
-                    const state = getState();
-                    logFailedAttemptScanAnalytics(state, isManualScan);
-                    return;
                 }
             }
 
@@ -101,9 +98,6 @@ export const startDeviceScan =
                         BluetoothUtils.setDidBleManagerStart(true);
                     } catch (err) {
                         console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
-                        const state = getState();
-                        logFailedAttemptScanAnalytics(state, isManualScan);
-                        return;
                     }
                 }
             }
