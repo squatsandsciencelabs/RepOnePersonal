@@ -44,8 +44,6 @@ import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 export const startDeviceScan =
     (isManualScan = false) =>
     async (dispatch, getState) => {
-        // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
-        // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
         if (Platform.OS !== 'ios') {
             const permissions = BluetoothUtils.getBluetoothPermissionsAndroid();
 
@@ -109,6 +107,8 @@ export const startDeviceScan =
             const state = getState();
             logFailedAttemptScanAnalytics(state, isManualScan);
         } else {
+            // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
+            // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
             BleManager.scan([], 99999, false);
             const state = getState();
             logAttemptScanAnalytics(state, isManualScan);
