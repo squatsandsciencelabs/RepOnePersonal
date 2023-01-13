@@ -247,7 +247,7 @@ export default async function (store) {
         BluetoothUtlis.setDidBleManagerStart(true);
     } catch(err) {
         // TODO: add error logging here
-        console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
+        console.tron.log(`Bluetooth.js start ble manager error ${JSON.stringify(err)}`);
     }
 }
 
