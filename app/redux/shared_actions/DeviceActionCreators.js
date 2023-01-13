@@ -64,7 +64,10 @@ export const startDeviceScan =
                     await BleManager.start({showAlert: false})
                     BluetoothUtils.setDidBleManagerStart(true);
                 } catch (e) {
-                    console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
+                    console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+                    const state = getState();
+                    logFailedAttemptScanAnalytics(state, isManualScan);
+                    return;
                 }
             }
 
@@ -97,16 +100,26 @@ export const startDeviceScan =
                         await BleManager.start({showAlert: false})
                         BluetoothUtils.setDidBleManagerStart(true);
                     } catch (e) {
-                        console.tron.log(`BluetoothSaga error ${JSON.stringify(err)}`);
+                        console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+                        const state = getState();
+                        logFailedAttemptScanAnalytics(state, isManualScan);
+                        return;
                     }
                 }
             }
         }
 
-        BleManager.scan([], 99999, false);
-
-        const state = getState();
-        logAttemptScanAnalytics(state, isManualScan);
+        if (BluetoothUtils.getDidBleManagerStart() === false) {
+            // sanity check start failed, exit
+            console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+            const state = getState();
+            logFailedAttemptScanAnalytics(state, isManualScan);
+            return;
+        } else {
+            BleManager.scan([], 99999, false);
+            const state = getState();
+            logAttemptScanAnalytics(state, isManualScan);
+        }
 
         dispatch({
             type: START_DEVICE_SCAN,
@@ -320,6 +333,12 @@ const logAddRepAnalytics = (state) => {
 
 const logAttemptScanAnalytics = (state, isManualScan) => {
     Analytics.logEventWithAppState('attempt_scan', {
+        is_manual: isManualScan,
+    }, state);
+};
+
+const logFailedAttemptScanAnalytics = (state, isManualScan) => {
+    Analytics.logEventWithAppState('failed_attempt_scan', {
         is_manual: isManualScan,
     }, state);
 };
