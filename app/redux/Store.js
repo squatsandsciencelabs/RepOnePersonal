@@ -75,7 +75,7 @@ const initializeStore = () => {
                 createFilter('settings', [
                     'defaultMetric',
                     'endSetTimerDuration',
-                    'kratosAutoDeleteReps',
+                    'kratosAutoDeleteRepCount',
                     'syncDate',
                     'wasTimerEdited',
                     'wasMetricEdited',

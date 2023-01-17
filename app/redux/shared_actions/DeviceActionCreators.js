@@ -293,7 +293,7 @@ export const receivedKratosLiftData =
                 ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
             time: time,
             kratosAutoDeleteReps:
-                SettingsSelectors.getKratosAutoDeleteReps(state),
+                SettingsSelectors.getKratosAutoDeleteRepCount(state),
         });
 
         dispatch(TimerActionCreators.startEndSetTimer());
