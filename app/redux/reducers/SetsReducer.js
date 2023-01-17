@@ -858,14 +858,6 @@ const endSet = (state, action) => {
     });
 };
 
-// UPDATE_KRATOS_AUTO_DELETED_REPS
-
-const calculateAutoDeletedReps = (reps, autoDeleteReps) =>
-    reps.map((rep, i) => ({
-        ...rep,
-        removed: i + 1 <= autoDeleteReps,
-    }));
-
 // SAVE_WORKOUT_VIDEO
 
 const saveWorkoutVideo = (state, action) => {
