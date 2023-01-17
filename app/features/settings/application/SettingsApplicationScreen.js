@@ -8,7 +8,7 @@ import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 const mapStateToProps = state => ({
     endSetTimerDuration: SettingsSelectors.getEndSetTimerDuration(state),
     defaultMetric: SettingsSelectors.getDefaultMetric(state),
-    kratosAutoDeleteReps: SettingsSelectors.getKratosAutoDeleteReps(state),
+    kratosAutoDeleteReps: SettingsSelectors.getKratosAutoDeleteRepCount(state),
 });
 
 const mapDispatchToProps = dispatch => {

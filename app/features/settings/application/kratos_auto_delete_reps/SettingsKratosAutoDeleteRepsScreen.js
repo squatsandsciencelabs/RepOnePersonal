@@ -26,7 +26,7 @@ const mapStateToProps = state => ({
         MIN_AUTO_DELETE_REPS,
         MAX_AUTO_DELETE_REPS,
     ),
-    selectedValue: SettingsSelectors.getKratosAutoDeleteReps(state),
+    selectedValue: SettingsSelectors.getKratosAutoDeleteRepCount(state),
 });
 
 const mapDispatchToProps = dispatch => {

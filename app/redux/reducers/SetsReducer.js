@@ -32,7 +32,6 @@ import {
     SET_DEVICE_TYPE,
     SAVE_WORKOUT_SET_KRATOS_DISCS,
     SAVE_HISTORY_SET_KRATOS_DISCS,
-    SAVE_KRATOS_AUTO_DELETE_REPS,
 } from 'app/configs+constants/ActionTypes';
 import 'react-native-get-random-values';
 import { v4 as uuidV4 } from 'uuid';
@@ -42,6 +41,14 @@ import * as SetUtils from 'app/utility/SetUtils';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getDeviceType } from 'app/utility/SensorUtils';
+
+const initKratosDiscs = {
+    XS: null,
+    S: null,
+    M: null,
+    L: null,
+    XL: null,
+};
 
 const SetsReducer = (state = createDefaultState(), action) => {
     switch (action.type) {
@@ -75,8 +82,6 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return saveHistoryRep(state, action);
         case END_SET:
             return endSet(state, action);
-        case SAVE_KRATOS_AUTO_DELETE_REPS:
-            return updateKratosAutoDeletedReps(state, action);
         case SAVE_WORKOUT_VIDEO:
             return saveWorkoutVideo(state, action);
         case SAVE_HISTORY_VIDEO:
@@ -143,13 +148,7 @@ const setDeviceType = (state, action) => {
     let kratosDiscs = null;
 
     if (deviceType === 'Kratos') {
-        kratosDiscs = {
-            XS: null,
-            S: null,
-            M: null,
-            L: null,
-            XL: null,
-        };
+        kratosDiscs = initKratosDiscs;
     }
 
     const newSet = { ...set, deviceType, kratosDiscs };
@@ -639,7 +638,7 @@ const addRepData = (state, action) => {
 
     let setChanges = {
         reps: [...set.reps, rep],
-        removed: false
+        deleted: false
     };
 
     if (!set.initialStartTime) {
@@ -663,6 +662,10 @@ const addKratosRepData = (state, action) => {
     let set = workoutData[workoutData.length - 1];
 
     const deviceFamily = 'Kratos';
+
+    const previousRepsAreRemoved = set.reps.every(rep=>!!rep.removed);
+
+    const removed = previousRepsAreRemoved ? set.reps.length < action.kratosAutoDeleteReps : false;
 
     const rep = {
         isValid: action.isValid,
@@ -691,12 +694,12 @@ const addKratosRepData = (state, action) => {
         ePeakAngularAcceleration: action.ePeakAngularAcceleration,
         ePeakPower: action.ePeakPower,
         deviceFamily,
-        deleted: set.reps.length < action.kratosAutoDeleteReps,
+        removed,
     };
 
     let setChanges = {
         reps: [...set.reps, rep],
-        removed: false
+        deleted: false
     };
 
     if (!set.initialStartTime) {
@@ -826,13 +829,13 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
 
     // set 0 reps = removed check
     let activeRep = newReps.find((rep) => { return !rep.removed; });
-    let setWasRemoved = activeRep === undefined;
+    let setWasDeleted = activeRep === undefined;
 
     // set
     return {
         ...set,
         reps: newReps,
-        removed: setWasRemoved,
+        deleted: setWasDeleted,
     };
 };
 
@@ -860,28 +863,8 @@ const endSet = (state, action) => {
 const calculateAutoDeletedReps = (reps, autoDeleteReps) =>
     reps.map((rep, i) => ({
         ...rep,
-        deleted: i + 1 <= autoDeleteReps,
+        removed: i + 1 <= autoDeleteReps,
     }));
-
-const updateKratosAutoDeletedReps = (state, action) => {
-    const autoDeleteReps = action.autoDeleteReps;
-
-    const workoutData = state.workoutData.slice(0);
-
-    const set = state.workoutData[state.workoutData.length - 1];
-
-    const newSet = {
-        ...set,
-        reps: calculateAutoDeletedReps(set.reps, autoDeleteReps),
-    }
-    workoutData[workoutData.length - 1] = newSet;
-
-
-    return {
-        ...state,
-        workoutData: workoutData,
-    };
-};
 
 // SAVE_WORKOUT_VIDEO
 
@@ -1002,16 +985,8 @@ const endWorkout = (state, action) => {
         historyChanges[setID] = lastSet;
     }
 
-    const kratosDiscs = {
-        XS: null,
-        S: null,
-        M: null,
-        L: null,
-        XL: null,
-    };
-
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [createSet(1, action.defaultMetric, lastSet.deviceType, kratosDiscs)];
+    let newWorkoutData = [createSet(1, action.defaultMetric, lastSet.deviceType, initKratosDiscs)];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {

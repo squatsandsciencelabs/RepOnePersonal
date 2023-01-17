@@ -14,8 +14,8 @@ export const getEndSetTimerDuration = state =>
 export const getIsEditingKratosAutoDeleteReps = state =>
     stateRoot(state).isEditingKratosAutoDeleteReps;
 
-export const getKratosAutoDeleteReps = state =>
-    stateRoot(state).kratosAutoDeleteReps;
+export const getKratosAutoDeleteRepCount = state =>
+    stateRoot(state).kratosAutoDeleteRepCount;
 
 export const getIfTimerWasEdited = state => stateRoot(state).wasTimerEdited;
 

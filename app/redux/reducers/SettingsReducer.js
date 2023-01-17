@@ -20,7 +20,7 @@ const defaultState = {
     isEditingDefaultMetric: false,
     endSetTimerDuration: 30,
     isEditingEndSetTimer: false,
-    kratosAutoDeleteReps: DEFAULT_KRATOS_AUTO_DELETE_REPS,
+    kratosAutoDeleteRepCount: DEFAULT_KRATOS_AUTO_DELETE_REPS,
     isEditingKratosAutoDeleteReps: false,
     syncDate: '',
     wasTimerEdited: false,
@@ -60,7 +60,7 @@ const SettingsReducer = (state = defaultState, action) => {
             });
         case SAVE_KRATOS_AUTO_DELETE_REPS:
             return Object.assign({}, state, {
-                kratosAutoDeleteReps: action.autoDeleteReps,
+                kratosAutoDeleteRepCount: action.autoDeleteReps,
             });
         case PRESENT_KRATOS_AUTO_DELETE_REPS:
             return Object.assign({}, state, {
