@@ -35,7 +35,7 @@ import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/
 
 let downloadTask = null;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
-const filePath =`${FileSystem.documentDirectory}/firmware.zip`;
+const filePath =`${FileSystem.documentDirectory}firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
@@ -167,7 +167,7 @@ function* startDownload(action) {
         downloadTask = FileSystem.createDownloadResumable(`https://firmware.reponestrength.com/${currentVersion}.zip`, filePath)
         const result = yield apply(downloadTask, downloadTask.downloadAsync);
 
-        console.tron.log(`download should be finished to ${result.uri}`);
+        console.tron.log(`download should be finished to ${result.uri} when filepath is ${filePath}`);
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
@@ -214,7 +214,8 @@ function* startInstall(action) {
         if (OpenBarbellConfig.bulkEnabled) {
             yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
         }
-        const path = Platform.OS === 'ios' ? `file://${filePath}` : filePath;
+        const path = Platform.OS === 'ios' ? filePath : filePath.replace('file://', '');
+        console.tron.log(`passing in path ${path}`);
         yield apply(NordicDFU, NordicDFU.startDFU, [{
             deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
             filePath: path,
