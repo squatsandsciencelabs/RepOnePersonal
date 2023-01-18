@@ -493,20 +493,27 @@ const exerciseExists = (exercise, arr) => {
 };
 
 // memoizing due to exercise picker screen
-export const generateExerciseItems = createSelector(
-    getAllSets,
-    (sets) => {
-        const exercises = [];
+export const generateExerciseItems = createSelector(getAllSets, sets => {
+    const exercises = [];
 
-        sets.forEach((set) => {
-            if (set.exercise) {
-                const lowercase = set.exercise.toLowerCase();
-                if (!exerciseExists(lowercase, exercises) && SetUtils.numValidUnremovedReps(set) > 0) {
-                    exercises.push({ label: lowercase, value: lowercase });
-                }
+    sets.forEach(set => {
+        if (set.exercise) {
+            const containsKratosReps = set.reps.some(
+                rep => rep.deviceFamily === 'Kratos',
+            );
+
+            const nonKratos =
+                set.deviceType !== 'Kratos' && !containsKratosReps;
+
+            const lowercase = set.exercise.toLowerCase();
+            if (
+                !exerciseExists(lowercase, exercises) &&
+                SetUtils.numValidUnremovedReps(set) > 0 &&
+                nonKratos
+            ) {
+                exercises.push({ label: lowercase, value: lowercase });
             }
-        });
-    
-        return exercises;
-    }
-);
+        }
+    });
+    return exercises;
+});
