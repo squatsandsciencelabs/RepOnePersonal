@@ -502,14 +502,18 @@ export const generateExerciseItems = createSelector(getAllSets, sets => {
                 rep => rep.deviceFamily === 'Kratos',
             );
 
-            const nonKratos =
+            const isNonKratosSet =
                 set.deviceType !== 'Kratos' && !containsKratosReps;
 
+            if (!isNonKratosSet) {
+                return;
+            }
+
             const lowercase = set.exercise.toLowerCase();
+
             if (
                 !exerciseExists(lowercase, exercises) &&
-                SetUtils.numValidUnremovedReps(set) > 0 &&
-                nonKratos
+                SetUtils.numValidUnremovedReps(set) > 0
             ) {
                 exercises.push({ label: lowercase, value: lowercase });
             }
