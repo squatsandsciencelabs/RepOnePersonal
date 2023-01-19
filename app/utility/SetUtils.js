@@ -7,12 +7,10 @@ import {
     PKH_METRIC,
     ROM_METRIC,
     DURATION_METRIC,
-    PEAK_FORCE_METRIC,
-    PEAK_FORCE_HEIGHT_METRIC,
-    AVERAGE_FORCE_METRIC,
-    PEAK_POWER_METRIC,
-    PEAK_POWER_HEIGHT_METRIC,
-    AVERAGE_POWER_METRIC,
+    FORCE_METRIC,
+    FORCE_HEIGHT_METRIC,
+    POWER_METRIC,
+    POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
@@ -607,18 +605,14 @@ export const getDisplayMetric = (metric, rep, set=null) => {
             return rep.linear3DROM ? rep.linear3DROM : INVALID;
         case DURATION_METRIC:
             return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
-        case PEAK_FORCE_METRIC:
+        case FORCE_METRIC:
             return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
-        case PEAK_FORCE_HEIGHT_METRIC:
+        case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
-        case AVERAGE_FORCE_METRIC:
-            return rep.averageForce ? Number(rep.averageForce).toFixed(2) : EMPTY;
-        case PEAK_POWER_METRIC:
+        case POWER_METRIC:
             return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
-        case PEAK_POWER_HEIGHT_METRIC:
+        case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
-        case AVERAGE_POWER_METRIC:
-            return rep.averagePower ? Number(rep.averagePower).toFixed(2) : EMPTY;
         default:
             return INVALID;
     }
@@ -656,22 +650,14 @@ export const getKratosDisplayMetric = (metric, rep, set = null) => {
             return rep.duration
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
-        case PEAK_FORCE_METRIC:
+        case FORCE_METRIC:
             return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
-        case PEAK_FORCE_HEIGHT_METRIC:
+        case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
-        case AVERAGE_FORCE_METRIC:
-            return rep.averageForce
-                ? Number(rep.averageForce).toFixed(2)
-                : EMPTY;
-        case PEAK_POWER_METRIC:
+        case POWER_METRIC:
             return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
-        case PEAK_POWER_HEIGHT_METRIC:
+        case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
-        case AVERAGE_POWER_METRIC:
-            return rep.averagePower
-                ? Number(rep.averagePower).toFixed(2)
-                : EMPTY;
         default:
             return INVALID;
     }
