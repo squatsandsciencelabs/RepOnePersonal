@@ -269,6 +269,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             setID: set.setID,
             removed: rep.removed,
             key: set.setID+i,
+            isLast: repCount === set.reps.length,
         };
 
         if (rep.deviceFamily === 'Kratos') {
