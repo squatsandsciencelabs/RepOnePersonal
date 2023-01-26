@@ -20,7 +20,7 @@ class SetDataRow extends PureComponent {
                     name="close"
                     size={20}
                     color="lightgray"
-                    style={{ marginTop: -1, marginRight: 3 }}
+                    style={styles.icon}
                 />
             );
         } else {
@@ -29,7 +29,7 @@ class SetDataRow extends PureComponent {
                     name="undo"
                     size={20}
                     color="lightgray"
-                    style={{ marginTop: -1, marginRight: 3 }}
+                    style={styles.icon}
                 />
             );
         }
@@ -44,11 +44,7 @@ class SetDataRow extends PureComponent {
                     style={[
                         styles.border,
                         {
-                            flex: 1,
-                            alignItems: 'stretch',
-                            backgroundColor: 'white',
                             paddingTop: 10,
-                            paddingBottom: 10,
                         },
                     ]}>
                     <TouchableOpacity
@@ -69,10 +65,7 @@ class SetDataRow extends PureComponent {
                                 return (
                                     <View
                                         key={`row-${itemNumber}-${rowType}`}
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}>
+                                        style={styles.rowWrapper}>
                                         <View style={styles.itemContainer}>
                                             <Text
                                                 style={[
@@ -104,23 +97,19 @@ class SetDataRow extends PureComponent {
                                 );
                             })}
                         </View>
-                        <View style={{ alignSelf: 'center', marginLeft: 10 }}>
-                            {button}
-                        </View>
+                        <View style={styles.buttonWrapper}>{button}</View>
                     </TouchableOpacity>
+
+                    <View style={styles.bottomBorderWrapper}>
+                        {!this.props.item.isLast && (
+                            <View style={styles.bottomBorder} />
+                        )}
+                    </View>
                 </View>
             );
         } else {
             return (
-                <View
-                    style={[
-                        styles.border,
-                        {
-                            flex: 1,
-                            alignItems: 'stretch',
-                            backgroundColor: 'white',
-                        },
-                    ]}>
+                <View style={styles.border}>
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => this._onPressRow()}>
@@ -151,6 +140,9 @@ const styles = StyleSheet.create({
         borderColor: '#e0e0e0',
         borderLeftWidth: 1,
         borderRightWidth: 1,
+        flex: 1,
+        alignItems: 'stretch',
+        backgroundColor: 'white',
     },
     bar: {
         flex: 1,
@@ -179,6 +171,22 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'lightgray',
     },
+    bottomBorder: {
+        height: 1,
+        backgroundColor: '#F2F2F2',
+        justifySelf: 'center',
+    },
+    bottomBorderWrapper: {
+        paddingLeft: 13,
+        paddingRight: 33,
+        marginTop: 10,
+    },
+    icon: { marginTop: -1, marginRight: 3 },
+    rowWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    buttonWrapper: { alignSelf: 'center', marginLeft: 10 },
 });
 
 // HELPERS
