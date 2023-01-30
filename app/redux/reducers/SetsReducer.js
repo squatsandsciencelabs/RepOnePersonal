@@ -695,6 +695,7 @@ const addKratosRepData = (state, action) => {
         ePeakPower: action.ePeakPower,
         deviceFamily,
         removed,
+        time: action.time,
     };
 
     let setChanges = {
