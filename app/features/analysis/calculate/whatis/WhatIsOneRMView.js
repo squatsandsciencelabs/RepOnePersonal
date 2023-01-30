@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -9,15 +9,16 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 class WhatIsOneRMView extends Component {
-
     _close() {
         this.props.closeModal();
     }
 
     render() {
-        const body = "Estimated One-Rep Max is based on the fastest velocity of each set of a given exercise within a specified date range, extrapolated to the lowest velocity at which you think you can successfully complete a max lift attempt.\n\nThis estimate is provided with an r² based on how much exercise data is included and how well that data adheres to a general trend. While outliers sometimes occur naturally, the key to accurate estimation is recording set information as fully and carefully as possible."
+        const body =
+            'Estimated One-Rep Max is based on the fastest velocity of each set of a given exercise within a specified date range, extrapolated to the lowest velocity at which you think you can successfully complete a max lift attempt.\n\nThis estimate is provided with an r² based on how much exercise data is included and how well that data adheres to a general trend. While outliers sometimes occur naturally, the key to accurate estimation is recording set information as fully and carefully as possible.';
         const top = Platform.OS === 'ios' ? 0 : 5;
 
         return (
@@ -26,34 +27,64 @@ class WhatIsOneRMView extends Component {
                     visible={this.props.isModalShowing}
                     animationType={'fade'}
                     onRequestClose={() => this.closeModal()}
-                    transparent={true}
-                >
+                    transparent={true}>
                     <View style={styles.container}>
                         <View style={styles.bodyContainer}>
                             <Text style={styles.titleText}>What is e1RM?</Text>
 
-                            <View style={{position: 'absolute', left: 0, top}}>
-                                <TouchableOpacity onPress={() => this._close() }>
+                            <View
+                                style={{ position: 'absolute', left: 0, top }}>
+                                <TouchableOpacity onPress={() => this._close()}>
                                     <View style={styles.nav}>
-                                        <Icon name="times-circle" size={20} color='red' />
+                                        <Icon
+                                            name="times-circle"
+                                            size={20}
+                                            color="red"
+                                        />
                                     </View>
                                 </TouchableOpacity>
                             </View>
 
+                            {getKratosEnabled() && (
+                                <View style={styles.kratosNote}>
+                                    <Text>
+                                        <Text style={styles.bold}>
+                                            Note:&nbsp;
+                                        </Text>
+                                        <Text>
+                                            e1RM is not compatible with Kratos
+                                        </Text>
+                                    </Text>
+                                </View>
+                            )}
+
                             <Text>{body}</Text>
 
-                            <TouchableOpacity style={{alignItems: 'center', marginTop: 20}} onPress={ () => this.props.presentAlgorithm() }>
-                                <Text style= {[SETTINGS_PANEL_STYLES.tappableText]} >How does the algorithm work?</Text>
+                            <TouchableOpacity
+                                style={{ alignItems: 'center', marginTop: 20 }}
+                                onPress={() => this.props.presentAlgorithm()}>
+                                <Text
+                                    style={[
+                                        SETTINGS_PANEL_STYLES.tappableText,
+                                    ]}>
+                                    How does the algorithm work?
+                                </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{alignItems: 'center', marginTop: 15}} onPress={ () => this.props.presentBestResults() }>
-                                <Text style= {[SETTINGS_PANEL_STYLES.tappableText]} >How can I get the best results?</Text>
+                            <TouchableOpacity
+                                style={{ alignItems: 'center', marginTop: 15 }}
+                                onPress={() => this.props.presentBestResults()}>
+                                <Text
+                                    style={[
+                                        SETTINGS_PANEL_STYLES.tappableText,
+                                    ]}>
+                                    How can I get the best results?
+                                </Text>
                             </TouchableOpacity>
-
                         </View>
                     </View>
                 </Modal>
-          </View>
+            </View>
         );
     }
 }
@@ -87,6 +118,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginBottom: 20,
     },
+    kratosNote: {
+        marginBottom: 15,
+    },
+    bold: { fontWeight: 'bold' },
 });
 
 export default WhatIsOneRMView;
