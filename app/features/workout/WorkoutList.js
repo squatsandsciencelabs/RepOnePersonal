@@ -30,6 +30,26 @@ import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO
 import EditWorkoutKratosDiscsScreen from './kratos_discs/EditWorkoutKratosDiscsScreen';
 
 class WorkoutList extends Component {
+    // UPDATE
+
+    shouldComponentUpdate(nextProps) {
+        const differentShowRemoved =
+            nextProps.shouldShowRemoved !== this.props.shouldShowRemoved;
+        const differentSections = nextProps.sections !== this.props.sections;
+
+        const differentIsLoggedIn =
+            nextProps.isLoggedIn !== this.props.isLoggedIn;
+        const differentIsLoggingIn =
+            nextProps.isLoggingIn !== this.props.isLoggingIn;
+
+        return (
+            differentShowRemoved ||
+            differentSections ||
+            differentIsLoggedIn ||
+            differentIsLoggingIn
+        );
+    }
+
     // RENDER
 
     _renderLoginBanner() {
