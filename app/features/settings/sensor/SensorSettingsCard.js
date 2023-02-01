@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     arrowIcon: {
         position: 'absolute',
-        right: 30,
+        right: 10,
         top: 10,
     },
 });
