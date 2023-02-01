@@ -5,17 +5,12 @@ import {
     TouchableOpacity,
     Platform,
     StyleSheet,
-    Linking,
 } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import * as DateUtils from 'app/utility/DateUtils';
 import SettingsEndSetTimerScreen from './timer/SettingsEndSetTimerScreen';
 import SettingsMetric from './metric/SettingsMetric';
-import SettingsKratosAutoDeleteRepsScreen from 'app/features/settings/application/kratos_auto_delete_reps/SettingsKratosAutoDeleteRepsScreen';
-
-const KRATOS_REDIRECT_URL =
-    'https://store.kabukistrength.net/collections/kratos-1';
 
 class SettingsApplicationPanel extends Component {
     // ACTIONS
@@ -26,18 +21,6 @@ class SettingsApplicationPanel extends Component {
 
     _tapDefaultMetric() {
         this.props.tapDefaultMetric();
-    }
-
-    _tapKratosAutoDeleteReps() {
-        this.props.tapKratosAutoDeleteReps();
-    }
-
-    _tapKratosFlywheel() {
-        Linking.canOpenURL(KRATOS_REDIRECT_URL).then(supported => {
-            if (supported) {
-                Linking.openURL(KRATOS_REDIRECT_URL);
-            }
-        });
     }
 
     // RENDER
@@ -51,7 +34,7 @@ class SettingsApplicationPanel extends Component {
                         { flexDirection: 'column' },
                     ]}>
                     <Text style={[{ marginBottom: 20 }, styles.titleText]}>
-                        Settings
+                        General App Settings
                     </Text>
 
                     <View>
@@ -84,29 +67,6 @@ class SettingsApplicationPanel extends Component {
                         </TouchableOpacity>
                     </View>
                     <SettingsMetric />
-
-                    <View>
-                        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                            <TouchableOpacity
-                                onPress={() => this._tapKratosFlywheel()}>
-                                <Text style={styles.linkText}>
-                                    Kratos Flywheel
-                                </Text>
-                            </TouchableOpacity>
-                            <Text style={styles.labelText}>
-                                {' '}
-                                auto-delete initial reps
-                            </Text>
-                        </View>
-
-                        <TouchableOpacity
-                            onPress={() => this._tapKratosAutoDeleteReps()}>
-                            <Text style={styles.linkText}>
-                                {this.props.kratosAutoDeleteReps} reps
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <SettingsKratosAutoDeleteRepsScreen />
                 </View>
             );
         } else {
@@ -141,22 +101,6 @@ class SettingsApplicationPanel extends Component {
                         </Text>
                     </View>
                     <SettingsMetric />
-
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            marginLeft: 7,
-                            marginBottom: -10,
-                        }}>
-                        <TouchableOpacity onPress={this._tapKratosFlywheel}>
-                            <Text style={styles.linkText}>Kratos Flywheel</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.labelText}>
-                            {' '}
-                            auto-delete initial reps
-                        </Text>
-                    </View>
-                    <SettingsKratosAutoDeleteRepsScreen />
                 </View>
             );
         }
