@@ -1,11 +1,42 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    Platform,
+} from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import SettingsEditRepOneRepColumnsScreen from './edit/SettingsEditRepOneRepColumnsScreen';
 
 class SettingsRepOneRepColumnsPanel extends Component {
     handleColumnPress = row => {
         this.props.presentEdit(row);
+    };
+
+    renderRow = (metric, index) => {
+        if (Platform.OS === 'ios') {
+            return (
+                <View style={styles.nameWrapper}>
+                    <Text style={[SETTINGS_PANEL_STYLES.tappableText]}>
+                        {metric}
+                    </Text>
+                    <Image
+                        source={require('app/appearance/images/icon_rep_columns_arrow.png')}
+                    />
+                </View>
+            );
+        }
+        return (
+            <View style={[{ flex: 1 }, styles.dropdownButton]}>
+                <SettingsEditRepOneRepColumnsScreen
+                    color={'rgba(47, 128, 237, 1)'}
+                    rank={index + 1}
+                    dropdownIconColor={'#4D4D4D'}
+                />
+            </View>
+        );
     };
 
     render() {
@@ -18,32 +49,34 @@ class SettingsRepOneRepColumnsPanel extends Component {
                     {this.props.metrics.map((metric, index) => {
                         return (
                             <TouchableOpacity
+                                key={`rep-column-${index + 1}`}
                                 onPress={() =>
                                     this.handleColumnPress(index + 1)
                                 }>
                                 <View
-                                    key={`rep-column-${index + 1}`}
-                                    style={styles.row}>
+                                    style={
+                                        Platform.OS === 'ios'
+                                            ? styles.row
+                                            : styles.rowAndroid
+                                    }>
                                     <Text style={styles.numeric}>
                                         {index + 1}.
                                     </Text>
-                                    <View style={styles.nameWrapper}>
-                                        <Text
-                                            style={[
-                                                SETTINGS_PANEL_STYLES.tappableText,
-                                            ]}>
-                                            {metric}
-                                        </Text>
-                                        <Image
-                                            source={require('app/appearance/images/icon_rep_columns_arrow.png')}
-                                        />
+                                    <View
+                                        style={{
+                                            lex: 1,
+                                            flexDirection: 'row',
+                                        }}>
+                                        {this.renderRow(metric, index)}
                                     </View>
                                 </View>
                             </TouchableOpacity>
                         );
                     })}
                 </View>
-                <SettingsEditRepOneRepColumnsScreen />
+                {Platform.OS === 'ios' && (
+                    <SettingsEditRepOneRepColumnsScreen />
+                )}
             </View>
         );
     }
@@ -52,7 +85,7 @@ class SettingsRepOneRepColumnsPanel extends Component {
 const styles = StyleSheet.create({
     columnsWrapper: {
         marginTop: 7,
-        paddingRight: 27,
+        paddingRight: 20,
     },
     labelText: {
         fontSize: 16,
@@ -64,10 +97,15 @@ const styles = StyleSheet.create({
     numeric: {
         color: '#979797',
         fontSize: 16,
+        width: 15,
     },
     row: {
         flexDirection: 'row',
         paddingVertical: 9,
+        alignItems: 'center',
+    },
+    rowAndroid: {
+        flexDirection: 'row',
         alignItems: 'center',
     },
     nameWrapper: {
@@ -75,6 +113,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginLeft: 12,
+        marginRight: 27,
+        alignItems: 'center',
+    },
+    dropdownButton: {
+        backgroundColor: 'white',
     },
 });
 
