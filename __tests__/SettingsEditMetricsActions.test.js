@@ -15,16 +15,18 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import * as Analytics from 'app/services/Analytics';
-import * as sut from 'app/features/settings/metrics/metric/SettingsEditMetricsActions';
+import * as sut from 'app/features/settings/sensor/repone/metrics/metric/SettingsEditMetricsActions';
 
-const middlewares = [ thunk ];
+const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 var logEventSpy = null;
 var store = null;
 
 describe('collapsedMetric Analysis', () => {
     beforeEach(() => {
-        logEventSpy = jest.spyOn(Analytics, 'logEventWithAppState').mockImplementation(() => {});        
+        logEventSpy = jest
+            .spyOn(Analytics, 'logEventWithAppState')
+            .mockImplementation(() => {});
         store = mockStore({
             collapsedSettings: {
                 metric1: AVG_VELOCITY_METRIC,
@@ -39,21 +41,20 @@ describe('collapsedMetric Analysis', () => {
                 quantifier5: ABS_LOSS_QUANTIFIER,
                 currentCollapsedMetricRank: 2,
                 isEditingMetric: false,
-                isEditingQuantifier: false,                
-            }
+                isEditingQuantifier: false,
+            },
         });
     });
 
     afterEach(() => {
-        logEventSpy.mockReset();        
+        logEventSpy.mockReset();
     });
 
     afterAll(() => {
         logEventSpy.mockRestore();
-    });   
+    });
 
     describe('change metric', () => {
-
         test('collapsedMetric changes to current rank', () => {
             const expectedMetric = AVG_VELOCITY_METRIC;
 
@@ -63,7 +64,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(2);
-            expect(params.from_metric).toBe(RPE_METRIC);   
+            expect(params.from_metric).toBe(RPE_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
 
@@ -76,7 +77,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(1);
-            expect(params.from_metric).toBe(AVG_VELOCITY_METRIC);   
+            expect(params.from_metric).toBe(AVG_VELOCITY_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
 
@@ -89,7 +90,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(2);
-            expect(params.from_metric).toBe(RPE_METRIC);   
+            expect(params.from_metric).toBe(RPE_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
 
@@ -102,7 +103,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(3);
-            expect(params.from_metric).toBe(ROM_METRIC);   
+            expect(params.from_metric).toBe(ROM_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
 
@@ -115,7 +116,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(4);
-            expect(params.from_metric).toBe(DURATION_METRIC);   
+            expect(params.from_metric).toBe(DURATION_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
 
@@ -128,9 +129,8 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_collapsed_metric');
             expect(params.rank).toBe(5);
-            expect(params.from_metric).toBe(AVG_VELOCITY_METRIC);   
+            expect(params.from_metric).toBe(AVG_VELOCITY_METRIC);
             expect(params.to_metric).toBe(expectedMetric);
         });
     });
-
 });

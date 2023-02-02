@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 
 import * as Analytics from 'app/services/Analytics';
-import * as sut from 'app/features/settings/metrics/SettingsMetricsActions';
+import * as sut from 'app/features/settings/sensor/repone/metrics/SettingsRepOneMetricsActions';
 
-const middlewares = [ thunk ];
+const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 var logEventSpy = null;
 var logScreenSpy = null;
@@ -13,23 +13,25 @@ var store = null;
 
 describe('what are metric tips', () => {
     beforeEach(() => {
-        logEventSpy = jest.spyOn(Analytics, 'logEventWithAppState').mockImplementation(() => {});        
+        logEventSpy = jest
+            .spyOn(Analytics, 'logEventWithAppState')
+            .mockImplementation(() => {});
         store = mockStore({
-            collapsedSettings: {}
+            collapsedSettings: {},
         });
     });
 
     afterEach(() => {
-        logEventSpy.mockReset();        
+        logEventSpy.mockReset();
     });
 
     afterAll(() => {
         logEventSpy.mockRestore();
-    });   
+    });
 
     test('what are metric tips gets logged', () => {
         store.dispatch(sut.presentBigMetricsInfo());
-        
+
         const event = logEventSpy.mock.calls[0][0];
         const params = logEventSpy.mock.calls[0][1];
         expect(event).toEqual('what_are_metric_tips');
@@ -39,48 +41,52 @@ describe('what are metric tips', () => {
 
 describe('edit collapsed metric screen', () => {
     beforeEach(() => {
-        logScreenSpy = jest.spyOn(Analytics, 'setCurrentScreen').mockImplementation(() => {});        
+        logScreenSpy = jest
+            .spyOn(Analytics, 'setCurrentScreen')
+            .mockImplementation(() => {});
         store = mockStore({
-            collapsedSettings: {}
+            collapsedSettings: {},
         });
     });
 
     afterEach(() => {
-        logScreenSpy.mockReset();        
+        logScreenSpy.mockReset();
     });
 
     afterAll(() => {
         logScreenSpy.mockRestore();
-    });   
+    });
 
     test('edit collapsed_metric screen is set', () => {
         store.dispatch(sut.presentCollapsedMetric());
-        
+
         const event = logScreenSpy.mock.calls[0][0];
         expect(event).toEqual('edit_collapsed_metric');
-    });    
+    });
 });
 
 describe('edit quantifier screen', () => {
     beforeEach(() => {
-        logScreenSpy = jest.spyOn(Analytics, 'setCurrentScreen').mockImplementation(() => {});        
+        logScreenSpy = jest
+            .spyOn(Analytics, 'setCurrentScreen')
+            .mockImplementation(() => {});
         store = mockStore({
-            collapsedSettings: {}
+            collapsedSettings: {},
         });
     });
 
     afterEach(() => {
-        logScreenSpy.mockReset();        
+        logScreenSpy.mockReset();
     });
 
     afterAll(() => {
         logScreenSpy.mockRestore();
-    });   
+    });
 
     test('edit quantifier screen is set', () => {
         store.dispatch(sut.presentQuantifier());
-        
+
         const event = logScreenSpy.mock.calls[0][0];
         expect(event).toEqual('edit_quantifier');
-    });    
+    });
 });

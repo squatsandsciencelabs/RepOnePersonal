@@ -8,7 +8,6 @@ import SettingsDeviceScreen from './device/SettingsDeviceScreen';
 import SettingsAccountScreen from './account/SettingsAccountScreen';
 import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
-import SettingsMetricsScreen from './metrics/SettingsMetricsScreen';
 import SettingsColumnsScreen from './columns/SettingsColumnsScreen';
 import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 import SettingsRepOnePanel from './sensor/repone/SettingsRepOnePanel';
