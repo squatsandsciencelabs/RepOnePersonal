@@ -5,25 +5,42 @@ import SettingsRepOneMetricsPanel from './SettingsRepOneMetricsPanel';
 import * as Actions from './SettingsRepOneMetricsActions';
 import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
 
-const mapStateToProps = state => ({
-    metric1: CollapsedSettingsSelectors.getMetric1(state),
-    quantifier1: CollapsedSettingsSelectors.getQuantifier1(state),
-    metric2: CollapsedSettingsSelectors.getMetric2(state),
-    quantifier2: CollapsedSettingsSelectors.getQuantifier2(state),
-    metric3: CollapsedSettingsSelectors.getMetric3(state),
-    quantifier3: CollapsedSettingsSelectors.getQuantifier3(state),
-    metric4: CollapsedSettingsSelectors.getMetric4(state),
-    quantifier4: CollapsedSettingsSelectors.getQuantifier4(state),
-    metric5: CollapsedSettingsSelectors.getMetric5(state),
-    quantifier5: CollapsedSettingsSelectors.getQuantifier5(state),
-});
+const METRICS_NUMBER = 5;
+
+const mapStateToProps = state => {
+    const metricQuantifierTable = [];
+
+    const metrics = {
+        metric1: CollapsedSettingsSelectors.getMetric1(state),
+        metric2: CollapsedSettingsSelectors.getMetric2(state),
+        metric3: CollapsedSettingsSelectors.getMetric3(state),
+        metric4: CollapsedSettingsSelectors.getMetric4(state),
+        metric5: CollapsedSettingsSelectors.getMetric5(state),
+    };
+
+    const quantifiers = {
+        quantifier1: CollapsedSettingsSelectors.getQuantifier1(state),
+        quantifier2: CollapsedSettingsSelectors.getQuantifier2(state),
+        quantifier3: CollapsedSettingsSelectors.getQuantifier3(state),
+        quantifier4: CollapsedSettingsSelectors.getQuantifier4(state),
+        quantifier5: CollapsedSettingsSelectors.getQuantifier5(state),
+    };
+
+    for (let i = 1; i <= METRICS_NUMBER; i++) {
+        metricQuantifierTable[i - 1] = [
+            metrics[`metric${i}`],
+            quantifiers[`quantifier${i}`],
+        ];
+    }
+
+    return { metricQuantifierTable };
+};
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             tapMetric: Actions.presentCollapsedMetric,
             tapQuantifier: Actions.presentQuantifier,
-            tappedBigMetricsInfo: Actions.presentBigMetricsInfo,
         },
         dispatch,
     );
