@@ -1,6 +1,6 @@
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import { bindActionCreators } from 'redux';
-import * as Actions from 'app/features/settings/application/kratos_auto_delete_reps/SettingsKratosAutoDeleteRepsActions';
+import * as Actions from 'app/features/settings/sensor/kratos/kratos_auto_delete_reps_modal/SettingsKratosAutoDeleteRepsModalActions';
 import { connect } from 'react-redux';
 import PickerModal from 'app/shared_features/picker/PickerModal';
 
@@ -39,9 +39,9 @@ const mapDispatchToProps = dispatch => {
     );
 };
 
-const SettingsKratosAutoDeleteRepsScreen = connect(
+const SettingsKratosAutoDeleteRepsModalScreen = connect(
     mapStateToProps,
     mapDispatchToProps,
 )(PickerModal);
 
-export default SettingsKratosAutoDeleteRepsScreen;
+export default SettingsKratosAutoDeleteRepsModalScreen;
