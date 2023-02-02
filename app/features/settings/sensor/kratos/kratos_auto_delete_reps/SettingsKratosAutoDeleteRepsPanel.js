@@ -7,12 +7,12 @@ import {
     StyleSheet,
     Linking,
 } from 'react-native';
-import SettingsKratosAutoDeleteRepsScreen from 'app/features/settings/application/kratos_auto_delete_reps/SettingsKratosAutoDeleteRepsScreen';
+import SettingsKratosAutoDeleteRepsModalScreen from 'app/features/settings/sensor/kratos/kratos_auto_delete_reps_modal/SettingsKratosAutoDeleteRepsModalScreen';
 
 const KRATOS_REDIRECT_URL =
     'https://store.kabukistrength.net/collections/kratos-1';
 
-class SettingsKratosAutoDeleteReps extends Component {
+class SettingsKratosAutoDeleteRepsPanel extends Component {
     _tapKratosFlywheel() {
         Linking.canOpenURL(KRATOS_REDIRECT_URL).then(supported => {
             if (supported) {
@@ -34,11 +34,10 @@ class SettingsKratosAutoDeleteReps extends Component {
                             <TouchableOpacity
                                 onPress={() => this._tapKratosFlywheel()}>
                                 <Text style={styles.linkText}>
-                                    Kratos Flywheel
+                                    Kratos Flywheel&nbsp;
                                 </Text>
                             </TouchableOpacity>
                             <Text style={styles.labelText}>
-                                {' '}
                                 auto-delete initial reps
                             </Text>
                         </View>
@@ -50,7 +49,7 @@ class SettingsKratosAutoDeleteReps extends Component {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <SettingsKratosAutoDeleteRepsScreen />
+                    <SettingsKratosAutoDeleteRepsModalScreen />
                 </View>
             );
         }
@@ -63,14 +62,15 @@ class SettingsKratosAutoDeleteReps extends Component {
                         marginBottom: -10,
                     }}>
                     <TouchableOpacity onPress={this._tapKratosFlywheel}>
-                        <Text style={styles.linkText}>Kratos Flywheel</Text>
+                        <Text style={styles.linkText}>
+                            Kratos Flywheel&nbsp;
+                        </Text>
                     </TouchableOpacity>
                     <Text style={styles.labelText}>
-                        {' '}
                         auto-delete initial reps
                     </Text>
                 </View>
-                <SettingsKratosAutoDeleteRepsScreen />
+                <SettingsKratosAutoDeleteRepsModalScreen />
             </View>
         );
     }
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsKratosAutoDeleteReps;
+export default SettingsKratosAutoDeleteRepsPanel;
