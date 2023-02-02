@@ -10,19 +10,46 @@ import { DataTable } from 'react-native-paper';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
+import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersScreen';
+import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
+
 const TABLE_HEADERS = ['REP METRIC', 'ROLLUP'];
 
 class SettingsRepOneSensorSetMetrics extends Component {
     constructor(props) {
         super(props);
-        this.dataToRender = [
-            [this.props.metric1, this.props.quantifier1],
-            [this.props.metric2, this.props.quantifier2],
-            [this.props.metric3, this.props.quantifier3],
-            [this.props.metric4, this.props.quantifier4],
-            [this.props.metric5, this.props.quantifier5],
-        ];
+        this.state = {
+            dataToRender: [
+                [this.props.metric1, this.props.quantifier1],
+                [this.props.metric2, this.props.quantifier2],
+                [this.props.metric3, this.props.quantifier3],
+                [this.props.metric4, this.props.quantifier4],
+                [this.props.metric5, this.props.quantifier5],
+            ],
+        };
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                dataToRender: [
+                    [this.props.metric1, this.props.quantifier1],
+                    [this.props.metric2, this.props.quantifier2],
+                    [this.props.metric3, this.props.quantifier3],
+                    [this.props.metric4, this.props.quantifier4],
+                    [this.props.metric5, this.props.quantifier5],
+                ],
+            });
+        }
+    }
+
+    handleMetricPress = row => {
+        this.props.tapMetric(row);
+    };
+
+    handleQuantifierPress = row => {
+        this.props.tapQuantifier(row);
+    };
 
     render() {
         return (
@@ -44,36 +71,52 @@ class SettingsRepOneSensorSetMetrics extends Component {
                             );
                         })}
                     </DataTable.Header>
-                    {this.dataToRender.map(([metric, quantifier], index) => {
-                        return (
-                            <DataTable.Row
-                                key={`row-${index}`}
-                                style={styles.row}>
-                                <DataTable.Cell
-                                    style={[styles.cell, { marginRight: -1 }]}>
-                                    <Text
+                    {this.state.dataToRender.map(
+                        ([metric, quantifier], index) => {
+                            return (
+                                <DataTable.Row
+                                    key={`row-${index}`}
+                                    style={styles.row}>
+                                    <DataTable.Cell
+                                        onPress={() =>
+                                            this.handleMetricPress(index + 1)
+                                        }
                                         style={[
-                                            SETTINGS_PANEL_STYLES.tappableText,
+                                            styles.cell,
+                                            { marginRight: -1 },
                                         ]}>
-                                        {CollapsedMetricsUtility.metricAbbreviation(
-                                            metric,
-                                        )}
-                                    </Text>
-                                </DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}>
-                                    <Text
-                                        style={[
-                                            SETTINGS_PANEL_STYLES.tappableText,
-                                        ]}>
-                                        {CollapsedMetricsUtility.quantifierString(
-                                            quantifier,
-                                        )}
-                                    </Text>
-                                </DataTable.Cell>
-                            </DataTable.Row>
-                        );
-                    })}
+                                        <Text
+                                            style={[
+                                                SETTINGS_PANEL_STYLES.tappableText,
+                                            ]}>
+                                            {CollapsedMetricsUtility.metricAbbreviation(
+                                                metric,
+                                            )}
+                                        </Text>
+                                    </DataTable.Cell>
+                                    <DataTable.Cell
+                                        style={styles.cell}
+                                        onPress={() =>
+                                            this.handleQuantifierPress(
+                                                index + 1,
+                                            )
+                                        }>
+                                        <Text
+                                            style={[
+                                                SETTINGS_PANEL_STYLES.tappableText,
+                                            ]}>
+                                            {CollapsedMetricsUtility.quantifierString(
+                                                quantifier,
+                                            )}
+                                        </Text>
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                            );
+                        },
+                    )}
                 </DataTable>
+                <SettingsEditMetricsScreen />
+                <SettingsEditQuantifiersScreen />
             </View>
         );
     }
