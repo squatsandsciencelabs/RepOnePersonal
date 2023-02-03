@@ -12,7 +12,6 @@ import {
     POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
-
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -25,6 +24,14 @@ import {
     MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
+    ECCENTRIC,
+    CONCENTRIC,
+    WORK,
+    FORCE,
+    POWER,
+    WORK_LOCATION,
+    FORCE_LOCATION,
+    POWER_LOCATION,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
 
@@ -32,9 +39,9 @@ import * as SetUtils from 'app/utility/SetUtils';
 
 const getMetrics = (set, metricFunction) => {
     const metrics = [];
-    
+
     if (!SetUtils.isDeleted(set)) {
-        set.reps.forEach((rep) => {                
+        set.reps.forEach(rep => {
             if (rep.isValid === true && rep.removed === false) {
                 const metric = Number(metricFunction(rep));
                 metrics.push(metric);
@@ -45,49 +52,76 @@ const getMetrics = (set, metricFunction) => {
     return metrics;
 };
 
-export const getRPE = (set) => {
+export const getRPE = set => {
     return set.rpe;
 };
 
-export const getAvgVelocities = (set) => {
+export const getAvgVelocities = set => {
     return getMetrics(set, r => r.averageVelocity / 1000);
 };
 
-export const getPKVs = (set) => {
+export const getPKVs = set => {
     return getMetrics(set, r => r.peakVelocity / 1000);
 };
 
-export const getPKHs = (set) => {
-    return getMetrics(set, r => 100 * r.peakHeight / r.rom);
+export const getPKHs = set => {
+    return getMetrics(set, r => (100 * r.peakHeight) / r.rom);
 };
 
-export const getROMs = (set) => {
+export const getROMs = set => {
     return getMetrics(set, r => r.rom);
 };
 
-export const getDurations = (set) => {
+export const getDurations = set => {
     return getMetrics(set, r => r.duration);
 };
 
-export const getPeakForces = set => getMetrics(set, r => r.peakForce !== null && r.peakForce !== undefined ? r.peakForce : null);
+export const getPeakForces = set =>
+    getMetrics(set, r =>
+        r.peakForce !== null && r.peakForce !== undefined ? r.peakForce : null,
+    );
 
-export const getPeakForceHeights = set => getMetrics(set, r => r.peakForceHeight !== null && r.peakForceHeight !== undefined ? r.peakForceHeight : null);
+export const getPeakForceHeights = set =>
+    getMetrics(set, r =>
+        r.peakForceHeight !== null && r.peakForceHeight !== undefined
+            ? r.peakForceHeight
+            : null,
+    );
 
-export const getAverageForces = set => getMetrics(set, r => r.averageForce !== null && r.averageForce !== undefined ? r.averageForce : null);
+export const getAverageForces = set =>
+    getMetrics(set, r =>
+        r.averageForce !== null && r.averageForce !== undefined
+            ? r.averageForce
+            : null,
+    );
 
-export const getPeakPowers = set => getMetrics(set, r => r.peakPower !== null && r.peakPower !== undefined ? r.peakPower : null);
+export const getPeakPowers = set =>
+    getMetrics(set, r =>
+        r.peakPower !== null && r.peakPower !== undefined ? r.peakPower : null,
+    );
 
-export const getPeakPowerHeights = set => getMetrics(set, r => r.peakPowerHeight !== null && r.peakPowerHeight !== undefined ? r.peakPowerHeight : null);
+export const getPeakPowerHeights = set =>
+    getMetrics(set, r =>
+        r.peakPowerHeight !== null && r.peakPowerHeight !== undefined
+            ? r.peakPowerHeight
+            : null,
+    );
 
-export const getAveragePowers = set => getMetrics(set, r => r.averagePower !== null && r.averagePower !== undefined ? r.averagePower : null);
+export const getAveragePowers = set =>
+    getMetrics(set, r =>
+        r.averagePower !== null && r.averagePower !== undefined
+            ? r.averagePower
+            : null,
+    );
 
-export const getLinear3DAvgVelocities = set => getMetrics(set, r => r.linear3DAverageVelocity / 1000);
+export const getLinear3DAvgVelocities = set =>
+    getMetrics(set, r => r.linear3DAverageVelocity / 1000);
 
 export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 
 // Average Quantifiers
 
-const getAvgOfMetrics = (metrics) => {
+const getAvgOfMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
@@ -96,52 +130,52 @@ const getAvgOfMetrics = (metrics) => {
     return Number((sum / metrics.length).toFixed(2));
 };
 
-export const getAvgOfAvgVelocities = (set) => {
+export const getAvgOfAvgVelocities = set => {
     const velocities = getAvgVelocities(set);
     return getAvgOfMetrics(velocities);
 };
 
-export const getAvgPKV = (set) => {
+export const getAvgPKV = set => {
     const pkvs = getPKVs(set);
     return getAvgOfMetrics(pkvs);
 };
 
-export const getAvgROM = (set) => {
+export const getAvgROM = set => {
     const roms = getROMs(set);
     return getAvgOfMetrics(roms);
 };
 
-export const getAvgDuration = (set) => {
+export const getAvgDuration = set => {
     const durations = getDurations(set);
     return getAvgOfMetrics(durations);
 };
 
-export const getAvgPeakForce = (set) => {
+export const getAvgPeakForce = set => {
     const peakForces = getPeakForces(set);
     return getAvgOfMetrics(peakForces);
 };
 
-export const getAvgOfAvgForces = (set) => {
+export const getAvgOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getAvgOfMetrics(averageForces);
 };
 
-export const getAvgPeakPower = (set) => {
+export const getAvgPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getAvgOfMetrics(peakPowers);
 };
 
-export const getAvgOfAvgPowers = (set) => {
+export const getAvgOfAvgPowers = set => {
     const averagePowers = getAveragePowers(set);
     return getAvgOfMetrics(averagePowers);
 };
 
-export const getAvgOfLinear3DAvgVelocities = (set) => {
+export const getAvgOfLinear3DAvgVelocities = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getAvgOfMetrics(velocities);
 };
 
-export const getAvgLinear3DROM = (set) => {
+export const getAvgLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getAvgOfMetrics(roms);
 };
@@ -163,63 +197,63 @@ export const getAvgPeakPowerHeight = set => {
 
 // Absolute Loss Quantifiers
 
-const getAbsLossOfMetrics = (metrics) => {
+const getAbsLossOfMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
 
     const max = Math.max(...metrics);
     const min = Math.min(...metrics);
-    
+
     return Number((max - min).toFixed(2));
 };
 
-export const getAbsLossOfAvgVelocities = (set) => {
+export const getAbsLossOfAvgVelocities = set => {
     const velocities = getAvgVelocities(set);
     return getAbsLossOfMetrics(velocities);
 };
 
-export const getAbsLossOfPKVs = (set) => {
+export const getAbsLossOfPKVs = set => {
     const pkvs = getPKVs(set);
     return getAbsLossOfMetrics(pkvs);
 };
 
-export const getAbsLossOfROMs = (set) => {
+export const getAbsLossOfROMs = set => {
     const roms = getROMs(set);
     return getAbsLossOfMetrics(roms);
 };
 
-export const getAbsLossOfDurations = (set) => {
+export const getAbsLossOfDurations = set => {
     const durations = getDurations(set);
-    return getAbsLossOfMetrics(durations);    
+    return getAbsLossOfMetrics(durations);
 };
 
-export const getAbsLossOfPeakForces = (set) => {
+export const getAbsLossOfPeakForces = set => {
     const peakForces = getPeakForces(set);
     return getAbsLossOfMetrics(peakForces);
 };
 
-export const getAbsLossOfAvgForces = (set) => {
+export const getAbsLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getAbsLossOfMetrics(averageForces);
 };
 
-export const getAbsLossOfPeakPowers = (set) => {
+export const getAbsLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getAbsLossOfMetrics(peakPowers);
 };
 
-export const getAbsLossOfAvgPowers = (set) => {
+export const getAbsLossOfAvgPowers = set => {
     const averagePowers = getAveragePowers(set);
     return getAbsLossOfMetrics(averagePowers);
 };
 
-export const getAbsLossOfLinear3DAvgVelocities = (set) => {
+export const getAbsLossOfLinear3DAvgVelocities = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getAbsLossOfMetrics(velocities);
 };
 
-export const getAbsLossOfLinear3DROMs = (set) => {
+export const getAbsLossOfLinear3DROMs = set => {
     const roms = getLinear3DROMs(set);
     return getAbsLossOfMetrics(roms);
 };
@@ -241,63 +275,63 @@ export const getAbsLossOfPeakPowerHeights = set => {
 
 // Percent Loss Quantifiers
 
-const getPercentLossOfMetrics = (metrics) => {
+const getPercentLossOfMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
 
     const max = Math.max(...metrics);
     const min = Math.min(...metrics);
-    
-    return Number((100*(max - min)/max).toFixed(2));
+
+    return Number(((100 * (max - min)) / max).toFixed(2));
 };
 
-export const getPercentLossOfAvgVelocities = (set) => {
+export const getPercentLossOfAvgVelocities = set => {
     const velocities = getAvgVelocities(set);
     return getPercentLossOfMetrics(velocities);
 };
 
-export const getPercentLossOfPKVs = (set) => {
+export const getPercentLossOfPKVs = set => {
     const pkvs = getPKVs(set);
     return getPercentLossOfMetrics(pkvs);
 };
 
-export const getPercentLossOfROMs = (set) => {
+export const getPercentLossOfROMs = set => {
     const roms = getROMs(set);
     return getPercentLossOfMetrics(roms);
 };
 
-export const getPercentLossOfDurations = (set) => {
+export const getPercentLossOfDurations = set => {
     const durations = getDurations(set);
-    return getPercentLossOfMetrics(durations);    
+    return getPercentLossOfMetrics(durations);
 };
 
-export const getPercentLossOfPeakForces = (set) => {
+export const getPercentLossOfPeakForces = set => {
     const peakForces = getPeakForces(set);
     return getPercentLossOfMetrics(peakForces);
 };
 
-export const getPercentLossOfAvgForces = (set) => {
+export const getPercentLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getPercentLossOfMetrics(averageForces);
 };
 
-export const getPercentLossOfPeakPowers = (set) => {
+export const getPercentLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getPercentLossOfMetrics(peakPowers);
 };
 
-export const getPercentLossOfAvgPowers = (set) => {
+export const getPercentLossOfAvgPowers = set => {
     const averagePowers = getAveragePowers(set);
     return getPercentLossOfMetrics(averagePowers);
 };
 
-export const getPercentLossOfLinear3DAvgVelocities = (set) => {
+export const getPercentLossOfLinear3DAvgVelocities = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getPercentLossOfMetrics(velocities);
 };
 
-export const getPercentLossOfLinear3DROMs = (set) => {
+export const getPercentLossOfLinear3DROMs = set => {
     const roms = getLinear3DROMs(set);
     return getPercentLossOfMetrics(roms);
 };
@@ -319,157 +353,157 @@ export const getPercentLossOfPeakPowerHeights = set => {
 
 // First Rep Quantifiers
 
-const getFirstRepOfMetrics = (metrics) => {
+const getFirstRepOfMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
 
-    return Number((metrics[0]).toFixed(2));
+    return Number(metrics[0].toFixed(2));
 };
 
-export const getFirstAvgVelocity = (set) => {
+export const getFirstAvgVelocity = set => {
     const velocities = getAvgVelocities(set);
     return getFirstRepOfMetrics(velocities);
 };
 
-export const getFirstPKV = (set) => {
+export const getFirstPKV = set => {
     const pkvs = getPKVs(set);
     return getFirstRepOfMetrics(pkvs);
 };
 
-export const getFirstPKH = (set) => {
+export const getFirstPKH = set => {
     const pkhs = getPKHs(set);
     return getFirstRepOfMetrics(pkhs);
 };
 
-export const getFirstROM = (set) => {
+export const getFirstROM = set => {
     const roms = getROMs(set);
     return getFirstRepOfMetrics(roms);
 };
 
-export const getFirstDuration = (set) => {
+export const getFirstDuration = set => {
     const durations = getDurations(set);
     return getFirstRepOfMetrics(durations);
 };
 
-export const getFirstPeakForce = (set) => {
+export const getFirstPeakForce = set => {
     const peakForces = getPeakForces(set);
     return getFirstRepOfMetrics(peakForces);
 };
 
-export const getFirstPeakForceHeight = (set) => {
+export const getFirstPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getFirstRepOfMetrics(peakForceHeights);
 };
 
-export const getFirstAvgForce = (set) => {
+export const getFirstAvgForce = set => {
     const averageForces = getAverageForces(set);
     return getFirstRepOfMetrics(averageForces);
 };
 
-export const getFirstPeakPower = (set) => {
+export const getFirstPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getFirstRepOfMetrics(peakPowers);
 };
 
-export const getFirstPeakPowerHeight = (set) => {
+export const getFirstPeakPowerHeight = set => {
     const peakPowerHeights = getPeakPowerHeights(set);
     return getFirstRepOfMetrics(peakPowerHeights);
 };
 
-export const getFirstAvgPower = (set) => {
+export const getFirstAvgPower = set => {
     const averagePowers = getAveragePowers(set);
     return getFirstRepOfMetrics(averagePowers);
 };
 
-export const getFirstLinear3DAvgVelocity = (set) => {
+export const getFirstLinear3DAvgVelocity = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getFirstRepOfMetrics(velocities);
 };
 
-export const getFirstLinear3DROM = (set) => {
+export const getFirstLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getFirstRepOfMetrics(roms);
 };
 
 // Last Rep Quantifiers
 
-const getLastRepMetrics = (metrics) => {
+const getLastRepMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
 
-    return Number((metrics[metrics.length - 1]).toFixed(2));
+    return Number(metrics[metrics.length - 1].toFixed(2));
 };
 
-export const getLastAvgVelocity = (set) => {
+export const getLastAvgVelocity = set => {
     const velocities = getAvgVelocities(set);
     return getLastRepMetrics(velocities);
 };
 
-export const getLastPKV = (set) => {
+export const getLastPKV = set => {
     const pkvs = getPKVs(set);
     return getLastRepMetrics(pkvs);
 };
 
-export const getLastPKH = (set) => {
+export const getLastPKH = set => {
     const pkhs = getPKHs(set);
     return getLastRepMetrics(pkhs);
 };
 
-export const getLastROM = (set) => {
+export const getLastROM = set => {
     const roms = getROMs(set);
     return getLastRepMetrics(roms);
 };
 
-export const getLastDuration = (set) => {
+export const getLastDuration = set => {
     const durations = getDurations(set);
     return getLastRepMetrics(durations);
 };
 
-export const getLastPeakForce = (set) => {
+export const getLastPeakForce = set => {
     const peakForces = getPeakForces(set);
     return getLastRepMetrics(peakForces);
 };
 
-export const getLastPeakForceHeight = (set) => {
+export const getLastPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getLastRepMetrics(peakForceHeights);
 };
 
-export const getLastAvgForce = (set) => {
+export const getLastAvgForce = set => {
     const averageForces = getAverageForces(set);
     return getLastRepMetrics(averageForces);
 };
 
-export const getLastPeakPower = (set) => {
+export const getLastPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getLastRepMetrics(peakPowers);
 };
 
-export const getLastPeakPowerHeight = (set) => {
+export const getLastPeakPowerHeight = set => {
     const peakPowerHeights = getPeakPowerHeights(set);
     return getLastRepMetrics(peakPowerHeights);
 };
 
-export const getLastAvgPower = (set) => {
+export const getLastAvgPower = set => {
     const averagePowers = getAveragePowers(set);
     return getLastRepMetrics(averagePowers);
 };
 
-export const getLastLinear3DAvgVelocity = (set) => {
+export const getLastLinear3DAvgVelocity = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getLastRepMetrics(velocities);
 };
 
-export const getLastLinear3DROM = (set) => {
+export const getLastLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getLastRepMetrics(roms);
 };
 
 // Get Min Quantifiers
 
-const getMinMetrics = (metrics) => {
+const getMinMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
@@ -477,74 +511,74 @@ const getMinMetrics = (metrics) => {
     return Number(Math.min(...metrics).toFixed(2));
 };
 
-export const getMinAvgVelocity = (set) => {
+export const getMinAvgVelocity = set => {
     const velocities = getAvgVelocities(set);
     return getMinMetrics(velocities);
 };
 
-export const getMinPKV = (set) => {
+export const getMinPKV = set => {
     const pkvs = getPKVs(set);
     return getMinMetrics(pkvs);
 };
 
-export const getMinPKH = (set) => {
+export const getMinPKH = set => {
     const pkhs = getPKHs(set);
     return getMinMetrics(pkhs);
 };
 
-export const getMinROM = (set) => {
+export const getMinROM = set => {
     const roms = getROMs(set);
     return getMinMetrics(roms);
 };
 
-export const getMinDuration = (set) => {
+export const getMinDuration = set => {
     const durations = getDurations(set);
     return getMinMetrics(durations);
 };
 
-export const getMinPeakForce = (set) => {
+export const getMinPeakForce = set => {
     const peakForces = getPeakForces(set);
     return getMinMetrics(peakForces);
 };
 
-export const getMinPeakForceHeight = (set) => {
+export const getMinPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getMinMetrics(peakForceHeights);
 };
 
-export const getMinAvgForce = (set) => {
+export const getMinAvgForce = set => {
     const averageForces = getAverageForces(set);
     return getMinMetrics(averageForces);
 };
 
-export const getMinPeakPower = (set) => {
+export const getMinPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getMinMetrics(peakPowers);
 };
 
-export const getMinPeakPowerHeight = (set) => {
+export const getMinPeakPowerHeight = set => {
     const peakPowerHeights = getPeakPowerHeights(set);
     return getMinMetrics(peakPowerHeights);
 };
 
-export const getMinAvgPower = (set) => {
+export const getMinAvgPower = set => {
     const averagePowers = getAveragePowers(set);
     return getMinMetrics(averagePowers);
 };
 
-export const getMinLinear3DAvgVelocity = (set) => {
+export const getMinLinear3DAvgVelocity = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getMinMetrics(velocities);
 };
 
-export const getMinLinear3DROM = (set) => {
+export const getMinLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getMinMetrics(roms);
 };
 
 // Get Max Quantifiers
 
-const getMaxMetrics = (metrics) => {
+const getMaxMetrics = metrics => {
     if (metrics.length <= 0) {
         return null;
     }
@@ -552,77 +586,77 @@ const getMaxMetrics = (metrics) => {
     return Number(Math.max(...metrics).toFixed(2));
 };
 
-export const getMaxAvgVelocity = (set) => {
+export const getMaxAvgVelocity = set => {
     const velocities = getAvgVelocities(set);
     return getMaxMetrics(velocities);
 };
 
-export const getMaxPKV = (set) => {
+export const getMaxPKV = set => {
     const pkvs = getPKVs(set);
     return getMaxMetrics(pkvs);
 };
 
-export const getMaxPKH = (set) => {
+export const getMaxPKH = set => {
     const pkhs = getPKHs(set);
     return getMaxMetrics(pkhs);
 };
 
-export const getMaxROM = (set) => {
+export const getMaxROM = set => {
     const roms = getROMs(set);
     return getMaxMetrics(roms);
 };
 
-export const getMaxDuration = (set) => {
+export const getMaxDuration = set => {
     const durations = getDurations(set);
     return getMaxMetrics(durations);
 };
 
-export const getMaxPeakForce = (set) => {
+export const getMaxPeakForce = set => {
     const peakForces = getPeakForces(set);
     return getMaxMetrics(peakForces);
 };
 
-export const getMaxPeakForceHeight = (set) => {
+export const getMaxPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getMaxMetrics(peakForceHeights);
 };
 
-export const getMaxAvgForce = (set) => {
+export const getMaxAvgForce = set => {
     const averageForces = getAverageForces(set);
     return getMaxMetrics(averageForces);
 };
 
-export const getMaxPeakPower = (set) => {
+export const getMaxPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getMaxMetrics(peakPowers);
 };
 
-export const getMaxPeakPowerHeight = (set) => {
+export const getMaxPeakPowerHeight = set => {
     const peakPowerHeights = getPeakPowerHeights(set);
     return getMaxMetrics(peakPowerHeights);
 };
 
-export const getMaxAvgPower = (set) => {
+export const getMaxAvgPower = set => {
     const averagePowers = getAveragePowers(set);
     return getMaxMetrics(averagePowers);
 };
 
-export const getMaxLinear3DAvgVelocity = (set) => {
+export const getMaxLinear3DAvgVelocity = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getMaxMetrics(velocities);
 };
 
-export const getMaxLinear3DROM = (set) => {
+export const getMaxLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getMaxMetrics(roms);
 };
 
 // Peak-End
 
-const getPeakEndMetrics = (metrics) => {
+const getPeakEndMetrics = metrics => {
     const min = getMinMetrics(metrics);
     const lastRepMetric = getLastRepMetrics(metrics);
-    
+
     if (metrics.length > 0) {
         return Number(((lastRepMetric + min) / 2).toFixed(2));
     } else {
@@ -630,59 +664,59 @@ const getPeakEndMetrics = (metrics) => {
     }
 };
 
-export const getPeakEndOfAvgVelocities = (set) => {
+export const getPeakEndOfAvgVelocities = set => {
     const velocities = getAvgVelocities(set);
     return getPeakEndMetrics(velocities);
 };
 
-export const getPeakEndOfPKVs = (set) => {
+export const getPeakEndOfPKVs = set => {
     const pkvs = getPKVs(set);
     return getPeakEndMetrics(pkvs);
 };
 
-export const getPeakEndOfROMs = (set) => {
+export const getPeakEndOfROMs = set => {
     const roms = getROMs(set);
     return getPeakEndMetrics(roms);
 };
 
-export const getPeakEndOfDurations = (set) => {
+export const getPeakEndOfDurations = set => {
     const durations = getDurations(set);
     return getPeakEndMetrics(durations);
 };
 
-export const getPeakEndOfPeakForces = (set) => {
+export const getPeakEndOfPeakForces = set => {
     const peakForces = getPeakForces(set);
     return getPeakEndMetrics(peakForces);
 };
 
-export const getPeakEndOfAvgForces = (set) => {
+export const getPeakEndOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getPeakEndMetrics(averageForces);
 };
 
-export const getPeakEndOfPeakPowers = (set) => {
+export const getPeakEndOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getPeakEndMetrics(peakPowers);
 };
 
-export const getPeakEndOfAvgPowers = (set) => {
+export const getPeakEndOfAvgPowers = set => {
     const averagePowers = getAveragePowers(set);
     return getPeakEndMetrics(averagePowers);
 };
 
-export const getPeakEndOfLinear3DAvgVelocities = (set) => {
+export const getPeakEndOfLinear3DAvgVelocities = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getPeakEndMetrics(velocities);
 };
 
-export const getPeakEndOfLinear3DROMs = (set) => {
+export const getPeakEndOfLinear3DROMs = set => {
     const roms = getLinear3DROMs(set);
     return getPeakEndMetrics(roms);
 };
 
 // Set Loss
 
-const getSetLossMetrics = (metrics) => {
+const getSetLossMetrics = metrics => {
     const lastRepMetric = getLastRepMetrics(metrics);
     const firstRepMetric = getFirstRepOfMetrics(metrics);
 
@@ -693,76 +727,84 @@ const getSetLossMetrics = (metrics) => {
     }
 };
 
-export const getSetLossOfAvgVelocities = (set) => {
+export const getSetLossOfAvgVelocities = set => {
     const velocities = getAvgVelocities(set);
     return getSetLossMetrics(velocities);
 };
 
-export const getSetLossOfPKVs = (set) => {
+export const getSetLossOfPKVs = set => {
     const pkvs = getPKVs(set);
     return getSetLossMetrics(pkvs);
 };
 
-export const getSetLossOfROMs = (set) => {
+export const getSetLossOfROMs = set => {
     const roms = getROMs(set);
     return getSetLossMetrics(roms);
 };
 
-export const getSetLossOfDurations = (set) => {
+export const getSetLossOfDurations = set => {
     const durations = getDurations(set);
     return getSetLossMetrics(durations);
 };
 
-export const getSetLossOfPeakForces = (set) => {
+export const getSetLossOfPeakForces = set => {
     const peakForces = getPeakForces(set);
     return getSetLossMetrics(peakForces);
 };
 
-export const getSetLossOfAvgForces = (set) => {
+export const getSetLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getSetLossMetrics(averageForces);
 };
 
-export const getSetLossOfPeakPowers = (set) => {
+export const getSetLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getSetLossMetrics(peakPowers);
 };
 
-export const getSetLossOfAvgPowers = (set) => {
+export const getSetLossOfAvgPowers = set => {
     const averagePowers = getAveragePowers(set);
     return getSetLossMetrics(averagePowers);
 };
 
-export const getSetLossOfLinear3DAvgVelocities = (set) => {
+export const getSetLossOfLinear3DAvgVelocities = set => {
     const velocities = getLinear3DAvgVelocities(set);
     return getSetLossMetrics(velocities);
 };
 
-export const getSetLossOfLinear3DROMs = (set) => {
+export const getSetLossOfLinear3DROMs = set => {
     const roms = getLinear3DROMs(set);
     return getSetLossMetrics(roms);
 };
 
 // RPE 1RM
 
-export const canCalcRPE1RM = (set) => {
+export const canCalcRPE1RM = set => {
     let rpe = set.rpe;
-    if (!rpe)
-        return false;
-    
-    const rpeWithoutCommas = rpe.replace(',','.');
+    if (!rpe) return false;
+
+    const rpeWithoutCommas = rpe.replace(',', '.');
     if (isNaN(rpeWithoutCommas)) {
         return false;
     }
 
-    if (rpeWithoutCommas === "6.5" || rpeWithoutCommas === "7" || rpeWithoutCommas === "7.5" || rpeWithoutCommas === "8" || rpeWithoutCommas === "8.5" || rpeWithoutCommas === "9" || rpeWithoutCommas === "9.5" || rpeWithoutCommas === "10") {
+    if (
+        rpeWithoutCommas === '6.5' ||
+        rpeWithoutCommas === '7' ||
+        rpeWithoutCommas === '7.5' ||
+        rpeWithoutCommas === '8' ||
+        rpeWithoutCommas === '8.5' ||
+        rpeWithoutCommas === '9' ||
+        rpeWithoutCommas === '9.5' ||
+        rpeWithoutCommas === '10'
+    ) {
         return true;
     }
 
     return false;
 };
 
-export const getRPE1RM = (set, useLBs=false) => {
+export const getRPE1RM = (set, useLBs = false) => {
     // empty rpe / weight check
     if (!set.rpe || !set.weight) {
         return null;
@@ -779,20 +821,119 @@ export const getRPE1RM = (set, useLBs=false) => {
     } else {
         var weight = set.weight;
     }
-    const rpe = Number(set.rpe.replace(',','.'));
+    const rpe = Number(set.rpe.replace(',', '.'));
 
     // RPE percentages of 1rm correlated to reps @ RPE values
     // "RPE":{"REP#": Percentage of 1rm, ...}
     const RPEIntensity = {
-        '10':{'10':0.759,'9':0.7855,'8':0.812,'7':0.839,'6':0.8665,'5':0.8935,'4':0.92,'3':0.947,'2':0.9735,'1':1},
-        '9.5':{'10':0.7395,'9':0.765,'8':0.7915,'7':0.819,'6':0.8455,'5':0.872,'4':0.899,'3':0.9255,'2':0.9525,'1':0.98},
-        '9':{'10':0.7195,'9':0.746,'8':0.7725,'7':0.7995,'6':0.8255,'5':0.8515,'4':0.878,'3':0.905,'2':0.9315,'1':0.959},
-        '8.5':{'10':0.6985,'9':0.726,'8':0.753,'7':0.7795,'6':0.8065,'5':0.833,'4':0.8595,'3':0.886,'2':0.9115,'1':0.9385},
-        '8':{'10':0.6775,'9':0.705,'8':0.732,'7':0.759,'6':0.7855,'5':0.8125,'4':0.839,'3':0.866,'2':0.893,'1':0.9195},
-        '7.5':{'10':0.659,'9':0.684,'8':0.711,'7':0.7375,'6':0.7645,'5':0.792,'4':0.819,'3':0.8455,'2':0.872,'1':0.899},
-        '7':{'10':0.639,'9':0.6655,'8':0.692,'7':0.719,'6':0.745,'5':0.771,'4':0.798,'3':0.825,'2':0.851,'1':0.878},
-        '6.5':{'10':0.6185,'9':0.645,'8':0.6715,'7':0.6985,'6':0.7255,'5':0.7525,'4':0.779,'3':0.806,'2':0.832,'1':0.8575},
-        '6':{'10':0.5975,'9':0.6245,'8':0.6515,'7':0.6785,'6':0.705,'5':0.7315,'4':0.7585,'3':0.7855,'2':0.812,'1':0.839},
+        10: {
+            10: 0.759,
+            9: 0.7855,
+            8: 0.812,
+            7: 0.839,
+            6: 0.8665,
+            5: 0.8935,
+            4: 0.92,
+            3: 0.947,
+            2: 0.9735,
+            1: 1,
+        },
+        9.5: {
+            10: 0.7395,
+            9: 0.765,
+            8: 0.7915,
+            7: 0.819,
+            6: 0.8455,
+            5: 0.872,
+            4: 0.899,
+            3: 0.9255,
+            2: 0.9525,
+            1: 0.98,
+        },
+        9: {
+            10: 0.7195,
+            9: 0.746,
+            8: 0.7725,
+            7: 0.7995,
+            6: 0.8255,
+            5: 0.8515,
+            4: 0.878,
+            3: 0.905,
+            2: 0.9315,
+            1: 0.959,
+        },
+        8.5: {
+            10: 0.6985,
+            9: 0.726,
+            8: 0.753,
+            7: 0.7795,
+            6: 0.8065,
+            5: 0.833,
+            4: 0.8595,
+            3: 0.886,
+            2: 0.9115,
+            1: 0.9385,
+        },
+        8: {
+            10: 0.6775,
+            9: 0.705,
+            8: 0.732,
+            7: 0.759,
+            6: 0.7855,
+            5: 0.8125,
+            4: 0.839,
+            3: 0.866,
+            2: 0.893,
+            1: 0.9195,
+        },
+        7.5: {
+            10: 0.659,
+            9: 0.684,
+            8: 0.711,
+            7: 0.7375,
+            6: 0.7645,
+            5: 0.792,
+            4: 0.819,
+            3: 0.8455,
+            2: 0.872,
+            1: 0.899,
+        },
+        7: {
+            10: 0.639,
+            9: 0.6655,
+            8: 0.692,
+            7: 0.719,
+            6: 0.745,
+            5: 0.771,
+            4: 0.798,
+            3: 0.825,
+            2: 0.851,
+            1: 0.878,
+        },
+        6.5: {
+            10: 0.6185,
+            9: 0.645,
+            8: 0.6715,
+            7: 0.6985,
+            6: 0.7255,
+            5: 0.7525,
+            4: 0.779,
+            3: 0.806,
+            2: 0.832,
+            1: 0.8575,
+        },
+        6: {
+            10: 0.5975,
+            9: 0.6245,
+            8: 0.6515,
+            7: 0.6785,
+            6: 0.705,
+            5: 0.7315,
+            4: 0.7585,
+            3: 0.7855,
+            2: 0.812,
+            1: 0.839,
+        },
     };
 
     // rpe table lookup
@@ -814,21 +955,23 @@ export const getRPE1RM = (set, useLBs=false) => {
 
 // Best Ever
 
-const getBestEverOfMetric = (set, allSets, metricFunction, isMax=true) => {
+const getBestEverOfMetric = (set, allSets, metricFunction, isMax = true) => {
     // null if not enough data entered
     if (!isSetComparable(set)) {
         return null;
     }
 
     // find all instances of this exercise with weight and reps
-    const matchedSets = allSets.filter(historySet => areSetsComparable(historySet, set));
-    
-    let metrics = matchedSets.map((matchedSet) => {
+    const matchedSets = allSets.filter(historySet =>
+        areSetsComparable(historySet, set),
+    );
+
+    let metrics = matchedSets.map(matchedSet => {
         return metricFunction(matchedSet);
     });
 
     metrics = metrics.reduce((a, b) => a.concat(b), []);
-    
+
     if (metrics.length > 0) {
         const result = isMax ? Math.max(...metrics) : Math.min(...metrics);
         return result ? Number(result).toFixed(2) : null;
@@ -841,12 +984,14 @@ const areSetsComparable = (historySet, set) => {
     if (!isSetComparable(set)) {
         return false;
     }
-    return historySet.exercise === set.exercise &&
+    return (
+        historySet.exercise === set.exercise &&
         historySet.weight === set.weight &&
-        historySet.metric === set.metric;
+        historySet.metric === set.metric
+    );
 };
 
-const isSetComparable = (set) => {
+const isSetComparable = set => {
     if (!set.exercise || set.exercise === '') {
         return false;
     }
@@ -940,7 +1085,7 @@ export const getSlowestLinear3DAvgVelocityEver = (set, allSets) => {
 
 // To String
 
-export const metricAbbreviation = (metric) => {
+export const metricAbbreviation = metric => {
     switch (metric) {
         case EMPTY_METRIC:
             return '';
@@ -970,10 +1115,10 @@ export const metricAbbreviation = (metric) => {
             return 'ROM³';
         default:
             return null;
-    };
+    }
 };
 
-export const metricString = (metric) => {
+export const metricString = metric => {
     switch (metric) {
         case EMPTY_METRIC:
             return '';
@@ -1001,9 +1146,22 @@ export const metricString = (metric) => {
             return 'Average Velocity 3D';
         case LINEAR_3D_ROM_METRIC:
             return 'Range Of Motion 3D';
+        // kratos metrics
+        case WORK:
+            return 'Work';
+        case FORCE:
+            return 'Force';
+        case POWER:
+            return 'Power';
+        case WORK_LOCATION:
+            return 'Work Location';
+        case FORCE_LOCATION:
+            return 'Force Location';
+        case POWER_LOCATION:
+            return 'Power Location';
         default:
             return null;
-    };
+    }
 };
 
 export const metricUnit = (metric, quantifier) => {
@@ -1034,10 +1192,10 @@ export const metricUnit = (metric, quantifier) => {
             return 'W';
         default:
             return null;
-    };
+    }
 };
 
-export const quantifierAbbreviation = (quantifier) => {
+export const quantifierAbbreviation = quantifier => {
     switch (quantifier) {
         case EMPTY_QUANTIFIER:
             return '';
@@ -1061,14 +1219,14 @@ export const quantifierAbbreviation = (quantifier) => {
             return 'MINEVER';
         case SET_LOSS_QUANTIFIER:
             return 'S. LOSS';
-        case PEAK_END_QUANTIFIER: 
+        case PEAK_END_QUANTIFIER:
             return 'PK-END';
         default:
             return null;
-    };
+    }
 };
 
-export const quantifierString = (quantifier) => {
+export const quantifierString = quantifier => {
     switch (quantifier) {
         case EMPTY_QUANTIFIER:
             return '';
@@ -1092,9 +1250,20 @@ export const quantifierString = (quantifier) => {
             return 'Minimum Ever';
         case SET_LOSS_QUANTIFIER:
             return 'Set Loss';
-        case PEAK_END_QUANTIFIER: 
+        case PEAK_END_QUANTIFIER:
             return 'Peak-End';
         default:
             return null;
-    };
+    }
+};
+
+export const phaseString = phase => {
+    switch (phase) {
+        case ECCENTRIC:
+            return 'Eccentric';
+        case CONCENTRIC:
+            return 'Concentric';
+        default:
+            return null;
+    }
 };

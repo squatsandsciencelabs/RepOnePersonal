@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 import SetsReducer from './SetsReducer';
 import ScannedDevicesReducer from './ScannedDevicesReducer';
 import ConnectedDeviceReducer from './ConnectedDeviceReducer';
@@ -20,6 +20,8 @@ import OTAReducer from './OTAReducer';
 import CalibrationReducer from './CalibrationReducer';
 import ScalarReducer from './ScalarReducer';
 import VisualizationReducer from './VisualizationReducer';
+import KratosCollapsedSettingsSetMetricsReducer from './KratosCollapsedSettingsSetMetricsReducer';
+import KratosColumnsSettingsReducer from './KratosColumnsSettingsReducer';
 
 export default reducers = combineReducers({
     sets: SetsReducer,
@@ -34,7 +36,9 @@ export default reducers = combineReducers({
     suggestions: SuggestionsReducer,
     settings: SettingsReducer,
     collapsedSettings: CollapsedSettingsReducer,
+    kratosCollapsedSettingsSetMetrics: KratosCollapsedSettingsSetMetricsReducer,
     columnsSettings: ColumnsSettingsReducer,
+    kratosColumnsSettings: KratosColumnsSettingsReducer,
     appState: AppStateReducer,
     durations: DurationsReducer,
     analysis: AnalysisReducer,
