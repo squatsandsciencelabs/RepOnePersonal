@@ -19,7 +19,7 @@ class SettingsKratosAutoDeleteRepsPanel extends Component {
     render() {
         if (Platform.OS === 'ios') {
             return (
-                <View>
+                <View style={styles.container}>
                     <View>
                         <View style={{ flexDirection: 'row', marginBottom: 2 }}>
                             <Text style={styles.labelText}>
@@ -85,6 +85,9 @@ const styles = StyleSheet.create({
         marginRight: 27,
         alignItems: 'center',
         marginTop: 9,
+    },
+    container: {
+        marginTop: 40,
     },
 });
 
