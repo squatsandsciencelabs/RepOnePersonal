@@ -1,6 +1,6 @@
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Platform} from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Platform } from 'react-native';
 
 import {
     CONCENTRIC,
@@ -8,12 +8,11 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 import PickerModal from 'app/shared_features/picker/PickerModal';
 import * as Actions from './SettingsEditKratosPhasesActions';
-import * as KratosCollapsedSettingsSetMetricsSelectors
-    from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
+import * as KratosCollapsedSettingsSetMetricsSelectors from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 
 const pickerItem = phase => ({
-    label: CollapsedMetricsUtility.phaseString(phase),
+    label: CollapsedMetricsUtility.getPhaseString(phase),
     value: phase,
 });
 

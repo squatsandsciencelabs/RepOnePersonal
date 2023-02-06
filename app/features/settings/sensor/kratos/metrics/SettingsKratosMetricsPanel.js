@@ -90,7 +90,9 @@ class SettingsKratosMetricsPanel extends Component {
                                     style={[
                                         SETTINGS_PANEL_STYLES.tappableText,
                                     ]}>
-                                    {CollapsedMetricsUtility.phaseString(phase)}
+                                    {CollapsedMetricsUtility.getPhaseString(
+                                        phase,
+                                    )}
                                 </Text>
                             </DataTable.Cell>
                         </DataTable.Row>
