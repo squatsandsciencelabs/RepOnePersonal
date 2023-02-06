@@ -1,6 +1,6 @@
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Platform } from 'react-native';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Platform} from 'react-native';
 
 import {
     CONCENTRIC,
@@ -8,7 +8,8 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 import PickerModal from 'app/shared_features/picker/PickerModal';
 import * as Actions from './SettingsEditKratosPhasesActions';
-import * as KratosCollapsedSettingsSetMetricsSelectors from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
+import * as KratosCollapsedSettingsSetMetricsSelectors
+    from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 
 const pickerItem = phase => ({
@@ -32,54 +33,17 @@ const mapStateToPropsiOS = state => {
     };
 };
 
-// not sure if memoization is worth it
-// memoizing would require ref checks of 6 items
-// not memoizing just checks rank up to 6 times, so it can end FASTER, though it does need to generate the final return value
 const mapStateToPropsAndroid = (state, ownProps) => {
-    switch (ownProps.rank) {
-        case 1:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosPhase1(
-                        state,
-                    ),
-            };
-        case 2:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosPhase2(
-                        state,
-                    ),
-            };
-        case 3:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosPhase3(
-                        state,
-                    ),
-            };
-        case 4:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosPhase4(
-                        state,
-                    ),
-            };
-        case 5:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosPhase5(
-                        state,
-                    ),
-            };
-        default:
-            return {};
-    }
+    const selectedValue =
+        KratosCollapsedSettingsSetMetricsSelectors.getKratosPhaseByRank(
+            state,
+            ownProps.rank,
+        );
+
+    return {
+        items,
+        selectedValue,
+    };
 };
 
 // this way only check OS once
@@ -96,45 +60,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch,
         );
     } else {
-        switch (ownProps.rank) {
-            case 1:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.savePhase1Setting,
-                    },
-                    dispatch,
-                );
-            case 2:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.savePhase2Setting,
-                    },
-                    dispatch,
-                );
-            case 3:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.savePhase3Setting,
-                    },
-                    dispatch,
-                );
-            case 4:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.savePhase4Setting,
-                    },
-                    dispatch,
-                );
-            case 5:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.savePhase5Setting,
-                    },
-                    dispatch,
-                );
-            default:
-                return {};
-        }
+        return bindActionCreators(
+            {
+                selectValue: value =>
+                    Actions.savePhaseSettingAndroid(value, ownProps.rank),
+            },
+            dispatch,
+        );
     }
 };
 

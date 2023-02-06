@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView} from 'react-native';
-import {DataTable} from 'react-native-paper';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
+import { DataTable } from 'react-native-paper';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
-import {SETTINGS_PANEL_STYLES} from 'app/appearance/styles/GlobalStyles';
+import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 import SettingsEditKratosRollupsScreen from './rollup/SettingsEditKratosRollupsScreen';
 import SettingsEditKratosMetricsScreen from './metric/SettingsEditKratosMetricsScreen';
@@ -102,7 +102,7 @@ class SettingsKratosMetricsPanel extends Component {
 
     renderMetricsAndroid = () => {
         return (
-            <View>
+            <View style={{ width: 400 }}>
                 {this.props.metricRollupPhaseTable.map(
                     ([metric, rollup, phase], index) => (
                         <View key={index} style={styles.rowAndroid}>
@@ -124,7 +124,7 @@ class SettingsKratosMetricsPanel extends Component {
                                     rank={index + 1}
                                 />
                             </View>
-                            <View style={styles.cellAndroid}>
+                            <View style={[styles.cellAndroid, styles.lastCell]}>
                                 <SetginsEditKratosPhasesScreen
                                     color={'rgba(47, 128, 237, 1)'}
                                     rank={index + 1}
@@ -145,22 +145,25 @@ class SettingsKratosMetricsPanel extends Component {
                 </Text>
 
                 <ScrollView horizontal={true}>
-                    <View style={{width: 400}}>
-                        <DataTable style={{marginTop: 13}}>
-                            {this.renderTableHeaders()}
-                            {Platform.OS === 'ios' && this.renderMetricsIOS()}
-                        </DataTable>
+                    <View>
+                        <View style={{ width: 400 }}>
+                            <DataTable style={{ marginTop: 13 }}>
+                                {this.renderTableHeaders()}
+                                {Platform.OS === 'ios' &&
+                                    this.renderMetricsIOS()}
+                            </DataTable>
+                        </View>
+                        {Platform.OS === 'ios' ? (
+                            <View>
+                                <SettingsEditKratosMetricsScreen />
+                                <SettingsEditKratosRollupsScreen />
+                                <SetginsEditKratosPhasesScreen />
+                            </View>
+                        ) : (
+                            this.renderMetricsAndroid()
+                        )}
                     </View>
                 </ScrollView>
-                {Platform.OS === 'ios' ? (
-                    <View>
-                        <SettingsEditKratosMetricsScreen/>
-                        <SettingsEditKratosRollupsScreen/>
-                        <SetginsEditKratosPhasesScreen/>
-                    </View>
-                ) : (
-                    this.renderMetricsAndroid()
-                )}
             </View>
         );
     }
@@ -202,6 +205,7 @@ const styles = StyleSheet.create({
         borderColor: '#DADADA',
         borderWidth: 1,
         marginBottom: -1,
+        marginRight: -1,
     },
     row: {
         paddingHorizontal: 0,

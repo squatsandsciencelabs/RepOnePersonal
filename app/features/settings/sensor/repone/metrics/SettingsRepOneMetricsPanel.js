@@ -79,28 +79,30 @@ class SettingsRepOneSensorSetMetrics extends Component {
     renderMetricsAndroid = () => {
         return (
             <View>
-                {this.state.dataToRender.map(([metric, quantifier], index) => (
-                    <View key={index} style={styles.rowAndroid}>
-                        <View
-                            style={[
-                                styles.cellAndroid,
-                                {
-                                    marginRight: -1,
-                                },
-                            ]}>
-                            <SettingsEditMetricsScreen
-                                color={'rgba(47, 128, 237, 1)'}
-                                rank={index + 1}
-                            />
+                {this.props.metricQuantifierTable.map(
+                    ([metric, quantifier], index) => (
+                        <View key={index} style={styles.rowAndroid}>
+                            <View
+                                style={[
+                                    styles.cellAndroid,
+                                    {
+                                        marginRight: -1,
+                                    },
+                                ]}>
+                                <SettingsEditMetricsScreen
+                                    color={'rgba(47, 128, 237, 1)'}
+                                    rank={index + 1}
+                                />
+                            </View>
+                            <View style={styles.cellAndroid}>
+                                <SettingsEditQuantifiersScreen
+                                    color={'rgba(47, 128, 237, 1)'}
+                                    rank={index + 1}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.cellAndroid}>
-                            <SettingsEditQuantifiersScreen
-                                color={'rgba(47, 128, 237, 1)'}
-                                rank={index + 1}
-                            />
-                        </View>
-                    </View>
-                ))}
+                    ),
+                )}
             </View>
         );
     };

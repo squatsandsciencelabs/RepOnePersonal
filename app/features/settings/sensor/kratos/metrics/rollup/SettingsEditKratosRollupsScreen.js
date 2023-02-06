@@ -56,54 +56,16 @@ const mapStateToPropsiOS = state => {
     };
 };
 
-// not sure if memoization is worth it
-// memoizing would require ref checks of 6 items
-// not memoizing just checks rank up to 6 times, so it can end FASTER, though it does need to generate the final return value
 const mapStateToPropsAndroid = (state, ownProps) => {
-    switch (ownProps.rank) {
-        case 1:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup1(
-                        state,
-                    ),
-            };
-        case 2:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup2(
-                        state,
-                    ),
-            };
-        case 3:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup3(
-                        state,
-                    ),
-            };
-        case 4:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup4(
-                        state,
-                    ),
-            };
-        case 5:
-            return {
-                items,
-                selectedValue:
-                    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup5(
-                        state,
-                    ),
-            };
-        default:
-            return {};
-    }
+    const selectedValue =
+        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
+            state,
+            ownProps.rank,
+        );
+    return {
+        items,
+        selectedValue,
+    };
 };
 
 // this way only check OS once
@@ -120,45 +82,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch,
         );
     } else {
-        switch (ownProps.rank) {
-            case 1:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.saveRollup1Setting,
-                    },
-                    dispatch,
-                );
-            case 2:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.saveRollup2Setting,
-                    },
-                    dispatch,
-                );
-            case 3:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.saveRollup3Setting,
-                    },
-                    dispatch,
-                );
-            case 4:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.saveRollup4Setting,
-                    },
-                    dispatch,
-                );
-            case 5:
-                return bindActionCreators(
-                    {
-                        selectValue: Actions.saveRollup5Setting,
-                    },
-                    dispatch,
-                );
-            default:
-                return {};
-        }
+        return bindActionCreators(
+            {
+                selectValue: value =>
+                    Actions.saveRollupSettingAndroid(value, ownProps.rank),
+            },
+            dispatch,
+        );
     }
 };
 
