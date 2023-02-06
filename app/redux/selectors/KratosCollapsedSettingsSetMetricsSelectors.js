@@ -29,7 +29,20 @@ export const getCurrentKratosMetric = state => {
 
 export const getKratosMetricByRank = (state, rank) => {
     const root = stateRoot(state);
-    return root[`metric${rank}`] || null;
+    switch (rank) {
+        case 1:
+            return root.metric1;
+        case 2:
+            return root.metric2;
+        case 3:
+            return root.metric3;
+        case 4:
+            return root.metric4;
+        case 5:
+            return root.metric5;
+        default:
+            return null;
+    }
 };
 
 export const getCurrentKratosRollup = state => {
@@ -52,7 +65,20 @@ export const getCurrentKratosRollup = state => {
 
 export const getKratosRollupByRank = (state, rank) => {
     const root = stateRoot(state);
-    return root[`rollup${rank}`] || null;
+    switch (rank) {
+        case 1:
+            return root.rollup1;
+        case 2:
+            return root.rollup2;
+        case 3:
+            return root.rollup3;
+        case 4:
+            return root.rollup4;
+        case 5:
+            return root.rollup5;
+        default:
+            return null;
+    }
 };
 
 export const getCurrentKratosPhase = state => {

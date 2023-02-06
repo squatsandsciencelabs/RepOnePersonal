@@ -1257,7 +1257,7 @@ export const quantifierString = quantifier => {
     }
 };
 
-export const phaseString = phase => {
+export const getPhaseString = phase => {
     switch (phase) {
         case ECCENTRIC:
             return 'Eccentric';
