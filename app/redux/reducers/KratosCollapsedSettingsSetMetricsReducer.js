@@ -6,24 +6,11 @@ import {
     DISMISS_KRATOS_ROLLUP,
     DISMISS_KRATOS_PHASE,
     SAVE_KRATOS_METRIC,
-    SAVE_KRATOS_METRIC_1,
-    SAVE_KRATOS_METRIC_2,
-    SAVE_KRATOS_METRIC_3,
-    SAVE_KRATOS_METRIC_4,
-    SAVE_KRATOS_METRIC_5,
     SAVE_KRATOS_ROLLUP,
-    SAVE_KRATOS_ROLLUP_1,
-    SAVE_KRATOS_ROLLUP_2,
-    SAVE_KRATOS_ROLLUP_3,
-    SAVE_KRATOS_ROLLUP_4,
-    SAVE_KRATOS_ROLLUP_5,
     SAVE_KRATOS_PHASE,
-    SAVE_KRATOS_PHASE_1,
-    SAVE_KRATOS_PHASE_2,
-    SAVE_KRATOS_PHASE_3,
-    SAVE_KRATOS_PHASE_4,
-    SAVE_KRATOS_PHASE_5,
     SAVE_KRATOS_METRIC_ANDROID,
+    SAVE_KRATOS_PHASE_ANDROID,
+    SAVE_KRATOS_ROLLUP_ANDROID,
 } from 'app/configs+constants/ActionTypes';
 
 import {
@@ -83,7 +70,6 @@ const KratosCollapsedSettingsSetMetricsReducer = (
 
     switch (action.type) {
         case PRESENT_KRATOS_METRIC:
-            console.log('PRESENT_KRATOS_METRIC', action.metricRank);
             return {
                 ...state,
                 currentKratosCollapsedMetricRank: action.metricRank,
@@ -112,25 +98,10 @@ const KratosCollapsedSettingsSetMetricsReducer = (
                 isEditingPhase: false,
             };
         case SAVE_KRATOS_METRIC:
-            changes = {};
-            rank = state.currentKratosCollapsedMetricRank;
-            changes[`metric${rank}`] = action.metric;
-
-            if (shouldResetRollup(action.metric)) {
-                changes[`rollup${rank}`] = EMPTY_QUANTIFIER;
-            }
-
-            return {
-                ...state,
-                ...changes,
-            };
         case SAVE_KRATOS_METRIC_ANDROID:
-            console.log(
-                'state.currentKratosCollapsedMetricRank save kratos metric N',
-                action.rank,
-            );
             changes = {};
-            rank = action.rank;
+            // iOS takes rank from state, Android takes rank from action
+            rank = state.currentKratosCollapsedMetricRank || action.rank;
             changes[`metric${rank}`] = action.metric;
 
             if (shouldResetRollup(action.metric)) {
@@ -142,8 +113,10 @@ const KratosCollapsedSettingsSetMetricsReducer = (
                 ...changes,
             };
         case SAVE_KRATOS_ROLLUP:
+        case SAVE_KRATOS_ROLLUP_ANDROID:
             changes = {};
-            rank = state.currentKratosCollapsedMetricRank;
+            // iOS takes rank from state, Android takes rank from action
+            rank = state.currentKratosCollapsedMetricRank || action.rank;
             changes[`rollup${rank}`] = action.rollup;
 
             if (shouldResetMetric(action.rollup, state[`metric${rank}`])) {
@@ -154,35 +127,17 @@ const KratosCollapsedSettingsSetMetricsReducer = (
                 ...state,
                 ...changes,
             };
-        case SAVE_KRATOS_ROLLUP_1:
-        case SAVE_KRATOS_ROLLUP_2:
-        case SAVE_KRATOS_ROLLUP_3:
-        case SAVE_KRATOS_ROLLUP_4:
-        case SAVE_KRATOS_ROLLUP_5:
-            console.log(
-                'state.currentKratosCollapsedMetricRank save kratos rollup N',
-                state.currentKratosCollapsedMetricRank,
-            );
-            return state;
         case SAVE_KRATOS_PHASE:
+        case SAVE_KRATOS_PHASE_ANDROID:
             changes = {};
-            rank = state.currentKratosCollapsedMetricRank;
+            // iOS takes rank from state, Android takes rank from action
+            rank = state.currentKratosCollapsedMetricRank || action.rank;
             changes[`phase${rank}`] = action.phase;
 
             return {
                 ...state,
                 ...changes,
             };
-        case SAVE_KRATOS_PHASE_1:
-        case SAVE_KRATOS_PHASE_2:
-        case SAVE_KRATOS_PHASE_3:
-        case SAVE_KRATOS_PHASE_4:
-        case SAVE_KRATOS_PHASE_5:
-            console.log(
-                'state.currentKratosCollapsedMetricRank save kratos phase N',
-                state.currentKratosCollapsedMetricRank,
-            );
-            return state;
         default:
             return state;
     }

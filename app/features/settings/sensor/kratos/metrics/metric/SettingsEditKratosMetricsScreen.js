@@ -167,57 +167,28 @@ const mapStateToPropsiOS = state => {
     };
 };
 
-// tough call whether to have it check against EVERY quantifier and metric, versus caching 5 of them and selecting the cache you want
-// check against each means more reference checks every action that gets run, AND it recalculates more than it should as it doesn't NEED to recalculate if the rank is still 1 and quant 5 changes
-// however caching all 5 means more shit in memory for something that rarely changes
-// going with former solution rather than latter, more worried about memory than a few extra ref checks
-const selectMapStateToPropsAndroid = createSelector(
-    (state, props) => props.rank,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup1,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosMetric1,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup2,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosMetric2,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup3,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosMetric3,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup4,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosMetric4,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup5,
-    KratosCollapsedSettingsSetMetricsSelectors.getKratosMetric5,
-    (
-        rank,
-        rollup1,
-        metric1,
-        rollup2,
-        metric2,
-        rollup3,
-        metric3,
-        rollup4,
-        metric4,
-        rollup5,
-        metric5,
-    ) => {
-        const items = [
-            [rollup1, metric1],
-            [rollup2, metric2],
-            [rollup3, metric3],
-            [rollup4, metric4],
-            [rollup5, metric5],
-        ];
+const mapStateToPropsAndroid = (state, ownProps) => {
+    const rollup =
+        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
+            state,
+            ownProps.rank,
+        );
 
-        const item = items[rank - 1];
+    const metric =
+        KratosCollapsedSettingsSetMetricsSelectors.getKratosMetricByRank(
+            state,
+            ownProps.rank,
+        );
 
-        return item
-            ? {
-                  items: generateItems(item[0]),
-                  selectedValue: item[1],
-              }
-            : {};
-    },
-);
+    return {
+        items: generateItems(rollup),
+        selectedValue: metric,
+    };
+};
 
 // this way only check OS once
 const mapStateToProps =
-    Platform.OS === 'ios' ? mapStateToPropsiOS : selectMapStateToPropsAndroid;
+    Platform.OS === 'ios' ? mapStateToPropsiOS : mapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {
@@ -229,16 +200,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch,
         );
     } else {
-        // const actions = {
-        //     saveCollapsedMetricSetting1: Actions.saveCollapsedMetricSetting1,
-        //     saveCollapsedMetricSetting2: Actions.saveCollapsedMetricSetting2,
-        //     saveCollapsedMetricSetting3: Actions.saveCollapsedMetricSetting3,
-        //     saveCollapsedMetricSetting4: Actions.saveCollapsedMetricSetting4,
-        //     saveCollapsedMetricSetting5: Actions.saveCollapsedMetricSetting5,
-        // };
-        // TODO: test if works properly
-        console.log('ownProps.rank', ownProps.rank);
-        // const action = actions[`saveCollapsedMetricSetting${ownProps.rank}`];
         return bindActionCreators(
             {
                 selectValue: value =>

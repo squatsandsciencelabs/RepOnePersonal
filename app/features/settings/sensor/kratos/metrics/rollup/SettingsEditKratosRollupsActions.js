@@ -22,70 +22,24 @@ export const saveRollupSetting = rollup => (dispatch, getState) => {
     );
 };
 
-export const saveRollup1Setting = rollup => (dispatch, getState) => {
-    const state = getState();
-    const prevRollup =
-        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup1(state);
-    logChangeRollupAnalytics(1, prevRollup, rollup, state);
+export const saveRollupSettingAndroid =
+    (rollup, rank) => (dispatch, getState) => {
+        const state = getState();
 
-    dispatch(
-        KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollup1(
-            rollup,
-        ),
-    );
-};
+        const prevRollup =
+            KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
+                state,
+                rank,
+            );
+        logChangeRollupAnalytics(rank, prevRollup, rollup, state);
 
-export const saveRollup2Setting = rollup => (dispatch, getState) => {
-    const state = getState();
-    const prevRollup =
-        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup2(state);
-    logChangeRollupAnalytics(2, prevRollup, rollup, state);
-
-    dispatch(
-        KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollup2(
-            rollup,
-        ),
-    );
-};
-
-export const saveRollup3Setting = rollup => (dispatch, getState) => {
-    const state = getState();
-    const prevRollup =
-        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup3(state);
-    logChangeRollupAnalytics(3, prevRollup, rollup, state);
-
-    dispatch(
-        KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollup3(
-            rollup,
-        ),
-    );
-};
-
-export const saveRollup4Setting = rollup => (dispatch, getState) => {
-    const state = getState();
-    const prevRollup =
-        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup4(state);
-    logChangeRollupAnalytics(4, prevRollup, rollup, state);
-
-    dispatch(
-        KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollup4(
-            rollup,
-        ),
-    );
-};
-
-export const saveRollup5Setting = rollup => (dispatch, getState) => {
-    const state = getState();
-    const prevRollup =
-        KratosCollapsedSettingsSetMetricsSelectors.getKratosRollup5(state);
-    logChangeRollupAnalytics(5, prevRollup, rollup, state);
-
-    dispatch(
-        KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollup5(
-            rollup,
-        ),
-    );
-};
+        dispatch(
+            KratosCollapsedSettingsSetMetricsActionCreators.saveKratosRollupAndroid(
+                rollup,
+                rank,
+            ),
+        );
+    };
 
 export const dismissRollupSetter = () => {
     Analytics.setCurrentScreen('settings');
