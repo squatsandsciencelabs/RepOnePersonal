@@ -18,36 +18,50 @@ import SettingsDevicePanelDisconnecting from './panels/SettingsDevicePanelDiscon
 import SettingsDevicePanelReconnecting from './panels/SettingsDevicePanelReconnecting';
 
 class SettingsDevicePanel extends Component {
-
     render() {
-        switch ( this.props.deviceStatus ) {
+        switch (this.props.deviceStatus) {
             case DEVICE_BLUETOOTH_OFF:
                 return <SettingsDevicePanelBluetoothOff />;
             case DISCONNECTED:
-                return <SettingsDevicePanelDisconnected
-                    scannedDevices={ this.props.scannedDevices }
-                    startDeviceScan={ this.props.startDeviceScan }
-                    stopDeviceScan={ this.props.stopDeviceScan }
-                    connectDevice={ this.props.connectDevice }
-                    tappedTroubleshooting={ this.props.tappedTroubleshooting }/>;
+                return (
+                    <SettingsDevicePanelDisconnected
+                        scannedDevices={this.props.scannedDevices}
+                        startDeviceScan={this.props.startDeviceScan}
+                        stopDeviceScan={this.props.stopDeviceScan}
+                        connectDevice={this.props.connectDevice}
+                        tappedTroubleshooting={this.props.tappedTroubleshooting}
+                    />
+                );
             case CONNECTING:
-                return <SettingsDevicePanelConnecting
-                    device={ this.props.deviceName }
-                    disconnectDevice={ this.props.disconnectDevice }/>;
+                return (
+                    <SettingsDevicePanelConnecting
+                        device={this.props.deviceName}
+                        disconnectDevice={this.props.disconnectDevice}
+                    />
+                );
             case CONNECTED:
-                return <SettingsDevicePanelConnected
-                    device={ this.props.deviceName }
-                    disconnectDevice={ this.props.disconnectDevice }
-                    isInstalling={ this.props.isInstalling } />;
+                return (
+                    <SettingsDevicePanelConnected
+                        device={this.props.deviceName}
+                        disconnectDevice={this.props.disconnectDevice}
+                        isInstalling={this.props.isInstalling}
+                        batteryPercentage={this.props.deviceBatteryPercentage}
+                    />
+                );
             case DISCONNECTING:
-                return <SettingsDevicePanelDisconnecting
-                    device={ this.props.deviceName }/>;
+                return (
+                    <SettingsDevicePanelDisconnecting
+                        device={this.props.deviceName}
+                    />
+                );
             case RECONNECTING:
-                return <SettingsDevicePanelReconnecting
-                    stopReconnect={ this.props.stopReconnect }/>;
+                return (
+                    <SettingsDevicePanelReconnecting
+                        stopReconnect={this.props.stopReconnect}
+                    />
+                );
         }
     }
-
 }
 
 export default SettingsDevicePanel;
