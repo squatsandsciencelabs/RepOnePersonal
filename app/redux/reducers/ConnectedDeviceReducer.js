@@ -118,9 +118,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 numDisconnects: 0,
             });
         case UPDATE_BATTERY_PERCENTAGE:
-            return Object.assign({}, state, {
-                batteryPercentage: action.percentage,
-            });
+            return { ...state, batteryPercentage: action.percentage };
         default:
             return state;
     }
