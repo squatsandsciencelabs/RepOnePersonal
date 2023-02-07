@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import {
-    Text,
-    View,
-    Image
-} from 'react-native';
+import { Text, View, Image } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 // displays connected device info, allows disconnect from device
 class SettingsDevicePanelConnected extends Component {
-
     _renderConnectedIcon() {
         const device = this.props.device;
         var img =
@@ -23,19 +18,27 @@ class SettingsDevicePanelConnected extends Component {
 
     render() {
         // hide disconnect mid install to prevent the weird bugs
-        const disconnectOption = this.props.isInstalling ? null : <View style={ SETTINGS_PANEL_STYLES.footer }>
-            <Text style={ SETTINGS_PANEL_STYLES.footerCancelText }
-                onPress={ () => this.props.disconnectDevice() }>
-                DISCONNECT
-            </Text>
-        </View>;
+        const disconnectOption = this.props.isInstalling ? null : (
+            <View style={SETTINGS_PANEL_STYLES.footer}>
+                <Text
+                    style={SETTINGS_PANEL_STYLES.footerCancelText}
+                    onPress={() => this.props.disconnectDevice()}>
+                    DISCONNECT
+                </Text>
+            </View>
+        );
 
         return (
-            <View style={ [SETTINGS_PANEL_STYLES.panel, { flex: 1 }] }>
-                <View style={ SETTINGS_PANEL_STYLES.header }>
-                    <Text style={ SETTINGS_PANEL_STYLES.headerText }>
-                        Connected to { this.props.device }
+            <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
+                <View style={SETTINGS_PANEL_STYLES.header}>
+                    <Text style={SETTINGS_PANEL_STYLES.headerText}>
+                        Connected to {this.props.device}
                     </Text>
+                    {this.props.batteryPercentage !== null && (
+                        <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
+                            Battery: {this.props.batteryPercentage} %
+                        </Text>
+                    )}
                 </View>
                 <View style={SETTINGS_PANEL_STYLES.content}>
                     {this._renderConnectedIcon()}
@@ -44,7 +47,6 @@ class SettingsDevicePanelConnected extends Component {
             </View>
         );
     }
-
 }
 
 export default SettingsDevicePanelConnected;
