@@ -9,6 +9,7 @@ import {
     CONNECTED_TO_DEVICE,
     RECONNECTING_TO_DEVICE,
     END_WORKOUT,
+    UPDATE_BATTERY_PERCENTAGE,
 } from 'app/configs+constants/ActionTypes';
 import {
     DEVICE_BLUETOOTH_OFF,
@@ -30,9 +31,10 @@ const defaultState = {
     numReconnects: 0,
     apiFormatVersion: null,
     firmwareVersion: null,
+    batteryPercentage: null,
 };
 
-const ConnectedDeviceReducer = ( state = defaultState, action) => {
+const ConnectedDeviceReducer = (state = defaultState, action) => {
     switch (action.type) {
         case CONNECT_DEVICE:
             return Object.assign({}, state, {
@@ -45,7 +47,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 status: CONNECTING,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
-                numReconnects: state.numReconnects + 1
+                numReconnects: state.numReconnects + 1,
             });
         case DISCONNECT_DEVICE:
             // TODO: confirm if there's an issue here with disconnecting from the device
@@ -55,21 +57,26 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 status: DISCONNECTING,
                 deviceName: null,
                 deviceIdentifier: null,
+                batteryPercentage: null,
             });
         case BLUETOOTH_OFF:
             return Object.assign({}, state, {
                 status: DEVICE_BLUETOOTH_OFF,
                 deviceName: null,
                 deviceIdentifier: null,
+                batteryPercentage: null,
             });
         case DISCONNECTED_FROM_DEVICE:
             return Object.assign({}, state, {
                 status: DISCONNECTED,
                 deviceName: null,
                 deviceIdentifier: null,
-                numDisconnects: action.deviceName ? state.numDisconnects + 1 : state.numDisconnects, // TODO: need to test this
+                numDisconnects: action.deviceName
+                    ? state.numDisconnects + 1
+                    : state.numDisconnects, // TODO: need to test this
                 apiFormatVersion: null,
                 firmwareVersion: null,
+                batteryPercentage: null,
             });
         case STOP_RECONNECT:
             return Object.assign({}, state, {
@@ -77,6 +84,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 isReconnecting: false,
+                batteryPercentage: null,
             });
         case CONNECTING_TO_DEVICE:
             return {
@@ -98,6 +106,7 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
                 isReconnecting: false,
                 apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,
+                batteryPercentage: action.batteryPercentage,
             });
         case RECONNECTING_TO_DEVICE:
             return Object.assign({}, state, {
@@ -107,6 +116,10 @@ const ConnectedDeviceReducer = ( state = defaultState, action) => {
             return Object.assign({}, state, {
                 numReconnects: 0,
                 numDisconnects: 0,
+            });
+        case UPDATE_BATTERY_PERCENTAGE:
+            return Object.assign({}, state, {
+                batteryPercentage: action.percentage,
             });
         default:
             return state;
