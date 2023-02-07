@@ -19,6 +19,7 @@ import {
     RECONNECT_DEVICE,
     VELOCITY_DROPPED,
     ADD_KRATOS_REP_DATA,
+    UPDATE_BATTERY_PERCENTAGE,
 } from 'app/configs+constants/ActionTypes';
 import {
     CONNECTING,
@@ -47,9 +48,8 @@ export const startDeviceScan =
         if (Platform.OS !== 'ios') {
             const permissions = BluetoothUtils.getBluetoothPermissionsAndroid();
 
-            let allPermissionsGranted = await BluetoothUtils.areAllPermissionsGranted(
-                permissions,
-            );
+            let allPermissionsGranted =
+                await BluetoothUtils.areAllPermissionsGranted(permissions);
 
             const bleManagerStarted = BluetoothUtils.getDidBleManagerStart();
 
@@ -57,21 +57,31 @@ export const startDeviceScan =
                 return;
             }
 
-            if((!isManualScan && allPermissionsGranted && !bleManagerStarted) || isManualScan && allPermissionsGranted && !bleManagerStarted) {
-                try{
-                    await BleManager.start({showAlert: false})
+            if (
+                (!isManualScan &&
+                    allPermissionsGranted &&
+                    !bleManagerStarted) ||
+                (isManualScan && allPermissionsGranted && !bleManagerStarted)
+            ) {
+                try {
+                    await BleManager.start({ showAlert: false });
                     BluetoothUtils.setDidBleManagerStart(true);
                 } catch (err) {
-                    console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+                    console.tron.log(
+                        `start device scan failed to start blemanager ${JSON.stringify(
+                            err,
+                        )}`,
+                    );
                 }
             }
 
             if (isManualScan && !allPermissionsGranted) {
                 await requestMultiple(permissions);
 
-                allPermissionsGranted = await BluetoothPermissionsUtils.areAllPermissionsGranted(
-                    permissions,
-                );
+                allPermissionsGranted =
+                    await BluetoothPermissionsUtils.areAllPermissionsGranted(
+                        permissions,
+                    );
 
                 if (!allPermissionsGranted) {
                     Alert.alert(
@@ -91,11 +101,15 @@ export const startDeviceScan =
                     );
                     return;
                 } else {
-                    try{
-                        await BleManager.start({showAlert: false})
+                    try {
+                        await BleManager.start({ showAlert: false });
                         BluetoothUtils.setDidBleManagerStart(true);
                     } catch (err) {
-                        console.tron.log(`start device scan failed to start blemanager ${JSON.stringify(err)}`);
+                        console.tron.log(
+                            `start device scan failed to start blemanager ${JSON.stringify(
+                                err,
+                            )}`,
+                        );
                     }
                 }
             }
@@ -127,7 +141,7 @@ export const stopDeviceScan = () => (dispatch, getState) => {
     logCompletedScanAnalytics(state);
 
     dispatch({
-        type: STOP_DEVICE_SCAN
+        type: STOP_DEVICE_SCAN,
     });
 };
 
@@ -139,82 +153,94 @@ export const foundDevice = (deviceName, deviceIdentifier) => ({
 
 // DEVICE
 
-export const connectDevice = (deviceName, deviceIdentifier) => (dispatch, getState) => {
-    BleManager.connect(deviceIdentifier); // TODO: should this be device?
-    const state = getState();
-    logAttemptConnectDeviceAnalytics(false, state);
-    dispatch(connectingToDevice(deviceName, deviceIdentifier));
+export const connectDevice =
+    (deviceName, deviceIdentifier) => (dispatch, getState) => {
+        BleManager.connect(deviceIdentifier); // TODO: should this be device?
+        const state = getState();
+        logAttemptConnectDeviceAnalytics(false, state);
+        dispatch(connectingToDevice(deviceName, deviceIdentifier));
 
-    dispatch({
-        type: CONNECT_DEVICE,
-        deviceName,
-        deviceIdentifier,
-    });
-};
-
-export const reconnectDevice = (deviceName, deviceIdentifier) => (dispatch, getState) => {
-    const state = getState();
-    logAttemptConnectDeviceAnalytics(true, state);
-
-    BleManager.connect(deviceIdentifier); // TODO: should this be device?
-    console.tron.log(`reconnect device called with ${deviceName} and ${deviceIdentifier}`);
-    dispatch(connectingToDevice(deviceName, deviceIdentifier));
-
-    dispatch({
-        type: RECONNECT_DEVICE,
-        deviceName,
-        deviceIdentifier,
-    });
-};
-
-export const disconnectDevice = (performAction=true) => (dispatch, getState) => {
-    const state = getState();
-    const deviceId = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
-    if (!deviceId) {
-        // TODO: error handling
-        // TODO: confirm this, it might clear the reducer too fast, and if so I'll need another way to grab the id to disconnect from the peripheral
-        // places to check are:
-        // 1. reconnect canceling
-        // 2. settings cancel connecting
-        // 3. settings cancel after connecdted
-        // 4. turning off power should not call this
-        console.tron.log(`unable to disconnect device as no device id saved in reducer`);
-        return;
-    }
-
-    BleManager.disconnect(deviceId);
-
-    if (performAction) {
         dispatch({
-            type: DISCONNECT_DEVICE,
-            deviceId,
+            type: CONNECT_DEVICE,
+            deviceName,
+            deviceIdentifier,
         });
-    }
-};
+    };
+
+export const reconnectDevice =
+    (deviceName, deviceIdentifier) => (dispatch, getState) => {
+        const state = getState();
+        logAttemptConnectDeviceAnalytics(true, state);
+
+        BleManager.connect(deviceIdentifier); // TODO: should this be device?
+        console.tron.log(
+            `reconnect device called with ${deviceName} and ${deviceIdentifier}`,
+        );
+        dispatch(connectingToDevice(deviceName, deviceIdentifier));
+
+        dispatch({
+            type: RECONNECT_DEVICE,
+            deviceName,
+            deviceIdentifier,
+        });
+    };
+
+export const disconnectDevice =
+    (performAction = true) =>
+    (dispatch, getState) => {
+        const state = getState();
+        const deviceId =
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+        if (!deviceId) {
+            // TODO: error handling
+            // TODO: confirm this, it might clear the reducer too fast, and if so I'll need another way to grab the id to disconnect from the peripheral
+            // places to check are:
+            // 1. reconnect canceling
+            // 2. settings cancel connecting
+            // 3. settings cancel after connecdted
+            // 4. turning off power should not call this
+            console.tron.log(
+                `unable to disconnect device as no device id saved in reducer`,
+            );
+            return;
+        }
+
+        BleManager.disconnect(deviceId);
+
+        if (performAction) {
+            dispatch({
+                type: DISCONNECT_DEVICE,
+                deviceId,
+            });
+        }
+    };
 
 // DEVICE STATUS
 
 export const bluetoothIsOff = () => ({
-    type: BLUETOOTH_OFF
+    type: BLUETOOTH_OFF,
 });
 
-export const disconnectedFromDevice = (name=null, deviceIdentifier=null) => (dispatch, getState) => {
-    Analytics.setUserProp('connected_device_id', null);
-    Analytics.setUserProp('device_version', null);
+export const disconnectedFromDevice =
+    (name = null, deviceIdentifier = null) =>
+    (dispatch, getState) => {
+        Analytics.setUserProp('connected_device_id', null);
+        Analytics.setUserProp('device_version', null);
 
-    const state = getState();
-    const deviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
-    if (deviceStatus === CONNECTED || deviceStatus === DISCONNECTING) {
-        const isIntentional = deviceStatus === DISCONNECTING;
-        logDisconnectedFromDeviceAnalytics(isIntentional, state);
-    }
+        const state = getState();
+        const deviceStatus =
+            ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
+        if (deviceStatus === CONNECTED || deviceStatus === DISCONNECTING) {
+            const isIntentional = deviceStatus === DISCONNECTING;
+            logDisconnectedFromDeviceAnalytics(isIntentional, state);
+        }
 
-    dispatch({
-        type: DISCONNECTED_FROM_DEVICE,
-        deviceName: name,
-        deviceIdentifier,
-    });
-};
+        dispatch({
+            type: DISCONNECTED_FROM_DEVICE,
+            deviceName: name,
+            deviceIdentifier,
+        });
+    };
 
 // TODO: i need to ensure identifier is passed in, right now it's just the name
 export const connectingToDevice = (name, deviceIdentifier) => ({
@@ -224,53 +250,72 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 });
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
-export const connectedToDevice = (deviceIdentifier, apiFormatVersion, firmwareVersion) => (dispatch, getState) => {
-    // analytics
-    const state = getState();
-    const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting"
-    console.tron.log(`got name ${name} and trying to set user prop with it`);
-    Analytics.setUserProp('connected_device_name', name);
-    Analytics.setUserProp('connected_device_id', deviceIdentifier);
-    Analytics.setUserProp('firmware_version', firmwareVersion);
+export const connectedToDevice =
+    (deviceIdentifier, apiFormatVersion, firmwareVersion, batteryPercentage) =>
+    (dispatch, getState) => {
+        // analytics
+        const state = getState();
+        const name =
+            ConnectedDeviceStatusSelectors.getConnectedDeviceName(state); // rely on name from "connecting"
+        console.tron.log(
+            `got name ${name} and trying to set user prop with it`,
+        );
+        Analytics.setUserProp('connected_device_name', name);
+        Analytics.setUserProp('connected_device_id', deviceIdentifier);
+        Analytics.setUserProp('firmware_version', firmwareVersion);
 
-    // TODO: get firmware and log that here
-    logConnectedToDeviceAnalytics(state);
+        // TODO: get firmware and log that here
+        logConnectedToDeviceAnalytics(state);
 
-    dispatch({
-        type: CONNECTED_TO_DEVICE,
-        deviceName: name,
-        deviceIdentifier,
-        apiFormatVersion,
-        firmwareVersion,
-    });
-};
+        dispatch({
+            type: CONNECTED_TO_DEVICE,
+            deviceName: name,
+            deviceIdentifier,
+            apiFormatVersion,
+            firmwareVersion,
+            batteryPercentage,
+        });
+    };
 
-export const reconnectingToDevice = (name) => {
+export const reconnectingToDevice = name => {
     return {
         type: RECONNECTING_TO_DEVICE,
         deviceName: name,
     };
 };
 
+export const updateBatteryPercentage = percentage => {
+    return {
+        type: UPDATE_BATTERY_PERCENTAGE,
+        percentage,
+    };
+};
+
 // DATA
 
-export const receivedLiftData = (data, time=new Date()) => (dispatch, getState) => {
-    const state = getState();
+export const receivedLiftData =
+    (data, time = new Date()) =>
+    (dispatch, getState) => {
+        const state = getState();
 
-    logAddRepAnalytics(state);
+        logAddRepAnalytics(state);
 
-    dispatch(TimerActionCreators.sanityCheckTimer());
-    dispatch({
-        ...data,
-        type: ADD_REP_DATA,
-        deviceName: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
-        deviceIdentifier: ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state),
-        firmwareVersion: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
-        time: time,
-    });
-    dispatch(TimerActionCreators.startEndSetTimer());
-
-};
+        dispatch(TimerActionCreators.sanityCheckTimer());
+        dispatch({
+            ...data,
+            type: ADD_REP_DATA,
+            deviceName:
+                ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
+            deviceIdentifier:
+                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(
+                    state,
+                ),
+            firmwareVersion:
+                ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+            time: time,
+        });
+        dispatch(TimerActionCreators.startEndSetTimer());
+    };
 
 export const receivedKratosLiftData =
     (json, time = new Date()) =>
@@ -301,7 +346,7 @@ export const receivedKratosLiftData =
 
 // ANALYTICS
 
-const logAddRepAnalytics = (state) => {
+const logAddRepAnalytics = state => {
     const currentSet = SetsSelectors.getWorkingSet(state);
     let set_id = currentSet.setID;
     let rep_count = currentSet.reps.length;
@@ -313,7 +358,9 @@ const logAddRepAnalytics = (state) => {
     let has_reps = Boolean(SetsSelectors.getNumWorkoutReps(state));
     let end_set_time_left = SettingsSelectors.getEndSetTimeLeft(state);
 
-    Analytics.logEventWithAppState('add_rep', {
+    Analytics.logEventWithAppState(
+        'add_rep',
+        {
             set_id: set_id,
             rep_count: rep_count,
             has_exercise_name: has_exercise_name,
@@ -323,50 +370,76 @@ const logAddRepAnalytics = (state) => {
             has_video: has_video,
             has_reps: has_reps,
             end_set_time_left: end_set_time_left,
-    }, state);
+        },
+        state,
+    );
 };
 
 const logAttemptScanAnalytics = (state, isManualScan) => {
-    Analytics.logEventWithAppState('attempt_scan', {
-        is_manual: isManualScan,
-    }, state);
+    Analytics.logEventWithAppState(
+        'attempt_scan',
+        {
+            is_manual: isManualScan,
+        },
+        state,
+    );
 };
 
 const logFailedAttemptScanAnalytics = (state, isManualScan) => {
-    Analytics.logEventWithAppState('failed_attempt_scan', {
-        is_manual: isManualScan,
-    }, state);
+    Analytics.logEventWithAppState(
+        'failed_attempt_scan',
+        {
+            is_manual: isManualScan,
+        },
+        state,
+    );
 };
 
-const logCompletedScanAnalytics = (state) => {
+const logCompletedScanAnalytics = state => {
     const isManualScan = ScannedDevicesSelectors.getIsManualScan(state);
-    const manualScannedNone = ScannedDevicesSelectors.getManualScannedNone(state);
+    const manualScannedNone =
+        ScannedDevicesSelectors.getManualScannedNone(state);
 
-    Analytics.logEventWithAppState('completed_scan', {
+    Analytics.logEventWithAppState(
+        'completed_scan',
+        {
             is_manual: isManualScan,
             manual_scanned_none: manualScannedNone,
-    }, state);
+        },
+        state,
+    );
 };
 
 const logAttemptConnectDeviceAnalytics = (isReconnect, state) => {
-    Analytics.logEventWithAppState('attempt_connect_device', {
-        is_reconnect: isReconnect
-    }, state);
+    Analytics.logEventWithAppState(
+        'attempt_connect_device',
+        {
+            is_reconnect: isReconnect,
+        },
+        state,
+    );
 };
 
-const logConnectedToDeviceAnalytics = (state) => {
-    Analytics.logEventWithAppState('connected_to_device', {
-    }, state);
+const logConnectedToDeviceAnalytics = state => {
+    Analytics.logEventWithAppState('connected_to_device', {}, state);
 };
 
 const logConnectedToDeviceTimedOutAnalytics = (isReconnect, state) => {
-    Analytics.logEventWithAppState('connect_to_device_timed_out', {
-        is_reconnect: isReconnect
-    }, state);
+    Analytics.logEventWithAppState(
+        'connect_to_device_timed_out',
+        {
+            is_reconnect: isReconnect,
+        },
+        state,
+    );
 };
 
 const logDisconnectedFromDeviceAnalytics = (isIntentional, state) => {
-    Analytics.logEventWithAppState('disconnected_from_device', {
-        is_intentional: isIntentional
-    }, state);
+    Analytics.logEventWithAppState(
+        'disconnected_from_device',
+        {
+            is_intentional: isIntentional,
+        },
+        state,
+    );
 };
