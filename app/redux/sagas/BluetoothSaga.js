@@ -18,7 +18,7 @@ export default function* BluetoothSaga() {
 
 function* setupServices(action) {
     try {
-        // lister for battery changes
+        // listen for battery changes
         yield apply(BleManager, BleManager.startNotification, [
             action.deviceIdentifier,
             BLE_BATTERY_SERVICE_UUID,

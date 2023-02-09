@@ -251,7 +251,12 @@ export const connectingToDevice = (name, deviceIdentifier) => ({
 
 // TODO: this may not be able to receive the name, may want to pull from selector and just live with that for analytics??
 export const connectedToDevice =
-    (deviceIdentifier, apiFormatVersion, firmwareVersion, batteryPercentage) =>
+    (
+        deviceIdentifier,
+        apiFormatVersion,
+        firmwareVersion,
+        initialBatteryPercentage,
+    ) =>
     (dispatch, getState) => {
         // analytics
         const state = getState();
@@ -273,7 +278,7 @@ export const connectedToDevice =
             deviceIdentifier,
             apiFormatVersion,
             firmwareVersion,
-            batteryPercentage,
+            initialBatteryPercentage,
         });
     };
 
