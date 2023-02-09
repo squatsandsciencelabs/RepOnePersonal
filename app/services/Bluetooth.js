@@ -97,7 +97,7 @@ export default async function (store) {
                 args.peripheral,
                 BLE_BATTERY_SERVICE_UUID,
                 BLE_BATTERY_CHARACTERISTIC_UUID,
-            ); // get battery info
+            ); // get initial battery percentage
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
 

@@ -106,7 +106,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 isReconnecting: false,
                 apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,
-                batteryPercentage: action.batteryPercentage,
+                batteryPercentage: action.initialBatteryPercentage,
             });
         case RECONNECTING_TO_DEVICE:
             return Object.assign({}, state, {
