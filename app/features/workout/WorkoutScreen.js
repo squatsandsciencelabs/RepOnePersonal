@@ -18,7 +18,14 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can3D) => {
+const createViewModels = (
+    sets,
+    collapsedModel,
+    columnsModel,
+    labels,
+    units,
+    can3D,
+) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
     let sections = [section]; // the return value
@@ -32,10 +39,10 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
     let isRemoved = false;
 
     // build view models
-    sets.map((set) => {
+    sets.map(set => {
         // last section check, splitting the "current set" out for footer purposes
         // TODO: depending on design for "finish current set", can put all the data in one section instead
-        if (count === sets.length-1) {
+        if (count === sets.length - 1) {
             section = { key: 0, data: [], position: -1, isLast: false };
             sections.splice(0, 0, section); // insert at beginning
             isLastSet = true;
@@ -53,7 +60,10 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
             lastExerciseName = null;
             setNumber = 1;
         } else if (!isRemoved) {
-            if (lastExerciseName !== null && lastExerciseName === set.exercise) {
+            if (
+                lastExerciseName !== null &&
+                lastExerciseName === set.exercise
+            ) {
                 setNumber++;
             } else {
                 setNumber = 1;
@@ -67,14 +77,25 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
         const setHasUnremovedRepWith3D = SetUtils.hasUnremovedRepWith3D(set);
         if (!isRemoved) {
             array.push(createTopBorder(set));
-            array.push(createTitleViewModel(set, setNumber, lastExerciseName, isLastSet, isCollapsed));
+            array.push(
+                createTitleViewModel(
+                    set,
+                    setNumber,
+                    lastExerciseName,
+                    isLastSet,
+                    isCollapsed,
+                ),
+            );
             if (!isCollapsed) {
                 array.push(createFormViewModel(set, setNumber, isRemoved));
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
                 if (isLastSet || set.reps.length > 0) {
-                    if (OpenBarbellConfig.visualizationEnabled && ((isLastSet && can3D) || setHasUnremovedRepWith3D)) {
+                    if (
+                        OpenBarbellConfig.visualizationEnabled &&
+                        ((isLastSet && can3D) || setHasUnremovedRepWith3D)
+                    ) {
                         array.push(createOpen3DButton(set));
                     } else {
                         array.push(createBorder(set));
@@ -92,7 +113,10 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            Array.prototype.push.apply(array, createRowViewModels(set, columnsModel));
+            Array.prototype.push.apply(
+                array,
+                createRowViewModels(set, columnsModel),
+            );
         }
 
         // footer with rest, 3d, and delete
@@ -109,14 +133,36 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
                 } else {
                     // working set, normal rest time (not live)
                     hasFooter = true;
-                    array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+                    array.push(
+                        createFooterVM(
+                            set,
+                            isInitialSet ? null : lastSetEndTime,
+                            isCollapsed,
+                            isLastSet,
+                            setHasUnremovedRepWith3D,
+                        ),
+                    );
                 }
             }
-        } else if (!isRemoved && (!isCollapsed || (!isInitialSet && lastSetEndTime !== null) || setHasUnremovedRepWith3D)) {
+        } else if (
+            !isRemoved &&
+            (!isCollapsed ||
+                (!isInitialSet && lastSetEndTime !== null) ||
+                setHasUnremovedRepWith3D)
+        ) {
             hasFooter = true;
-            array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, isLastSet, setHasUnremovedRepWith3D));
+            array.push(
+                createFooterVM(
+                    set,
+                    isInitialSet ? null : lastSetEndTime,
+                    isCollapsed,
+                    isLastSet,
+                    setHasUnremovedRepWith3D,
+                ),
+            );
         }
-        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
+        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) {
+            // ignore removed sets in rest calculations
             // update variable for calculation purposes
             lastSetEndTime = SetUtils.endTime(set);
         }
@@ -146,19 +192,19 @@ const createViewModels = (sets, collapsedModel, columnsModel, labels, units, can
 
     // return
     return sections;
-}
+};
 
-const createTopBorder = (set) => ({
+const createTopBorder = set => ({
     type: 'top border',
     key: set.setID + 'topborder',
 });
 
-const createWorkingSetHeader = (set) => ({
+const createWorkingSetHeader = set => ({
     type: 'working set header',
-    key: set.setID+'end set timer'
+    key: set.setID + 'end set timer',
 });
 
-const createRestoreViewModel = (set) => {
+const createRestoreViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
     return {
         type: 'restore',
@@ -168,13 +214,13 @@ const createRestoreViewModel = (set) => {
         rpe: set.rpe ? set.rpe : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
         key: set.setID + 'restore',
     };
 };
 
 // TODO: remove hack fix, see https://github.com/react-native-community/react-native-video/issues/1572
-const getVideoFileURL = (set) => {
+const getVideoFileURL = set => {
     // Android
     if (Platform.OS !== 'ios') {
         return set.videoFileURL;
@@ -192,9 +238,15 @@ const getVideoFileURL = (set) => {
     return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
 };
 
-const createTitleViewModel = (set, setNumber, bias=null, isLastSet=false, isCollapsed=false) => ({
+const createTitleViewModel = (
+    set,
+    setNumber,
+    bias = null,
+    isLastSet = false,
+    isCollapsed = false,
+) => ({
     type: 'title',
-    key: set.setID+'title',
+    key: set.setID + 'title',
     setNumber: setNumber,
     exercise: set.exercise ? set.exercise.toLowerCase() : null,
     setID: set.setID,
@@ -211,7 +263,7 @@ const createFormViewModel = (set, setNumber, isRemoved) => ({
     setID: set.setID,
     removed: isRemoved,
     setNumber: setNumber,
-    tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+    tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
     weight: set.weight,
     metric: set.metric,
     rpe: set.rpe,
@@ -221,38 +273,40 @@ const createFormViewModel = (set, setNumber, isRemoved) => ({
     deviceType: set.deviceType,
 });
 
-const createSummaryViewModel = (set) => {
+const createSummaryViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
     return {
         type: 'summary',
-        key: set.setID+'summary',
+        key: set.setID + 'summary',
         weight: set.weight ? set.weight : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
+        kratosDiscs: set.kratosDiscs,
+        deviceType: set.deviceType,
     };
 };
 
-const createAnalysisViewModel = (set) => ({
+const createAnalysisViewModel = set => ({
     type: 'analysis',
-    key: set.setID+'analysis',
+    key: set.setID + 'analysis',
     set: set,
 });
 
-const createOpen3DButton = (set) => ({
+const createOpen3DButton = set => ({
     type: 'open 3d button',
     setID: set.setID,
-    key: set.setID+"open 3d button",
+    key: set.setID + 'open 3d button',
 });
 
-const createBorder = (set) => ({
-    type: "border",
+const createBorder = set => ({
+    type: 'border',
     key: `${set.setID}border`,
 });
 
 const createSubheaderModel = (set, labels, units) => ({
-    type: "subheader",
-    key: set.setID+"subheader",
+    type: 'subheader',
+    key: set.setID + 'subheader',
     labels,
     units,
 });
@@ -260,7 +314,7 @@ const createSubheaderModel = (set, labels, units) => ({
 const createRowViewModels = (set, columnsModel) => {
     let array = [];
 
-    for (let i=0, repCount=0; i<set.reps.length; i++) {
+    for (let i = 0, repCount = 0; i < set.reps.length; i++) {
         // get rep
         let rep = set.reps[i];
 
@@ -269,12 +323,12 @@ const createRowViewModels = (set, columnsModel) => {
 
         // vm
         let vm = {
-            type: "data",
+            type: 'data',
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
             removed: rep.removed,
-            key: set.setID+i,
+            key: set.setID + i,
         };
 
         if (rep.deviceFamily === 'Kratos') {
@@ -306,32 +360,43 @@ const createRowViewModels = (set, columnsModel) => {
 
 const createWorkingSetFooterVM = (set, restStartTime) => {
     let footerVM = {
-        type: "working set footer",
-        restStartTimeMS: (new Date(restStartTime)).getTime(),
-        key: set.setID + 'live rest'
+        type: 'working set footer',
+        restStartTimeMS: new Date(restStartTime).getTime(),
+        key: set.setID + 'live rest',
     };
     return footerVM;
 };
 
-const createFooterVM = (set, lastSetEndTime, isCollapsed, isWorkingSet, setHasUnremovedRepWith3D) => {
+const createFooterVM = (
+    set,
+    lastSetEndTime,
+    isCollapsed,
+    isWorkingSet,
+    setHasUnremovedRepWith3D,
+) => {
     let rest = null;
     if (lastSetEndTime) {
-        const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+        const restInMS =
+            new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
         rest = DateUtils.restInSentenceFormat(restInMS);
     }
     return {
-        type: "footer",
+        type: 'footer',
         rest,
         key: set.setID + 'rest',
         setID: set.setID,
         isCollapsed: isCollapsed,
         isWorkingSet: isWorkingSet,
-        show3D: OpenBarbellConfig.visualizationEnabled && isCollapsed && !isWorkingSet && setHasUnremovedRepWith3D,
+        show3D:
+            OpenBarbellConfig.visualizationEnabled &&
+            isCollapsed &&
+            !isWorkingSet &&
+            setHasUnremovedRepWith3D,
     };
 };
 
 const createBottomBorder = (set, isPadded) => ({
-    type: "bottom border",
+    type: 'bottom border',
     key: set.setID + 'bottomborder',
     isPadded,
 });
@@ -344,48 +409,55 @@ const getWorkoutSections = createSelector(
     ColumnsSettingsSelectors.getColumnUnits,
     ConnectedDeviceStatusSelectors.getCan3D,
     (sets, collapsedModel, columnsModel, labels, units, can3D) => {
-        return createViewModels(sets, collapsedModel, columnsModel, labels, units, can3D);
-    }
+        return createViewModels(
+            sets,
+            collapsedModel,
+            columnsModel,
+            labels,
+            units,
+            can3D,
+        );
+    },
 );
 
 // worth memoizing because isUntouched ref check saves
 const calculateIsAddEnabled = createSelector(
     SetsSelectors.getWorkoutSets,
-    (sets) => {
+    sets => {
         if (sets.length === 0) {
             return false;
         } else {
-            return !SetUtils.isUntouched(sets[sets.length-1]);
+            return !SetUtils.isUntouched(sets[sets.length - 1]);
         }
-    }
+    },
 );
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         sections: getWorkoutSections(state),
         sets: SetsSelectors.getWorkoutSets(state),
         isAddEnabled: calculateIsAddEnabled(state),
         isLoggedIn: AuthSelectors.getIsLoggedIn(state),
         isLoggingIn: AuthSelectors.getIsLoggingIn(state),
-    }
+    };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        endSet: Actions.endSet,
-        removeRep: Actions.removeRep,
-        restoreRep: Actions.restoreRep,
-        deleteSet: Actions.deleteSet,
-        restoreSet: Actions.restoreSet,
-        getDefaultMetric: SetsActionCreators.getDefaultMetric,
-        open3D: Actions.open3D,
-        tappedLoginBanner: Actions.tappedLoginBanner,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            endSet: Actions.endSet,
+            removeRep: Actions.removeRep,
+            restoreRep: Actions.restoreRep,
+            deleteSet: Actions.deleteSet,
+            restoreSet: Actions.restoreSet,
+            getDefaultMetric: SetsActionCreators.getDefaultMetric,
+            open3D: Actions.open3D,
+            tappedLoginBanner: Actions.tappedLoginBanner,
+        },
+        dispatch,
+    );
 };
 
-const WorkoutScreen = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(WorkoutList);
+const WorkoutScreen = connect(mapStateToProps, mapDispatchToProps)(WorkoutList);
 
 export default WorkoutScreen;
