@@ -17,7 +17,14 @@ import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSe
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved) => {
+const createViewModels = (
+    sets,
+    collapsedModel,
+    columnsModel,
+    columnLabels,
+    columnUnits,
+    shouldShowRemoved,
+) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -31,7 +38,7 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
     let isRemoved = false;
 
     // build view models
-    for (let i=0; i<sets.length; i++) {
+    for (let i = 0; i < sets.length; i++) {
         // get set
         let set = sets[i];
 
@@ -45,7 +52,7 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
         if (set.rpe) {
             set.rpe = rpe;
         } else {
-            set.rpe = "";
+            set.rpe = '';
         }
 
         // every workout is a section
@@ -56,7 +63,11 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
             isInitialSet = true;
 
             // create section
-            section = { key: new Date(workoutStartTime).toLocaleString(), data: [], position: -1 };
+            section = {
+                key: new Date(workoutStartTime).toLocaleString(),
+                data: [],
+                position: -1,
+            };
             sections.splice(0, 0, section); // insert at beginning
         } else {
             isInitialSet = false;
@@ -74,7 +85,10 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
             lastExerciseName = null;
             setNumber = 1;
         } else if (!isRemoved) {
-            if (lastExerciseName !== null && lastExerciseName === set.exercise) {
+            if (
+                lastExerciseName !== null &&
+                lastExerciseName === set.exercise
+            ) {
                 setNumber++;
             } else {
                 setNumber = 1;
@@ -90,13 +104,23 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
                 if (!isRemoved) {
                     array.push(createAnalysisViewModel(set));
                 }
-                if ((shouldShowRemoved && !SetUtils.hasNoReps(set)) || (!shouldShowRemoved && SetUtils.numValidUnremovedReps(set) > 0)) { // TODO: might have bug where set has just 1 invalid rep?
-                    if (OpenBarbellConfig.visualizationEnabled && setHasUnremovedRepWith3D) {
+                if (
+                    (shouldShowRemoved && !SetUtils.hasNoReps(set)) ||
+                    (!shouldShowRemoved &&
+                        SetUtils.numValidUnremovedReps(set) > 0)
+                ) {
+                    // TODO: might have bug where set has just 1 invalid rep?
+                    if (
+                        OpenBarbellConfig.visualizationEnabled &&
+                        setHasUnremovedRepWith3D
+                    ) {
                         array.push(createOpen3DButton(set));
                     } else {
                         array.push(createBorder(set));
                     }
-                    array.push(createSubheaderModel(set, columnLabels, columnUnits));
+                    array.push(
+                        createSubheaderModel(set, columnLabels, columnUnits),
+                    );
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -109,7 +133,10 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            Array.prototype.push.apply(array, createRowViewModels(set, columnsModel, shouldShowRemoved));
+            Array.prototype.push.apply(
+                array,
+                createRowViewModels(set, columnsModel, shouldShowRemoved),
+            );
         }
 
         // footer with rest, 3d, and delete
@@ -118,14 +145,27 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
         }
         let hasFooter = false;
-        if (!isRemoved && (!isCollapsed || (!isInitialSet && lastSetEndTime !== null) || setHasUnremovedRepWith3D)) {
+        if (
+            !isRemoved &&
+            (!isCollapsed ||
+                (!isInitialSet && lastSetEndTime !== null) ||
+                setHasUnremovedRepWith3D)
+        ) {
             // add rest footer if valid
             // ALWAYS shows up when expanded regardless of rest, as it needs to have delete
             // on collapsed, it only shows up if REST or if has 3D
             hasFooter = true;
-            array.push(createFooterVM(set, isInitialSet ? null : lastSetEndTime, isCollapsed, setHasUnremovedRepWith3D));
+            array.push(
+                createFooterVM(
+                    set,
+                    isInitialSet ? null : lastSetEndTime,
+                    isCollapsed,
+                    setHasUnremovedRepWith3D,
+                ),
+            );
         }
-        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
+        if (!isInitialSet && !isRemoved && SetUtils.hasUnremovedRep(set)) {
+            // ignore removed sets in rest calculations
             // update end time for calculation purposes
             lastSetEndTime = SetUtils.endTime(set);
         }
@@ -146,9 +186,9 @@ const createViewModels = (sets, collapsedModel, columnsModel, columnLabels, colu
 
     // return
     return sections;
-}
+};
 
-const createRestoreViewModel = (set) => {
+const createRestoreViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
     return {
         type: 'restore',
@@ -158,13 +198,13 @@ const createRestoreViewModel = (set) => {
         rpe: set.rpe ? set.rpe : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
         key: set.setID + 'restore',
     };
 };
 
 // TODO: remove hack fix, see https://github.com/react-native-community/react-native-video/issues/1572
-const getVideoFileURL = (set) => {
+const getVideoFileURL = set => {
     // Android
     if (Platform.OS !== 'ios') {
         return set.videoFileURL;
@@ -182,9 +222,9 @@ const getVideoFileURL = (set) => {
     return `assets-library://asset/asset.${ext}?id=${appleId}&ext=${ext}`;
 };
 
-const createTitleViewModel = (set, setNumber, isCollapsed=false) => ({
+const createTitleViewModel = (set, setNumber, isCollapsed = false) => ({
     type: 'title',
-    key: set.setID+'title',
+    key: set.setID + 'title',
     setNumber: setNumber,
     exercise: set.exercise ? set.exercise.toLowerCase() : null,
     setID: set.setID,
@@ -195,12 +235,12 @@ const createTitleViewModel = (set, setNumber, isCollapsed=false) => ({
 
 const createFormViewModel = (set, setNumber, isRemoved) => ({
     type: 'form',
-    key: set.setID+'form',
+    key: set.setID + 'form',
     setID: set.setID,
     initialStartTime: set.initialStartTime,
     removed: isRemoved,
     setNumber: setNumber,
-    tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+    tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
     weight: set.weight,
     metric: set.metric,
     rpe: set.rpe,
@@ -210,38 +250,41 @@ const createFormViewModel = (set, setNumber, isRemoved) => ({
     deviceType: set.deviceType,
 });
 
-const createSummaryViewModel = (set) => {
+const createSummaryViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
+
     return {
         type: 'summary',
-        key: set.setID+'summary',
+        key: set.setID + 'summary',
         weight: set.weight ? set.weight : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
+        kratosDiscs: set.kratosDiscs,
+        deviceType: set.deviceType,
     };
 };
 
-const createAnalysisViewModel = (set) => ({
+const createAnalysisViewModel = set => ({
     type: 'analysis',
-    key: set.setID+'analysis',
+    key: set.setID + 'analysis',
     set: set,
 });
 
-const createOpen3DButton = (set) => ({
+const createOpen3DButton = set => ({
     type: 'open 3d button',
     setID: set.setID,
-    key: set.setID+"open 3d button",
+    key: set.setID + 'open 3d button',
 });
 
-const createBorder = (set) => ({
-    type: "border",
+const createBorder = set => ({
+    type: 'border',
     key: `${set.setID}border`,
 });
 
 const createSubheaderModel = (set, labels, units) => ({
-    type: "subheader",
-    key: set.setID+"subheader",
+    type: 'subheader',
+    key: set.setID + 'subheader',
     labels,
     units,
 });
@@ -249,7 +292,7 @@ const createSubheaderModel = (set, labels, units) => ({
 const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
     let array = [];
 
-    for (let i=0, repCount=0; i<set.reps.length; i++) {
+    for (let i = 0, repCount = 0; i < set.reps.length; i++) {
         // get rep
         let rep = set.reps[i];
 
@@ -263,17 +306,17 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
 
         // vm
         let vm = {
-            type: "data",
+            type: 'data',
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
             removed: rep.removed,
-            key: set.setID+i,
+            key: set.setID + i,
             isLast: repCount === set.reps.length,
         };
 
         if (rep.deviceFamily === 'Kratos') {
-             const resultReps = SetUtils.getKratosRepRows(rep);
+            const resultReps = SetUtils.getKratosRepRows(rep);
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
                 const model = columnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
@@ -303,21 +346,25 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
 const createFooterVM = (set, lastSetEndTime, isCollapsed, setHasRepWith3D) => {
     let rest = null;
     if (lastSetEndTime) {
-        const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+        const restInMS =
+            new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
         rest = DateUtils.restInSentenceFormat(restInMS);
     }
     return {
-        type: "footer",
+        type: 'footer',
         rest,
         key: set.setID + 'rest',
         setID: set.setID,
         isCollapsed: isCollapsed,
-        show3D: OpenBarbellConfig.visualizationEnabled && isCollapsed && setHasRepWith3D,
+        show3D:
+            OpenBarbellConfig.visualizationEnabled &&
+            isCollapsed &&
+            setHasRepWith3D,
     };
 };
 
 const createBottomBorder = (set, isPadded) => ({
-    type: "bottom border",
+    type: 'bottom border',
     key: set.setID + 'bottomborder',
     isPadded,
 });
@@ -329,12 +376,26 @@ const getHistorySections = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     HistorySelectors.getShowRemoved,
-    (sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved) => {
-        return createViewModels(sets, collapsedModel, columnsModel, columnLabels, columnUnits, shouldShowRemoved);
-    }
+    (
+        sets,
+        collapsedModel,
+        columnsModel,
+        columnLabels,
+        columnUnits,
+        shouldShowRemoved,
+    ) => {
+        return createViewModels(
+            sets,
+            collapsedModel,
+            columnsModel,
+            columnLabels,
+            columnUnits,
+            shouldShowRemoved,
+        );
+    },
 );
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const email = AuthSelectors.getEmail(state);
     const shouldShowRemoved = HistorySelectors.getShowRemoved(state);
     const isFiltering = HistorySelectors.getIsFiltering(state);
@@ -348,21 +409,21 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        removeRep: Actions.removeRep,
-        restoreRep: Actions.restoreRep,
-        deleteSet: Actions.deleteSet,
-        restoreSet: Actions.restoreSet,
-        open3D: Actions.open3D,
-        finishLoading: Actions.finishLoading,
-        presentHistoryFilter: Actions.presentHistoryFilter,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            removeRep: Actions.removeRep,
+            restoreRep: Actions.restoreRep,
+            deleteSet: Actions.deleteSet,
+            restoreSet: Actions.restoreSet,
+            open3D: Actions.open3D,
+            finishLoading: Actions.finishLoading,
+            presentHistoryFilter: Actions.presentHistoryFilter,
+        },
+        dispatch,
+    );
 };
 
-const HistoryScreen = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(HistoryList);
+const HistoryScreen = connect(mapStateToProps, mapDispatchToProps)(HistoryList);
 
 export default HistoryScreen;
