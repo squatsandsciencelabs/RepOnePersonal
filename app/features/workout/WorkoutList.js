@@ -69,7 +69,7 @@ class WorkoutList extends Component {
 
     _renderSectionHeader(section) {
         const sets = this.props.sets;
-        const currentSetIndex = (this.props.sets.length) - 1;
+        const currentSetIndex = this.props.sets.length - 1;
         const set = sets[currentSetIndex];
         const marginTop = this.props.isLoggedIn ? 0 : 40;
 
@@ -77,15 +77,21 @@ class WorkoutList extends Component {
         if (section.key === 0) {
             if (!this.props.isAddEnabled) {
                 return (
-                    <View style={[styles.disabledButton, { marginTop: marginTop }]}>
+                    <View
+                        style={[
+                            styles.disabledButton,
+                            { marginTop: marginTop },
+                        ]}>
                         <Text style={styles.buttonText}>CREATE NEW SET</Text>
                     </View>
-                );                
+                );
             } else {
                 return (
                     <View style={[styles.button, { marginTop: marginTop }]}>
-                        <TouchableOpacity onPress={ () => this.props.endSet() }>
-                            <Text style={styles.buttonText}>CREATE NEW SET</Text>
+                        <TouchableOpacity onPress={() => this.props.endSet()}>
+                            <Text style={styles.buttonText}>
+                                CREATE NEW SET
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 );
@@ -97,7 +103,7 @@ class WorkoutList extends Component {
 
     _renderSectionFooter(section) {
         if (section.key !== 0) {
-            return <ListLoadingFooter isLargeFooter={section.isLast} />
+            return <ListLoadingFooter isLargeFooter={section.isLast} />;
         }
     }
 
@@ -115,98 +121,179 @@ class WorkoutList extends Component {
                         tags={item.tags}
                     />
                 );
-            case "title":
+            case 'title':
                 if (!item.isCollapsed) {
-                    return (<View>
-                                <EditWorkoutTitleExpandedScreen
-                                    setID={item.setID}
-                                    exercise={item.exercise}
-                                    bias={item.bias}
-                                    removed={item.removed}
-                                    setNumber={item.setNumber}
-                                    isCollapsable={!item.isWorkingSet} />
-                            </View>);
+                    return (
+                        <View>
+                            <EditWorkoutTitleExpandedScreen
+                                setID={item.setID}
+                                exercise={item.exercise}
+                                bias={item.bias}
+                                removed={item.removed}
+                                setNumber={item.setNumber}
+                                isCollapsable={!item.isWorkingSet}
+                            />
+                        </View>
+                    );
                 } else {
-                    return (<View>
-                                <EditWorkoutTitleCollapsedScreen
-                                    setID={item.setID}
-                                    exercise={item.exercise}
-                                    removed={item.removed}
-                                    setNumber={item.setNumber}
-                                    videoFileURL={item.videoFileURL} />
-                            </View>);
+                    return (
+                        <View>
+                            <EditWorkoutTitleCollapsedScreen
+                                setID={item.setID}
+                                exercise={item.exercise}
+                                removed={item.removed}
+                                setNumber={item.setNumber}
+                                videoFileURL={item.videoFileURL}
+                            />
+                        </View>
+                    );
                 }
-            case "summary":
+            case 'summary':
                 return (
                     <SetSummary
                         weight={item.weight}
                         metric={item.metric}
                         numReps={item.numReps}
                         tags={item.tags}
+                        kratosDiscs={item.kratosDiscs}
+                        deviceType={item.deviceType}
                     />
                 );
-            case "analysis":
+            case 'analysis':
+                return <SetAnalysisScreen set={item.set} />;
+            case 'form':
                 return (
-                    <SetAnalysisScreen set={item.set}/>
+                    <View style={{ backgroundColor: 'white' }}>
+                        <EditWorkoutSetFormScreen
+                            setID={item.setID}
+                            removed={item.removed}
+                            tags={item.tags}
+                            weight={item.weight}
+                            metric={item.metric}
+                            rpe={item.rpe}
+                            kratosDiscs={item.kratosDiscs}
+                            deviceType={item.deviceType}
+                            renderDetailComponent={() => {
+                                if (
+                                    item.videoFileURL !== null &&
+                                    item.videoFileURL !== undefined
+                                ) {
+                                    return (
+                                        <WorkoutVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="watch"
+                                            videoFileURL={item.videoFileURL}
+                                        />
+                                    );
+                                } else if (section.position === 0) {
+                                    return (
+                                        <WorkoutVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="record"
+                                        />
+                                    );
+                                } else {
+                                    return (
+                                        <WorkoutVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="commentary"
+                                        />
+                                    );
+                                }
+                            }}
+                        />
+                    </View>
                 );
-            case "form":
-                return (<View style={{backgroundColor: 'white'}}>
-                            <EditWorkoutSetFormScreen
-                                setID={item.setID}
-                                removed={item.removed}
-                                tags={item.tags}
-                                weight={item.weight}
-                                metric={item.metric}
-                                rpe={item.rpe}
-                                kratosDiscs={item.kratosDiscs}
-                                deviceType={item.deviceType}
-                                renderDetailComponent={()=> {
-                                    if (item.videoFileURL !== null && item.videoFileURL !== undefined) {
-                                        return (<WorkoutVideoButtonScreen setID={item.setID} mode='watch' videoFileURL={item.videoFileURL} />);
-                                    } else if (section.position === 0) {
-                                        return (<WorkoutVideoButtonScreen setID={item.setID} mode='record' />);
-                                    } else {
-                                        return (<WorkoutVideoButtonScreen setID={item.setID} mode='commentary' />);
-                                    }
-                                }}
-                            />
-                        </View>);
-            case "open 3d button":
+            case 'open 3d button':
                 return (
                     <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
-            case "subheader":
+            case 'subheader':
+                return <SetDataLabelRow item={item} />;
+            case 'data':
                 return (
-                    <SetDataLabelRow item={item} />
+                    <SetDataRow
+                        item={item}
+                        onPressRemove={() =>
+                            this.props.removeRep(item.setID, item.rep)
+                        }
+                        onPressRestore={() =>
+                            this.props.restoreRep(item.setID, item.rep)
+                        }
+                    />
                 );
-            case "data":
-                return (<SetDataRow item={item}
-                            onPressRemove={() =>this.props.removeRep(item.setID, item.rep) }
-                            onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
-                        />);
-            case "footer":
-                return <SetFooterRow item={item} onPressDelete={this.props.deleteSet} open3D={this.props.open3D} />;
-            case "working set header":
+            case 'footer':
                 return (
-                    <View style={{marginTop: 15}}>
+                    <SetFooterRow
+                        item={item}
+                        onPressDelete={this.props.deleteSet}
+                        open3D={this.props.open3D}
+                    />
+                );
+            case 'working set header':
+                return (
+                    <View style={{ marginTop: 15 }}>
                         <TimerProgressBarScreen />
                     </View>
                 );
-            case "top border":
-                return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1}} />);
-            case "border":
-                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
-            case "bottom border":
-                if (item.isPadded) {
-                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 5, marginBottom: 15}} />);
-                } else {
-                    return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
-                }
-            case "working set footer":
+            case 'top border':
                 return (
-                    <View style={{marginBottom: 15}}>
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#e0e0e0',
+                            height: 1,
+                        }}
+                    />
+                );
+            case 'border':
+                return (
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'white',
+                            borderColor: '#e0e0e0',
+                            borderLeftWidth: 1,
+                            borderRightWidth: 1,
+                            borderBottomWidth: 1,
+                            height: 10,
+                        }}
+                    />
+                );
+            case 'bottom border':
+                if (item.isPadded) {
+                    return (
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'white',
+                                borderColor: '#e0e0e0',
+                                borderLeftWidth: 1,
+                                borderRightWidth: 1,
+                                borderBottomWidth: 1,
+                                height: 5,
+                                marginBottom: 15,
+                            }}
+                        />
+                    );
+                } else {
+                    return (
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: '#e0e0e0',
+                                height: 1,
+                                marginBottom: 15,
+                            }}
+                        />
+                    );
+                }
+            case 'working set footer':
+                return (
+                    <View style={{ marginBottom: 15 }}>
                         <LiveRestRow restStartTimeMS={item.restStartTimeMS} />
-                    </View>);
+                    </View>
+                );
             default:
                 break;
         }
@@ -215,35 +302,48 @@ class WorkoutList extends Component {
     render() {
         var list = null;
         if (this.props.sections.length > 0) {
-            list = (<SectionList
-                ref={(ref) => { this.sectionList = ref; }}
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps='always'
-                initialNumToRender={13}
-                stickySectionHeadersEnabled={false}
-                renderItem={({section, index, item}) => this._renderRow(section, index, item)}
-                renderSectionHeader={({section}) => this._renderSectionHeader(section)}
-                renderSectionFooter={({section}) => this._renderSectionFooter(section)}
-                sections={this.props.sections}
-                style = {{padding: 10, backgroundColor: '#f2f2f2'}}
-            />);
+            list = (
+                <SectionList
+                    ref={ref => {
+                        this.sectionList = ref;
+                    }}
+                    keyboardDismissMode="on-drag"
+                    keyboardShouldPersistTaps="always"
+                    initialNumToRender={13}
+                    stickySectionHeadersEnabled={false}
+                    renderItem={({ section, index, item }) =>
+                        this._renderRow(section, index, item)
+                    }
+                    renderSectionHeader={({ section }) =>
+                        this._renderSectionHeader(section)
+                    }
+                    renderSectionFooter={({ section }) =>
+                        this._renderSectionFooter(section)
+                    }
+                    sections={this.props.sections}
+                    style={{ padding: 10, backgroundColor: '#f2f2f2' }}
+                />
+            );
         }
 
         return (
-            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    backgroundColor: 'white',
+                }}>
                 <EditWorkoutExerciseScreen />
                 <EditWorkoutTagsScreen />
                 <EditWorkoutKratosDiscsScreen />
                 <WorkoutVideoRecorderScreen />
                 <WorkoutVideoPlayerScreen />
 
-                <View style={{ flex: 1 }}>
-                    {list}
-                </View>
+                <View style={{ flex: 1 }}>{list}</View>
 
                 {this._renderLoginBanner()}
 
-                <View style={{height: 50}}>
+                <View style={{ height: 50 }}>
                     <WorkoutBottomBarScreen />
                 </View>
             </View>
@@ -266,34 +366,34 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderColor: 'rgba(47, 128, 237, 1)',        
+        borderColor: 'rgba(47, 128, 237, 1)',
         borderWidth: 5,
         borderRadius: 15,
     },
     disabledButton: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderColor: 'rgba(47, 128, 237, 1)',        
+        borderColor: 'rgba(47, 128, 237, 1)',
         borderWidth: 5,
         borderRadius: 15,
-        opacity: 0.3
+        opacity: 0.3,
     },
     buttonText: {
         color: 'white',
         padding: 5,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     Shadow: {
-        shadowColor: "#000000",
+        shadowColor: '#000000',
         shadowOpacity: 0.2,
         shadowRadius: 2,
         shadowOffset: {
             height: 4,
-            width: 0
+            width: 0,
         },
     },
     rowText: {
-        fontSize:20,
-        paddingTop:5,
+        fontSize: 20,
+        paddingTop: 5,
     },
 });
 
