@@ -1092,15 +1092,15 @@ export const metricAbbreviation = metric => {
         case AVG_VELOCITY_METRIC:
             return 'VEL';
         case RPE_METRIC:
-            return 'RPE';
+            return 'RPE e1rm';
         case DURATION_METRIC:
             return 'DUR';
         case ROM_METRIC:
             return 'ROM';
         case PKH_METRIC:
-            return 'PKH';
+            return 'PK VEL LOC';
         case PKV_METRIC:
-            return 'PKV';
+            return 'PK VEL';
         case FORCE_METRIC:
             return 'FRC';
         case FORCE_HEIGHT_METRIC:
@@ -1200,27 +1200,27 @@ export const quantifierAbbreviation = quantifier => {
         case EMPTY_QUANTIFIER:
             return '';
         case FIRST_REP_QUANTIFIER:
-            return 'FIRST';
+            return 'FRST';
         case LAST_REP_QUANTIFIER:
             return 'LAST';
         case MIN_QUANTIFIER:
-            return 'MIN SET';
+            return 'MIN';
         case MAX_QUANTIFIER:
-            return 'MAX SET';
+            return 'MAX';
         case AVG_QUANTIFIER:
-            return 'AVG SET';
+            return 'MEAN';
         case ABS_LOSS_QUANTIFIER:
-            return 'A. LOSS';
+            return 'ABS LOSS';
         case PERCENT_LOSS_QUANTIFIER:
-            return '% LOSS';
+            return 'PCT LOSS';
         case MAX_EVER_QUANTIFIER:
-            return 'MAXEVER';
+            return 'MAXPR';
         case MIN_EVER_QUANTIFIER:
-            return 'MINEVER';
+            return 'MINPR';
         case SET_LOSS_QUANTIFIER:
-            return 'S. LOSS';
+            return 'SET LOSS';
         case PEAK_END_QUANTIFIER:
-            return 'PK-END';
+            return 'PEAK END';
         default:
             return null;
     }
