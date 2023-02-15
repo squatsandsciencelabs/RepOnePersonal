@@ -29,14 +29,17 @@ import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO
 import EditHistoryKratosDiscsScreen from './kratos_discs/EditHistoryKratosDiscsScreen';
 
 class HistoryList extends Component {
-
     // UPDATE
 
     shouldComponentUpdate(nextProps) {
-        const differentShowRemoved = nextProps.shouldShowRemoved !== this.props.shouldShowRemoved;
+        const differentShowRemoved =
+            nextProps.shouldShowRemoved !== this.props.shouldShowRemoved;
         const differentSections = nextProps.sections !== this.props.sections;
-        const differentIsFiltering = nextProps.isFiltering !== this.props.isFiltering;
-        return differentShowRemoved || differentSections || differentIsFiltering;
+        const differentIsFiltering =
+            nextProps.isFiltering !== this.props.isFiltering;
+        return (
+            differentShowRemoved || differentSections || differentIsFiltering
+        );
     }
 
     // RENDER
@@ -44,8 +47,15 @@ class HistoryList extends Component {
     _renderSectionHeader(section) {
         return (
             <View>
-                <View style={{height:40, justifyContent: 'flex-end', alignItems: 'center'}}>
-                    <Text style={{color: 'rgba(77, 77, 77, 1)'}}>{section.key}</Text>
+                <View
+                    style={{
+                        height: 40,
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                    }}>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                        {section.key}
+                    </Text>
                 </View>
             </View>
         );
@@ -53,7 +63,7 @@ class HistoryList extends Component {
 
     _renderSectionFooter(section) {
         if (section.key !== 0) {
-            return <ListLoadingFooter />
+            return <ListLoadingFooter />;
         }
     }
 
@@ -71,86 +81,159 @@ class HistoryList extends Component {
                         tags={item.tags}
                     />
                 );
-            case "title":
+            case 'title':
                 if (!item.isCollapsed) {
-                    return (<View style={{borderTopWidth: 1, borderColor: '#e0e0e0'}}>
-                                <EditHistoryTitleExpandedScreen
-                                    setID={item.setID}
-                                    exercise={item.exercise}
-                                    removed={item.removed}
-                                    setNumber={item.setNumber}
-                                    isCollapsable={true} />
-                            </View>);
+                    return (
+                        <View
+                            style={{
+                                borderTopWidth: 1,
+                                borderColor: '#e0e0e0',
+                            }}>
+                            <EditHistoryTitleExpandedScreen
+                                setID={item.setID}
+                                exercise={item.exercise}
+                                removed={item.removed}
+                                setNumber={item.setNumber}
+                                isCollapsable={true}
+                            />
+                        </View>
+                    );
                 } else {
-                    return (<View style={{borderTopWidth: 1, borderColor: '#e0e0e0'}}>
-                                <EditHistoryTitleCollapsedScreen
-                                    setID={item.setID}
-                                    exercise={item.exercise}
-                                    removed={item.removed}
-                                    setNumber={item.setNumber}
-                                    videoFileURL={item.videoFileURL} />
-                            </View>);
+                    return (
+                        <View
+                            style={{
+                                borderTopWidth: 1,
+                                borderColor: '#e0e0e0',
+                            }}>
+                            <EditHistoryTitleCollapsedScreen
+                                setID={item.setID}
+                                exercise={item.exercise}
+                                removed={item.removed}
+                                setNumber={item.setNumber}
+                                videoFileURL={item.videoFileURL}
+                            />
+                        </View>
+                    );
                 }
-            case "summary":
+            case 'summary':
                 return (
                     <SetSummary
                         weight={item.weight}
                         metric={item.metric}
                         numReps={item.numReps}
                         tags={item.tags}
+                        kratosDiscs={item.kratosDiscs}
+                        deviceType={item.deviceType}
                     />
                 );
-            case "analysis":
-                return (
-                    <SetAnalysisScreen set={item.set} />
-                );
-            case "form":
+            case 'analysis':
+                return <SetAnalysisScreen set={item.set} />;
+            case 'form':
                 // note: on focus will avoid the Redux store for simplicity and just do it through the callback function
                 // technically an action to scroll should be application state and therefore should go through the global store
-                return (<View style={{backgroundColor: 'white'}}>
-                            <EditHistorySetFormScreen
-                                setID={item.setID}
-                                initialStartTime={item.initialStartTime}
-                                removed={item.removed}
-                                tags={item.tags}
-                                weight={item.weight}
-                                metric={item.metric}
-                                rpe={item.rpe}
-                                kratosDiscs={item.kratosDiscs}
-                                deviceType={item.deviceType}
-                                renderDetailComponent={()=> {
-                                    if (item.videoFileURL !== null && item.videoFileURL !== undefined) {
-                                        return (<HistoryVideoButtonScreen setID={item.setID} mode='watch' videoFileURL={item.videoFileURL} />);
-                                    } else {
-                                        return (<HistoryVideoButtonScreen setID={item.setID} mode='commentary' />);
-                                    }
-                                }}
-                            />
-                        </View>);
-            case "open 3d button":
+                return (
+                    <View style={{ backgroundColor: 'white' }}>
+                        <EditHistorySetFormScreen
+                            setID={item.setID}
+                            initialStartTime={item.initialStartTime}
+                            removed={item.removed}
+                            tags={item.tags}
+                            weight={item.weight}
+                            metric={item.metric}
+                            rpe={item.rpe}
+                            kratosDiscs={item.kratosDiscs}
+                            deviceType={item.deviceType}
+                            renderDetailComponent={() => {
+                                if (
+                                    item.videoFileURL !== null &&
+                                    item.videoFileURL !== undefined
+                                ) {
+                                    return (
+                                        <HistoryVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="watch"
+                                            videoFileURL={item.videoFileURL}
+                                        />
+                                    );
+                                } else {
+                                    return (
+                                        <HistoryVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="commentary"
+                                        />
+                                    );
+                                }
+                            }}
+                        />
+                    </View>
+                );
+            case 'open 3d button':
                 return (
                     <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
-            case "subheader":
+            case 'subheader':
+                return <SetDataLabelRow item={item} />;
+            case 'data':
                 return (
-                    <SetDataLabelRow item={item} />
+                    <SetDataRow
+                        item={item}
+                        onPressRemove={() =>
+                            this.props.removeRep(item.setID, item.rep)
+                        }
+                        onPressRestore={() =>
+                            this.props.restoreRep(item.setID, item.rep)
+                        }
+                    />
                 );
-            case "data":
-                return (<SetDataRow item={item}
-                            onPressRemove={() =>this.props.removeRep(item.setID, item.rep) }
-                            onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
-                        />);
-            case "border":
-                return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
-            case "bottom border":
-                if (item.isPadded) {
-                    return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10, marginBottom: 15}} />);
-                } else {
-                    return (<View style={{flex: 1, backgroundColor: '#e0e0e0', height: 1, marginBottom: 15}} />);
-                }
-            case "footer":
+            case 'border':
                 return (
-                    <SetFooterRow item={item} onPressDelete={this.props.deleteSet} open3D={this.props.open3D} />
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'white',
+                            borderColor: '#e0e0e0',
+                            borderLeftWidth: 1,
+                            borderRightWidth: 1,
+                            borderBottomWidth: 1,
+                            height: 10,
+                        }}
+                    />
+                );
+            case 'bottom border':
+                if (item.isPadded) {
+                    return (
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'white',
+                                borderColor: '#e0e0e0',
+                                borderLeftWidth: 1,
+                                borderRightWidth: 1,
+                                borderBottomWidth: 1,
+                                height: 10,
+                                marginBottom: 15,
+                            }}
+                        />
+                    );
+                } else {
+                    return (
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: '#e0e0e0',
+                                height: 1,
+                                marginBottom: 15,
+                            }}
+                        />
+                    );
+                }
+            case 'footer':
+                return (
+                    <SetFooterRow
+                        item={item}
+                        onPressDelete={this.props.deleteSet}
+                        open3D={this.props.open3D}
+                    />
                 );
             default:
                 break;
@@ -158,12 +241,29 @@ class HistoryList extends Component {
     }
 
     _renderFilterHeader() {
-        const filterTitle = this.props.isFiltering ? 'Edit Filters' : 'Add Filters';
+        const filterTitle = this.props.isFiltering
+            ? 'Edit Filters'
+            : 'Add Filters';
 
         return (
-            <TouchableOpacity onPress={ () => this.props.presentHistoryFilter() }>
-                <View style={{borderBottomWidth: 1, borderBottomColor: '#959595'}}>
-                    <Text style={{ textAlign: 'center', paddingTop: 10, paddingBottom: 10, fontSize: 15, fontWeight: 'bold', fontSize: 18, color: 'rgba(47, 128, 237, 1)' }}>{filterTitle}</Text>
+            <TouchableOpacity onPress={() => this.props.presentHistoryFilter()}>
+                <View
+                    style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#959595',
+                    }}>
+                    <Text
+                        style={{
+                            textAlign: 'center',
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            fontSize: 18,
+                            color: 'rgba(47, 128, 237, 1)',
+                        }}>
+                        {filterTitle}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -172,24 +272,39 @@ class HistoryList extends Component {
     render() {
         var list = null;
         if (this.props.sections.length > 0) {
-            list = (<SectionList
-                ref={(ref) => { this.sectionList = ref; }}
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps='always'
-                initialNumToRender={13}
-                stickySectionHeadersEnabled={false}
-                ListFooterComponent={HistoryLoadingFooterScreen}
-                renderItem={({item, index, section}) => this._renderRow(section, index, item)}
-                renderSectionHeader={({section}) => this._renderSectionHeader(section) }
-                renderSectionFooter={({section}) => this._renderSectionFooter(section)}              
-                sections={this.props.sections}
-                onEndReached={() => this.props.finishLoading() }
-                style = {{padding: 10, backgroundColor: '#f2f2f2'}}
-            />);
+            list = (
+                <SectionList
+                    ref={ref => {
+                        this.sectionList = ref;
+                    }}
+                    keyboardDismissMode="on-drag"
+                    keyboardShouldPersistTaps="always"
+                    initialNumToRender={13}
+                    stickySectionHeadersEnabled={false}
+                    ListFooterComponent={HistoryLoadingFooterScreen}
+                    renderItem={({ item, index, section }) =>
+                        this._renderRow(section, index, item)
+                    }
+                    renderSectionHeader={({ section }) =>
+                        this._renderSectionHeader(section)
+                    }
+                    renderSectionFooter={({ section }) =>
+                        this._renderSectionFooter(section)
+                    }
+                    sections={this.props.sections}
+                    onEndReached={() => this.props.finishLoading()}
+                    style={{ padding: 10, backgroundColor: '#f2f2f2' }}
+                />
+            );
         }
         if (this.props.email !== undefined && this.props.email !== null) {
             return (
-                <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        backgroundColor: 'white',
+                    }}>
                     <EditHistoryExerciseScreen />
                     <EditHistoryTagsScreen />
                     <HistoryVideoRecorderScreen />
@@ -204,7 +319,9 @@ class HistoryList extends Component {
             );
         } else {
             return (
-                <ScrollView style={{flex: 1, backgroundColor: '#f2f2f2'}} contentContainerStyle={{flexGrow: 1}}>
+                <ScrollView
+                    style={{ flex: 1, backgroundColor: '#f2f2f2' }}
+                    contentContainerStyle={{ flexGrow: 1 }}>
                     <UserLoggedOutPanel />
                 </ScrollView>
             );
