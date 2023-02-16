@@ -28,17 +28,17 @@ const pickerItem = rollup => ({
 
 const items = [
     pickerItem(EMPTY_QUANTIFIER),
-    pickerItem(AVG_QUANTIFIER), // vel, pkv, dur
-    pickerItem(MAX_EVER_QUANTIFIER), // vel, pkv, dur
-    pickerItem(MIN_EVER_QUANTIFIER), // vel, pkv, dur
-    pickerItem(ABS_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(PERCENT_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(SET_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(PEAK_END_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(FIRST_REP_QUANTIFIER), // all
-    pickerItem(LAST_REP_QUANTIFIER), // all
-    pickerItem(MIN_QUANTIFIER), // all
-    pickerItem(MAX_QUANTIFIER), // all
+    pickerItem(AVG_QUANTIFIER),
+    pickerItem(MAX_EVER_QUANTIFIER),
+    pickerItem(MIN_EVER_QUANTIFIER),
+    pickerItem(ABS_LOSS_QUANTIFIER),
+    pickerItem(PERCENT_LOSS_QUANTIFIER),
+    pickerItem(SET_LOSS_QUANTIFIER),
+    pickerItem(PEAK_END_QUANTIFIER),
+    pickerItem(FIRST_REP_QUANTIFIER),
+    pickerItem(LAST_REP_QUANTIFIER),
+    pickerItem(MIN_QUANTIFIER),
+    pickerItem(MAX_QUANTIFIER),
 ];
 
 const mapStateToPropsiOS = state => {

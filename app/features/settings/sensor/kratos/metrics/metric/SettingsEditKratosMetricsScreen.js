@@ -17,8 +17,6 @@ import {
     FORCE_HEIGHT_METRIC,
     POWER_METRIC,
     POWER_HEIGHT_METRIC,
-    LINEAR_3D_AVG_VELOCITY_METRIC,
-    LINEAR_3D_ROM_METRIC,
     AVG_QUANTIFIER,
     MAX_EVER_QUANTIFIER,
     MIN_EVER_QUANTIFIER,
@@ -41,109 +39,49 @@ const pickerItem = metric => ({
     value: metric,
 });
 
-// NOTE: To avoid an android picker bug, the item order is explicitly set to Empty -> PKH -> ROM -> others
-// Basically, if you don't do this, it's possible for the Picker to trigger each time Quantifier changes
-// See https://github.com/facebook/react-native/issues/16849 for more information
-// Once the bug is resolved, can redo the order into something that makes more sense
 const generateItems = rollup => {
     switch (rollup) {
         case MAX_EVER_QUANTIFIER:
         case MIN_EVER_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled
-                ? [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(FORCE_METRIC),
-                      pickerItem(POWER_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ]
-                : [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ];
+            return [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
         case PERCENT_LOSS_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled
-                ? [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(FORCE_METRIC),
-                      pickerItem(POWER_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(LINEAR_3D_ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                      pickerItem(PKH_METRIC),
-                      pickerItem(FORCE_HEIGHT_METRIC),
-                      pickerItem(POWER_HEIGHT_METRIC),
-                  ]
-                : [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(PKH_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ];
+            return [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(PKH_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled
-                ? [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(FORCE_METRIC),
-                      pickerItem(POWER_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(LINEAR_3D_ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ]
-                : [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ];
+            return [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ];
         default:
-            return OpenBarbellConfig.bulkMetricsEnabled
-                ? [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(PKH_METRIC),
-                      pickerItem(FORCE_METRIC),
-                      pickerItem(FORCE_HEIGHT_METRIC),
-                      pickerItem(POWER_METRIC),
-                      pickerItem(POWER_HEIGHT_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(LINEAR_3D_ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ]
-                : [
-                      pickerItem(EMPTY_METRIC),
-                      pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(PKV_METRIC),
-                      pickerItem(PKH_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(RPE_METRIC),
-                  ];
+            return [
+                pickerItem(EMPTY_METRIC),
+                pickerItem(AVG_VELOCITY_METRIC),
+                pickerItem(PKV_METRIC),
+                pickerItem(PKH_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(RPE_METRIC),
+            ];
     }
 };
 

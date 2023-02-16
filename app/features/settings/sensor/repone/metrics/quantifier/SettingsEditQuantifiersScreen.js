@@ -21,29 +21,30 @@ import * as Actions from './SettingsEditQuantifiersActions';
 import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 
-const pickerItem = (quantifier) => ({
+const pickerItem = quantifier => ({
     label: CollapsedMetricsUtility.quantifierString(quantifier),
     value: quantifier,
 });
 
 const items = [
     pickerItem(EMPTY_QUANTIFIER),
-    pickerItem(AVG_QUANTIFIER), // vel, pkv, dur
-    pickerItem(MAX_EVER_QUANTIFIER), // vel, pkv, dur
-    pickerItem(MIN_EVER_QUANTIFIER), // vel, pkv, dur
-    pickerItem(ABS_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(PERCENT_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(SET_LOSS_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(PEAK_END_QUANTIFIER), // vel, pkv, dur, rom
-    pickerItem(FIRST_REP_QUANTIFIER), // all
-    pickerItem(LAST_REP_QUANTIFIER), // all
-    pickerItem(MIN_QUANTIFIER), // all
-    pickerItem(MAX_QUANTIFIER), // all
+    pickerItem(AVG_QUANTIFIER),
+    pickerItem(MAX_EVER_QUANTIFIER),
+    pickerItem(MIN_EVER_QUANTIFIER),
+    pickerItem(ABS_LOSS_QUANTIFIER),
+    pickerItem(PERCENT_LOSS_QUANTIFIER),
+    pickerItem(SET_LOSS_QUANTIFIER),
+    pickerItem(PEAK_END_QUANTIFIER),
+    pickerItem(FIRST_REP_QUANTIFIER),
+    pickerItem(LAST_REP_QUANTIFIER),
+    pickerItem(MIN_QUANTIFIER),
+    pickerItem(MAX_QUANTIFIER),
 ];
 
-const mapStateToPropsiOS = (state) => {
+const mapStateToPropsiOS = state => {
     return {
-        isModalShowing: CollapsedSettingsSelectors.getIsEditingQuantifier(state),
+        isModalShowing:
+            CollapsedSettingsSelectors.getIsEditingQuantifier(state),
         items,
         selectedValue: CollapsedSettingsSelectors.getCurrentQuantifier(state),
     };
@@ -53,7 +54,7 @@ const mapStateToPropsiOS = (state) => {
 // memoizing would require ref checks of 6 items
 // not memoizing just checks rank up to 6 times, so it can end FASTER, though it does need to generate the final return value
 const mapStateToPropsAndroid = (state, ownProps) => {
-    switch(ownProps.rank) {
+    switch (ownProps.rank) {
         case 1:
             return {
                 items,
@@ -85,36 +86,55 @@ const mapStateToPropsAndroid = (state, ownProps) => {
 };
 
 // this way only check OS once
-const mapStateToProps = Platform.OS === 'ios' ? mapStateToPropsiOS : mapStateToPropsAndroid;
+const mapStateToProps =
+    Platform.OS === 'ios' ? mapStateToPropsiOS : mapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {
-        return bindActionCreators({
-            selectValue: Actions.saveQuantifierSetting,
-            closeModal: Actions.dismissQuantifierSetter
-        }, dispatch);
+        return bindActionCreators(
+            {
+                selectValue: Actions.saveQuantifierSetting,
+                closeModal: Actions.dismissQuantifierSetter,
+            },
+            dispatch,
+        );
     } else {
-        switch(ownProps.rank) {
+        switch (ownProps.rank) {
             case 1:
-                return bindActionCreators({
-                    selectValue: Actions.saveQuantifier1Setting,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveQuantifier1Setting,
+                    },
+                    dispatch,
+                );
             case 2:
-                return bindActionCreators({
-                    selectValue: Actions.saveQuantifier2Setting,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveQuantifier2Setting,
+                    },
+                    dispatch,
+                );
             case 3:
-                return bindActionCreators({
-                    selectValue: Actions.saveQuantifier3Setting,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveQuantifier3Setting,
+                    },
+                    dispatch,
+                );
             case 4:
-                return bindActionCreators({
-                    selectValue: Actions.saveQuantifier4Setting,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveQuantifier4Setting,
+                    },
+                    dispatch,
+                );
             case 5:
-                return bindActionCreators({
-                    selectValue: Actions.saveQuantifier5Setting,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveQuantifier5Setting,
+                    },
+                    dispatch,
+                );
             default:
                 return {};
         }
@@ -123,7 +143,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const SettingsEditQuantifiersScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(PickerModal);
 
 export default SettingsEditQuantifiersScreen;
