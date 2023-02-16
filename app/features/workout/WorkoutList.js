@@ -256,7 +256,7 @@ class WorkoutList extends Component {
                             borderLeftWidth: 1,
                             borderRightWidth: 1,
                             borderBottomWidth: 1,
-                            height: 10,
+                            height: 1,
                         }}
                     />
                 );
@@ -271,7 +271,7 @@ class WorkoutList extends Component {
                                 borderLeftWidth: 1,
                                 borderRightWidth: 1,
                                 borderBottomWidth: 1,
-                                height: 5,
+                                height: 1,
                                 marginBottom: 15,
                             }}
                         />

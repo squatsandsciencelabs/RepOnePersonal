@@ -195,7 +195,7 @@ class HistoryList extends Component {
                             borderLeftWidth: 1,
                             borderRightWidth: 1,
                             borderBottomWidth: 1,
-                            height: 10,
+                            height: 1,
                         }}
                     />
                 );
@@ -210,7 +210,7 @@ class HistoryList extends Component {
                                 borderLeftWidth: 1,
                                 borderRightWidth: 1,
                                 borderBottomWidth: 1,
-                                height: 10,
+                                height: 1,
                                 marginBottom: 15,
                             }}
                         />
