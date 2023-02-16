@@ -13,6 +13,7 @@ import * as DateUtils from 'app/utility/DateUtils';
 import SettingsEndSetTimerScreen from './timer/SettingsEndSetTimerScreen';
 import SettingsMetric from './metric/SettingsMetric';
 import SettingsKratosAutoDeleteRepsScreen from 'app/features/settings/application/kratos_auto_delete_reps/SettingsKratosAutoDeleteRepsScreen';
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
 const KRATOS_REDIRECT_URL =
     'https://store.kabukistrength.net/collections/kratos-1';
@@ -85,27 +86,29 @@ class SettingsApplicationPanel extends Component {
                     </View>
                     <SettingsMetric />
 
-                    <View>
-                        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+                    {getKratosEnabled() && (
+                        <View>
+                            <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+                                <TouchableOpacity
+                                    onPress={() => this._tapKratosFlywheel()}>
+                                    <Text style={styles.linkText}>
+                                        Kratos Flywheel
+                                    </Text>
+                                </TouchableOpacity>
+                                <Text style={styles.labelText}>
+                                    {' '}
+                                    auto-delete initial reps
+                                </Text>
+                            </View>
+
                             <TouchableOpacity
-                                onPress={() => this._tapKratosFlywheel()}>
+                                onPress={() => this._tapKratosAutoDeleteReps()}>
                                 <Text style={styles.linkText}>
-                                    Kratos Flywheel
+                                    {this.props.kratosAutoDeleteReps} reps
                                 </Text>
                             </TouchableOpacity>
-                            <Text style={styles.labelText}>
-                                {' '}
-                                auto-delete initial reps
-                            </Text>
                         </View>
-
-                        <TouchableOpacity
-                            onPress={() => this._tapKratosAutoDeleteReps()}>
-                            <Text style={styles.linkText}>
-                                {this.props.kratosAutoDeleteReps} reps
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    )}
                     <SettingsKratosAutoDeleteRepsScreen />
                 </View>
             );
@@ -142,21 +145,25 @@ class SettingsApplicationPanel extends Component {
                     </View>
                     <SettingsMetric />
 
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            marginLeft: 7,
-                            marginBottom: -10,
-                        }}>
-                        <TouchableOpacity onPress={this._tapKratosFlywheel}>
-                            <Text style={styles.linkText}>Kratos Flywheel</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.labelText}>
-                            {' '}
-                            auto-delete initial reps
-                        </Text>
-                    </View>
-                    <SettingsKratosAutoDeleteRepsScreen />
+                    {getKratosEnabled() && (
+                        <>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    marginLeft: 7,
+                                    marginBottom: -10,
+                                }}>
+                                <TouchableOpacity onPress={this._tapKratosFlywheel}>
+                                    <Text style={styles.linkText}>Kratos Flywheel</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.labelText}>
+                                    {' '}
+                                    auto-delete initial reps
+                                </Text>
+                            </View>
+                            <SettingsKratosAutoDeleteRepsScreen />
+                        </>
+                    )}
                 </View>
             );
         }
