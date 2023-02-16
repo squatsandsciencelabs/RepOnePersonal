@@ -21,7 +21,8 @@ export const convert = data => {
         : 'Exercise,Set,Rep,Weight,Metric,Set RPE,Tags,Workout Start Time,Rest Time,Avg Velocity (m/s),Range of Motion (mm),Peak Velocity (m/s),Peak Velocity Location (%),Duration of rep (sec)\n';
 
     // filter removed sets
-    sets = sets.filter(set => set.deleted === false && set.reps.length > 0);
+    // NOTE: removed is for backwards compatibility, as delete is the new variable used
+    sets = sets.filter(set => (set.deleted === false || set.deleted === undefined && set.removed === false) && set.reps.length > 0);
 
     if (!isKratosEnabled) {
         sets = sets.filter(set => set.deviceType !== 'Kratos');
