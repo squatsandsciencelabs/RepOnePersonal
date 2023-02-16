@@ -81,7 +81,10 @@ class SetAnalysis extends Component {
                 ]}>
                 <ScrollView
                     horizontal={true}
-                    contentContainerStyle={{ justifyContent: 'space-between' }}>
+                    contentContainerStyle={{
+                        justifyContent: 'space-between',
+                        paddingBottom: 10,
+                    }}>
                     {this._renderAnalysisItems()}
                     {lastColumn}
                 </ScrollView>
