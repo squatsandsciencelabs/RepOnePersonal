@@ -257,9 +257,10 @@ class SetForm extends Component {
 
     _renderKratosDiscs() {
 
-        if (!this.state.kratosDiscs) {
+        if (this.state.deviceType !== 'Kratos') {
             return null;
         }
+
         const discsHaveNoData = Object.values(this.state.kratosDiscs).every(
             disc => disc === null,
         );
