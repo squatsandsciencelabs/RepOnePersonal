@@ -18,7 +18,6 @@ import {
     POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
-
     AVG_QUANTIFIER,
     MAX_EVER_QUANTIFIER,
     MIN_EVER_QUANTIFIER,
@@ -33,117 +32,124 @@ import * as Actions from './SettingsEditMetricsActions';
 import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
 import * as CollapsedMetricsUtility from 'app/math/CollapsedMetrics';
 
-const pickerItem = (metric) => ({
-    label: Platform.OS === 'ios' ? CollapsedMetricsUtility.metricString(metric) : CollapsedMetricsUtility.metricAbbreviation(metric),
+const pickerItem = metric => ({
+    label:
+        Platform.OS === 'ios'
+            ? CollapsedMetricsUtility.metricString(metric)
+            : CollapsedMetricsUtility.metricAbbreviation(metric),
     value: metric,
 });
 
-// NOTE: To avoid an android picker bug, the item order is explicitly set to Empty -> PKH -> ROM -> others
-// Basically, if you don't do this, it's possible for the Picker to trigger each time Quantifier changes
-// See https://github.com/facebook/react-native/issues/16849 for more information
-// Once the bug is resolved, can redo the order into something that makes more sense
-const generateItems = (quantifier) => {
+const generateItems = quantifier => {
     switch (quantifier) {
         case MAX_EVER_QUANTIFIER:
         case MIN_EVER_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled ? [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ] : [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ];
+            return OpenBarbellConfig.bulkMetricsEnabled
+                ? [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(FORCE_METRIC),
+                      pickerItem(POWER_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ]
+                : [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
         case PERCENT_LOSS_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled ? [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-                pickerItem(PKH_METRIC),
-                pickerItem(FORCE_HEIGHT_METRIC),
-                pickerItem(POWER_HEIGHT_METRIC),
-            ] : [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(PKH_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ];
+            return OpenBarbellConfig.bulkMetricsEnabled
+                ? [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(FORCE_METRIC),
+                      pickerItem(POWER_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(FORCE_HEIGHT_METRIC),
+                      pickerItem(POWER_HEIGHT_METRIC),
+                  ]
+                : [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
-            return OpenBarbellConfig.bulkMetricsEnabled ? [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ] : [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ];
+            return OpenBarbellConfig.bulkMetricsEnabled
+                ? [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(FORCE_METRIC),
+                      pickerItem(POWER_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ]
+                : [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ];
         default:
-            return OpenBarbellConfig.bulkMetricsEnabled ? [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(PKH_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(FORCE_HEIGHT_METRIC),
-                pickerItem(POWER_METRIC),
-                pickerItem(POWER_HEIGHT_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ] : [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(PKH_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
-            ];
-    };
+            return OpenBarbellConfig.bulkMetricsEnabled
+                ? [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(FORCE_METRIC),
+                      pickerItem(FORCE_HEIGHT_METRIC),
+                      pickerItem(POWER_METRIC),
+                      pickerItem(POWER_HEIGHT_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ]
+                : [
+                      pickerItem(EMPTY_METRIC),
+                      pickerItem(AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
+                      pickerItem(RPE_METRIC),
+                  ];
+    }
 };
 
 const getiOSItems = createSelector(
     CollapsedSettingsSelectors.getCurrentQuantifier,
     quantifier => {
         return generateItems(quantifier);
-    }
+    },
 );
 
-const mapStateToPropsiOS = (state) => {
+const mapStateToPropsiOS = state => {
     return {
         isModalShowing: CollapsedSettingsSelectors.getIsEditingMetric(state),
         items: getiOSItems(state),
@@ -167,7 +173,19 @@ const selectMapStateToPropsAndroid = createSelector(
     CollapsedSettingsSelectors.getMetric4,
     CollapsedSettingsSelectors.getQuantifier5,
     CollapsedSettingsSelectors.getMetric5,
-    (rank, quantifier1, metric1, quantifier2, metric2, quantifier3, metric3, quantifier4, metric4, quantifier5, metric5) => {
+    (
+        rank,
+        quantifier1,
+        metric1,
+        quantifier2,
+        metric2,
+        quantifier3,
+        metric3,
+        quantifier4,
+        metric4,
+        quantifier5,
+        metric5,
+    ) => {
         switch (rank) {
             case 1:
                 return {
@@ -197,40 +215,59 @@ const selectMapStateToPropsAndroid = createSelector(
             default:
                 return {};
         }
-    }
+    },
 );
 
 // this way only check OS once
-const mapStateToProps = Platform.OS === 'ios' ? mapStateToPropsiOS : selectMapStateToPropsAndroid;
+const mapStateToProps =
+    Platform.OS === 'ios' ? mapStateToPropsiOS : selectMapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {
-        return bindActionCreators({
-            selectValue: Actions.saveCollapsedMetricSetting,
-            closeModal: Actions.dismissCollapsedMetricSetter
-        }, dispatch);
+        return bindActionCreators(
+            {
+                selectValue: Actions.saveCollapsedMetricSetting,
+                closeModal: Actions.dismissCollapsedMetricSetter,
+            },
+            dispatch,
+        );
     } else {
-        switch(ownProps.rank) {
+        switch (ownProps.rank) {
             case 1:
-                return bindActionCreators({
-                    selectValue: Actions.saveCollapsedMetricSetting1,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveCollapsedMetricSetting1,
+                    },
+                    dispatch,
+                );
             case 2:
-                return bindActionCreators({
-                    selectValue: Actions.saveCollapsedMetricSetting2,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveCollapsedMetricSetting2,
+                    },
+                    dispatch,
+                );
             case 3:
-                return bindActionCreators({
-                    selectValue: Actions.saveCollapsedMetricSetting3,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveCollapsedMetricSetting3,
+                    },
+                    dispatch,
+                );
             case 4:
-                return bindActionCreators({
-                    selectValue: Actions.saveCollapsedMetricSetting4,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveCollapsedMetricSetting4,
+                    },
+                    dispatch,
+                );
             case 5:
-                return bindActionCreators({
-                    selectValue: Actions.saveCollapsedMetricSetting5,
-                }, dispatch);
+                return bindActionCreators(
+                    {
+                        selectValue: Actions.saveCollapsedMetricSetting5,
+                    },
+                    dispatch,
+                );
             default:
                 return {};
         }
@@ -239,7 +276,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const SettingsEditMetricsScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(PickerModal);
 
 export default SettingsEditMetricsScreen;
