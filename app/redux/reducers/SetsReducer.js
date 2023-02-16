@@ -979,7 +979,11 @@ const endWorkout = (state, action) => {
     }
 
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    let newWorkoutData = [createSet(1, action.defaultMetric, lastSet.deviceType, initKratosDiscs)];
+    const kratosDiscs =
+        lastSet.deviceType === 'Kratos' ? initKratosDiscs : null;
+    let newWorkoutData = [
+        createSet(1, action.defaultMetric, lastSet.deviceType, kratosDiscs),
+    ];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
     return Object.assign({}, state, {
