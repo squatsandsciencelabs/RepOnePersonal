@@ -128,7 +128,15 @@ const connectedDisconnectedDevice = (state, action) => {
     const set = workoutData[workoutData.length - 1];
 
     if (set.reps.length > 0) {
-        return state;
+        let deviceType = 'RepOne';
+
+        if (action.deviceName) {
+            deviceType = getKratosEnabled()
+                ? getDeviceType(action.deviceName)
+                : 'RepOne';
+        }
+
+        return { ...state, deviceType };
     } else {
         return setDeviceType(state, action);
     }
@@ -160,6 +168,7 @@ const setDeviceType = (state, action) => {
 
     return {
         ...state,
+        deviceType,
         workoutData: newWorkoutData,
     };
 };
@@ -199,7 +208,8 @@ const createDefaultState = () => {
         historyData: {},
         setIDsToUpload: [],
         setIDsBeingUploaded: [],
-        revision: 0
+        revision: 0,
+        deviceType: 'RepOne',
     };
 };
 
@@ -844,7 +854,7 @@ const endSet = (state, action) => {
         createSet(
             currentSet.setNumber + 1,
             action.defaultMetric,
-            currentSet.deviceType,
+            state.deviceType,
         ),
     ];
 
@@ -973,10 +983,10 @@ const endWorkout = (state, action) => {
     }
 
     let newSetIDsToUpload = [...state.setIDsToUpload, ...workoutSetIDs];
-    const kratosDiscs =
-        lastSet.deviceType === 'Kratos' ? initKratosDiscs : null;
+    const kratosDiscs = state.deviceType === 'Kratos' ? initKratosDiscs : null;
+
     let newWorkoutData = [
-        createSet(1, action.defaultMetric, lastSet.deviceType, kratosDiscs),
+        createSet(1, action.defaultMetric, state.deviceType, kratosDiscs),
     ];
     let newHistoryData = Object.assign({}, state.historyData, historyChanges);
 
