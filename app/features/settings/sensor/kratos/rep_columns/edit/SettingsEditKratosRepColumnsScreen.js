@@ -12,9 +12,6 @@ import {
     WORK,
     FORCE,
     POWER,
-    WORK_LOCATION,
-    FORCE_LOCATION,
-    POWER_LOCATION,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 import PickerModal from 'app/shared_features/picker/PickerModal';
@@ -36,9 +33,6 @@ const items = [
     pickerItem(WORK),
     pickerItem(FORCE),
     pickerItem(POWER),
-    pickerItem(WORK_LOCATION),
-    pickerItem(FORCE_LOCATION),
-    pickerItem(POWER_LOCATION),
 ];
 
 const mapStateToPropsiOS = state => {
