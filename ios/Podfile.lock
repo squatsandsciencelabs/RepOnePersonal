@@ -22,7 +22,7 @@ PODS:
     - ExpoModulesCore
   - EXFont (11.0.1):
     - ExpoModulesCore
-  - Expo (47.0.9):
+  - Expo (47.0.13):
     - ExpoModulesCore
   - ExpoAdapterGoogleSignIn (8.2.2):
     - ExpoModulesCore
@@ -30,7 +30,7 @@ PODS:
     - React-Core
   - ExpoKeepAwake (11.0.1):
     - ExpoModulesCore
-  - ExpoModulesCore (1.0.4):
+  - ExpoModulesCore (1.1.1):
     - React-Core
     - ReactCommon/turbomodule/core
   - EXVideoThumbnails (7.0.0):
@@ -478,11 +478,11 @@ PODS:
     - glog
   - react-native-background-timer (2.4.1):
     - React-Core
-  - react-native-ble-manager (8.5.0):
+  - react-native-ble-manager (8.8.0):
     - React-Core
-  - react-native-blob-util (0.17.0):
+  - react-native-blob-util (0.17.1):
     - React-Core
-  - react-native-cameraroll (5.2.0):
+  - react-native-cameraroll (5.2.3):
     - React-Core
   - react-native-charts-wrapper (0.5.11):
     - Charts (= 4.1.0)
@@ -493,18 +493,18 @@ PODS:
   - react-native-nordic-dfu (3.3.0):
     - iOSDFULibrary (~> 4.11.1)
     - React
-  - react-native-pager-view (6.1.2):
+  - react-native-pager-view (6.1.4):
     - React-Core
-  - react-native-slider (4.4.0):
+  - react-native-slider (4.4.2):
     - React-Core
-  - react-native-version-check (3.4.3):
-    - React
+  - react-native-version-check (3.4.7):
+    - React-Core
   - react-native-video (5.2.1):
     - React-Core
     - react-native-video/Video (= 5.2.1)
   - react-native-video/Video (5.2.1):
     - React-Core
-  - react-native-webview (11.26.0):
+  - react-native-webview (11.26.1):
     - React-Core
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -576,9 +576,9 @@ PODS:
     - React-Core
   - RNCPicker (1.16.5):
     - React-Core
-  - RNDateTimePicker (6.7.1):
+  - RNDateTimePicker (6.7.5):
     - React-Core
-  - RNDeviceInfo (10.3.0):
+  - RNDeviceInfo (10.4.0):
     - React-Core
   - RNFBAnalytics (14.12.0):
     - Firebase/Analytics (= 8.15.0)
@@ -609,14 +609,14 @@ PODS:
     - RNSound/Core (= 0.11.2)
   - RNSound/Core (0.11.2):
     - React-Core
-  - RNSVG (12.5.0):
+  - RNSVG (12.5.1):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftAlgorithms (1.0.0)
   - SwiftyJSON (5.0.0)
-  - VisionCamera (2.15.2):
+  - VisionCamera (2.15.4):
     - React
     - React-callinvoker
     - React-Core
@@ -934,10 +934,10 @@ SPEC CHECKSUMS:
   EXErrorRecovery: ae43433feb0608a64dc5b1c8363b3e7769a9ea24
   EXFileSystem: 60602b6eefa6873f97172c684b7537c9760b50d6
   EXFont: 319606bfe48c33b5b5063fb0994afdc496befe80
-  Expo: 5523a4835730104a301caeac1e68dad095a9dfff
+  Expo: b9fa98bf260992312ee3c424400819fb9beadafe
   ExpoAdapterGoogleSignIn: b7792934ab1b5d559a3eee31334d752a73f0366e
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
-  ExpoModulesCore: 8211c89bcc3ba86e2d02c54b1d31f1fa81acb6de
+  ExpoModulesCore: 485dff3a59b036a33b6050c0a5aea3cf1037fdd1
   EXVideoThumbnails: 8b3e48f3716679dd0cbf949217a31eab5c555799
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
@@ -994,17 +994,17 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
-  react-native-ble-manager: e1184e064e170de242ca12648ac31f8fcdc6ecab
-  react-native-blob-util: f9dfda9077e57129b444a33e3c51f7785b2a075f
-  react-native-cameraroll: 0ff04cc4e0ff5f19a94ff4313e5c8bc4503cd86d
+  react-native-ble-manager: f8add48474ad08a0bd3e46b2d1ebff5e00a628b7
+  react-native-blob-util: 4949dcc0dd5ee25fcb5abe0687f67fa3d5cdf05a
+  react-native-cameraroll: 5b25d0be40185d02e522bf2abf8a1ba4e8faa107
   react-native-charts-wrapper: 4461b72f48e737a490e968bf2468cc0fd2281681
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-nordic-dfu: c65357a9802f28bd3bd85f7cb9f0cdf4e8280297
-  react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
-  react-native-slider: d2938a12c4e439a227c70eec65d119136eb4aeb5
-  react-native-version-check: e85c2e21d0955b7cdfd91c0ddacc3edf14b7abd7
+  react-native-pager-view: b58cb9e9f42f64e50cab3040815772c1d119a2e2
+  react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
+  react-native-version-check: 6cd36aad4e30b8e3216747e3b4ddeb09e0647af8
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
-  react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
+  react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -1019,8 +1019,8 @@ SPEC CHECKSUMS:
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNCPicker: 28e41a58b79cd82cc639391bb99ca1b2489a3ea9
-  RNDateTimePicker: 0530a73a6f3a1a85814cbde0802736993b9e675e
-  RNDeviceInfo: 4701f0bf2a06b34654745053db0ce4cb0c53ada7
+  RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
+  RNDeviceInfo: 749f2e049dcd79e2e44f134f66b73a06951b5066
   RNFBAnalytics: ea1421b49a0bf5e5bb7274df4a330713d0e85d2e
   RNFBApp: e4439717c23252458da2b41b81b4b475c86f90c4
   RNFBCrashlytics: 94e1f78e2a9aa9e02edbfb0d3f1f0921ce00094b
@@ -1029,12 +1029,12 @@ SPEC CHECKSUMS:
   RNGoogleSignin: 81521697b2c8f97f9a586ac7257b1a1d9b51b115
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
-  RNSVG: 6adc5c52d2488a476248413064b7f2832e639057
+  RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  VisionCamera: 4cfd685b1e671fea4aa0400905ab397f0e972210
+  VisionCamera: e9a95af10e00aaebe99d648ff4519fd336e16ffe
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
