@@ -13,27 +13,6 @@ class SetDataRow extends PureComponent {
     }
 
     render() {
-        var button = null;
-        if (!this.props.item.removed) {
-            button = (
-                <Icon
-                    name="close"
-                    size={20}
-                    color="lightgray"
-                    style={styles.icon}
-                />
-            );
-        } else {
-            button = (
-                <Icon
-                    name="undo"
-                    size={20}
-                    color="lightgray"
-                    style={styles.icon}
-                />
-            );
-        }
-
         const dataStyle = this.props.item.removed
             ? styles.removedData
             : styles.data;
@@ -97,7 +76,6 @@ class SetDataRow extends PureComponent {
                                 );
                             })}
                         </View>
-                        <View style={styles.buttonWrapper}>{button}</View>
                     </TouchableOpacity>
 
                     <View style={styles.bottomBorderWrapper}>
@@ -126,7 +104,6 @@ class SetDataRow extends PureComponent {
                                     <Text style={dataStyle}> {i} </Text>
                                 </View>
                             ))}
-                            {button}
                         </View>
                     </TouchableOpacity>
                 </View>
