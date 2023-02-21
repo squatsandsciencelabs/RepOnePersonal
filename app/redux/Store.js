@@ -2,7 +2,10 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, autoRehydrate, getStoredState } from 'redux-persist';
 import Reactotron from 'reactotron-react-native';
-import { createFilter } from 'redux-persist-transform-filter';
+import {
+    createBlacklistFilter,
+    createFilter,
+} from 'redux-persist-transform-filter';
 import _ from 'lodash';
 
 // store imports
@@ -62,7 +65,6 @@ const initializeStore = () => {
                 'scalar',
                 'visualization',
             ],
-            // note, everything in sets is to be persisted so not blacklisting or transforming them
             // note, everything in workoutCollapsed and historyCollapsed are to be persisted so not blacklisting or transforming
 
             transforms: [
@@ -115,6 +117,8 @@ const initializeStore = () => {
                     'optedOutEndWorkoutPromptSurveyURLs',
                 ]),
                 createFilter('ota', ['firmwareVersion, firmwareDescription']),
+                // note, everything in sets is to be persisted except deviceType
+                createBlacklistFilter('sets', ['deviceType']),
             ],
         },
         async (fsError, fsResult) => {
