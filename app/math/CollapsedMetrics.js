@@ -26,12 +26,10 @@ import {
     PEAK_END_QUANTIFIER,
     ECCENTRIC,
     CONCENTRIC,
-    WORK,
-    FORCE,
-    POWER,
-    WORK_LOCATION,
-    FORCE_LOCATION,
-    POWER_LOCATION,
+    WORK_METRIC,
+    WORK_LOCATION_METRIC,
+    FORCE_LOCATION_METRIC,
+    POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
 
@@ -1147,17 +1145,13 @@ export const metricString = metric => {
         case LINEAR_3D_ROM_METRIC:
             return 'Range Of Motion 3D';
         // kratos metrics
-        case WORK:
+        case WORK_METRIC:
             return 'Work';
-        case FORCE:
-            return 'Force';
-        case POWER:
-            return 'Power';
-        case WORK_LOCATION:
+        case WORK_LOCATION_METRIC:
             return 'Work Location';
-        case FORCE_LOCATION:
+        case FORCE_LOCATION_METRIC:
             return 'Force Location';
-        case POWER_LOCATION:
+        case POWER_LOCATION_METRIC:
             return 'Power Location';
         default:
             return null;
