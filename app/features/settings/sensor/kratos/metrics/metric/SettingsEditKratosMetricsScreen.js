@@ -2,21 +2,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { createSelector } from 'reselect';
-import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as KratosCollapsedSettingsSetMetricsSelectors from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
 
 import {
     EMPTY_METRIC,
     AVG_VELOCITY_METRIC,
-    RPE_METRIC,
     DURATION_METRIC,
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
-    FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_METRIC,
-    POWER_HEIGHT_METRIC,
     AVG_QUANTIFIER,
     MAX_EVER_QUANTIFIER,
     MIN_EVER_QUANTIFIER,
@@ -48,7 +42,6 @@ const generateItems = rollup => {
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
             ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
@@ -60,7 +53,6 @@ const generateItems = rollup => {
                 pickerItem(PKH_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
             ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
@@ -70,7 +62,6 @@ const generateItems = rollup => {
                 pickerItem(PKV_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
             ];
         default:
             return [
@@ -80,7 +71,6 @@ const generateItems = rollup => {
                 pickerItem(PKH_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
-                pickerItem(RPE_METRIC),
             ];
     }
 };
