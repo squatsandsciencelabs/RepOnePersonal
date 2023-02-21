@@ -36,6 +36,11 @@ Be careful when using react-native link. It duplicates imports for the React Nat
 
 Use Carthage for all iOS Swift only native libraries such as SwiftyJSON and Charts. Use Cocoapods for all other iOS libraries. If Carthage packages have issues, try running `carthage update --platform iOS --no-use-binaries`
 
+# NAMING NOTES
+
+The codebase uses the following names: `Metric`, `Quantifier` and `Rollup`. `Quantifier` and `Rollup` are the equivalent
+of `Set Metric` and `Metric` is typically a `Rep Metric`.
+
 # APP ARCHITECTURE
 
 See https://github.com/squatsandsciencelabs/OpenBarbell-V3/wiki/App-Architecture

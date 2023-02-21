@@ -8,7 +8,7 @@ import SettingsEditKratosRollupsScreen from './rollup/SettingsEditKratosRollupsS
 import SettingsEditKratosMetricsScreen from './metric/SettingsEditKratosMetricsScreen';
 import SetginsEditKratosPhasesScreen from './phase/SettingsEditKratosPhasesScreen';
 
-const TABLE_HEADERS = ['REP METRIC', 'ROLLUP', 'PHASE'];
+const TABLE_HEADERS = ['REP METRIC', 'SET METRIC', 'PHASE'];
 
 class SettingsKratosMetricsPanel extends Component {
     constructor(props) {
