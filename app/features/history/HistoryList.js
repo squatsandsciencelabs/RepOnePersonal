@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import {
     Text,
     View,
@@ -79,6 +79,7 @@ class HistoryList extends Component {
                         rpe={item.rpe}
                         numReps={item.numReps}
                         tags={item.tags}
+                        key={index}
                     />
                 );
             case 'title':
@@ -95,6 +96,7 @@ class HistoryList extends Component {
                                 removed={item.removed}
                                 setNumber={item.setNumber}
                                 isCollapsable={true}
+                                key={index}
                             />
                         </View>
                     );
@@ -111,6 +113,7 @@ class HistoryList extends Component {
                                 removed={item.removed}
                                 setNumber={item.setNumber}
                                 videoFileURL={item.videoFileURL}
+                                key={index}
                             />
                         </View>
                     );
@@ -124,10 +127,11 @@ class HistoryList extends Component {
                         tags={item.tags}
                         kratosDiscs={item.kratosDiscs}
                         deviceType={item.deviceType}
+                        key={index}
                     />
                 );
             case 'analysis':
-                return <SetAnalysisScreen set={item.set} />;
+                return <SetAnalysisScreen set={item.set} key={index} />;
             case 'form':
                 // note: on focus will avoid the Redux store for simplicity and just do it through the callback function
                 // technically an action to scroll should be application state and therefore should go through the global store
@@ -169,21 +173,40 @@ class HistoryList extends Component {
                 );
             case 'open 3d button':
                 return (
-                    <Open3DRow setID={item.setID} open3D={this.props.open3D} />
-                );
-            case 'subheader':
-                return <SetDataLabelRow item={item} />;
-            case 'data':
-                return (
-                    <SetDataRow
-                        item={item}
-                        onPressRemove={() =>
-                            this.props.removeRep(item.setID, item.rep)
-                        }
-                        onPressRestore={() =>
-                            this.props.restoreRep(item.setID, item.rep)
-                        }
+                    <Open3DRow
+                        setID={item.setID}
+                        open3D={this.props.open3D}
+                        key={index}
                     />
+                );
+            case 'reps':
+                return (
+                    <ScrollView horizontal={true}>
+                        <View style={{ flex: 1 }}>
+                            <SetDataLabelRow item={item.subheader} />
+
+                            {item.items.map((item, index) => {
+                                return (
+                                    <SetDataRow
+                                        key={index}
+                                        item={item}
+                                        onPressRemove={() =>
+                                            this.props.removeRep(
+                                                item.setID,
+                                                item.rep,
+                                            )
+                                        }
+                                        onPressRestore={() =>
+                                            this.props.restoreRep(
+                                                item.setID,
+                                                item.rep,
+                                            )
+                                        }
+                                    />
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 );
             case 'border':
                 return (
@@ -257,7 +280,6 @@ class HistoryList extends Component {
                             textAlign: 'center',
                             paddingTop: 10,
                             paddingBottom: 10,
-                            fontSize: 15,
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: 'rgba(47, 128, 237, 1)',
