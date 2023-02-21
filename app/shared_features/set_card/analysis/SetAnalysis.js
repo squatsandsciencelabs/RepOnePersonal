@@ -81,6 +81,7 @@ class SetAnalysis extends Component {
                 ]}>
                 <ScrollView
                     horizontal={true}
+                    showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
                         justifyContent: 'space-between',
                         paddingBottom: 10,
