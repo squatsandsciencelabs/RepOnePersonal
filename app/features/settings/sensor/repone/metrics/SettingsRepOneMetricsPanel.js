@@ -7,7 +7,7 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersScreen';
 import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
 
-const TABLE_HEADERS = ['REP METRIC', 'ROLLUP'];
+const TABLE_HEADERS = ['REP METRIC', 'SET METRIC'];
 
 class SettingsRepOneSensorSetMetrics extends Component {
     handleMetricPress = row => {
