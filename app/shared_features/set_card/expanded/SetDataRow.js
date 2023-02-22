@@ -3,15 +3,6 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class SetDataRow extends PureComponent {
-    _onPressRow() {
-        // temp just toggle remove
-        if (this.props.item.removed) {
-            this.props.onPressRestore();
-        } else {
-            this.props.onPressRemove();
-        }
-    }
-
     render() {
         const dataStyle = this.props.item.removed
             ? styles.removedData
@@ -26,9 +17,7 @@ class SetDataRow extends PureComponent {
                             paddingTop: 10,
                         },
                     ]}>
-                    <TouchableOpacity
-                        style={{ flex: 1, flexDirection: 'row' }}
-                        onPress={() => this._onPressRow()}>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, flexDirection: 'column' }}>
                             {this.props.item.columns.map((data, index) => {
                                 const rowType =
@@ -45,15 +34,6 @@ class SetDataRow extends PureComponent {
                                     <View
                                         key={`row-${itemNumber}-${rowType}`}
                                         style={styles.rowWrapper}>
-                                        <View style={styles.itemContainer}>
-                                            <Text
-                                                style={[
-                                                    dataStyle,
-                                                    { textAlign: 'right' },
-                                                ]}>
-                                                {`${itemNumber}${rowType}`}
-                                            </Text>
-                                        </View>
                                         {displayData.map((item, itemIndex) => {
                                             // NOTE: If this is a pure decimal, remove the starting 0 so it's just .25 instead of 0.25
                                             const displayItem =
@@ -76,7 +56,7 @@ class SetDataRow extends PureComponent {
                                 );
                             })}
                         </View>
-                    </TouchableOpacity>
+                    </View>
 
                     <View style={styles.bottomBorderWrapper}>
                         {!this.props.item.isLast && (
@@ -88,9 +68,7 @@ class SetDataRow extends PureComponent {
         } else {
             return (
                 <View style={styles.border}>
-                    <TouchableOpacity
-                        style={{ flex: 1 }}
-                        onPress={() => this._onPressRow()}>
+                    <View style={{ flex: 1 }}>
                         <View style={styles.bar}>
                             <View style={styles.itemContainer}>
                                 <Text style={dataStyle}>
@@ -105,7 +83,7 @@ class SetDataRow extends PureComponent {
                                 </View>
                             ))}
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 </View>
             );
         }
@@ -115,7 +93,6 @@ class SetDataRow extends PureComponent {
 const styles = StyleSheet.create({
     border: {
         borderColor: '#e0e0e0',
-        borderLeftWidth: 1,
         borderRightWidth: 1,
         flex: 1,
         alignItems: 'stretch',
@@ -135,7 +112,7 @@ const styles = StyleSheet.create({
         marginRight: 0,
     },
     itemContainer: {
-        width: 45,
+        width: 64,
         height: 20,
         justifyContent: 'center',
         overflow: 'hidden',
@@ -161,7 +138,6 @@ const styles = StyleSheet.create({
     icon: { marginTop: -1, marginRight: 3 },
     rowWrapper: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
     },
     buttonWrapper: { alignSelf: 'center', marginLeft: 10 },
 });
