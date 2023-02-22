@@ -18,6 +18,7 @@ import UserLoggedOutPanel from './logged_out/UserLoggedOutPanel';
 import ListLoadingFooter from '../history/loading/ListLoadingFooter';
 import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
 import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
+import SetData from 'app/shared_features/set_card/expanded/SetData';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import HistoryVideoButtonScreen from './card/expanded/form/HistoryVideoButtonScreen';
 import HistoryVideoRecorderScreen from './camera/HistoryVideoRecorderScreen';
@@ -181,32 +182,16 @@ class HistoryList extends Component {
                 );
             case 'reps':
                 return (
-                    <ScrollView horizontal={true}>
-                        <View style={{ flex: 1 }}>
-                            <SetDataLabelRow item={item.subheader} />
-
-                            {item.items.map((item, index) => {
-                                return (
-                                    <SetDataRow
-                                        key={index}
-                                        item={item}
-                                        onPressRemove={() =>
-                                            this.props.removeRep(
-                                                item.setID,
-                                                item.rep,
-                                            )
-                                        }
-                                        onPressRestore={() =>
-                                            this.props.restoreRep(
-                                                item.setID,
-                                                item.rep,
-                                            )
-                                        }
-                                    />
-                                );
-                            })}
-                        </View>
-                    </ScrollView>
+                    <SetData
+                        item={item}
+                        key={index}
+                        onPressRemove={(setID, rep) =>
+                            this.props.removeRep(setID, rep)
+                        }
+                        onPressRestore={(setID, rep) =>
+                            this.props.restoreRep(item.setID, item.rep)
+                        }
+                    />
                 );
             case 'border':
                 return (
