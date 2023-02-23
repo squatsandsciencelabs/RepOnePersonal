@@ -16,8 +16,6 @@ import EditHistoryTagsScreen from './tags/EditHistoryTagsScreen';
 import EditHistoryFilterScreen from './history_filter/EditHistoryFilterScreen';
 import UserLoggedOutPanel from './logged_out/UserLoggedOutPanel';
 import ListLoadingFooter from '../history/loading/ListLoadingFooter';
-import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
-import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
 import SetData from 'app/shared_features/set_card/expanded/SetData';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import HistoryVideoButtonScreen from './card/expanded/form/HistoryVideoButtonScreen';
@@ -189,7 +187,7 @@ class HistoryList extends Component {
                             this.props.removeRep(setID, rep)
                         }
                         onPressRestore={(setID, rep) =>
-                            this.props.restoreRep(item.setID, item.rep)
+                            this.props.restoreRep(setID, rep)
                         }
                     />
                 );

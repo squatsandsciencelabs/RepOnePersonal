@@ -13,8 +13,7 @@ import EditWorkoutTitleCollapsedScreen from './card/collapsed/EditWorkoutTitleCo
 import EditWorkoutSetFormScreen from './card/expanded/form/EditWorkoutSetFormScreen';
 import EditWorkoutExerciseScreen from './exercise_name/EditWorkoutExerciseScreen';
 import EditWorkoutTagsScreen from './tags/EditWorkoutTagsScreen';
-import SetDataLabelRow from 'app/shared_features/set_card/expanded/SetDataLabelRow';
-import SetDataRow from 'app/shared_features/set_card/expanded/SetDataRow';
+import SetData from 'app/shared_features/set_card/expanded/SetData';
 import SetFooterRow from 'app/shared_features/set_card/SetFooterRow';
 import LiveRestRow from 'app/shared_features/set_card/expanded/LiveRestRow';
 import WorkoutVideoButtonScreen from './card/expanded/form/WorkoutVideoButtonScreen';
@@ -208,17 +207,16 @@ class WorkoutList extends Component {
                 return (
                     <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
-            case 'subheader':
-                return <SetDataLabelRow item={item} />;
-            case 'data':
+            case 'reps':
                 return (
-                    <SetDataRow
+                    <SetData
                         item={item}
-                        onPressRemove={() =>
-                            this.props.removeRep(item.setID, item.rep)
+                        key={index}
+                        onPressRemove={(setID, rep) =>
+                            this.props.removeRep(setID, rep)
                         }
-                        onPressRestore={() =>
-                            this.props.restoreRep(item.setID, item.rep)
+                        onPressRestore={(setID, rep) =>
+                            this.props.restoreRep(setID, rep)
                         }
                     />
                 );
