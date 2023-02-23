@@ -133,17 +133,22 @@ const createViewModels = (
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            const items = createRowViewModels(
+            const data = createRowViewModels(
                 set,
                 columnsModel,
                 shouldShowRemoved,
             );
+            const subheader = createSubheaderModel(
+                set,
+                columnLabels,
+                columnUnits,
+            );
 
             array.push({
                 type: 'reps',
-                key: `reps-${array.length - 1}`,
-                items,
-                subheader: createSubheaderModel(set, columnLabels, columnUnits),
+                key: `reps-${set.setID}`,
+                data,
+                subheader,
             });
         }
 
@@ -335,7 +340,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             });
 
             // add obj
-            array.push(vm);
+            array.splice(0, 0, vm); // insert at beginning
         } else {
             // update vm
             vm.columns = columnsModel.map(m =>
@@ -343,7 +348,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             );
 
             // add obj
-            array.push(vm);
+            array.splice(0, 0, vm); // insert at beginning
         }
     }
 

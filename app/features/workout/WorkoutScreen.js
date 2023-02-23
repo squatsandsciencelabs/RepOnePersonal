@@ -113,10 +113,15 @@ const createViewModels = (
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            Array.prototype.push.apply(
-                array,
-                createRowViewModels(set, columnsModel),
-            );
+            const data = createRowViewModels(set, columnsModel);
+            const subheader = createSubheaderModel(set, labels, units);
+
+            array.push({
+                type: 'reps',
+                key: `reps-${set.setID}`,
+                data,
+                subheader,
+            });
         }
 
         // footer with rest, 3d, and delete
