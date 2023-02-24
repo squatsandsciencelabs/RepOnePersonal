@@ -35,6 +35,28 @@ class SetData extends Component {
         }
     }
 
+    removeRep = () => {
+        this.props.onPressRemove(
+            this.state.selectedRow.setID,
+            this.state.selectedRow.rep,
+        );
+
+        this.setState({
+            selectedRow: this.emptySelectedRow,
+        });
+    };
+
+    restoreRep = () => {
+        this.props.onPressRestore(
+            this.state.selectedRow.setID,
+            this.state.selectedRow.rep,
+        );
+
+        this.setState({
+            selectedRow: this.emptySelectedRow,
+        });
+    };
+
     renderRowOverlayNumbers() {
         const columns = this.state.selectedRow.columns;
 
@@ -100,28 +122,6 @@ class SetData extends Component {
         );
     }
 
-    removeRep = () => {
-        this.props.onPressRemove(
-            this.state.selectedRow.setID,
-            this.state.selectedRow.rep,
-        );
-
-        this.setState({
-            selectedRow: this.emptySelectedRow,
-        });
-    };
-
-    restoreRep = () => {
-        this.props.onPressRestore(
-            this.state.selectedRow.setID,
-            this.state.selectedRow.rep,
-        );
-
-        this.setState({
-            selectedRow: this.emptySelectedRow,
-        });
-    };
-
     renderRowNumbers() {
         return (
             <View style={styles.rowNumbersWrapper}>
@@ -175,7 +175,6 @@ class SetData extends Component {
                         <View style={styles.overlayNumbersContainer}>
                             {this.renderRowOverlayNumbers()}
                         </View>
-
                         {this.renderRowOverlayButton()}
                     </View>
                 </TouchableOpacity>
@@ -184,10 +183,7 @@ class SetData extends Component {
 
                 <ScrollView
                     horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    onScrollBeginDrag={() =>
-                        this.setState({ selectedRow: this.emptySelectedRow })
-                    }>
+                    showsHorizontalScrollIndicator={false}>
                     <View style={styles.scrollableContent}>
                         <SetDataLabelRow item={this.props.item.subheader} />
 

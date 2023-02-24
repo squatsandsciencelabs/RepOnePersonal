@@ -118,9 +118,6 @@ const createViewModels = (
                     } else {
                         array.push(createBorder(set));
                     }
-                    array.push(
-                        createSubheaderModel(set, columnLabels, columnUnits),
-                    );
                 }
             } else if (!isRemoved) {
                 array.push(createSummaryViewModel(set));
@@ -146,7 +143,7 @@ const createViewModels = (
 
             array.push({
                 type: 'reps',
-                key: `reps-${set.setID}`,
+                key: `${set.setID}reps`,
                 data,
                 subheader,
             });

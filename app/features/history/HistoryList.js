@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
     Text,
     View,
@@ -78,7 +78,6 @@ class HistoryList extends Component {
                         rpe={item.rpe}
                         numReps={item.numReps}
                         tags={item.tags}
-                        key={index}
                     />
                 );
             case 'title':
@@ -95,7 +94,6 @@ class HistoryList extends Component {
                                 removed={item.removed}
                                 setNumber={item.setNumber}
                                 isCollapsable={true}
-                                key={index}
                             />
                         </View>
                     );
@@ -112,7 +110,6 @@ class HistoryList extends Component {
                                 removed={item.removed}
                                 setNumber={item.setNumber}
                                 videoFileURL={item.videoFileURL}
-                                key={index}
                             />
                         </View>
                     );
@@ -126,11 +123,10 @@ class HistoryList extends Component {
                         tags={item.tags}
                         kratosDiscs={item.kratosDiscs}
                         deviceType={item.deviceType}
-                        key={index}
                     />
                 );
             case 'analysis':
-                return <SetAnalysisScreen set={item.set} key={index} />;
+                return <SetAnalysisScreen set={item.set} />;
             case 'form':
                 // note: on focus will avoid the Redux store for simplicity and just do it through the callback function
                 // technically an action to scroll should be application state and therefore should go through the global store
@@ -172,17 +168,12 @@ class HistoryList extends Component {
                 );
             case 'open 3d button':
                 return (
-                    <Open3DRow
-                        setID={item.setID}
-                        open3D={this.props.open3D}
-                        key={index}
-                    />
+                    <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
             case 'reps':
                 return (
                     <SetData
                         item={item}
-                        key={index}
                         onPressRemove={(setID, rep) =>
                             this.props.removeRep(setID, rep)
                         }
