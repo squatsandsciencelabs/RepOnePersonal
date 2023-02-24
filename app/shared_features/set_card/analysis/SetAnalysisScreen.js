@@ -15,6 +15,7 @@ import {
     POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
+    WORK_METRIC,
 
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
@@ -407,6 +408,38 @@ const metricValue = (set, allSets, quantifier, metric) => {
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfLinear3DROMs(set);
                     break; 
+            }
+            break;
+        case WORK_METRIC:
+            // TODO: implement functions
+            switch (quantifier) {
+                case FIRST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getFirstWork(set);
+                    break;
+                case LAST_REP_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getLastWork(set);
+                    break;
+                case MIN_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMinWork(set);
+                    break;
+                case MAX_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getMaxWork(set);
+                    break;
+                case AVG_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAvgWork(set);
+                    break;
+                case ABS_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getAbsLossOfWork(set);
+                    break;
+                case PERCENT_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPercentLossOfWork(set);
+                    break;
+                case SET_LOSS_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getSetLossOfWork(set);
+                    break;
+                case PEAK_END_QUANTIFIER:
+                    returnValue = CollapsedMetrics.getPeakEndOfWork(set);
+                    break;
             }
             break;
     }

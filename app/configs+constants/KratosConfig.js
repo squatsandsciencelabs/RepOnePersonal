@@ -5,6 +5,14 @@ export const DEFAULT_KRATOS_AUTO_DELETE_REPS = 1;
 export const getKratosEnabled = () =>
     firebase.remoteConfig().getValue('kratos_enabled').asBoolean();
 
+export const kratosDiscMass = {
+    XS: 2.65,
+    S: 4.16,
+    M: 5.88,
+    L: 8.3,
+    XL: 11.94,
+};
+
 export const kratosDiscsOptions = [
     { key: 'XS', fullName: 'Extra Small', description: '2.65lbs' },
     { key: 'S', fullName: 'Small', description: '4.16lbs', },
