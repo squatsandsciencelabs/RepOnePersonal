@@ -319,7 +319,7 @@ class WorkoutList extends Component {
                         this._renderSectionFooter(section)
                     }
                     sections={this.props.sections}
-                    style={{ padding: 10, backgroundColor: '#f2f2f2' }}
+                    style={{ padding: 16, backgroundColor: '#f2f2f2' }}
                 />
             );
         }

@@ -86,7 +86,7 @@ class HistoryList extends Component {
                         <View
                             style={{
                                 borderTopWidth: 1,
-                                borderColor: '#e0e0e0',
+                                borderColor: '#F2F2F2',
                             }}>
                             <EditHistoryTitleExpandedScreen
                                 setID={item.setID}
@@ -102,7 +102,7 @@ class HistoryList extends Component {
                         <View
                             style={{
                                 borderTopWidth: 1,
-                                borderColor: '#e0e0e0',
+                                borderColor: '#F2F2F2',
                             }}>
                             <EditHistoryTitleCollapsedScreen
                                 setID={item.setID}
@@ -188,7 +188,7 @@ class HistoryList extends Component {
                         style={{
                             flex: 1,
                             backgroundColor: 'white',
-                            borderColor: '#e0e0e0',
+                            borderColor: '#F2F2F2',
                             borderLeftWidth: 1,
                             borderRightWidth: 1,
                             borderBottomWidth: 1,
@@ -203,7 +203,7 @@ class HistoryList extends Component {
                             style={{
                                 flex: 1,
                                 backgroundColor: 'white',
-                                borderColor: '#e0e0e0',
+                                borderColor: '#F2F2F2',
                                 borderLeftWidth: 1,
                                 borderRightWidth: 1,
                                 borderBottomWidth: 1,
@@ -289,7 +289,7 @@ class HistoryList extends Component {
                     }
                     sections={this.props.sections}
                     onEndReached={() => this.props.finishLoading()}
-                    style={{ padding: 10, backgroundColor: '#f2f2f2' }}
+                    style={{ padding: 16, backgroundColor: '#f2f2f2' }}
                 />
             );
         }

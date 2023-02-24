@@ -34,6 +34,7 @@ import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettin
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
+import * as SetUtils from 'app/utility/SetUtils';
 
 const metricValue = (set, allSets, quantifier, metric) => {
     let returnValue = null;
@@ -410,7 +411,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
             break;
     }
 
-    return returnValue ? returnValue : '---';    
+    return returnValue ? SetUtils.formatMetric(returnValue) : '---';
 };
 
 const metricDescription = (quantifier, metric, rpe, weightMetric) => {
@@ -418,7 +419,7 @@ const metricDescription = (quantifier, metric, rpe, weightMetric) => {
         if (rpe) {
             return weightMetric + ' @ ' + rpe + " " + CollapsedMetrics.metricAbbreviation(metric) +  "\ne1RM";       
         } else {
-            return "---\nRPE e1RM";
+            return "RPE e1RM";
         }
     }
 
@@ -428,8 +429,10 @@ const metricDescription = (quantifier, metric, rpe, weightMetric) => {
     return CollapsedMetrics.quantifierAbbreviation(quantifier) + " " + CollapsedMetrics.metricAbbreviation(metric);
 };
 
-const unit = (metric, quantifier) => CollapsedMetrics.metricUnit(metric, quantifier);
-
+const unit = (metric, quantifier) =>
+    metric === RPE_METRIC
+        ? '---'
+        : CollapsedMetrics.metricUnit(metric, quantifier);
 
 // selector
 

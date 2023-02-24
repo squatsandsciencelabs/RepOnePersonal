@@ -406,7 +406,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0)'
     },
     border: {
-        borderColor: '#e0e0e0',
+        borderBottomColor: '#f2f2f2',
+        borderRightColor: '#e0e0e0',
+        borderLeftColor: '#e0e0e0',
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderBottomWidth: 1,

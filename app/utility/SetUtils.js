@@ -587,12 +587,12 @@ const INVALID = 'INV';
 const EMPTY = '-';
 
 export const getDisplayMetric = (metric, rep, set = null) =>
-    _formatMetric(_getDisplayMetric(metric, rep, set));
+    formatMetric(_getDisplayMetric(metric, rep, set));
 
 export const getKratosDisplayMetric = (metric, rep, set = null) =>
-    _formatMetric(_getKratosDisplayMetric(metric, rep, set));
+    formatMetric(_getKratosDisplayMetric(metric, rep, set));
 
-const _formatMetric = metric => 
+export const formatMetric = metric =>
     metric < 1 ? metric.toString().slice(1) : metric;
 
 const _getDisplayMetric = (metric, rep, set=null) => {

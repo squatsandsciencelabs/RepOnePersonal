@@ -19,11 +19,11 @@ class SetAnalysis extends Component {
         } else {
             let textStyle =
                 !this.props.rpe && description.includes('RPE')
-                    ? styles.redText
+                    ? [styles.text, styles.redText]
                     : styles.text;
             let metricStyle =
                 !this.props.rpe && description.includes('RPE')
-                    ? styles.redMetric
+                    ? [styles.metric, styles.redMetric]
                     : styles.metric;
 
             return (
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
         backgroundColor: 'white',
-        paddingTop: 10,
+        paddingTop: 5,
         paddingBottom: 0,
-        paddingLeft: 5,
+        paddingLeft: 7,
     },
     border: {
         borderColor: '#e0e0e0',
@@ -109,20 +109,12 @@ const styles = StyleSheet.create({
     },
     redText: {
         color: 'red',
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginLeft: 5,
-        marginRight: 5,
-        marginTop: 5,
-        textAlign: 'center',
-        paddingTop: 5,
-        paddingBottom: 5,
     },
     text: {
         color: '#4d4d4d',
         fontSize: 18,
         fontWeight: '500',
-        marginTop: 8,
+        marginTop: 5,
         textAlign: 'center',
     },
     metric: {
@@ -131,28 +123,22 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'center',
         alignSelf: 'center',
+        fontFamily: 'RobotoCondensed-Regular',
     },
     redMetric: {
         color: 'red',
-        fontSize: 8,
-        fontWeight: '500',
-        paddingTop: 3,
-        paddingBottom: 5,
-        marginTop: -8,
-        marginLeft: 3,
-        marginRight: 3,
-        textAlign: 'center',
     },
     bigMetricBackground: {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         backgroundColor: '#fddddd',
-        width: 80,
-        height: 80,
-        borderRadius: 80 / 2,
+        width: 84,
+        height: 84,
+        borderRadius: 84 / 2,
         borderColor: '#fddddd',
         overflow: 'hidden',
+        marginRight: 3,
     },
     bigMetricText: {
         textAlign: 'center',
@@ -167,10 +153,11 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         paddingHorizontal: 16,
         alignSelf: 'center',
+        fontFamily: 'RobotoCondensed-Regular',
     },
     metricWrapper: {
         flex: 1,
-        paddingTop: 3,
+        paddingTop: 14,
         alignItems: 'center',
         width: 62,
         marginLeft: 7,

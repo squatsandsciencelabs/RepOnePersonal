@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     },
     scrollableContent: {
         flex: 1,
-        paddingLeft: 46,
+        paddingLeft: 36,
         backgroundColor: 'white',
         minWidth: '100%',
     },
