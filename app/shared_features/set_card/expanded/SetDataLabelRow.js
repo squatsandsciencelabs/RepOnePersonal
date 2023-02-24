@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         lineHeight: 14,
         fontWeight: '500',
+        fontFamily: 'RobotoCondensed-Regular',
     },
     unit: {
         fontSize: 11,
