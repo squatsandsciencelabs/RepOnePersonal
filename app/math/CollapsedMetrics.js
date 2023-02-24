@@ -74,10 +74,14 @@ export const getDurations = set => {
     return getMetrics(set, r => r.duration);
 };
 
-export const getPeakForces = set =>
-    getMetrics(set, r =>
-        r.peakForce !== null && r.peakForce !== undefined ? r.peakForce : null,
-    );
+export const getPeakForces = set => {
+    getMetrics(set, r => {
+        const mass = getKratosDiscsMass(set.kratosDiscMass);
+        return mass && r.peakLinearAcceleration
+            ? r.peakLinearAcceleration * mass
+            : null;
+    });
+};
 
 export const getPeakForceHeights = set =>
     getMetrics(set, r =>
@@ -94,9 +98,10 @@ export const getAverageForces = set =>
     );
 
 export const getPeakPowers = set =>
-    getMetrics(set, r =>
-        r.peakPower !== null && r.peakPower !== undefined ? r.peakPower : null,
-    );
+    getMetrics(set, r => {
+        const mass = getKratosDiscsMass(set);
+        return r.peakPower && mass ? r.peakPower * mass : null;
+    });
 
 export const getPeakPowerHeights = set =>
     getMetrics(set, r =>
@@ -116,6 +121,8 @@ export const getLinear3DAvgVelocities = set =>
     getMetrics(set, r => r.linear3DAverageVelocity / 1000);
 
 export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
+
+export const getWorks = set => getMetrics(set, r => r.peakForce * r.rom);
 
 // Average Quantifiers
 
@@ -1104,13 +1111,15 @@ export const metricAbbreviation = metric => {
         case FORCE_HEIGHT_METRIC:
             return 'FH';
         case POWER_METRIC:
-            return 'PW';
+            return 'PWR';
         case POWER_HEIGHT_METRIC:
             return 'PH';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'VEL³';
         case LINEAR_3D_ROM_METRIC:
             return 'ROM³';
+        case WORK_METRIC:
+            return 'WRK';
         default:
             return null;
     }
@@ -1144,7 +1153,6 @@ export const metricString = metric => {
             return 'Average Velocity 3D';
         case LINEAR_3D_ROM_METRIC:
             return 'Range Of Motion 3D';
-        // kratos metrics
         case WORK_METRIC:
             return 'Work';
         case WORK_LOCATION_METRIC:
@@ -1260,4 +1268,15 @@ export const getPhaseString = phase => {
         default:
             return null;
     }
+};
+
+// HELPERS
+
+const getKratosDiscsMass = kratosDiscs => {
+    return kratosDiscs
+        ? Object.entries(kratosDiscs)
+              .filter(disc => !!disc[1])
+              .map(disc => kratosDiscMass[disc[0]])
+              .reduce((acc, disc) => acc + disc, 0)
+        : null;
 };
