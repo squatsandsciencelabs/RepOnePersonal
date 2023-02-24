@@ -585,7 +585,17 @@ export const getPeakHeight = (bulkDataArray, peakIndex) => {
 
 const INVALID = 'INV';
 const EMPTY = '-';
-export const getDisplayMetric = (metric, rep, set=null) => {
+
+export const getDisplayMetric = (metric, rep, set = null) =>
+    _formatMetric(_getDisplayMetric(metric, rep, set));
+
+export const getKratosDisplayMetric = (metric, rep, set = null) =>
+    _formatMetric(_getKratosDisplayMetric(metric, rep, set));
+
+const _formatMetric = metric => 
+    metric < 1 ? metric.toString().slice(1) : metric;
+
+const _getDisplayMetric = (metric, rep, set=null) => {
     if (!rep || !rep.isValid) {
         return INVALID;
     }
@@ -620,7 +630,7 @@ export const getDisplayMetric = (metric, rep, set=null) => {
 
 // NOTE: This expects a normalized Kratos rep where it only shows either eccentric or concentric
 // See workoutscreen, historyscreen, and onermeditscreen for conversion logic
-export const getKratosDisplayMetric = (metric, rep, set = null) => {
+const _getKratosDisplayMetric = (metric, rep, set = null) => {
     if (!rep || !rep.isValid) {
         return INVALID;
     }

@@ -23,22 +23,13 @@ class SetDataRow extends PureComponent {
                             {this.props.item.columns.map((data, index) => {
                                 const rowType = data[data.length - 1];
 
-                                const itemNumber =
-                                    index === 0
-                                        ? this.props.item.repDisplay
-                                        : '';
                                 const displayData = data.slice(0, -1);
 
                                 return (
                                     <View
-                                        key={`row-${itemNumber}-${rowType}`}
+                                        key={`row-${this.props.item.repDisplay}-${rowType}`}
                                         style={styles.rowWrapper}>
                                         {displayData.map((item, itemIndex) => {
-                                            // NOTE: If this is a pure decimal, remove the starting 0 so it's just .25 instead of 0.25
-                                            const displayItem =
-                                                item < 1
-                                                    ? item.toString().slice(1)
-                                                    : item;
                                             return (
                                                 <View
                                                     key={`row-item-${itemIndex}`}
@@ -46,7 +37,7 @@ class SetDataRow extends PureComponent {
                                                         styles.itemContainer
                                                     }>
                                                     <Text style={dataStyle}>
-                                                        {displayItem}
+                                                        {item}
                                                     </Text>
                                                 </View>
                                             );
@@ -67,15 +58,11 @@ class SetDataRow extends PureComponent {
                     <View style={{ flex: 1 }}>
                         <View style={styles.bar}>
                             {this.props.item.columns.map((item, index) => {
-                                const displayItem =
-                                    item < 1 ? item.toString().slice(1) : item;
                                 return (
                                     <View
                                         style={styles.itemContainer}
                                         key={`data-column-${index}`}>
-                                        <Text style={dataStyle}>
-                                            {displayItem}
-                                        </Text>
+                                        <Text style={dataStyle}>{item}</Text>
                                     </View>
                                 );
                             })}
@@ -92,8 +79,6 @@ class SetDataRow extends PureComponent {
 
 const styles = StyleSheet.create({
     border: {
-        borderColor: '#e0e0e0',
-        borderRightWidth: 1,
         flex: 1,
         alignItems: 'stretch',
         backgroundColor: 'white',
