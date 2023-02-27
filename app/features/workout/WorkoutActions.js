@@ -4,6 +4,8 @@ import {
     DELETE_WORKOUT_SET,
     RESTORE_WORKOUT_SET,
     SHOW_VISUALIZATION_MODAL,
+    SELECT_WORKOUT_REP_ROW,
+    DESELECT_WORKOUT_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
@@ -51,6 +53,19 @@ export const open3D = setID => {
     };
 };
 
+export const selectRow = (setID, rep, repDisplay) => (dispatch, getState) =>
+    dispatch({
+        type: SELECT_WORKOUT_REP_ROW,
+        selectedRowSetID: setID,
+        selectedRowRep: rep,
+        selectedRowDisplayRep: repDisplay,
+    });
+
+export const deselectRow = () => (dispatch, getState) => {
+    dispatch({
+        type: DESELECT_WORKOUT_REP_ROW,
+    });
+};
 // ANALYTICS
 
 const logLoginBannerAnalytics = (state) => {

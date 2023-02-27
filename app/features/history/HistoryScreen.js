@@ -144,6 +144,7 @@ const createViewModels = (
             array.push({
                 type: 'reps',
                 key: `${set.setID}reps`,
+                setID: set.setID,
                 data,
                 subheader,
             });
@@ -410,12 +411,19 @@ const mapStateToProps = state => {
     const shouldShowRemoved = HistorySelectors.getShowRemoved(state);
     const isFiltering = HistorySelectors.getIsFiltering(state);
     const sections = getHistorySections(state);
+    const selectedRowSetID = HistorySelectors.getSelectedRowSetID(state);
+    const selectedRowRep = HistorySelectors.getSelectedRowRep(state);
+    const selectedRowDisplayRep =
+        HistorySelectors.getSelectedRowDisplayRep(state);
 
     return {
         email,
         sections,
         shouldShowRemoved,
         isFiltering,
+        selectedRowSetID,
+        selectedRowRep,
+        selectedRowDisplayRep,
     };
 };
 
@@ -429,6 +437,8 @@ const mapDispatchToProps = dispatch => {
             open3D: Actions.open3D,
             finishLoading: Actions.finishLoading,
             presentHistoryFilter: Actions.presentHistoryFilter,
+            selectRow: Actions.selectRow,
+            deselectRow: Actions.deselectRow,
         },
         dispatch,
     );

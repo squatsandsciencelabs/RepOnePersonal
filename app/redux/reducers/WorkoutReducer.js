@@ -24,6 +24,8 @@ import {
     TOGGLE_WORKOUT_CAMERA_TYPE,
     PRESENT_WORKOUT_KRATOS_DISCS,
     DISMISS_WORKOUT_KRATOS_DISCS,
+    SELECT_WORKOUT_REP_ROW,
+    DESELECT_WORKOUT_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -53,6 +55,11 @@ const defaultState = {
     timerStatus: 'inactive',
     removedCounter: 0,
     restoredCounter: 0,
+
+    // highlight
+    selectedRowSetID: null,
+    selectedRowRep: null,
+    selectedRowDisplayRep: null,
 };
 
 const WorkoutReducer = (state = defaultState, action) => {
@@ -139,7 +146,7 @@ const WorkoutReducer = (state = defaultState, action) => {
                 watchFileURL: action.videoFileURL,
                 isEditing: true
             });
-        case DELETE_WORKOUT_VIDEO:            
+        case DELETE_WORKOUT_VIDEO:
         case DISMISS_WORKOUT_VIDEO_PLAYER:
             return Object.assign({}, state, {
                 watchSetID: null,
@@ -182,7 +189,7 @@ const WorkoutReducer = (state = defaultState, action) => {
                 timerRemaining: null,
                 timerStatus: 'stopped'
             });
-        case PAUSE_END_SET_TIMER:        
+        case PAUSE_END_SET_TIMER:
             return Object.assign({}, state, {
                 projectedEndSetTime: null,
                 timerRemaining: action.timerRemaining,
@@ -200,11 +207,25 @@ const WorkoutReducer = (state = defaultState, action) => {
             } else {
                 return state;
             }
-        case END_WORKOUT: 
+        case END_WORKOUT:
             return Object.assign({}, state, {
                 removedCounter: 0,
                 restoredCounter: 0,
             });
+        case SELECT_WORKOUT_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: action.selectedRowSetID,
+                selectedRowRep: action.selectedRowRep,
+                selectedRowDisplayRep: action.selectedRowDisplayRep,
+            };
+        case DESELECT_WORKOUT_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: null,
+                selectedRowRep: null,
+                selectedRowDisplayRep: null,
+            };
         default:
             return state;
     }

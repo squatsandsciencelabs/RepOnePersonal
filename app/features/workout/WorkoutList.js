@@ -212,12 +212,18 @@ class WorkoutList extends Component {
                     <SetData
                         item={item}
                         key={index}
+                        selectedRowSetID={this.props.selectedRowSetID}
+                        selectedRowRep={this.props.selectedRowRep}
                         onPressRemove={(setID, rep) =>
                             this.props.removeRep(setID, rep)
                         }
                         onPressRestore={(setID, rep) =>
                             this.props.restoreRep(setID, rep)
                         }
+                        onRowSelect={(setID, rep) =>
+                            this.props.selectRow(setID, rep)
+                        }
+                        onRowDeselect={this.props.deselectRow}
                     />
                 );
             case 'footer':
