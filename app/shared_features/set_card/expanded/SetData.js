@@ -175,6 +175,7 @@ class SetData extends Component {
                         <View style={styles.overlayNumbersContainer}>
                             {this.renderRowOverlayNumbers()}
                         </View>
+                        <View style={styles.leftShadow} />
                         {this.renderRowOverlayButton()}
                     </View>
                 </TouchableOpacity>
@@ -245,12 +246,16 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'absolute',
+        right: 0,
     },
     restoreRepButton: {
         backgroundColor: '#FDEEEE',
         width: 57,
         height: '100%',
         justifyContent: 'center',
+        position: 'absolute',
+        right: 0,
     },
     restoreRepButtonText: {
         color: '#EB5757',
@@ -292,7 +297,21 @@ const styles = StyleSheet.create({
         shadowColor: '#fff',
         shadowOffset: {
             width: 3,
-            height: 7,
+            height: 3,
+        },
+        shadowOpacity: 0.92,
+        shadowRadius: 7,
+    },
+    leftShadow: {
+        height: 55,
+        width: 57,
+        zIndex: 0,
+        backgroundColor: '#FDEEEE',
+
+        shadowColor: '#FDEEEE',
+        shadowOffset: {
+            width: -3,
+            height: 0,
         },
         shadowOpacity: 0.92,
         shadowRadius: 7,
