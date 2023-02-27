@@ -47,6 +47,8 @@ import {
     DISMISS_HISTORY_FILTER_END_DATE,
     PRESENT_HISTORY_KRATOS_DISCS,
     DISMISS_HISTORY_KRATOS_DISCS,
+    SELECT_WORKOUT_REP_ROW,
+    DESELECT_WORKOUT_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 
 // isEditing for analytics
@@ -60,7 +62,7 @@ const defaultState = {
     recordingVideoType: null,
     cameraType: null,
     isRecording: false,
-    isSavingVideo: false,    
+    isSavingVideo: false,
     watchSetID: null,
     watchFileURL: null,
     viewedCounter: 0,
@@ -110,6 +112,11 @@ const defaultState = {
     editingShowRemoved: false,
     showRemoved: false,
     showHistoryFilter: false,
+
+    // highlight
+    selectedRowSetID: null,
+    selectedRowRep: null,
+    selectedRowDisplayRep: null,
 };
 
 const HistoryReducer = (state = defaultState, action) => {
@@ -163,8 +170,8 @@ const HistoryReducer = (state = defaultState, action) => {
                 recordingSetID: action.setID,
                 recordingVideoType: action.isCommentary ? 'commentary' : 'lift',
                 cameraType: action.isCommentary ? 'front' : 'back',
-                isRecording: false,                
-                isSavingVideo: false                
+                isRecording: false,
+                isSavingVideo: false
             });
         case TOGGLE_HISTORY_CAMERA_TYPE: {
             let cameraType = state.cameraType;
@@ -189,7 +196,7 @@ const HistoryReducer = (state = defaultState, action) => {
         case STOP_RECORDING_HISTORY:
             return Object.assign({}, state, {
                 isRecording: false,
-                isSavingVideo: true                
+                isSavingVideo: true
             });
         case PRESENT_HISTORY_VIDEO_PLAYER:
             return Object.assign({}, state, {
@@ -197,7 +204,7 @@ const HistoryReducer = (state = defaultState, action) => {
                 watchFileURL: action.videoFileURL
             });
         case DISMISS_HISTORY_VIDEO_PLAYER:
-        case DELETE_HISTORY_VIDEO:        
+        case DELETE_HISTORY_VIDEO:
             return Object.assign({}, state, {
                 watchSetID: null,
                 watchFileURL: null
@@ -232,7 +239,7 @@ const HistoryReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 isEditingFilterExerciseName: true,
-            };    
+            };
         case SAVE_HISTORY_FILTER_EXERCISE:
             return {
                 ...state,
@@ -344,7 +351,7 @@ const HistoryReducer = (state = defaultState, action) => {
                 editingStartingRepRange: '',
                 editingEndingRepRange: '',
                 editingShowRemoved: false,
-            };  
+            };
         case SAVE_HISTORY_FILTER: {
             const exercise = state.editingFilterExerciseName;
             const tagsToInclude = state.editingFilterTagsToInclude;
@@ -426,6 +433,20 @@ const HistoryReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 isEditingEndingDate: false,
+            };
+        case SELECT_WORKOUT_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: action.selectedRowSetID,
+                selectedRowRep: action.selectedRowRep,
+                selectedRowDisplayRep: action.selectedRowDisplayRep,
+            };
+        case DESELECT_WORKOUT_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: null,
+                selectedRowRep: null,
+                selectedRowDisplayRep: null,
             };
         default:
             return state;

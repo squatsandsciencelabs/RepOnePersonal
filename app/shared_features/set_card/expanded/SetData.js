@@ -15,9 +15,6 @@ class SetData extends Component {
         super(props);
 
         this.emptySelectedRow = {
-            setID: null,
-            rep: null,
-            repDisplay: null,
             columns: null,
             removed: false,
         };
@@ -35,22 +32,39 @@ class SetData extends Component {
         }
     }
 
-    removeRep = () => {
-        this.props.onPressRemove(
-            this.state.selectedRow.setID,
-            this.state.selectedRow.rep,
-        );
+    removeRep = (setID, rep) => {
+        this.props.onRowDeselect();
+
+        this.props.onPressRemove(setID, rep);
 
         this.setState({
             selectedRow: this.emptySelectedRow,
         });
     };
 
-    restoreRep = () => {
-        this.props.onPressRestore(
-            this.state.selectedRow.setID,
-            this.state.selectedRow.rep,
-        );
+    restoreRep = (setID, rep) => {
+        this.props.onRowDeselect();
+
+        this.props.onPressRestore(setID, rep);
+
+        this.setState({
+            selectedRow: this.emptySelectedRow,
+        });
+    };
+
+    handleSetDataRowSelect = item => {
+        this.props.onRowSelect(item.setID, item.rep, item.repDisplay);
+
+        this.setState({
+            selectedRow: {
+                columns: item.columns || null,
+                removed: item.removed,
+            },
+        });
+    };
+
+    handleSetDataRowDeselect = () => {
+        this.props.onRowDeselect();
 
         this.setState({
             selectedRow: this.emptySelectedRow,
@@ -60,7 +74,7 @@ class SetData extends Component {
     renderRowOverlayNumbers() {
         const columns = this.state.selectedRow.columns;
 
-        if (!columns || !this.state.selectedRow.repDisplay) {
+        if (!columns || !this.props.selectedRowDisplayRep) {
             return null;
         }
         if (is2dArray(columns)) {
@@ -69,7 +83,7 @@ class SetData extends Component {
                     {columns.map((column, index) => {
                         const rowType =
                             column[column.length - 1][0].toUpperCase();
-                        const itemNumber = this.state.selectedRow.repDisplay;
+                        const itemNumber = this.props.selectedRowDisplayRep;
                         return (
                             <View key={`column-${index}`}>
                                 <Text style={[styles.selectedData]}>
@@ -83,9 +97,9 @@ class SetData extends Component {
         }
         return (
             <View>
-                <View key={`data-column-${this.state.selectedRow.repDisplay}`}>
+                <View key={`data-column-${this.props.selectedRowDisplayRep}`}>
                     <Text style={[styles.selectedData]}>
-                        {this.state.selectedRow.repDisplay}
+                        {this.props.selectedRowDisplayRep}
                     </Text>
                 </View>
             </View>
@@ -115,7 +129,12 @@ class SetData extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={1}
-                onPress={pressHandler}
+                onPress={() =>
+                    pressHandler(
+                        this.props.item.setID,
+                        this.props.selectedRowRep,
+                    )
+                }
                 style={buttonStyle}>
                 {content}
             </TouchableOpacity>
@@ -151,34 +170,32 @@ class SetData extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity
-                    onPress={() =>
-                        this.setState({
-                            selectedRow: this.emptySelectedRow,
-                        })
-                    }
-                    style={[
-                        styles.overlay,
-                        {
-                            display: this.state.selectedRow.repDisplay
-                                ? 'flex'
-                                : 'none',
-                            marginTop: this.state.selectedRow.repDisplay
-                                ? (this.props.item.data.length -
-                                      this.state.selectedRow.repDisplay) *
-                                      65 +
-                                  52
-                                : 0,
-                        },
-                    ]}>
-                    <View style={styles.overlayContentWrapper}>
-                        <View style={styles.overlayNumbersContainer}>
-                            {this.renderRowOverlayNumbers()}
+                {this.props.item.setID === this.props.selectedRowSetID && (
+                    <TouchableOpacity
+                        onPress={this.handleSetDataRowDeselect}
+                        style={[
+                            styles.overlay,
+                            {
+                                display: !isNaN(this.props.selectedRowRep)
+                                    ? 'flex'
+                                    : 'none',
+                                marginTop: this.props.selectedRowDisplayRep
+                                    ? (this.props.item.data.length -
+                                          this.props.selectedRowDisplayRep) *
+                                          65 +
+                                      52
+                                    : 0,
+                            },
+                        ]}>
+                        <View style={styles.overlayContentWrapper}>
+                            <View style={styles.overlayNumbersContainer}>
+                                {this.renderRowOverlayNumbers()}
+                            </View>
+                            <View style={styles.leftShadow} />
+                            {this.renderRowOverlayButton()}
                         </View>
-                        <View style={styles.leftShadow} />
-                        {this.renderRowOverlayButton()}
-                    </View>
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                )}
 
                 {this.renderRowNumbers()}
 
@@ -195,24 +212,17 @@ class SetData extends Component {
                                         key={`data-row-${index}`}
                                         activeOpacity={1}
                                         onPress={() => {
-                                            this.setState({
-                                                selectedRow: {
-                                                    setID: item.setID,
-                                                    rep: item.rep,
-                                                    repDisplay: item.repDisplay,
-                                                    columns:
-                                                        item.columns || null,
-                                                    removed: item.removed,
-                                                },
-                                            });
+                                            this.handleSetDataRowSelect(item);
                                         }}
                                         style={styles.setDataRowWrapper}>
                                         <SetDataRow
                                             key={index}
                                             item={item}
                                             selected={
-                                                this.state.selectedRow.rep ===
-                                                item.rep
+                                                this.props.selectedRowRep ===
+                                                    item.rep &&
+                                                this.props.selectedRowSetID ===
+                                                    item.setID
                                             }
                                         />
                                     </TouchableOpacity>

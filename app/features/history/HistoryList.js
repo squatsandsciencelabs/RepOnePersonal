@@ -36,8 +36,16 @@ class HistoryList extends Component {
         const differentSections = nextProps.sections !== this.props.sections;
         const differentIsFiltering =
             nextProps.isFiltering !== this.props.isFiltering;
+        const differentSelectedRep =
+            nextProps.selectedRowSetID !== this.props.selectedRowSetID ||
+            nextProps.selectedRowRep !== this.props.selectedRep ||
+            nextProps.selectedRowDisplayRep !==
+                this.props.selectedRowDisplayRep;
         return (
-            differentShowRemoved || differentSections || differentIsFiltering
+            differentShowRemoved ||
+            differentSections ||
+            differentIsFiltering ||
+            differentSelectedRep
         );
     }
 
@@ -174,12 +182,19 @@ class HistoryList extends Component {
                 return (
                     <SetData
                         item={item}
+                        selectedRowSetID={this.props.selectedRowSetID}
+                        selectedRowRep={this.props.selectedRowRep}
+                        selectedRowDisplayRep={this.props.selectedRowDisplayRep}
                         onPressRemove={(setID, rep) =>
                             this.props.removeRep(setID, rep)
                         }
                         onPressRestore={(setID, rep) =>
                             this.props.restoreRep(setID, rep)
                         }
+                        onRowSelect={(setID, rep, repDisplay) =>
+                            this.props.selectRow(setID, rep, repDisplay)
+                        }
+                        onRowDeselect={this.props.deselectRow}
                     />
                 );
             case 'border':

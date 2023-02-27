@@ -16,6 +16,7 @@ import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSe
 import * as WorkoutCollapsedSelectors from 'app/redux/selectors/WorkoutCollapsedSelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
+import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
 // assumes chronological sets
 const createViewModels = (
@@ -118,6 +119,7 @@ const createViewModels = (
             array.push({
                 type: 'reps',
                 key: `${set.setID}reps`,
+                setID: set.setID,
                 data,
                 subheader,
             });
@@ -443,6 +445,8 @@ const mapStateToProps = state => {
         isAddEnabled: calculateIsAddEnabled(state),
         isLoggedIn: AuthSelectors.getIsLoggedIn(state),
         isLoggingIn: AuthSelectors.getIsLoggingIn(state),
+        selectedRowSetID: WorkoutSelectors.getSelectedRowSetID(state),
+        selectedRowRep: WorkoutSelectors.getSelectedRowRep(state),
     };
 };
 
@@ -457,6 +461,8 @@ const mapDispatchToProps = dispatch => {
             getDefaultMetric: SetsActionCreators.getDefaultMetric,
             open3D: Actions.open3D,
             tappedLoginBanner: Actions.tappedLoginBanner,
+            selectRow: Actions.selectRow,
+            deselectRow: Actions.deselectRow,
         },
         dispatch,
     );

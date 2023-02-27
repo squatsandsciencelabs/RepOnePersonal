@@ -68,3 +68,11 @@ export const getTimerStatus = (state) => stateRoot(state).timerStatus;
 export const getRemovedCounter = (state) => stateRoot(state).removedCounter;
 
 export const getRestoredCounter = (state) => stateRoot(state).restoredCounter;
+
+// row highlight
+export const getSelectedRowSetID = state => stateRoot(state).selectedRowSetID;
+
+export const getSelectedRowRep = state => stateRoot(state).selectedRowRep;
+
+export const getSelectedRowDisplayRep = state =>
+    stateRoot(state).selectedRowDisplayRep;

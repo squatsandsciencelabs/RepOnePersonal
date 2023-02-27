@@ -151,3 +151,11 @@ export const getIsFiltering = state => {
     || getHistoryFilterEndingRepRange(state)
     || getShowRemoved(state);
 };
+
+// row highlight
+export const getSelectedRowSetID = state => stateRoot(state).selectedRowSetID;
+
+export const getSelectedRowRep = state => stateRoot(state).selectedRowRep;
+
+export const getSelectedRowDisplayRep = state =>
+    stateRoot(state).selectedRowDisplayRep;

@@ -4,6 +4,8 @@ import {
     EXPAND_HISTORY_SET,
     PRESENT_HISTORY_FILTER,
     SHOW_VISUALIZATION_MODAL,
+    SELECT_WORKOUT_REP_ROW,
+    DESELECT_WORKOUT_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
@@ -41,6 +43,20 @@ export const presentHistoryFilter = () => {
     return {
         type: PRESENT_HISTORY_FILTER,
     };
+};
+
+export const selectRow = (setID, rep, repDisplay) => (dispatch, getState) =>
+    dispatch({
+        type: SELECT_WORKOUT_REP_ROW,
+        selectedRowSetID: setID,
+        selectedRowRep: rep,
+        selectedRowDisplayRep: repDisplay,
+    });
+
+export const deselectRow = () => (dispatch, getState) => {
+    dispatch({
+        type: DESELECT_WORKOUT_REP_ROW,
+    });
 };
 
 export const open3D = setID => {
