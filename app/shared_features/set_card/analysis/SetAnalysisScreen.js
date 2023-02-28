@@ -69,7 +69,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfAvgVelocities(set);
-                    break;                    
+                    break;
                 case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestAvgVelocityEver(set, allSets);
                     break;
@@ -106,7 +106,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfDurations(set);
-                    break; 
+                    break;
                 case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestDurationEver(set, allSets);
                     break;
@@ -146,7 +146,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfROMs(set);
-                    break; 
+                    break;
             }
             break;
         case PKH_METRIC:
@@ -202,7 +202,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPKVs(set);
-                    break; 
+                    break;
                 case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestPKVEver(set, allSets);
                     break;
@@ -242,12 +242,6 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPeakForces(set);
-                    break;                    
-                case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestPeakForceEver(set, allSets);
-                    break;
-                case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestPeakForceEver(set, allSets);
                     break;
             }
             break;
@@ -306,12 +300,6 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfPeakPowers(set);
-                    break;                    
-                case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestPeakPowerEver(set, allSets);
-                    break;
-                case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestPeakPowerEver(set, allSets);
                     break;
             }
             break;
@@ -370,7 +358,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfLinear3DAvgVelocities(set);
-                    break;                    
+                    break;
                 case MAX_EVER_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFastestLinear3DAvgVelocityEver(set, allSets);
                     break;
@@ -407,11 +395,10 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
                 case PEAK_END_QUANTIFIER:
                     returnValue = CollapsedMetrics.getPeakEndOfLinear3DROMs(set);
-                    break; 
+                    break;
             }
             break;
         case WORK_METRIC:
-            // TODO: implement functions
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFirstWork(set);

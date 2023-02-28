@@ -200,6 +200,11 @@ export const getAvgPeakPowerHeight = set => {
     return getAvgOfMetrics(peakPowerHeights);
 };
 
+export const getAvgWork = set => {
+    const work = getWorks(set);
+    return getAvgOfMetrics(work);
+};
+
 // Absolute Loss Quantifiers
 
 const getAbsLossOfMetrics = metrics => {
@@ -278,6 +283,10 @@ export const getAbsLossOfPeakPowerHeights = set => {
     return getAbsLossOfMetrics(peakPowerHeights);
 };
 
+export const getAbsLossOfWork = set => {
+    const work = getWorks(set);
+    return getAbsLossOfMetrics(work);
+};
 // Percent Loss Quantifiers
 
 const getPercentLossOfMetrics = metrics => {
@@ -356,6 +365,10 @@ export const getPercentLossOfPeakPowerHeights = set => {
     return getPercentLossOfMetrics(peakPowerHeights);
 };
 
+export const getPercentLossOfWork = set => {
+    const work = getWorks(set);
+    return getPercentLossOfMetrics(work);
+};
 // First Rep Quantifiers
 
 const getFirstRepOfMetrics = metrics => {
@@ -429,6 +442,11 @@ export const getFirstLinear3DAvgVelocity = set => {
 export const getFirstLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getFirstRepOfMetrics(roms);
+};
+
+export const getFirstWork = set => {
+    const works = getWorks(set);
+    return getFirstRepOfMetrics(works);
 };
 
 // Last Rep Quantifiers
@@ -506,6 +524,10 @@ export const getLastLinear3DROM = set => {
     return getLastRepMetrics(roms);
 };
 
+export const getLastWork = set => {
+    const work = getWorks(set);
+    return getLastRepMetrics(work);
+};
 // Get Min Quantifiers
 
 const getMinMetrics = metrics => {
@@ -579,6 +601,11 @@ export const getMinLinear3DAvgVelocity = set => {
 export const getMinLinear3DROM = set => {
     const roms = getLinear3DROMs(set);
     return getMinMetrics(roms);
+};
+
+export const getMinWork = set => {
+    const work = getWorks(set);
+    return getMinMetrics(work);
 };
 
 // Get Max Quantifiers
@@ -656,6 +683,10 @@ export const getMaxLinear3DROM = set => {
     return getMaxMetrics(roms);
 };
 
+export const getMaxWork = set => {
+    const work = getWorks(set);
+    return getMaxMetrics(work);
+};
 // Peak-End
 
 const getPeakEndMetrics = metrics => {
@@ -719,6 +750,11 @@ export const getPeakEndOfLinear3DROMs = set => {
     return getPeakEndMetrics(roms);
 };
 
+export const getPeakEndOfWork = set => {
+    const work = getWorks(set);
+    return getPeakEndMetrics(work);
+};
+
 // Set Loss
 
 const getSetLossMetrics = metrics => {
@@ -780,6 +816,11 @@ export const getSetLossOfLinear3DAvgVelocities = set => {
 export const getSetLossOfLinear3DROMs = set => {
     const roms = getLinear3DROMs(set);
     return getSetLossMetrics(roms);
+};
+
+export const getSetLossOfWork = set => {
+    const work = getWorks(set);
+    return getSetLossMetrics(work);
 };
 
 // RPE 1RM
@@ -1036,16 +1077,8 @@ export const getFastestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getDurations, false);
 };
 
-export const getFastestPeakForceEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getPeakForces);
-};
-
 export const getFastestAvgForceEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getAverageForces);
-};
-
-export const getFastestPeakPowerEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getPeakPowers);
 };
 
 export const getFastestAvgPowerEver = (set, allSets) => {
@@ -1068,16 +1101,8 @@ export const getSlowestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getDurations);
 };
 
-export const getSlowestPeakForceEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getPeakForces, false);
-};
-
 export const getSlowestAvgForceEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getAverageForces, false);
-};
-
-export const getSlowestPeakPowerEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getPeakPowers, false);
 };
 
 export const getSlowestAvgPowerEver = (set, allSets) => {
