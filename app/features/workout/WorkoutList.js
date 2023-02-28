@@ -41,11 +41,16 @@ class WorkoutList extends Component {
         const differentIsLoggingIn =
             nextProps.isLoggingIn !== this.props.isLoggingIn;
 
+        const differentSelectedRep =
+            nextProps.selectedRowSetID !== this.props.selectedRowSetID ||
+            nextProps.selectedRowRep !== this.props.selectedRep;
+
         return (
             differentShowRemoved ||
             differentSections ||
             differentIsLoggedIn ||
-            differentIsLoggingIn
+            differentIsLoggingIn ||
+            differentSelectedRep
         );
     }
 
@@ -211,17 +216,33 @@ class WorkoutList extends Component {
                 return (
                     <SetData
                         item={item}
-                        key={index}
                         selectedRowSetID={this.props.selectedRowSetID}
                         selectedRowRep={this.props.selectedRowRep}
+                        selectedRowDisplayRep={this.props.selectedRowDisplayRep}
+                        selectedRowIsRemoved={this.props.selectedRowIsRemoved}
+                        selectedRowOverlayNumbers={
+                            this.props.selectedRowOverlayNumbers
+                        }
                         onPressRemove={(setID, rep) =>
                             this.props.removeRep(setID, rep)
                         }
                         onPressRestore={(setID, rep) =>
                             this.props.restoreRep(setID, rep)
                         }
-                        onRowSelect={(setID, rep) =>
-                            this.props.selectRow(setID, rep)
+                        onRowSelect={(
+                            setID,
+                            rep,
+                            repDisplay,
+                            overlayNumbers,
+                            isRemoved,
+                        ) =>
+                            this.props.selectRow(
+                                setID,
+                                rep,
+                                repDisplay,
+                                overlayNumbers,
+                                isRemoved,
+                            )
                         }
                         onRowDeselect={this.props.deselectRow}
                     />

@@ -147,6 +147,7 @@ const createViewModels = (
                 setID: set.setID,
                 data,
                 subheader,
+                repsAreChronological: true,
             });
         }
 
@@ -338,7 +339,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             });
 
             // add obj
-            array.splice(0, 0, vm); // insert at beginning
+            array.push(vm);
         } else {
             // update vm
             vm.columns = columnsModel.map(m =>
@@ -346,7 +347,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
             );
 
             // add obj
-            array.splice(0, 0, vm); // insert at beginning
+            array.push(vm);
         }
     }
 
@@ -415,6 +416,10 @@ const mapStateToProps = state => {
     const selectedRowRep = HistorySelectors.getSelectedRowRep(state);
     const selectedRowDisplayRep =
         HistorySelectors.getSelectedRowDisplayRep(state);
+    const selectedRowIsRemoved =
+        HistorySelectors.getSelectedRowIsRemoved(state);
+    const selectedRowOverlayNumbers =
+        HistorySelectors.getSelectedRowOverlayNumbers(state);
 
     return {
         email,
@@ -424,6 +429,8 @@ const mapStateToProps = state => {
         selectedRowSetID,
         selectedRowRep,
         selectedRowDisplayRep,
+        selectedRowIsRemoved,
+        selectedRowOverlayNumbers,
     };
 };
 

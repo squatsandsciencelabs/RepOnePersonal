@@ -1,8 +1,6 @@
 import {
     COLLAPSE_WORKOUT_SET,
     EXPAND_WORKOUT_SET,
-    DELETE_WORKOUT_SET,
-    RESTORE_WORKOUT_SET,
     SHOW_VISUALIZATION_MODAL,
     SELECT_WORKOUT_REP_ROW,
     DESELECT_WORKOUT_REP_ROW,
@@ -53,13 +51,17 @@ export const open3D = setID => {
     };
 };
 
-export const selectRow = (setID, rep, repDisplay) => (dispatch, getState) =>
-    dispatch({
-        type: SELECT_WORKOUT_REP_ROW,
-        selectedRowSetID: setID,
-        selectedRowRep: rep,
-        selectedRowDisplayRep: repDisplay,
-    });
+export const selectRow =
+    (setID, rep, repDisplay, overlayNumbers, isRemoved) =>
+    (dispatch, getState) =>
+        dispatch({
+            type: SELECT_WORKOUT_REP_ROW,
+            selectedRowSetID: setID,
+            selectedRowRep: rep,
+            selectedRowDisplayRep: repDisplay,
+            selectedRowOverlayNumbers: overlayNumbers,
+            selectedRowIsRemoved: isRemoved,
+        });
 
 export const deselectRow = () => (dispatch, getState) => {
     dispatch({

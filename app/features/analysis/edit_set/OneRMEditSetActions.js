@@ -1,6 +1,8 @@
 import {
     DISMISS_EDIT_1RM_SET,
     SHOW_VISUALIZATION_MODAL,
+    SELECT_1RM_REP_ROW,
+    DESELECT_1RM_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as Analytics from 'app/services/Analytics';
@@ -61,6 +63,24 @@ export const open3D = setID => {
     };
 };
 
+export const selectRow =
+    (setID, rep, repDisplay, overlayNumbers, isRemoved) =>
+    (dispatch, getState) =>
+        dispatch({
+            type: SELECT_1RM_REP_ROW,
+            selectedRowSetID: setID,
+            selectedRowRep: rep,
+            selectedRowDisplayRep: repDisplay,
+            selectedRowOverlayNumbers: overlayNumbers,
+            selectedRowIsRemoved: isRemoved,
+        });
+
+export const deselectRow = () => (dispatch, getState) => {
+    dispatch({
+        type: DESELECT_1RM_REP_ROW,
+    });
+};
+
 // ANALYTICS
 
 const logCloseEditSetAnalytics = (state) => {
@@ -80,15 +100,15 @@ const logCloseEditSetAnalytics = (state) => {
     const didEditSet = didChangeExercise || didChangeWeight || didChangeMetric || didChangeRPE || didChangeTags || didChangeReps || didDeleteSet || didRestoreSet;
 
     Analytics.logEventWithAppState('one_rm_close_edit_set', {
-        did_edit_set: didEditSet,
-        did_change_exercise: didChangeExercise,
-        did_change_weight: didChangeWeight,
-        did_change_metric: didChangeMetric,
-        did_change_rpe: didChangeRPE,
-        did_change_tags: didChangeTags,
-        did_change_reps: didChangeReps,
-        did_delete_set: didDeleteSet,
-        did_restore_set: didRestoreSet,
-        was_error: wasError,
+            did_edit_set: didEditSet,
+            did_change_exercise: didChangeExercise,
+            did_change_weight: didChangeWeight,
+            did_change_metric: didChangeMetric,
+            did_change_rpe: didChangeRPE,
+            did_change_tags: didChangeTags,
+            did_change_reps: didChangeReps,
+            did_delete_set: didDeleteSet,
+            did_restore_set: didRestoreSet,
+            was_error: wasError,
     }, state);
 };

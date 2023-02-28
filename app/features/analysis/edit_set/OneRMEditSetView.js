@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Text,
     View,
@@ -26,6 +26,7 @@ import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 
 import * as Device from 'app/utility/Device';
+import SetData from 'app/shared_features/set_card/expanded/SetData';
 
 // TODO: add a close button on this shit
 class OneRMEditSetView extends Component {
@@ -101,11 +102,11 @@ class OneRMEditSetView extends Component {
                 );
             case "title":
                 return (<View style={{borderTopWidth: 1, borderColor: '#e0e0e0'}}>
-                            <OneRMEditSetTitleScreen
-                                setID={item.setID}
-                                exercise={item.exercise}
-                                removed={item.removed}
-                                setNumber={item.setNumber}
+                        <OneRMEditSetTitleScreen
+                            setID={item.setID}
+                            exercise={item.exercise}
+                            removed={item.removed}
+                            setNumber={item.setNumber}
                                 isCollapsable={false} />
                         </View>);
             case "analysis":
@@ -116,22 +117,22 @@ class OneRMEditSetView extends Component {
                 // note: on focus will avoid the Redux store for simplicity and just do it through the callback function
                 // technically an action to scroll should be application state and therefore should go through the global store
                 return (<View style={{backgroundColor: 'white'}}>
-                            <OneRMEditSetFormScreen
-                                setID={item.setID}
-                                initialStartTime={item.initialStartTime}
-                                removed={item.removed}
-                                tags={item.tags}
-                                weight={item.weight}
-                                metric={item.metric}
-                                rpe={item.rpe}
+                        <OneRMEditSetFormScreen
+                            setID={item.setID}
+                            initialStartTime={item.initialStartTime}
+                            removed={item.removed}
+                            tags={item.tags}
+                            weight={item.weight}
+                            metric={item.metric}
+                            rpe={item.rpe}
                                 renderDetailComponent={()=> {
                                     if (item.videoFileURL !== null && item.videoFileURL !== undefined) {
                                         return (<OneRMEditSetVideoButtonScreen setID={item.setID} mode='watch' videoFileURL={item.videoFileURL} />);
-                                    } else {
+                                } else {
                                         return (<OneRMEditSetVideoButtonScreen setID={item.setID} mode='commentary' />);
-                                    }
-                                }}
-                            />
+                                }
+                            }}
+                        />
                         </View>);
             case "open 3d button":
                 return (
@@ -139,9 +140,40 @@ class OneRMEditSetView extends Component {
                 );
             case "border":
                 return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
-            case "subheader":
+            case 'reps':
                 return (
-                    <SetDataLabelRow item={item} />
+                    <SetData
+                        item={item}
+                        selectedRowSetID={this.props.selectedRowSetID}
+                        selectedRowRep={this.props.selectedRowRep}
+                        selectedRowDisplayRep={this.props.selectedRowDisplayRep}
+                        selectedRowIsRemoved={this.props.selectedRowIsRemoved}
+                        selectedRowOverlayNumbers={
+                            this.props.selectedRowOverlayNumbers
+                        }
+                        onPressRemove={(setID, rep) =>
+                            this.props.removeRep(setID, rep)
+                        }
+                        onPressRestore={(setID, rep) =>
+                            this.props.restoreRep(setID, rep)
+                        }
+                        onRowSelect={(
+                            setID,
+                            rep,
+                            repDisplay,
+                            overlayNumbers,
+                            isRemoved,
+                        ) =>
+                            this.props.selectRow(
+                                setID,
+                                rep,
+                                repDisplay,
+                                overlayNumbers,
+                                isRemoved,
+                            )
+                        }
+                        onRowDeselect={this.props.deselectRow}
+                    />
                 );
             case "data":
                 return (<SetDataRow item={item}
@@ -163,11 +195,11 @@ class OneRMEditSetView extends Component {
                 ref={(ref) => { this.sectionList = ref; }}
                 keyboardDismissMode='on-drag'
                 keyboardShouldPersistTaps='always'
-                initialNumToRender={13}
-                stickySectionHeadersEnabled={false}
+                    initialNumToRender={13}
+                    stickySectionHeadersEnabled={false}
                 renderItem={({item, index, section}) => this._renderRow(section, index, item)}
                 renderSectionHeader={({section}) => this._renderSectionHeader(section) }
-                sections={this.props.sections}
+                    sections={this.props.sections}
                 style = {{padding: 10, backgroundColor: '#f2f2f2'}}
             />);
         }

@@ -43,6 +43,8 @@ import {
     ANALYSIS_DRAGGED,
     CLEAR_1RM_ANALYTICS,
     TOGGLE_1RM_VIDEO_RECORDER_CAMERA_TYPE,
+    SELECT_1RM_REP_ROW,
+    DESELECT_1RM_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -87,7 +89,7 @@ const defaultState = {
     recordingVideoType: null,
     cameraType: null,
     isRecording: false,
-    isSavingVideo: false,    
+    isSavingVideo: false,
     watchSetID: null,
     watchFileURL: null,
 
@@ -106,6 +108,13 @@ const defaultState = {
     // scroll
     scroll: false, // used to scroll on calculate
     dragged: false, // hack to detect touch drag on the chart and prevent opening set as a result, aka it acts like touch canceled
+
+    // highlight
+    selectedRowSetID: null,
+    selectedRowRep: null,
+    selectedRowDisplayRep: null,
+    selectedRowOverlayNumbers: null,
+    selectedRowIsRemoved: false,
 };
 
 const AnalysisReducer = (state = defaultState, action) => {
@@ -121,7 +130,7 @@ const AnalysisReducer = (state = defaultState, action) => {
                 ...state,
                 showInfoModal: false,
             };
-        case PRESENT_SELECT_EXERCISE: 
+        case PRESENT_SELECT_EXERCISE:
             return Object.assign({}, state, {
                 isEditingExercise: true,
             });
@@ -170,7 +179,7 @@ const AnalysisReducer = (state = defaultState, action) => {
                 ...state,
                 velocitySlider: Number(action.velocity.toFixed(2)),
             };
-        case CHANGE_1RM_DAYS_RANGE: 
+        case CHANGE_1RM_DAYS_RANGE:
             return Object.assign({}, state, {
                 daysRange: action.days,
             });
@@ -184,7 +193,7 @@ const AnalysisReducer = (state = defaultState, action) => {
         case CALC_1RM:
             let storedOneRMAnalytics = state.oneRMAnalytics;
             let currentOneRMAnalytics = action.oneRMAnalytics;
-            
+
             // filter out existing exercise + tags combos
             storedOneRMAnalytics = storedOneRMAnalytics.filter((storedOneRMAnalytic) => {
                 return !compareByExerciseAndTags(storedOneRMAnalytic, currentOneRMAnalytics);
@@ -310,7 +319,7 @@ const AnalysisReducer = (state = defaultState, action) => {
                 watchSetID: null,
                 watchFileURL: null
             });
-        
+
         // analytics
         case SAVE_WORKOUT_REP:
         case SAVE_HISTORY_REP:
@@ -329,8 +338,25 @@ const AnalysisReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 currentRPE: action.rpe,
             });
-
-        default: 
+        case SELECT_1RM_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: action.selectedRowSetID,
+                selectedRowRep: action.selectedRowRep,
+                selectedRowDisplayRep: action.selectedRowDisplayRep,
+                selectedRowOverlayNumbers: action.selectedRowOverlayNumbers,
+                selectedRowIsRemoved: action.selectedRowIsRemoved,
+            };
+        case DESELECT_1RM_REP_ROW:
+            return {
+                ...state,
+                selectedRowSetID: null,
+                selectedRowRep: null,
+                selectedRowDisplayRep: null,
+                selectedRowOverlayNumbers: null,
+                selectedRowIsRemoved: false,
+            };
+        default:
             return state;
     }
 };
@@ -347,7 +373,7 @@ const areArraysEqual = (array1, array2) => {
     if (!array1 || !array2 || array1.length !== array2.length) {
         return false;
     }
-    
+
     return _.isEqual(array1.sort(), array2.sort());
 };
 

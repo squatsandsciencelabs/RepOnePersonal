@@ -47,8 +47,8 @@ import {
     DISMISS_HISTORY_FILTER_END_DATE,
     PRESENT_HISTORY_KRATOS_DISCS,
     DISMISS_HISTORY_KRATOS_DISCS,
-    SELECT_WORKOUT_REP_ROW,
-    DESELECT_WORKOUT_REP_ROW,
+    SELECT_HISTORY_REP_ROW,
+    DESELECT_HISTORY_REP_ROW,
 } from 'app/configs+constants/ActionTypes';
 
 // isEditing for analytics
@@ -117,6 +117,8 @@ const defaultState = {
     selectedRowSetID: null,
     selectedRowRep: null,
     selectedRowDisplayRep: null,
+    selectedRowOverlayNumbers: null,
+    selectedRowIsRemoved: false,
 };
 
 const HistoryReducer = (state = defaultState, action) => {
@@ -387,11 +389,18 @@ const HistoryReducer = (state = defaultState, action) => {
                 endingRepRange,
                 showRemoved,
                 showHistoryFilter: false,
+
+                selectedRowSetID: null,
+                selectedRowRep: null,
+                selectedRowDisplayRep: null,
+                selectedRowOverlayNumbers: null,
+                selectedRowIsRemoved: false,
             };
         }
         case TOGGLE_START_WEIGHT_METRIC: {
             const startingWeightMetric = state.editingStartingWeightMetric;
-            const newStartingWeightMetric = startingWeightMetric === 'kgs' ? 'lbs' : 'kgs';
+            const newStartingWeightMetric =
+                startingWeightMetric === 'kgs' ? 'lbs' : 'kgs';
 
             return {
                 ...state,
@@ -434,19 +443,23 @@ const HistoryReducer = (state = defaultState, action) => {
                 ...state,
                 isEditingEndingDate: false,
             };
-        case SELECT_WORKOUT_REP_ROW:
+        case SELECT_HISTORY_REP_ROW:
             return {
                 ...state,
                 selectedRowSetID: action.selectedRowSetID,
                 selectedRowRep: action.selectedRowRep,
                 selectedRowDisplayRep: action.selectedRowDisplayRep,
+                selectedRowOverlayNumbers: action.selectedRowOverlayNumbers,
+                selectedRowIsRemoved: action.selectedRowIsRemoved,
             };
-        case DESELECT_WORKOUT_REP_ROW:
+        case DESELECT_HISTORY_REP_ROW:
             return {
                 ...state,
                 selectedRowSetID: null,
                 selectedRowRep: null,
                 selectedRowDisplayRep: null,
+                selectedRowOverlayNumbers: null,
+                selectedRowIsRemoved: false,
             };
         default:
             return state;
