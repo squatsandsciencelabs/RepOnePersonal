@@ -150,6 +150,21 @@ export const getDidRestoreSet = (state, set) => (SetUtils.isDeleted(set) !== get
 
 export const getDidUpdateReps = (state) => stateRoot(state).didUpdateReps;
 
+// row highlight
+
+export const getSelectedRowSetID = state => stateRoot(state).selectedRowSetID;
+
+export const getSelectedRowRep = state => stateRoot(state).selectedRowRep;
+
+export const getSelectedRowDisplayRep = state =>
+    stateRoot(state).selectedRowDisplayRep;
+
+export const getSelectedRowOverlayNumbers = state =>
+    stateRoot(state).selectedRowOverlayNumbers;
+
+export const getSelectedRowIsRemoved = state =>
+    stateRoot(state).selectedRowIsRemoved;
+
 // helpers
 
 const isEmpty = (x) => x === null || x === '' || x === undefined;

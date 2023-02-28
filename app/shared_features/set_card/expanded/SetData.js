@@ -10,115 +10,109 @@ import {
 import SetDataLabelRow from './SetDataLabelRow';
 import SetDataRow from './SetDataRow';
 
+const SUBHEADER_HEIGHT = 52;
+const ROW_HEIGHT = 65;
+
 class SetData extends Component {
-    constructor(props) {
-        super(props);
-
-        this.emptySelectedRow = {
-            columns: null,
-            removed: false,
-        };
-
-        this.state = {
-            selectedRow: this.emptySelectedRow,
-        };
-    }
-
     componentWillReceiveProps(nextProps) {
-        if (this.props.item.data !== nextProps.item.data) {
-            this.setState({
-                selectedRow: this.emptySelectedRow,
-            });
+        if (this.props.item.data.length !== nextProps.item.data.length) {
+            this.props.onRowDeselect();
         }
     }
 
     removeRep = (setID, rep) => {
         this.props.onRowDeselect();
-
         this.props.onPressRemove(setID, rep);
-
-        this.setState({
-            selectedRow: this.emptySelectedRow,
-        });
     };
 
     restoreRep = (setID, rep) => {
         this.props.onRowDeselect();
-
         this.props.onPressRestore(setID, rep);
-
-        this.setState({
-            selectedRow: this.emptySelectedRow,
-        });
     };
 
     handleSetDataRowSelect = item => {
-        this.props.onRowSelect(item.setID, item.rep, item.repDisplay);
+        const overlayNumbers = is2dArray(item.columns)
+            ? item.columns.map(column => {
+                  const rowType = column[column.length - 1][0].toUpperCase();
+                  return `${item.repDisplay}${rowType}`;
+              })
+            : [item.repDisplay];
 
-        this.setState({
-            selectedRow: {
-                columns: item.columns || null,
-                removed: item.removed,
-            },
-        });
+        this.props.onRowSelect(
+            item.setID,
+            item.rep,
+            item.repDisplay,
+            overlayNumbers,
+            item.removed,
+        );
     };
 
     handleSetDataRowDeselect = () => {
         this.props.onRowDeselect();
-
-        this.setState({
-            selectedRow: this.emptySelectedRow,
-        });
     };
 
-    renderRowOverlayNumbers() {
-        const columns = this.state.selectedRow.columns;
-
-        if (!columns || !this.props.selectedRowDisplayRep) {
-            return null;
-        }
-        if (is2dArray(columns)) {
+    renderRowOverlay() {
+        if (this.props.item.setID === this.props.selectedRowSetID) {
             return (
-                <View>
-                    {columns.map((column, index) => {
-                        const rowType =
-                            column[column.length - 1][0].toUpperCase();
-                        const itemNumber = this.props.selectedRowDisplayRep;
-                        return (
-                            <View key={`column-${index}`}>
-                                <Text style={[styles.selectedData]}>
-                                    {`${itemNumber}${rowType}`}
-                                </Text>
-                            </View>
-                        );
-                    })}
-                </View>
+                <TouchableOpacity
+                    onPress={this.handleSetDataRowDeselect}
+                    style={[
+                        styles.overlay,
+                        {
+                            marginTop: this.props.selectedRowDisplayRep
+                                ? getOverlayMargin(
+                                      this.props.item.data.length,
+                                      this.props.selectedRowDisplayRep,
+                                      this.props.item.repsAreChronological,
+                                  )
+                                : 0,
+                        },
+                    ]}>
+                    <View style={styles.overlayContentWrapper}>
+                        <View style={styles.overlayNumbersContainer}>
+                            {this.renderRowOverlayNumbers()}
+                        </View>
+                        <View style={styles.leftShadow} />
+                        {this.renderRowOverlayButton()}
+                    </View>
+                </TouchableOpacity>
             );
         }
+        return null;
+    }
+
+    renderRowOverlayNumbers() {
+        if (!this.props.selectedRowOverlayNumbers) {
+            return null;
+        }
+
         return (
             <View>
-                <View key={`data-column-${this.props.selectedRowDisplayRep}`}>
-                    <Text style={[styles.selectedData]}>
-                        {this.props.selectedRowDisplayRep}
-                    </Text>
-                </View>
+                {this.props.selectedRowOverlayNumbers.map((column, index) => {
+                    return (
+                        <View
+                            key={`overlay-numbers-${this.props.selectedRowDisplayRep}-${index}`}>
+                            <Text style={styles.selectedData}>{column}</Text>
+                        </View>
+                    );
+                })}
             </View>
         );
     }
 
     renderRowOverlayButton() {
         const pressHandler =
-            this.state.selectedRow !== this.emptySelectedRow
-                ? this.state.selectedRow.removed
+            this.props.selectedRowSetID !== null
+                ? this.props.selectedRowIsRemoved
                     ? this.restoreRep
                     : this.removeRep
                 : undefined;
 
-        const buttonStyle = this.state.selectedRow.removed
+        const buttonStyle = this.props.selectedRowIsRemoved
             ? styles.restoreRepButton
             : styles.removeRepButton;
 
-        const content = this.state.selectedRow.removed ? (
+        const content = this.props.selectedRowIsRemoved ? (
             <Text style={styles.restoreRepButtonText}>RESTORE REP</Text>
         ) : (
             <Image
@@ -170,33 +164,7 @@ class SetData extends Component {
     render() {
         return (
             <View style={styles.container}>
-                {this.props.item.setID === this.props.selectedRowSetID && (
-                    <TouchableOpacity
-                        onPress={this.handleSetDataRowDeselect}
-                        style={[
-                            styles.overlay,
-                            {
-                                display: !isNaN(this.props.selectedRowRep)
-                                    ? 'flex'
-                                    : 'none',
-                                marginTop: this.props.selectedRowDisplayRep
-                                    ? (this.props.item.data.length -
-                                          this.props.selectedRowDisplayRep) *
-                                          65 +
-                                      52
-                                    : 0,
-                            },
-                        ]}>
-                        <View style={styles.overlayContentWrapper}>
-                            <View style={styles.overlayNumbersContainer}>
-                                {this.renderRowOverlayNumbers()}
-                            </View>
-                            <View style={styles.leftShadow} />
-                            {this.renderRowOverlayButton()}
-                        </View>
-                    </TouchableOpacity>
-                )}
-
+                {this.renderRowOverlay()}
                 {this.renderRowNumbers()}
 
                 <ScrollView
@@ -211,9 +179,9 @@ class SetData extends Component {
                                     <TouchableOpacity
                                         key={`data-row-${index}`}
                                         activeOpacity={1}
-                                        onPress={() => {
-                                            this.handleSetDataRowSelect(item);
-                                        }}
+                                        onPress={() =>
+                                            this.handleSetDataRowSelect(item)
+                                        }
                                         style={styles.setDataRowWrapper}>
                                         <SetDataRow
                                             key={index}
@@ -280,7 +248,7 @@ const styles = StyleSheet.create({
         left: 0,
         backgroundColor: 'rgba(235, 87, 87, 0.1)',
         width: '100%',
-        height: 65,
+        height: ROW_HEIGHT,
         zIndex: 2,
     },
     overlayNumbersContainer: {
@@ -329,7 +297,7 @@ const styles = StyleSheet.create({
     rowNumberWrapper: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: 65,
+        height: ROW_HEIGHT,
     },
     rowNumber: {
         zIndex: 1,
@@ -343,10 +311,15 @@ const styles = StyleSheet.create({
         minWidth: '100%',
     },
     setDataRowWrapper: {
-        height: 65,
+        height: ROW_HEIGHT,
     },
 });
 
 const is2dArray = array => array.every(item => Array.isArray(item));
+
+const getOverlayMargin = (items, displayRep, isChronological) =>
+    isChronological
+        ? (displayRep - 1) * ROW_HEIGHT + SUBHEADER_HEIGHT
+        : (items - displayRep) * ROW_HEIGHT + SUBHEADER_HEIGHT;
 
 export default SetData;

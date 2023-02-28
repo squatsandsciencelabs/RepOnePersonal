@@ -849,12 +849,15 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
 const endSet = (state, action) => {
     let workoutData = state.workoutData;
     let currentSet = workoutData[workoutData.length - 1];
+    const kratosDiscs = state.deviceType === 'Kratos' ? initKratosDiscs : null;
+
     let newWorkoutData = [
         ...workoutData,
         createSet(
             currentSet.setNumber + 1,
             action.defaultMetric,
             state.deviceType,
+            kratosDiscs,
         ),
     ];
 

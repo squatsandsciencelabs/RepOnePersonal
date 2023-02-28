@@ -38,9 +38,8 @@ class HistoryList extends Component {
             nextProps.isFiltering !== this.props.isFiltering;
         const differentSelectedRep =
             nextProps.selectedRowSetID !== this.props.selectedRowSetID ||
-            nextProps.selectedRowRep !== this.props.selectedRep ||
-            nextProps.selectedRowDisplayRep !==
-                this.props.selectedRowDisplayRep;
+            nextProps.selectedRowRep !== this.props.selectedRep;
+
         return (
             differentShowRemoved ||
             differentSections ||
@@ -185,14 +184,30 @@ class HistoryList extends Component {
                         selectedRowSetID={this.props.selectedRowSetID}
                         selectedRowRep={this.props.selectedRowRep}
                         selectedRowDisplayRep={this.props.selectedRowDisplayRep}
+                        selectedRowIsRemoved={this.props.selectedRowIsRemoved}
+                        selectedRowOverlayNumbers={
+                            this.props.selectedRowOverlayNumbers
+                        }
                         onPressRemove={(setID, rep) =>
                             this.props.removeRep(setID, rep)
                         }
                         onPressRestore={(setID, rep) =>
                             this.props.restoreRep(setID, rep)
                         }
-                        onRowSelect={(setID, rep, repDisplay) =>
-                            this.props.selectRow(setID, rep, repDisplay)
+                        onRowSelect={(
+                            setID,
+                            rep,
+                            repDisplay,
+                            overlayNumbers,
+                            isRemoved,
+                        ) =>
+                            this.props.selectRow(
+                                setID,
+                                rep,
+                                repDisplay,
+                                overlayNumbers,
+                                isRemoved,
+                            )
                         }
                         onRowDeselect={this.props.deselectRow}
                     />

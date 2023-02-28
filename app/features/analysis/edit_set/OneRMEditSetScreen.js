@@ -29,7 +29,7 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
     let isInitialSet = false; // to help determine when to display rest time
     let isRemoved = false;
     let title = '';
-    
+
     // ignore if initialStartTime is null as that was a bug, it's supposed to be undefined or an actual date
     sets = sets.filter((set) => set.initialStartTime !== null);
 
@@ -93,11 +93,30 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
                 } else {
                     array.push(createBorder(set));
                 }
-                if (set.reps.length > 0) {
-                    array.push(createSubheaderModel(set, labels, units));
-                }
-                Array.prototype.push.apply(array, createRowViewModels(set, columnsModel));
-                array.push(createFooterVM(set, !isInitialSet && SetUtils.hasUnremovedRep(set) && lastSetEndTime != null ? lastSetEndTime : null));
+
+                // reps
+                const rowVMs = createRowViewModels(set, columnsModel);
+                const subheader = createSubheaderModel(set, labels, units);
+
+                array.push({
+                    type: 'reps',
+                    key: `${set.setID}reps`,
+                    setID: set.setID,
+                    data: rowVMs,
+                    subheader,
+                    repsAreChronological: true,
+                });
+
+                array.push(
+                    createFooterVM(
+                        set,
+                        !isInitialSet &&
+                            SetUtils.hasUnremovedRep(set) &&
+                            lastSetEndTime != null
+                            ? lastSetEndTime
+                            : null,
+                    ),
+                );
             } else {
                 array.push(createRestoreViewModel(set));
             }
@@ -313,16 +332,49 @@ const selectMapStateToProps = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     SettingsSelectors.getDefaultMetric,
-    (setID, workoutID, allSets, columnsModel, labels, units, defaultMetric) => {
+    AnalysisSelectors.getSelectedRowSetID,
+    AnalysisSelectors.getSelectedRowRep,
+    AnalysisSelectors.getSelectedRowDisplayRep,
+    AnalysisSelectors.getSelectedRowIsRemoved,
+    AnalysisSelectors.getSelectedRowOverlayNumbers,
+    (
+        setID,
+        workoutID,
+        allSets,
+        columnsModel,
+        labels,
+        units,
+        defaultMetric,
+        selectedRowSetID,
+        selectedRowRep,
+        selectedRowDisplayRep,
+        selectedRowIsRemoved,
+        selectedRowOverlayNumbers,
+    ) => {
         if (setID) {
-            const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
-            const {title, sections} = createViewModels(sets, setID, columnsModel, labels, units, defaultMetric);
+            const sets = getAnalysisWorkoutSetsChronological(
+                allSets,
+                workoutID,
+            );
+            const { title, sections } = createViewModels(
+                sets,
+                setID,
+                columnsModel,
+                labels,
+                units,
+                defaultMetric,
+            );
 
             return {
                 title: title,
                 setID,
                 sections: sections,
                 isModalShowing: true,
+                selectedRowSetID,
+                selectedRowRep,
+                selectedRowDisplayRep,
+                selectedRowIsRemoved,
+                selectedRowOverlayNumbers,
             };
         } else {
             return {
@@ -330,25 +382,35 @@ const selectMapStateToProps = createSelector(
                 setID: null,
                 sections: [],
                 isModalShowing: false,
+                selectedRowSetID,
+                selectedRowRep,
+                selectedRowDisplayRep,
+                selectedRowIsRemoved,
+                selectedRowOverlayNumbers,
             };
         }
-    }
+    },
 );
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        deleteSet: Actions.deleteSet,
-        restoreSet: Actions.restoreSet,
-        removeRep: Actions.removeRep,
-        restoreRep: Actions.restoreRep,
-        open3D: Actions.open3D,
-        dismissModal: Actions.dismissEditSet,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            deleteSet: Actions.deleteSet,
+            restoreSet: Actions.restoreSet,
+            removeRep: Actions.removeRep,
+            restoreRep: Actions.restoreRep,
+            open3D: Actions.open3D,
+            dismissModal: Actions.dismissEditSet,
+            selectRow: Actions.selectRow,
+            deselectRow: Actions.deselectRow,
+        },
+        dispatch,
+    );
 };
 
 const OneRMEditSetScreen = connect(
     selectMapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(OneRMEditSetView);
 
 export default OneRMEditSetScreen;

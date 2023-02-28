@@ -122,6 +122,7 @@ const createViewModels = (
                 setID: set.setID,
                 data,
                 subheader,
+                repsAreChronological: false,
             });
         }
 
@@ -447,6 +448,10 @@ const mapStateToProps = state => {
         isLoggingIn: AuthSelectors.getIsLoggingIn(state),
         selectedRowSetID: WorkoutSelectors.getSelectedRowSetID(state),
         selectedRowRep: WorkoutSelectors.getSelectedRowRep(state),
+        selectedRowDisplayRep: WorkoutSelectors.getSelectedRowDisplayRep(state),
+        selectedRowIsRemoved: WorkoutSelectors.getSelectedRowIsRemoved(state),
+        selectedRowOverlayNumbers:
+            WorkoutSelectors.getSelectedRowOverlayNumbers(state),
     };
 };
 

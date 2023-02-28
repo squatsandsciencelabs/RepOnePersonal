@@ -60,6 +60,8 @@ const defaultState = {
     selectedRowSetID: null,
     selectedRowRep: null,
     selectedRowDisplayRep: null,
+    selectedRowOverlayNumbers: null,
+    selectedRowIsRemoved: false,
 };
 
 const WorkoutReducer = (state = defaultState, action) => {
@@ -218,6 +220,8 @@ const WorkoutReducer = (state = defaultState, action) => {
                 selectedRowSetID: action.selectedRowSetID,
                 selectedRowRep: action.selectedRowRep,
                 selectedRowDisplayRep: action.selectedRowDisplayRep,
+                selectedRowOverlayNumbers: action.selectedRowOverlayNumbers,
+                selectedRowIsRemoved: action.selectedRowIsRemoved,
             };
         case DESELECT_WORKOUT_REP_ROW:
             return {
@@ -225,6 +229,8 @@ const WorkoutReducer = (state = defaultState, action) => {
                 selectedRowSetID: null,
                 selectedRowRep: null,
                 selectedRowDisplayRep: null,
+                selectedRowOverlayNumbers: null,
+                selectedRowIsRemoved: false,
             };
         default:
             return state;
