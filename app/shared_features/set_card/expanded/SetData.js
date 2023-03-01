@@ -11,7 +11,8 @@ import SetDataLabelRow from './SetDataLabelRow';
 import SetDataRow from './SetDataRow';
 
 const SUBHEADER_HEIGHT = 52;
-const ROW_HEIGHT = 65;
+const ROW_HEIGHT_KRATOS = 65;
+const ROW_HEIGHT_REPONE = 40;
 
 class SetData extends Component {
     componentWillReceiveProps(nextProps) {
@@ -52,18 +53,32 @@ class SetData extends Component {
     };
 
     renderRowOverlay() {
+        let overlayStyles = styles.overlayRepOne;
+        let leftShadowStyles = styles.leftShadowRepOne;
+
+        if (this.props.item.deviceType === 'Kratos') {
+            overlayStyles = styles.overlayKratos;
+            leftShadowStyles = styles.leftShadowKratos;
+        }
+
+        const shadowWidth = this.props.selectedRowIsRemoved
+            ? styles.restoreButton
+            : styles.removeButton;
+
         if (this.props.item.setID === this.props.selectedRowSetID) {
             return (
                 <TouchableOpacity
                     onPress={this.handleSetDataRowDeselect}
                     style={[
                         styles.overlay,
+                        overlayStyles,
                         {
                             marginTop: this.props.selectedRowDisplayRep
                                 ? getOverlayTopPosition(
                                       this.props.item.data.length,
                                       this.props.selectedRowDisplayRep,
                                       this.props.item.repsAreChronological,
+                                      this.props.item.deviceType,
                                   )
                                 : 0,
                         },
@@ -72,7 +87,13 @@ class SetData extends Component {
                         <View style={styles.overlayNumbersContainer}>
                             {this.renderRowOverlayNumbers()}
                         </View>
-                        <View style={styles.leftShadow} />
+                        <View
+                            style={[
+                                styles.leftShadow,
+                                leftShadowStyles,
+                                shadowWidth,
+                            ]}
+                        />
                         {this.renderRowOverlayButton()}
                     </View>
                 </TouchableOpacity>
@@ -85,6 +106,10 @@ class SetData extends Component {
         if (!this.props.selectedRowOverlayNumbers) {
             return null;
         }
+        const overlayNumbersStyle =
+            this.props.item.deviceType === 'Kratos'
+                ? [styles.selectedData]
+                : [styles.selectedData, styles.selectedDataRepOne];
 
         return (
             <View>
@@ -92,7 +117,7 @@ class SetData extends Component {
                     return (
                         <View
                             key={`overlay-numbers-${this.props.selectedRowDisplayRep}-${index}`}>
-                            <Text style={styles.selectedData}>{column}</Text>
+                            <Text style={overlayNumbersStyle}>{column}</Text>
                         </View>
                     );
                 })}
@@ -136,12 +161,17 @@ class SetData extends Component {
     }
 
     renderRowNumbers() {
+        const rowNumberWrapperStyles =
+            this.props.item.deviceType === 'Kratos'
+                ? styles.rowNumberWrapperKratos
+                : styles.rowNumberWrapperRepOne;
+
         return (
             <View style={styles.rowNumbersWrapper}>
                 {this.props.item.data.map(data => {
                     return (
                         <View
-                            style={styles.rowNumberWrapper}
+                            style={rowNumberWrapperStyles}
                             key={`rep-${data.rep}`}>
                             <Text
                                 style={[
@@ -162,6 +192,10 @@ class SetData extends Component {
     }
 
     render() {
+        const setDataRowWrapperStyles =
+            this.props.item.deviceType === 'Kratos'
+                ? styles.setDataRowWrapperKratos
+                : styles.setDataRowWrapperRepOne;
         return (
             <View style={styles.container}>
                 {this.renderRowOverlay()}
@@ -182,7 +216,7 @@ class SetData extends Component {
                                         onPress={() =>
                                             this.handleSetDataRowSelect(item)
                                         }
-                                        style={styles.setDataRowWrapper}>
+                                        style={setDataRowWrapperStyles}>
                                         <SetDataRow
                                             key={index}
                                             item={item}
@@ -218,20 +252,26 @@ const styles = StyleSheet.create({
     selectedData: {
         color: '#EB5757',
     },
+    selectedDataRepOne: {
+        fontSize: 24,
+        fontWeight: '300',
+    },
     removeRepButton: {
         backgroundColor: '#FDEEEE',
-        width: 57,
+        width: 45,
         height: '100%',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         position: 'absolute',
+        paddingRight: 15,
         right: 0,
     },
     restoreRepButton: {
         backgroundColor: '#FDEEEE',
-        width: 57,
+        width: 75,
         height: '100%',
         justifyContent: 'center',
+        alignItems: 'flex-end',
         position: 'absolute',
         right: 0,
     },
@@ -240,16 +280,24 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 10,
         lineHeight: 12,
-        width: 57,
+        width: 55,
+
         textAlign: 'center',
+        fontFamily: 'RobotoCondensed-Regular',
+        paddingRight: 15,
     },
     overlay: {
         position: 'absolute',
         left: 0,
         backgroundColor: 'rgba(235, 87, 87, 0.1)',
         width: '100%',
-        height: ROW_HEIGHT,
         zIndex: 2,
+    },
+    overlayKratos: {
+        height: ROW_HEIGHT_KRATOS,
+    },
+    overlayRepOne: {
+        height: ROW_HEIGHT_REPONE,
     },
     overlayNumbersContainer: {
         backgroundColor: '#FDEEEE',
@@ -269,7 +317,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         zIndex: 1,
-        paddingTop: 50,
+        paddingTop: SUBHEADER_HEIGHT,
         width: 46,
         backgroundColor: 'white',
         shadowColor: '#fff',
@@ -280,9 +328,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.92,
         shadowRadius: 7,
     },
+
+    removeButton: {
+        width: 45,
+    },
+    restoreButton: {
+        width: 75,
+    },
     leftShadow: {
-        height: 55,
-        width: 57,
         zIndex: 0,
         backgroundColor: '#FDEEEE',
 
@@ -294,10 +347,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.92,
         shadowRadius: 7,
     },
-    rowNumberWrapper: {
+    leftShadowRepOne: {
+        height: 25,
+    },
+    leftShadowKratos: {
+        height: 55,
+    },
+    rowNumberWrapperKratos: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: ROW_HEIGHT,
+        height: ROW_HEIGHT_KRATOS,
+    },
+    rowNumberWrapperRepOne: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: ROW_HEIGHT_REPONE,
     },
     rowNumber: {
         zIndex: 1,
@@ -310,16 +374,27 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         minWidth: '100%',
     },
-    setDataRowWrapper: {
-        height: ROW_HEIGHT,
+    setDataRowWrapperKratos: {
+        height: ROW_HEIGHT_KRATOS,
+    },
+    setDataRowWrapperRepOne: {
+        height: ROW_HEIGHT_REPONE,
     },
 });
 
 const is2dArray = array => array.every(item => Array.isArray(item));
 
-const getOverlayTopPosition = (items, displayRep, isChronological) =>
-    isChronological
-        ? (displayRep - 1) * ROW_HEIGHT + SUBHEADER_HEIGHT
-        : (items - displayRep) * ROW_HEIGHT + SUBHEADER_HEIGHT;
+const getOverlayTopPosition = (
+    items,
+    displayRep,
+    isChronological,
+    deviceType,
+) => {
+    const rowHeight =
+        deviceType === 'Kratos' ? ROW_HEIGHT_KRATOS : ROW_HEIGHT_REPONE;
+    return isChronological
+        ? (displayRep - 1) * rowHeight + SUBHEADER_HEIGHT
+        : (items - displayRep) * rowHeight + SUBHEADER_HEIGHT;
+};
 
 export default SetData;

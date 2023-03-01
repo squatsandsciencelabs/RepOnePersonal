@@ -105,6 +105,7 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
                     data: rowVMs,
                     subheader,
                     repsAreChronological: true,
+                    deviceType: set.deviceType,
                 });
 
                 array.push(

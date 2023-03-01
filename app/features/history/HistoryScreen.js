@@ -148,6 +148,7 @@ const createViewModels = (
                 data,
                 subheader,
                 repsAreChronological: true,
+                deviceType: set.deviceType,
             });
         }
 
