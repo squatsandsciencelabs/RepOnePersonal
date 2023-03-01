@@ -16,6 +16,7 @@
 		1645C531295D56CB00850EE4 /* foobar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645C530295D56CB00850EE4 /* foobar.swift */; };
 		1645C538295D578900850EE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1645C537295D578900850EE4 /* GoogleService-Info.plist */; };
 		2984226BE218D91684436A93 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3104256CFA66A1F962AFA5 /* ExpoModulesProvider.swift */; };
+		63869C6F9C6D46C0AE348382 /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B259ADA427C45208C4F594F /* RobotoCondensed-Regular.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-RepOnePersonal-RepOnePersonalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-RepOnePersonal-RepOnePersonalTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -34,6 +35,7 @@
 		00E356EE1AD99517003FC87E /* RepOnePersonalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RepOnePersonalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RepOnePersonalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RepOnePersonalTests.m; sourceTree = "<group>"; };
+		0B259ADA427C45208C4F594F /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../assets/fonts/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RepOnePersonal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RepOnePersonal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RepOnePersonal/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = RepOnePersonal/AppDelegate.mm; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				F85ECAF8E734B42286A2526A /* ExpoModulesProviders */,
+				A96B2FF7C8B849A6BE8CE0D6 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -158,6 +161,15 @@
 				00E356EE1AD99517003FC87E /* RepOnePersonalTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A96B2FF7C8B849A6BE8CE0D6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0B259ADA427C45208C4F594F /* RobotoCondensed-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		B7FA75CB3F44E1C805E3213C /* RepOnePersonal */ = {
@@ -287,6 +299,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				1645C538295D578900850EE4 /* GoogleService-Info.plist in Resources */,
+				63869C6F9C6D46C0AE348382 /* RobotoCondensed-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
