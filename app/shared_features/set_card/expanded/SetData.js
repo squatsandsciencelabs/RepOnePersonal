@@ -60,7 +60,7 @@ class SetData extends Component {
                         styles.overlay,
                         {
                             marginTop: this.props.selectedRowDisplayRep
-                                ? getOverlayMargin(
+                                ? getOverlayTopPosition(
                                       this.props.item.data.length,
                                       this.props.selectedRowDisplayRep,
                                       this.props.item.repsAreChronological,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
 
 const is2dArray = array => array.every(item => Array.isArray(item));
 
-const getOverlayMargin = (items, displayRep, isChronological) =>
+const getOverlayTopPosition = (items, displayRep, isChronological) =>
     isChronological
         ? (displayRep - 1) * ROW_HEIGHT + SUBHEADER_HEIGHT
         : (items - displayRep) * ROW_HEIGHT + SUBHEADER_HEIGHT;
