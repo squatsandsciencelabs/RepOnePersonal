@@ -123,6 +123,7 @@ const createViewModels = (
                 data,
                 subheader,
                 repsAreChronological: false,
+                deviceType: set.deviceType,
             });
         }
 
