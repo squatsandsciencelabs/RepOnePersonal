@@ -76,9 +76,14 @@ export const getDurations = set => {
 
 export const getPeakForces = set => {
     getMetrics(set, r => {
-        const mass = getKratosDiscsMass(set.kratosDiscMass);
-        return mass && r.peakLinearAcceleration
-            ? r.peakLinearAcceleration * mass
+        if (set.deviceType === 'Kratos') {
+            const mass = getKratosDiscsMass(set.kratosDiscs);
+            return mass && r.peakLinearAcceleration
+                ? r.peakLinearAcceleration * mass
+                : null;
+        }
+        return r.peakForce !== null && r.peakForce !== undefined
+            ? r.peakForce
             : null;
     });
 };
@@ -99,8 +104,13 @@ export const getAverageForces = set =>
 
 export const getPeakPowers = set =>
     getMetrics(set, r => {
-        const mass = getKratosDiscsMass(set);
-        return r.peakPower && mass ? r.peakPower * mass : null;
+        if (set.deviceType === 'Kratos') {
+            const mass = getKratosDiscsMass(set.kratosDiscs);
+            return r.peakPower && mass ? r.peakPower * mass : null;
+        }
+        return r.peakPower !== null && r.peakPower !== undefined
+            ? r.peakPower
+            : null;
     });
 
 export const getPeakPowerHeights = set =>
@@ -122,7 +132,16 @@ export const getLinear3DAvgVelocities = set =>
 
 export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 
-export const getWorks = set => getMetrics(set, r => r.peakForce * r.rom);
+export const getWorks = set =>
+    getMetrics(set, r => {
+        if (set.deviceType === 'Kratos') {
+            const mass = getKratosDiscsMass(set.kratosDiscs);
+            return mass && r.peakLinearAcceleration
+                ? r.peakLinearAcceleration * mass * r.rom
+                : null;
+        }
+        return r.peakForce * r.rom;
+    });
 
 // Average Quantifiers
 
@@ -201,8 +220,8 @@ export const getAvgPeakPowerHeight = set => {
 };
 
 export const getAvgWork = set => {
-    const work = getWorks(set);
-    return getAvgOfMetrics(work);
+    const works = getWorks(set);
+    return getAvgOfMetrics(works);
 };
 
 // Absolute Loss Quantifiers
@@ -284,8 +303,8 @@ export const getAbsLossOfPeakPowerHeights = set => {
 };
 
 export const getAbsLossOfWork = set => {
-    const work = getWorks(set);
-    return getAbsLossOfMetrics(work);
+    const works = getWorks(set);
+    return getAbsLossOfMetrics(works);
 };
 // Percent Loss Quantifiers
 
@@ -366,8 +385,8 @@ export const getPercentLossOfPeakPowerHeights = set => {
 };
 
 export const getPercentLossOfWork = set => {
-    const work = getWorks(set);
-    return getPercentLossOfMetrics(work);
+    const works = getWorks(set);
+    return getPercentLossOfMetrics(works);
 };
 // First Rep Quantifiers
 
@@ -525,8 +544,8 @@ export const getLastLinear3DROM = set => {
 };
 
 export const getLastWork = set => {
-    const work = getWorks(set);
-    return getLastRepMetrics(work);
+    const works = getWorks(set);
+    return getLastRepMetrics(works);
 };
 // Get Min Quantifiers
 
@@ -604,8 +623,8 @@ export const getMinLinear3DROM = set => {
 };
 
 export const getMinWork = set => {
-    const work = getWorks(set);
-    return getMinMetrics(work);
+    const works = getWorks(set);
+    return getMinMetrics(works);
 };
 
 // Get Max Quantifiers
@@ -684,8 +703,8 @@ export const getMaxLinear3DROM = set => {
 };
 
 export const getMaxWork = set => {
-    const work = getWorks(set);
-    return getMaxMetrics(work);
+    const works = getWorks(set);
+    return getMaxMetrics(works);
 };
 // Peak-End
 
@@ -751,8 +770,8 @@ export const getPeakEndOfLinear3DROMs = set => {
 };
 
 export const getPeakEndOfWork = set => {
-    const work = getWorks(set);
-    return getPeakEndMetrics(work);
+    const works = getWorks(set);
+    return getPeakEndMetrics(works);
 };
 
 // Set Loss
@@ -819,8 +838,8 @@ export const getSetLossOfLinear3DROMs = set => {
 };
 
 export const getSetLossOfWork = set => {
-    const work = getWorks(set);
-    return getSetLossMetrics(work);
+    const works = getWorks(set);
+    return getSetLossMetrics(works);
 };
 
 // RPE 1RM
@@ -1077,14 +1096,6 @@ export const getFastestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getDurations, false);
 };
 
-export const getFastestAvgForceEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getAverageForces);
-};
-
-export const getFastestAvgPowerEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getAveragePowers);
-};
-
 export const getFastestLinear3DAvgVelocityEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getLinear3DAvgVelocities);
 };
@@ -1099,14 +1110,6 @@ export const getSlowestPKVEver = (set, allSets) => {
 
 export const getSlowestDurationEver = (set, allSets) => {
     return getBestEverOfMetric(set, allSets, getDurations);
-};
-
-export const getSlowestAvgForceEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getAverageForces, false);
-};
-
-export const getSlowestAvgPowerEver = (set, allSets) => {
-    return getBestEverOfMetric(set, allSets, getAveragePowers, false);
 };
 
 export const getSlowestLinear3DAvgVelocityEver = (set, allSets) => {
@@ -1298,10 +1301,14 @@ export const getPhaseString = phase => {
 // HELPERS
 
 const getKratosDiscsMass = kratosDiscs => {
-    return kratosDiscs
-        ? Object.entries(kratosDiscs)
-              .filter(disc => !!disc[1])
-              .map(disc => kratosDiscMass[disc[0]])
-              .reduce((acc, disc) => acc + disc, 0)
-        : null;
+    if (!kratosDiscs) {
+        return null;
+    }
+
+    const sum = Object.entries(kratosDiscs)
+        .filter(disc => !!disc[1])
+        .map(disc => kratosDiscMass[disc[0]])
+        .reduce((acc, disc) => acc + disc, 0);
+
+    return sum === 0 ? 1 : sum;
 };
