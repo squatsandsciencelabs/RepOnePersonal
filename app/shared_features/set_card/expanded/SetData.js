@@ -11,8 +11,9 @@ import SetDataLabelRow from './SetDataLabelRow';
 import SetDataRow from './SetDataRow';
 
 const SUBHEADER_HEIGHT = 52;
-const ROW_HEIGHT_KRATOS = 65;
-const ROW_HEIGHT_REPONE = 40;
+// CE - both concentric and eccentric data
+const ROW_HEIGHT_C_E = 65;
+const ROW_HEIGHT = 40;
 
 class SetData extends Component {
     componentWillReceiveProps(nextProps) {
@@ -53,12 +54,12 @@ class SetData extends Component {
     };
 
     renderRowOverlay() {
-        let overlayStyles = styles.overlayRepOne;
-        let leftShadowStyles = styles.leftShadowRepOne;
+        let overlayStyles = styles.overlayHeight;
+        let leftShadowStyles = styles.leftShadowHeight;
 
         if (this.props.item.deviceType === 'Kratos') {
-            overlayStyles = styles.overlayKratos;
-            leftShadowStyles = styles.leftShadowKratos;
+            overlayStyles = styles.overlayHeightCE;
+            leftShadowStyles = styles.leftShadowHeightCE;
         }
 
         const shadowWidth = this.props.selectedRowIsRemoved
@@ -109,7 +110,7 @@ class SetData extends Component {
         const overlayNumbersStyle =
             this.props.item.deviceType === 'Kratos'
                 ? [styles.selectedData]
-                : [styles.selectedData, styles.selectedDataRepOne];
+                : [styles.selectedData, styles.selectedDataBigNumber];
 
         return (
             <View>
@@ -163,8 +164,8 @@ class SetData extends Component {
     renderRowNumbers() {
         const rowNumberWrapperStyles =
             this.props.item.deviceType === 'Kratos'
-                ? styles.rowNumberWrapperKratos
-                : styles.rowNumberWrapperRepOne;
+                ? styles.rowNumberWrapperCE
+                : styles.rowNumberWrapper;
 
         return (
             <View style={styles.rowNumbersWrapper}>
@@ -194,8 +195,8 @@ class SetData extends Component {
     render() {
         const setDataRowWrapperStyles =
             this.props.item.deviceType === 'Kratos'
-                ? styles.setDataRowWrapperKratos
-                : styles.setDataRowWrapperRepOne;
+                ? styles.setDataRowWrapperCE
+                : styles.setDataRowWrapper;
         return (
             <View style={styles.container}>
                 {this.renderRowOverlay()}
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     selectedData: {
         color: '#EB5757',
     },
-    selectedDataRepOne: {
+    selectedDataBigNumber: {
         fontSize: 24,
         fontWeight: '300',
     },
@@ -293,11 +294,11 @@ const styles = StyleSheet.create({
         width: '100%',
         zIndex: 2,
     },
-    overlayKratos: {
-        height: ROW_HEIGHT_KRATOS,
+    overlayHeightCE: {
+        height: ROW_HEIGHT_C_E,
     },
-    overlayRepOne: {
-        height: ROW_HEIGHT_REPONE,
+    overlayHeight: {
+        height: ROW_HEIGHT,
     },
     overlayNumbersContainer: {
         backgroundColor: '#FDEEEE',
@@ -347,21 +348,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.92,
         shadowRadius: 7,
     },
-    leftShadowRepOne: {
+    leftShadowHeight: {
         height: 25,
     },
-    leftShadowKratos: {
+    leftShadowHeightCE: {
         height: 55,
     },
-    rowNumberWrapperKratos: {
+    rowNumberWrapperCE: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: ROW_HEIGHT_KRATOS,
+        height: ROW_HEIGHT_C_E,
     },
-    rowNumberWrapperRepOne: {
+    rowNumberWrapper: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: ROW_HEIGHT_REPONE,
+        height: ROW_HEIGHT,
     },
     rowNumber: {
         zIndex: 1,
@@ -374,11 +375,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         minWidth: '100%',
     },
-    setDataRowWrapperKratos: {
-        height: ROW_HEIGHT_KRATOS,
+    setDataRowWrapperCE: {
+        height: ROW_HEIGHT_C_E,
     },
-    setDataRowWrapperRepOne: {
-        height: ROW_HEIGHT_REPONE,
+    setDataRowWrapper: {
+        height: ROW_HEIGHT,
     },
 });
 
@@ -390,8 +391,7 @@ const getOverlayTopPosition = (
     isChronological,
     deviceType,
 ) => {
-    const rowHeight =
-        deviceType === 'Kratos' ? ROW_HEIGHT_KRATOS : ROW_HEIGHT_REPONE;
+    const rowHeight = deviceType === 'Kratos' ? ROW_HEIGHT_C_E : ROW_HEIGHT;
     return isChronological
         ? (displayRep - 1) * rowHeight + SUBHEADER_HEIGHT
         : (items - displayRep) * rowHeight + SUBHEADER_HEIGHT;
