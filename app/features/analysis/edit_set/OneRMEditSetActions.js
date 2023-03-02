@@ -9,7 +9,7 @@ import * as Analytics from 'app/services/Analytics';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
-export const deleteSet = (setID) => (dispatch, getState) => {
+export const deleteSet = setID => (dispatch, getState) => {
     const state = getState();
     if (SetsSelectors.getIsWorkoutSet(state, setID)) {
         dispatch(SetsActionCreators.deleteWorkoutSet(setID));
@@ -18,7 +18,7 @@ export const deleteSet = (setID) => (dispatch, getState) => {
     }
 };
 
-export const restoreSet = (setID) => (dispatch, getState) => {
+export const restoreSet = setID => (dispatch, getState) => {
     const state = getState();
     if (SetsSelectors.getIsWorkoutSet(state, setID)) {
         dispatch(SetsActionCreators.restoreWorkoutSet(setID));
@@ -51,7 +51,7 @@ export const dismissEditSet = () => (dispatch, getState) => {
     Analytics.setCurrentScreen('analysis');
 
     dispatch({
-        type: DISMISS_EDIT_1RM_SET
+        type: DISMISS_EDIT_1RM_SET,
     });
 };
 
@@ -65,7 +65,10 @@ export const open3D = setID => {
 
 export const selectRow =
     (setID, rep, repDisplay, overlayNumbers, isRemoved) =>
-    (dispatch, getState) =>
+    (dispatch, getState) => {
+        const state = getState();
+        logSelectRowAnalytics(state);
+
         dispatch({
             type: SELECT_1RM_REP_ROW,
             selectedRowSetID: setID,
@@ -74,8 +77,12 @@ export const selectRow =
             selectedRowOverlayNumbers: overlayNumbers,
             selectedRowIsRemoved: isRemoved,
         });
+    };
 
 export const deselectRow = () => (dispatch, getState) => {
+    const state = getState();
+    logDeselectRowAnalytics(state);
+
     dispatch({
         type: DESELECT_1RM_REP_ROW,
     });
@@ -83,11 +90,14 @@ export const deselectRow = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logCloseEditSetAnalytics = (state) => {
+const logCloseEditSetAnalytics = state => {
     const setID = AnalysisSelectors.getSetID(state);
     const set = SetsSelectors.getSet(state, setID);
 
-    const didChangeExercise = AnalysisSelectors.getDidUpdateExerciseName(state, set);
+    const didChangeExercise = AnalysisSelectors.getDidUpdateExerciseName(
+        state,
+        set,
+    );
     const didChangeWeight = AnalysisSelectors.getDidUpdateWeight(state, set);
     const didChangeMetric = AnalysisSelectors.getDidUpdateMetric(state, set);
     const didChangeRPE = AnalysisSelectors.getDidUpdateRPE(state, set);
@@ -97,9 +107,19 @@ const logCloseEditSetAnalytics = (state) => {
     const didRestoreSet = AnalysisSelectors.getDidRestoreSet(state, set);
     const wasError = AnalysisSelectors.getWasError(state);
 
-    const didEditSet = didChangeExercise || didChangeWeight || didChangeMetric || didChangeRPE || didChangeTags || didChangeReps || didDeleteSet || didRestoreSet;
+    const didEditSet =
+        didChangeExercise ||
+        didChangeWeight ||
+        didChangeMetric ||
+        didChangeRPE ||
+        didChangeTags ||
+        didChangeReps ||
+        didDeleteSet ||
+        didRestoreSet;
 
-    Analytics.logEventWithAppState('one_rm_close_edit_set', {
+    Analytics.logEventWithAppState(
+        'one_rm_close_edit_set',
+        {
             did_edit_set: didEditSet,
             did_change_exercise: didChangeExercise,
             did_change_weight: didChangeWeight,
@@ -110,5 +130,29 @@ const logCloseEditSetAnalytics = (state) => {
             did_delete_set: didDeleteSet,
             did_restore_set: didRestoreSet,
             was_error: wasError,
-    }, state);
+        },
+        state,
+    );
+};
+
+const logSelectRowAnalytics = state => {
+    const setID = AnalysisSelectors.getSelectedRowSetID(state);
+    const isRepRemoved = AnalysisSelectors.getSelectedRowIsRemoved(state);
+    const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
+
+    Analytics.logEventWithAppState('one_rm_select_row', {
+        is_removed: isRepRemoved,
+        is_working_set: isWorkingSet,
+    });
+};
+
+const logDeselectRowAnalytics = state => {
+    const setID = AnalysisSelectors.getSelectedRowSetID(state);
+    const isRepRemoved = AnalysisSelectors.getSelectedRowIsRemoved(state);
+    const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
+
+    Analytics.logEventWithAppState('one_rm_deselect_row', {
+        is_removed: isRepRemoved,
+        is_working_set: isWorkingSet,
+    });
 };
