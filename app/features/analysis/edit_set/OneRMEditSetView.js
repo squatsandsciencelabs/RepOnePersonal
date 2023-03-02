@@ -30,12 +30,14 @@ import SetData from 'app/shared_features/set_card/expanded/SetData';
 
 // TODO: add a close button on this shit
 class OneRMEditSetView extends Component {
-
     // UPDATE
 
     shouldComponentUpdate(nextProps) {
         const differentSections = nextProps.sections !== this.props.sections;
-        return differentSections;
+        const differentSelectedRep =
+            nextProps.selectedRowSetID !== this.props.selectedRowSetID ||
+            nextProps.selectedRowRep !== this.props.selectedRep;
+        return differentSections || differentSelectedRep;
     }
 
     // RENDER
@@ -175,11 +177,6 @@ class OneRMEditSetView extends Component {
                         onRowDeselect={this.props.deselectRow}
                     />
                 );
-            case "data":
-                return (<SetDataRow item={item}
-                            onPressRemove={() =>this.props.removeRep(item.setID, item.rep) }
-                            onPressRestore={() => this.props.restoreRep(item.setID, item.rep) }
-                        />);
             case "footer":
                 // shouldn't need open 3d as it should never open 3d from here
                 return (<SetFooterRow item={item} onPressDelete={this.props.deleteSet} />);

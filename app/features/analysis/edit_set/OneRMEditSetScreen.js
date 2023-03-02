@@ -322,9 +322,7 @@ const getAnalysisWorkoutSetsChronological = (sets, workoutID) => {
     return analysisSets;
 };
 
-// map state
-
-const selectMapStateToProps = createSelector(
+const getSections = createSelector(
     AnalysisSelectors.getSetID,
     AnalysisSelectors.getWorkoutID,
     SetsSelectors.getAllSets,
@@ -332,65 +330,52 @@ const selectMapStateToProps = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     SettingsSelectors.getDefaultMetric,
-    AnalysisSelectors.getSelectedRowSetID,
-    AnalysisSelectors.getSelectedRowRep,
-    AnalysisSelectors.getSelectedRowDisplayRep,
-    AnalysisSelectors.getSelectedRowIsRemoved,
-    AnalysisSelectors.getSelectedRowOverlayNumbers,
-    (
-        setID,
-        workoutID,
-        allSets,
-        columnsModel,
-        labels,
-        units,
-        defaultMetric,
-        selectedRowSetID,
-        selectedRowRep,
-        selectedRowDisplayRep,
-        selectedRowIsRemoved,
-        selectedRowOverlayNumbers,
-    ) => {
-        if (setID) {
-            const sets = getAnalysisWorkoutSetsChronological(
-                allSets,
-                workoutID,
-            );
-            const { title, sections } = createViewModels(
-                sets,
-                setID,
-                columnsModel,
-                labels,
-                units,
-                defaultMetric,
-            );
-
-            return {
-                title: title,
-                setID,
-                sections: sections,
-                isModalShowing: true,
-                selectedRowSetID,
-                selectedRowRep,
-                selectedRowDisplayRep,
-                selectedRowIsRemoved,
-                selectedRowOverlayNumbers,
-            };
-        } else {
-            return {
-                title: '',
-                setID: null,
-                sections: [],
-                isModalShowing: false,
-                selectedRowSetID,
-                selectedRowRep,
-                selectedRowDisplayRep,
-                selectedRowIsRemoved,
-                selectedRowOverlayNumbers,
-            };
-        }
+    (setID, workoutID, allSets, columnsModel, labels, units, defaultMetric) => {
+        const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
+        const sections = createViewModels(
+            sets,
+            setID,
+            columnsModel,
+            labels,
+            units,
+            defaultMetric,
+        );
+        return sections;
     },
 );
+
+const mapStateToProps = state => {
+    const setID = AnalysisSelectors.getSetID(state);
+    if (setID) {
+        const { title, sections } = getSections(state);
+        const isModalShowing = true;
+        const selectedRowSetID = AnalysisSelectors.getSelectedRowSetID(state);
+        const selectedRowRep = AnalysisSelectors.getSelectedRowRep(state);
+        const selectedRowDisplayRep =
+            AnalysisSelectors.getSelectedRowDisplayRep(state);
+        const selectedRowIsRemoved =
+            AnalysisSelectors.getSelectedRowIsRemoved(state);
+        const selectedRowOverlayNumbers =
+            AnalysisSelectors.getSelectedRowOverlayNumbers(state);
+        return {
+            title,
+            setID,
+            sections,
+            isModalShowing,
+            selectedRowSetID,
+            selectedRowRep,
+            selectedRowDisplayRep,
+            selectedRowIsRemoved,
+            selectedRowOverlayNumbers,
+        };
+    }
+    return {
+        title: '',
+        setID: null,
+        sections: [],
+        isModalShowing: false,
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
@@ -409,7 +394,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const OneRMEditSetScreen = connect(
-    selectMapStateToProps,
+    mapStateToProps,
     mapDispatchToProps,
 )(OneRMEditSetView);
 
