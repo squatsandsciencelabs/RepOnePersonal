@@ -32,8 +32,7 @@ import {
     POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
-import { kratosDiscWeights } from 'app/configs+constants/KratosConfig';
-import * as WeightConversion from 'app/utility/WeightConversion';
+import { getTotalKratosDiscsMass } from 'app/utility/KratosUtils';
 
 // unique metrics
 
@@ -1300,19 +1299,4 @@ export const getPhaseString = phase => {
         default:
             return null;
     }
-};
-
-// HELPERS
-
-const getTotalKratosDiscsMass = kratosDiscs => {
-    if (!kratosDiscs) {
-        return null;
-    }
-
-    const sum = Object.entries(kratosDiscs)
-        .filter(disc => !!disc[1])
-        .map(disc => kratosDiscWeights[disc[0]] * disc[1])
-        .reduce((acc, disc) => acc + disc, 0);
-
-    return sum === 0 ? 1 : WeightConversion.weightInKGs('lbs', sum);
 };

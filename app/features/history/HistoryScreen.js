@@ -15,6 +15,7 @@ import * as Actions from './HistoryActions';
 import HistoryList from './HistoryList';
 import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
+import * as KratosColumnsSettingsSelectors from 'app/redux/selectors/KratosColumnsSettingsSelectors';
 
 // assumes chronological sets
 const createViewModels = (
@@ -24,6 +25,9 @@ const createViewModels = (
     columnLabels,
     columnUnits,
     shouldShowRemoved,
+    kratosColumnsModel,
+    kratosColumnLabels,
+    kratosColumnUnits,
 ) => {
     // declare variables
     let sections = []; // the return value
@@ -134,12 +138,16 @@ const createViewModels = (
                 set,
                 columnsModel,
                 shouldShowRemoved,
+                kratosColumnsModel,
             );
-            const subheader = createSubheaderModel(
-                set,
-                columnLabels,
-                columnUnits,
-            );
+            const subheader =
+                set.deviceType === 'Kratos'
+                    ? createSubheaderModel(
+                          set,
+                          kratosColumnLabels,
+                          kratosColumnUnits,
+                      )
+                    : createSubheaderModel(set, columnLabels, columnUnits);
 
             array.push({
                 type: 'reps',
@@ -302,7 +310,12 @@ const createSubheaderModel = (set, labels, units) => ({
     units,
 });
 
-const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
+const createRowViewModels = (
+    set,
+    columnsModel,
+    shouldShowRemoved,
+    kratosColumnsModel,
+) => {
     let array = [];
 
     for (let i = 0, repCount = 0; i < set.reps.length; i++) {
@@ -331,7 +344,7 @@ const createRowViewModels = (set, columnsModel, shouldShowRemoved) => {
         if (rep.deviceFamily === 'Kratos') {
             const resultReps = SetUtils.getKratosRepRows(rep);
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
-                const model = columnsModel.map(m =>
+                const model = kratosColumnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
                 );
                 // last element of the array is rowType - eccentric || concentric
@@ -389,6 +402,9 @@ const getHistorySections = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     HistorySelectors.getShowRemoved,
+    KratosColumnsSettingsSelectors.getMetrics,
+    KratosColumnsSettingsSelectors.getColumnLabels,
+    KratosColumnsSettingsSelectors.getColumnUnits,
     (
         sets,
         collapsedModel,
@@ -396,6 +412,9 @@ const getHistorySections = createSelector(
         columnLabels,
         columnUnits,
         shouldShowRemoved,
+        kratosColumnsModel,
+        kratosColumnLabels,
+        kratosColumnUnits,
     ) => {
         return createViewModels(
             sets,
@@ -404,6 +423,9 @@ const getHistorySections = createSelector(
             columnLabels,
             columnUnits,
             shouldShowRemoved,
+            kratosColumnsModel,
+            kratosColumnLabels,
+            kratosColumnUnits,
         );
     },
 );
