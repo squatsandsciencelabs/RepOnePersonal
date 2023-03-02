@@ -13,8 +13,10 @@ import {
     POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
+    WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import THREE from 'three';
+import { getTotalKratosDiscsMass } from 'app/utility/KratosUtils';
 
 export const isDeleted = (set) => {
     if (set.hasOwnProperty('deleted')) {
@@ -100,7 +102,7 @@ export const hasUnremovedRepWith3D = set => {
 export const weightInLBs = (set) => {
     if (!set.hasOwnProperty('weight') || set.weight === null || isNaN(set.weight) || !set.metric) {
         return null;
-    } 
+    }
 
     return WeightConversion.weightInLBs(set.metric, set.weight);
 
@@ -109,7 +111,7 @@ export const weightInLBs = (set) => {
 export const weightInKGs = (set) => {
     if (!set.hasOwnProperty('weight') || set.weight === null || isNaN(set.weight) || !set.metric) {
         return null;
-    } 
+    }
 
     return WeightConversion.weightInKGs(set.metric, set.weight);
 };
@@ -123,7 +125,7 @@ export const numFieldsEntered = (set) => {
             num_fields_entered++;
         }
     });
-    
+
     return num_fields_entered;
 };
 
@@ -257,7 +259,7 @@ export const checkWeightRange = (setWeight, setMetric, startingWeight, startingW
     const setWeightLBs = WeightConversion.weightInLBs(setMetric, setWeight);
     const startingWeightLBs = WeightConversion.weightInLBs(startingWeightMetric, startingWeight);
     const endingWeightLBs = WeightConversion.weightInLBs(endingWeightMetric, endingWeight);
-    
+
     if (!startingWeightLBs && !endingWeightLBs) {
         return true;
     } else if ((startingWeightLBs || endingWeightLBs) && !setWeightLBs) {
@@ -358,7 +360,7 @@ export const getDeltaTimes = (rep, bulkData=null) => {
 
         // save values
         times.push(deltaT);
-    } 
+    }
 
     return times;
 }
@@ -584,7 +586,7 @@ export const getPeakHeight = (bulkDataArray, peakIndex) => {
 // display helpers, mayb should go into another file honestly
 
 const INVALID = 'INV';
-const EMPTY = '-';
+const EMPTY = '---';
 
 export const getDisplayMetric = (metric, rep, set = null) =>
     formatMetric(_getDisplayMetric(metric, rep, set));
@@ -635,6 +637,8 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
         return INVALID;
     }
 
+    let mass = null;
+
     switch (metric) {
         case AVG_VELOCITY_METRIC:
             return rep.avgLinearVelocity
@@ -661,13 +665,18 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
         case FORCE_METRIC:
-            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+            mass = getTotalKratosDiscsMass(set.kratosDiscs);
+            return mass ? rep.peakLinearAcceleration * mass : EMPTY;
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
-            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+            mass = getTotalKratosDiscsMass(set.kratosDiscs);
+            return mass ? rep.peakPower * mass : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
+        case WORK_METRIC:
+            mass = getTotalKratosDiscsMass(set.kratosDiscs);
+            return mass ? rep.peakLinearAcceleration * mass * rep.rom : EMPTY;
         default:
             return INVALID;
     }
