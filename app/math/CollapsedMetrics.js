@@ -32,6 +32,7 @@ import {
     POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
+import { getKratosDiscMass } from 'app/configs+constants/KratosConfig';
 
 // unique metrics
 
@@ -1307,7 +1308,7 @@ const getKratosDiscsMass = kratosDiscs => {
 
     const sum = Object.entries(kratosDiscs)
         .filter(disc => !!disc[1])
-        .map(disc => kratosDiscMass[disc[0]])
+        .map(disc => getKratosDiscMass(disc[0]))
         .reduce((acc, disc) => acc + disc, 0);
 
     return sum === 0 ? 1 : sum;
