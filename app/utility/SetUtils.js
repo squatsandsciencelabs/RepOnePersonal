@@ -666,17 +666,21 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 : INVALID;
         case FORCE_METRIC:
             mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass ? rep.peakLinearAcceleration * mass : EMPTY;
+            return mass
+                ? Number(rep.peakLinearAcceleration * mass).toFixed(2)
+                : EMPTY;
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
             mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass ? rep.peakPower * mass : EMPTY;
+            return mass ? Number(rep.peakPower * mass).toFixed(2) : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case WORK_METRIC:
             mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass ? rep.peakLinearAcceleration * mass * rep.rom : EMPTY;
+            return mass
+                ? Number(rep.peakLinearAcceleration * mass * rep.rom).toFixed(2)
+                : EMPTY;
         default:
             return INVALID;
     }
