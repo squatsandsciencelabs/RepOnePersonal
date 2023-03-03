@@ -16,7 +16,6 @@ import {
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     WORK_METRIC,
-
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -32,6 +31,7 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 import SetAnalysis from './SetAnalysis';
 import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
+import * as KratosCollapsedSettingsSetMetricsSelectors from 'app/redux/selectors/KratosCollapsedSettingsSetMetricsSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
@@ -59,22 +59,32 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getAvgOfAvgVelocities(set);
                     break;
                 case ABS_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAbsLossOfAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getAbsLossOfAvgVelocities(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfAvgVelocities(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSetLossOfAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getSetLossOfAvgVelocities(set);
                     break;
                 case PEAK_END_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPeakEndOfAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getPeakEndOfAvgVelocities(set);
                     break;
                 case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestAvgVelocityEver(set, allSets);
+                    returnValue = CollapsedMetrics.getFastestAvgVelocityEver(
+                        set,
+                        allSets,
+                    );
                     break;
                 case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestAvgVelocityEver(set, allSets);
+                    returnValue = CollapsedMetrics.getSlowestAvgVelocityEver(
+                        set,
+                        allSets,
+                    );
                     break;
             }
             break;
@@ -99,7 +109,8 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getAbsLossOfDurations(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfDurations(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfDurations(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSetLossOfDurations(set);
@@ -108,10 +119,16 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfDurations(set);
                     break;
                 case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestDurationEver(set, allSets);
+                    returnValue = CollapsedMetrics.getFastestDurationEver(
+                        set,
+                        allSets,
+                    );
                     break;
                 case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestDurationEver(set, allSets);
+                    returnValue = CollapsedMetrics.getSlowestDurationEver(
+                        set,
+                        allSets,
+                    );
                     break;
             }
             if (returnValue !== null) {
@@ -204,10 +221,16 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getPeakEndOfPKVs(set);
                     break;
                 case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestPKVEver(set, allSets);
+                    returnValue = CollapsedMetrics.getFastestPKVEver(
+                        set,
+                        allSets,
+                    );
                     break;
                 case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestPKVEver(set, allSets);
+                    returnValue = CollapsedMetrics.getSlowestPKVEver(
+                        set,
+                        allSets,
+                    );
                     break;
             }
             break;
@@ -235,7 +258,8 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getAbsLossOfPeakForces(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfPeakForces(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfPeakForces(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSetLossOfPeakForces(set);
@@ -293,7 +317,8 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getAbsLossOfPeakPowers(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfPeakPowers(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfPeakPowers(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
                     returnValue = CollapsedMetrics.getSetLossOfPeakPowers(set);
@@ -333,37 +358,56 @@ const metricValue = (set, allSets, quantifier, metric) => {
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFirstLinear3DAvgVelocity(set);
+                    returnValue =
+                        CollapsedMetrics.getFirstLinear3DAvgVelocity(set);
                     break;
                 case LAST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getLastLinear3DAvgVelocity(set);
+                    returnValue =
+                        CollapsedMetrics.getLastLinear3DAvgVelocity(set);
                     break;
                 case MIN_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMinLinear3DAvgVelocity(set);
+                    returnValue =
+                        CollapsedMetrics.getMinLinear3DAvgVelocity(set);
                     break;
                 case MAX_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMaxLinear3DAvgVelocity(set);
+                    returnValue =
+                        CollapsedMetrics.getMaxLinear3DAvgVelocity(set);
                     break;
                 case AVG_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAvgOfLinear3DAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getAvgOfLinear3DAvgVelocities(set);
                     break;
                 case ABS_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAbsLossOfLinear3DAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getAbsLossOfLinear3DAvgVelocities(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfLinear3DAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfLinear3DAvgVelocities(
+                            set,
+                        );
                     break;
                 case SET_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSetLossOfLinear3DAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getSetLossOfLinear3DAvgVelocities(set);
                     break;
                 case PEAK_END_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPeakEndOfLinear3DAvgVelocities(set);
+                    returnValue =
+                        CollapsedMetrics.getPeakEndOfLinear3DAvgVelocities(set);
                     break;
                 case MAX_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFastestLinear3DAvgVelocityEver(set, allSets);
+                    returnValue =
+                        CollapsedMetrics.getFastestLinear3DAvgVelocityEver(
+                            set,
+                            allSets,
+                        );
                     break;
                 case MIN_EVER_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSlowestLinear3DAvgVelocityEver(set, allSets);
+                    returnValue =
+                        CollapsedMetrics.getSlowestLinear3DAvgVelocityEver(
+                            set,
+                            allSets,
+                        );
                     break;
             }
             break;
@@ -385,16 +429,20 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     returnValue = CollapsedMetrics.getAvgLinear3DROM(set);
                     break;
                 case ABS_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAbsLossOfLinear3DROMs(set);
+                    returnValue =
+                        CollapsedMetrics.getAbsLossOfLinear3DROMs(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPercentLossOfLinear3DROMs(set);
+                    returnValue =
+                        CollapsedMetrics.getPercentLossOfLinear3DROMs(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSetLossOfLinear3DROMs(set);
+                    returnValue =
+                        CollapsedMetrics.getSetLossOfLinear3DROMs(set);
                     break;
                 case PEAK_END_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPeakEndOfLinear3DROMs(set);
+                    returnValue =
+                        CollapsedMetrics.getPeakEndOfLinear3DROMs(set);
                     break;
             }
             break;
@@ -437,16 +485,27 @@ const metricValue = (set, allSets, quantifier, metric) => {
 const metricDescription = (quantifier, metric, rpe, weightMetric) => {
     if (metric === RPE_METRIC) {
         if (rpe) {
-            return weightMetric + ' @ ' + rpe + " " + CollapsedMetrics.metricAbbreviation(metric) +  "\ne1RM";       
+            return (
+                weightMetric +
+                ' @ ' +
+                rpe +
+                ' ' +
+                CollapsedMetrics.metricAbbreviation(metric) +
+                '\ne1RM'
+            );
         } else {
-            return "RPE e1RM";
+            return 'RPE e1RM';
         }
     }
 
     if (quantifier === EMPTY_QUANTIFIER || metric === EMPTY_METRIC) {
         return '';
     }
-    return CollapsedMetrics.quantifierAbbreviation(quantifier) + " " + CollapsedMetrics.metricAbbreviation(metric);
+    return (
+        CollapsedMetrics.quantifierAbbreviation(quantifier) +
+        ' ' +
+        CollapsedMetrics.metricAbbreviation(metric)
+    );
 };
 
 const unit = (metric, quantifier) =>
@@ -456,42 +515,81 @@ const unit = (metric, quantifier) =>
 
 // selector
 
-const makeSelector = () => createSelector(
-    (state, props) => props.set,
-    SetsSelectors.getAllSets,
-    CollapsedSettingsSelectors.getMetric1,
-    CollapsedSettingsSelectors.getQuantifier1,
-    CollapsedSettingsSelectors.getMetric2,
-    CollapsedSettingsSelectors.getQuantifier2,
-    CollapsedSettingsSelectors.getMetric3,
-    CollapsedSettingsSelectors.getQuantifier3,
-    CollapsedSettingsSelectors.getMetric4,
-    CollapsedSettingsSelectors.getQuantifier4,
-    CollapsedSettingsSelectors.getMetric5,
-    CollapsedSettingsSelectors.getQuantifier5,
-    (set, allSets, metric1, quantifier1, metric2, quantifier2, metric3, quantifier3, metric4, quantifier4, metric5, quantifier5) => {
-        const rpe = set.rpe;
-        const weightMetric = set.metric;
-        return {
-            value1: metricValue(set, allSets, quantifier1, metric1),
-            unit1: unit(metric1, quantifier1),
-            description1: metricDescription(quantifier1, metric1, rpe, weightMetric),
-            value2: metricValue(set, allSets, quantifier2, metric2),
-            description2: metricDescription(quantifier2, metric2, rpe, weightMetric),
-            unit2: unit(metric2, quantifier2),
-            value3: metricValue(set, allSets, quantifier3, metric3),
-            description3: metricDescription(quantifier3, metric3, rpe, weightMetric),
-            unit3: unit(metric3, quantifier3),
-            value4: metricValue(set, allSets, quantifier4, metric4),
-            description4: metricDescription(quantifier4, metric4, rpe, weightMetric),
-            unit4: unit(metric4, quantifier4),
-            value5: metricValue(set, allSets, quantifier5, metric5),
-            description5: metricDescription(quantifier5, metric5, rpe, weightMetric),
-            unit5: unit(metric5, quantifier5),
-            rpe: rpe,
-        };
-    }
-);
+const makeSelector = () =>
+    createSelector(
+        (state, props) => props.set,
+        SetsSelectors.getAllSets,
+        CollapsedSettingsSelectors.getMetric1,
+        CollapsedSettingsSelectors.getQuantifier1,
+        CollapsedSettingsSelectors.getMetric2,
+        CollapsedSettingsSelectors.getQuantifier2,
+        CollapsedSettingsSelectors.getMetric3,
+        CollapsedSettingsSelectors.getQuantifier3,
+        CollapsedSettingsSelectors.getMetric4,
+        CollapsedSettingsSelectors.getQuantifier4,
+        CollapsedSettingsSelectors.getMetric5,
+        CollapsedSettingsSelectors.getQuantifier5,
+        (
+            set,
+            allSets,
+            metric1,
+            quantifier1,
+            metric2,
+            quantifier2,
+            metric3,
+            quantifier3,
+            metric4,
+            quantifier4,
+            metric5,
+            quantifier5,
+        ) => {
+            const rpe = set.rpe;
+            const weightMetric = set.metric;
+            return {
+                value1: metricValue(set, allSets, quantifier1, metric1),
+                unit1: unit(metric1, quantifier1),
+                description1: metricDescription(
+                    quantifier1,
+                    metric1,
+                    rpe,
+                    weightMetric,
+                ),
+                value2: metricValue(set, allSets, quantifier2, metric2),
+                description2: metricDescription(
+                    quantifier2,
+                    metric2,
+                    rpe,
+                    weightMetric,
+                ),
+                unit2: unit(metric2, quantifier2),
+                value3: metricValue(set, allSets, quantifier3, metric3),
+                description3: metricDescription(
+                    quantifier3,
+                    metric3,
+                    rpe,
+                    weightMetric,
+                ),
+                unit3: unit(metric3, quantifier3),
+                value4: metricValue(set, allSets, quantifier4, metric4),
+                description4: metricDescription(
+                    quantifier4,
+                    metric4,
+                    rpe,
+                    weightMetric,
+                ),
+                unit4: unit(metric4, quantifier4),
+                value5: metricValue(set, allSets, quantifier5, metric5),
+                description5: metricDescription(
+                    quantifier5,
+                    metric5,
+                    rpe,
+                    weightMetric,
+                ),
+                unit5: unit(metric5, quantifier5),
+                rpe: rpe,
+            };
+        },
+    );
 
 // map state to props
 const makeMapStateToProps = () => {
@@ -500,9 +598,43 @@ const makeMapStateToProps = () => {
         return getModel(state, props);
     };
 };
+const mapStateToProps = (state, ownProps) => {
+    const set = ownProps.set;
+    const allSets = SetsSelectors.getAllSets(state);
 
-const SetAnalysisScreen = connect(
-    makeMapStateToProps,
-)(SetAnalysis);
+    const model = {
+        rpe: set.rpe,
+    };
+    for (let i = 1; i <= 5; i++) {
+        const metric =
+            KratosCollapsedSettingsSetMetricsSelectors.getKratosMetricByRank(
+                state,
+                i,
+            );
+        const rollup =
+            KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
+                state,
+                i,
+            );
+        const phase =
+            KratosCollapsedSettingsSetMetricsSelectors.getKratosPhaseByRank(
+                state,
+                i,
+            );
+
+        // TODO: add phase to metricValue
+        model[`value${i}`] = metricValue(set, allSets, rollup, metric, phase);
+        model[`unit${i}`] = unit(metric, rollup);
+        // TODO: add phase to metricDescription
+        model[`description${i}`] = metricDescription(
+            rollup,
+            metric,
+            set.rpe,
+            set.metric,
+        );
+    }
+};
+
+const SetAnalysisScreen = connect(makeMapStateToProps)(SetAnalysis);
 
 export default SetAnalysisScreen;
