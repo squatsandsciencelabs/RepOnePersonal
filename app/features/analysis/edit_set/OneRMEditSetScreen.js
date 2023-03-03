@@ -374,6 +374,11 @@ const mapStateToProps = state => {
         setID: null,
         sections: [],
         isModalShowing: false,
+        selectedRowSetID: null,
+        selectedRowRep: null,
+        selectedRowDisplayRep: null,
+        selectedRowOverlayNumbers: null,
+        selectedRowIsRemoved: false,
     };
 };
 
