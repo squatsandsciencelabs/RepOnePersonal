@@ -70,7 +70,8 @@ export const setUserProp = (name, value) => {
 // Log Events
 // params must be an object
 export const logEvent = (event, params) => {
-    firebase.app().analytics().logEvent(event, params);
+    const parameters = transformParameters(params);
+    firebase.app().analytics().logEvent(event, parameters);
 
     console.tron.display({
         name: 'LogEvent',
@@ -102,7 +103,7 @@ export const logEventWithAppState = (event, params, state) => {
     // } else if (currentAppState === 'inactive') {
     //     params.is_app_active = false;
     //     params.is_app_in_background = true;
-    //     params.is_app_inactive = true;        
+    //     params.is_app_inactive = true;
     // }
 
     let devices = ScannedDevicesSelectors.getScannedDevices(state);
@@ -115,16 +116,16 @@ export const logEventWithAppState = (event, params, state) => {
 
     const scanned_devices = devices.join().replace(/\s|RepOne|,/g, '');
     params.scanned_devices = scanned_devices;
-        
-    params.num_scanned_devices = devices.length;  
-    
+
+    params.num_scanned_devices = devices.length;
+
     // not sure why this was disabled, but leaving it this way as I assume it was for a reason
     // params.is_bluetooth_on = connectedDeviceStatus !== 'BLUETOOTH_OFF';
 
     params.is_workout_in_progress = !isWorkoutEmpty;
 
     params.is_survey_visible = isSurveyVisible;
-    
+
     logEvent(event, params);
 };
 
@@ -184,4 +185,19 @@ export const logErrorWithAppState = (error, event, params, state) => {
     let errorParams = addErrorToParams(error, event, params);
     logCrashlyticsError(error, errorParams);
     logEventWithAppState(event, errorParams, state);
+};
+
+// HELPERS
+
+const transformParameters = params => {
+    const incompatibleValues = [Infinity, -Infinity];
+
+    return Object.fromEntries(
+        Object.entries(params).map(([key, value]) => {
+            if (incompatibleValues.indexOf(value) !== -1 || isNaN(value)) {
+                return [key, value.toString()];
+            }
+            return [key, value];
+        }),
+    );
 };
