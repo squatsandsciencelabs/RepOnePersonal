@@ -75,7 +75,7 @@ export const getDurations = set => {
     return getMetrics(set, r => r.duration);
 };
 
-export const getPeakForces = set => {
+export const getPeakForces = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
@@ -87,7 +87,6 @@ export const getPeakForces = set => {
             ? r.peakForce
             : null;
     });
-};
 
 export const getPeakForceHeights = set =>
     getMetrics(set, r =>

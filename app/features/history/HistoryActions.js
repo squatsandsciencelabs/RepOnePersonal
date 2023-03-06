@@ -89,10 +89,14 @@ const logSelectRowAnalytics = state => {
     const isRepRemoved = HistorySelectors.getSelectedRowIsRemoved(state);
     const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
 
-    Analytics.logEventWithAppState('history_select_row', {
-        is_removed: isRepRemoved,
-        is_working_set: isWorkingSet,
-    });
+    Analytics.logEventWithAppState(
+        'history_select_row',
+        {
+            is_removed: isRepRemoved,
+            is_working_set: isWorkingSet,
+        },
+        state,
+    );
 };
 
 const logDeselectRowAnalytics = state => {
@@ -100,8 +104,12 @@ const logDeselectRowAnalytics = state => {
     const isRepRemoved = HistorySelectors.getSelectedRowIsRemoved(state);
     const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
 
-    Analytics.logEventWithAppState('history_deselect_row', {
-        is_removed: isRepRemoved,
-        is_working_set: isWorkingSet,
-    });
+    Analytics.logEventWithAppState(
+        'history_deselect_row',
+        {
+            is_removed: isRepRemoved,
+            is_working_set: isWorkingSet,
+        },
+        state,
+    );
 };
