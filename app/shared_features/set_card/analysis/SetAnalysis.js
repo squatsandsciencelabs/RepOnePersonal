@@ -31,7 +31,7 @@ class SetAnalysis extends Component {
                     <Text style={textStyle} numberOfLines={1}>
                         {value}
                     </Text>
-                    <Text style={metricStyle}>{unit}</Text>
+                    <Text style={metricStyle}>{unit || ' '}</Text>
                     <Text style={metricStyle} numberOfLines={2}>
                         {description}
                     </Text>

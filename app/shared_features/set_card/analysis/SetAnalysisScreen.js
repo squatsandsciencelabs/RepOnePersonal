@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import {
     EMPTY_METRIC,
@@ -36,6 +35,9 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 import * as SetUtils from 'app/utility/SetUtils';
+import _ from 'lodash';
+
+const METRICS_NUMBER = 5;
 
 const metricValue = (set, allSets, quantifier, metric) => {
     let returnValue = null;
@@ -482,7 +484,13 @@ const metricValue = (set, allSets, quantifier, metric) => {
     return returnValue ? SetUtils.formatMetric(returnValue) : '---';
 };
 
-const metricDescription = (quantifier, metric, rpe, weightMetric) => {
+const metricDescription = (
+    quantifier,
+    metric,
+    rpe,
+    weightMetric,
+    phase = undefined,
+) => {
     if (metric === RPE_METRIC) {
         if (rpe) {
             return (
@@ -501,8 +509,13 @@ const metricDescription = (quantifier, metric, rpe, weightMetric) => {
     if (quantifier === EMPTY_QUANTIFIER || metric === EMPTY_METRIC) {
         return '';
     }
+
+    const phaseString = phase ? CollapsedMetrics.phaseAbbreviation(phase) : '';
+
     return (
         CollapsedMetrics.quantifierAbbreviation(quantifier) +
+        ' ' +
+        phaseString +
         ' ' +
         CollapsedMetrics.metricAbbreviation(metric)
     );
@@ -513,128 +526,98 @@ const unit = (metric, quantifier) =>
         ? '---'
         : CollapsedMetrics.metricUnit(metric, quantifier);
 
-// selector
-
-const makeSelector = () =>
-    createSelector(
-        (state, props) => props.set,
-        SetsSelectors.getAllSets,
-        CollapsedSettingsSelectors.getMetric1,
-        CollapsedSettingsSelectors.getQuantifier1,
-        CollapsedSettingsSelectors.getMetric2,
-        CollapsedSettingsSelectors.getQuantifier2,
-        CollapsedSettingsSelectors.getMetric3,
-        CollapsedSettingsSelectors.getQuantifier3,
-        CollapsedSettingsSelectors.getMetric4,
-        CollapsedSettingsSelectors.getQuantifier4,
-        CollapsedSettingsSelectors.getMetric5,
-        CollapsedSettingsSelectors.getQuantifier5,
-        (
-            set,
-            allSets,
-            metric1,
-            quantifier1,
-            metric2,
-            quantifier2,
-            metric3,
-            quantifier3,
-            metric4,
-            quantifier4,
-            metric5,
-            quantifier5,
-        ) => {
-            const rpe = set.rpe;
-            const weightMetric = set.metric;
-            return {
-                value1: metricValue(set, allSets, quantifier1, metric1),
-                unit1: unit(metric1, quantifier1),
-                description1: metricDescription(
-                    quantifier1,
-                    metric1,
-                    rpe,
-                    weightMetric,
-                ),
-                value2: metricValue(set, allSets, quantifier2, metric2),
-                description2: metricDescription(
-                    quantifier2,
-                    metric2,
-                    rpe,
-                    weightMetric,
-                ),
-                unit2: unit(metric2, quantifier2),
-                value3: metricValue(set, allSets, quantifier3, metric3),
-                description3: metricDescription(
-                    quantifier3,
-                    metric3,
-                    rpe,
-                    weightMetric,
-                ),
-                unit3: unit(metric3, quantifier3),
-                value4: metricValue(set, allSets, quantifier4, metric4),
-                description4: metricDescription(
-                    quantifier4,
-                    metric4,
-                    rpe,
-                    weightMetric,
-                ),
-                unit4: unit(metric4, quantifier4),
-                value5: metricValue(set, allSets, quantifier5, metric5),
-                description5: metricDescription(
-                    quantifier5,
-                    metric5,
-                    rpe,
-                    weightMetric,
-                ),
-                unit5: unit(metric5, quantifier5),
-                rpe: rpe,
-            };
-        },
-    );
-
-// map state to props
-const makeMapStateToProps = () => {
-    const getModel = makeSelector();
-    return (state, props) => {
-        return getModel(state, props);
-    };
-};
 const mapStateToProps = (state, ownProps) => {
-    const set = ownProps.set;
+    // cloning the set as we're mutating the object
+    const set = _.cloneDeep(ownProps.set);
+
     const allSets = SetsSelectors.getAllSets(state);
 
     const model = {
         rpe: set.rpe,
     };
-    for (let i = 1; i <= 5; i++) {
-        const metric =
-            KratosCollapsedSettingsSetMetricsSelectors.getKratosMetricByRank(
-                state,
-                i,
-            );
-        const rollup =
-            KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
-                state,
-                i,
-            );
-        const phase =
-            KratosCollapsedSettingsSetMetricsSelectors.getKratosPhaseByRank(
-                state,
-                i,
-            );
 
-        // TODO: add phase to metricValue
-        model[`value${i}`] = metricValue(set, allSets, rollup, metric, phase);
-        model[`unit${i}`] = unit(metric, rollup);
-        // TODO: add phase to metricDescription
+    if (set.deviceType === 'Kratos') {
+        const reps = set.reps.map(rep => SetUtils.getKratosRepRows(rep));
+        // transforming set reps into the array of objects with 'eccentric' and 'concentric' keys and assigning them to the set
+        set.reps = reps;
+
+        // get all 5 metrics, rollups, phases
+        for (let i = 1; i <= METRICS_NUMBER; i++) {
+            const metric =
+                KratosCollapsedSettingsSetMetricsSelectors.getKratosMetricByRank(
+                    state,
+                    i,
+                );
+            const rollup =
+                KratosCollapsedSettingsSetMetricsSelectors.getKratosRollupByRank(
+                    state,
+                    i,
+                );
+            const phase =
+                KratosCollapsedSettingsSetMetricsSelectors.getKratosPhaseByRank(
+                    state,
+                    i,
+                );
+            // assigning to the set.reps the 'concentric' or 'eccentric' value - normalizing the set to be consistent with the RepOne
+            // taking the key from the selected phase value
+            set.reps = reps.map(rep => rep[phase.toLowerCase()]);
+
+            model[`value${i}`] = metricValue(
+                set,
+                allSets,
+                rollup,
+                metric,
+                phase,
+            );
+            model[`unit${i}`] = unit(metric, rollup);
+            model[`description${i}`] = metricDescription(
+                rollup,
+                metric,
+                set.rpe,
+                set.metric,
+                phase,
+            );
+        }
+
+        return model;
+    }
+
+    const weightMetric = set.metric;
+    const rpe = set.rpe;
+
+    const metrics = {
+        metric1: CollapsedSettingsSelectors.getMetric1(state),
+        metric2: CollapsedSettingsSelectors.getMetric2(state),
+        metric3: CollapsedSettingsSelectors.getMetric3(state),
+        metric4: CollapsedSettingsSelectors.getMetric4(state),
+        metric5: CollapsedSettingsSelectors.getMetric5(state),
+    };
+
+    const quantifiers = {
+        quantifier1: CollapsedSettingsSelectors.getQuantifier1(state),
+        quantifier2: CollapsedSettingsSelectors.getQuantifier2(state),
+        quantifier3: CollapsedSettingsSelectors.getQuantifier3(state),
+        quantifier4: CollapsedSettingsSelectors.getQuantifier4(state),
+        quantifier5: CollapsedSettingsSelectors.getQuantifier5(state),
+    };
+
+    for (let i = 1; i <= METRICS_NUMBER; i++) {
+        const quantifier = quantifiers[`quantifier${i}`];
+        const metric = metrics[`metric${i}`];
+
+        model[`value${i}`] = metricValue(set, allSets, quantifier, metric);
+        model[`unit${i}`] = unit(metric, quantifier);
         model[`description${i}`] = metricDescription(
-            rollup,
+            quantifier,
             metric,
-            set.rpe,
-            set.metric,
+            rpe,
+            weightMetric,
         );
     }
+
+    return model;
 };
 
-const SetAnalysisScreen = connect(makeMapStateToProps)(SetAnalysis);
+const SetAnalysisScreen = connect(mapStateToProps)(SetAnalysis);
 
 export default SetAnalysisScreen;

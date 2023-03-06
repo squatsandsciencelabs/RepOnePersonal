@@ -56,15 +56,33 @@ export const getRPE = set => {
 };
 
 export const getAvgVelocities = set => {
-    return getMetrics(set, r => r.averageVelocity / 1000);
+    return getMetrics(
+        set,
+        r =>
+            (set.deviceType === 'Kratos'
+                ? r.avgLinearVelocity
+                : r.averageVelocity) / 1000,
+    );
 };
 
 export const getPKVs = set => {
-    return getMetrics(set, r => r.peakVelocity / 1000);
+    return getMetrics(
+        set,
+        r =>
+            (set.deviceType === 'Kratos'
+                ? r.peakLinearVelocity
+                : r.peakVelocity) / 1000,
+    );
 };
 
 export const getPKHs = set => {
-    return getMetrics(set, r => (100 * r.peakHeight) / r.rom);
+    return getMetrics(
+        set,
+        r =>
+            (100 * set.deviceType === 'Kratos'
+                ? r.peakVelocityLocation
+                : r.peakHeight) / r.rom,
+    );
 };
 
 export const getROMs = set => {
@@ -79,10 +97,12 @@ export const getPeakForces = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
+
             return mass && r.peakLinearAcceleration
                 ? r.peakLinearAcceleration * mass
                 : null;
         }
+
         return r.peakForce !== null && r.peakForce !== undefined
             ? r.peakForce
             : null;
@@ -106,8 +126,10 @@ export const getPeakPowers = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
+
             return r.peakPower && mass ? r.peakPower * mass : null;
         }
+
         return r.peakPower !== null && r.peakPower !== undefined
             ? r.peakPower
             : null;
@@ -136,10 +158,12 @@ export const getWorks = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
+
             return mass && r.peakLinearAcceleration
                 ? r.peakLinearAcceleration * mass * r.rom
                 : null;
         }
+
         return r.peakForce !== null && r.peakForce !== undefined
             ? r.peakForce * r.rom
             : null;
@@ -1295,6 +1319,17 @@ export const getPhaseString = phase => {
             return 'Eccentric';
         case CONCENTRIC:
             return 'Concentric';
+        default:
+            return null;
+    }
+};
+
+export const phaseAbbreviation = phase => {
+    switch (phase) {
+        case ECCENTRIC:
+            return 'ECC';
+        case CONCENTRIC:
+            return 'CON';
         default:
             return null;
     }
