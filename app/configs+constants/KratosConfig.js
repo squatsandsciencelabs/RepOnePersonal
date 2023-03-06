@@ -1,5 +1,4 @@
 import firebase from 'app/services/Firebase';
-import * as WeightConversion from 'app/utility/WeightConversion';
 
 export const DEFAULT_KRATOS_AUTO_DELETE_REPS = 1;
 
@@ -12,10 +11,6 @@ export const kratosDiscWeights = {
     M: 5.88,
     L: 8.3,
     XL: 11.94,
-};
-
-export const getKratosDiscMass = disc => {
-    return WeightConversion.weightInKGs('lbs', kratosDiscWeights[disc]);
 };
 
 export const kratosDiscsOptions = [

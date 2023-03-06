@@ -32,7 +32,8 @@ import {
     POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
-import { getKratosDiscMass } from 'app/configs+constants/KratosConfig';
+import { kratosDiscWeights } from 'app/configs+constants/KratosConfig';
+import * as WeightConversion from 'app/utility/WeightConversion';
 
 // unique metrics
 
@@ -78,7 +79,7 @@ export const getDurations = set => {
 export const getPeakForces = set => {
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            const mass = getKratosDiscsMass(set.kratosDiscs);
+            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
             return mass && r.peakLinearAcceleration
                 ? r.peakLinearAcceleration * mass
                 : null;
@@ -106,7 +107,7 @@ export const getAverageForces = set =>
 export const getPeakPowers = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            const mass = getKratosDiscsMass(set.kratosDiscs);
+            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
             return r.peakPower && mass ? r.peakPower * mass : null;
         }
         return r.peakPower !== null && r.peakPower !== undefined
@@ -136,12 +137,14 @@ export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 export const getWorks = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            const mass = getKratosDiscsMass(set.kratosDiscs);
+            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
             return mass && r.peakLinearAcceleration
                 ? r.peakLinearAcceleration * mass * r.rom
                 : null;
         }
-        return r.peakForce * r.rom;
+        return r.peakForce !== null && r.peakForce !== undefined
+            ? r.peakForce * r.rom
+            : null;
     });
 
 // Average Quantifiers
@@ -1301,15 +1304,15 @@ export const getPhaseString = phase => {
 
 // HELPERS
 
-const getKratosDiscsMass = kratosDiscs => {
+const getTotalKratosDiscsMass = kratosDiscs => {
     if (!kratosDiscs) {
         return null;
     }
 
     const sum = Object.entries(kratosDiscs)
         .filter(disc => !!disc[1])
-        .map(disc => getKratosDiscMass(disc[0]))
+        .map(disc => kratosDiscWeights[disc[0]] * disc[1])
         .reduce((acc, disc) => acc + disc, 0);
 
-    return sum === 0 ? 1 : sum;
+    return sum === 0 ? 1 : WeightConversion.weightInKGs('lbs', sum);
 };
