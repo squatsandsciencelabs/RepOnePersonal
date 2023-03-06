@@ -16,9 +16,20 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
 import * as SetUtils from 'app/utility/SetUtils';
+import * as KratosColumnsSettingsSelectors from 'app/redux/selectors/KratosColumnsSettingsSelectors';
 
 // assumes chronological sets
-const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
+const createViewModels = (
+    sets,
+    setID,
+    columnsModel,
+    labels,
+    units,
+    metric,
+    kratosColumnsModel,
+    kratosColumnLabels,
+    kratosColumnUnits,
+) => {
     // declare variables
     let sections = []; // the return value
     let section = null; // contains the actual data
@@ -31,10 +42,10 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
     let title = '';
 
     // ignore if initialStartTime is null as that was a bug, it's supposed to be undefined or an actual date
-    sets = sets.filter((set) => set.initialStartTime !== null);
+    sets = sets.filter(set => set.initialStartTime !== null);
 
     // build view models
-    for (let i=0; i<sets.length; i++) {
+    for (let i = 0; i < sets.length; i++) {
         // get set
         let set = sets[i];
         let rpe = String(sets[i].rpe);
@@ -47,7 +58,11 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
         // setup based on first actual set
         if (!workoutStartTime) {
             workoutStartTime = SetUtils.startTime(set);
-            section = { key: new Date(workoutStartTime).toLocaleString(), data: [], position: 0 };
+            section = {
+                key: new Date(workoutStartTime).toLocaleString(),
+                data: [],
+                position: 0,
+            };
             sections.push(section);
             isInitialSet = true;
         } else {
@@ -60,7 +75,10 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
             lastExerciseName = null;
             setNumber = 1;
         } else if (!isRemoved) {
-            if (lastExerciseName !== null && lastExerciseName === set.exercise) {
+            if (
+                lastExerciseName !== null &&
+                lastExerciseName === set.exercise
+            ) {
                 setNumber++;
             } else {
                 setNumber = 1;
@@ -80,7 +98,7 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
             if (set.rpe) {
                 set.rpe = String(set.rpe);
             } else {
-                set.rpe = "";
+                set.rpe = '';
             }
 
             // card views
@@ -88,15 +106,29 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
                 array.push(createTitleViewModel(set, setNumber));
                 array.push(createFormViewModel(set, setNumber));
                 array.push(createAnalysisViewModel(set));
-                if (OpenBarbellConfig.visualizationEnabled && SetUtils.hasUnremovedRepWith3D(set)) {
+                if (
+                    OpenBarbellConfig.visualizationEnabled &&
+                    SetUtils.hasUnremovedRepWith3D(set)
+                ) {
                     array.push(createOpen3DButton(set));
                 } else {
                     array.push(createBorder(set));
                 }
 
                 // reps
-                const rowVMs = createRowViewModels(set, columnsModel);
-                const subheader = createSubheaderModel(set, labels, units);
+                const rowVMs = createRowViewModels(
+                    set,
+                    columnsModel,
+                    kratosColumnsModel,
+                );
+                const subheader =
+                    set.deviceType === 'Kratos'
+                        ? createSubheaderModel(
+                              set,
+                              kratosColumnLabels,
+                              kratosColumnUnits,
+                          )
+                        : createSubheaderModel(set, labels, units);
 
                 array.push({
                     type: 'reps',
@@ -131,7 +163,8 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
         if (isInitialSet) {
             // new set, reset the end time
             lastSetEndTime = isRemoved ? null : SetUtils.endTime(set);
-        } else if (SetUtils.hasUnremovedRep(set)) { // ignore removed sets in rest calculations
+        } else if (SetUtils.hasUnremovedRep(set)) {
+            // ignore removed sets in rest calculations
             // update variable for calculation purposes
             lastSetEndTime = SetUtils.endTime(set);
         }
@@ -139,10 +172,10 @@ const createViewModels = (sets, setID, columnsModel, labels, units, metric) => {
 
     // cannot find the set in question, should be impossible
     // TODO: error this
-    return {title: title, sections: null};
-}
+    return { title: title, sections: null };
+};
 
-const createRestoreViewModel = (set) => {
+const createRestoreViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
     return {
         type: 'restore',
@@ -152,13 +185,13 @@ const createRestoreViewModel = (set) => {
         rpe: set.rpe ? set.rpe : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
         key: set.setID + 'restore',
     };
 };
 
 // TODO: remove hack fix, see https://github.com/react-native-community/react-native-video/issues/1572
-const getVideoFileURL = (set) => {
+const getVideoFileURL = set => {
     // Android
     if (Platform.OS !== 'ios') {
         return set.videoFileURL;
@@ -178,7 +211,7 @@ const getVideoFileURL = (set) => {
 
 const createTitleViewModel = (set, setNumber) => ({
     type: 'title',
-    key: set.setID+'title',
+    key: set.setID + 'title',
     setNumber: setNumber,
     exercise: set.exercise ? set.exercise.toLowerCase() : null,
     setID: set.setID,
@@ -189,12 +222,12 @@ const createTitleViewModel = (set, setNumber) => ({
 
 const createFormViewModel = (set, setNumber) => ({
     type: 'form',
-    key: set.setID+'form',
+    key: set.setID + 'form',
     setID: set.setID,
     initialStartTime: set.initialStartTime,
     removed: false,
     setNumber: setNumber,
-    tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+    tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
     weight: set.weight,
     metric: set.metric,
     rpe: set.rpe,
@@ -202,46 +235,46 @@ const createFormViewModel = (set, setNumber) => ({
     videoType: set.videoType,
 });
 
-const createSummaryViewModel = (set) => {
+const createSummaryViewModel = set => {
     const numReps = SetUtils.numValidUnremovedReps(set);
     return {
         type: 'summary',
-        key: set.setID+'summary',
+        key: set.setID + 'summary',
         weight: set.weight ? set.weight : 0,
         numReps: numReps ? numReps : '0 reps',
         metric: set.metric,
-        tags: set.tags ? set.tags.map((tag) => tag.toLowerCase()) : [],
+        tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
     };
 };
 
-const createAnalysisViewModel = (set) => ({
+const createAnalysisViewModel = set => ({
     type: 'analysis',
-    key: set.setID+'analysis',
+    key: set.setID + 'analysis',
     set: set,
 });
 
-const createOpen3DButton = (set) => ({
+const createOpen3DButton = set => ({
     type: 'open 3d button',
     setID: set.setID,
-    key: set.setID+"open 3d button",
+    key: set.setID + 'open 3d button',
 });
 
-const createBorder = (set) => ({
-    type: "border",
+const createBorder = set => ({
+    type: 'border',
     key: `${set.setID}border`,
 });
 
 const createSubheaderModel = (set, labels, units) => ({
-    type: "subheader",
-    key: set.setID+"subheader",
+    type: 'subheader',
+    key: set.setID + 'subheader',
     labels,
     units,
 });
 
-const createRowViewModels = (set, columnsModel) => {
+const createRowViewModels = (set, columnsModel, kratosColumnsModel) => {
     let array = [];
 
-    for (let i=0, repCount=0; i<set.reps.length; i++) {
+    for (let i = 0, repCount = 0; i < set.reps.length; i++) {
         // get rep
         let rep = set.reps[i];
 
@@ -249,19 +282,19 @@ const createRowViewModels = (set, columnsModel) => {
         repCount++;
 
         let vm = {
-            type: "data",
+            type: 'data',
             rep: i,
             repDisplay: repCount,
             setID: set.setID,
             removed: rep.removed,
-            key: set.setID+i,
+            key: set.setID + i,
         };
 
         if (rep.deviceFamily === 'Kratos') {
             const resultReps = SetUtils.getKratosRepRows(rep);
 
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
-                const model = columnsModel.map(m =>
+                const model = kratosColumnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
                 );
                 // last element of the array is rowType - eccentric || concentric
@@ -289,11 +322,12 @@ const createRowViewModels = (set, columnsModel) => {
 const createFooterVM = (set, lastSetEndTime) => {
     let rest = null;
     if (lastSetEndTime) {
-        const restInMS = new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
+        const restInMS =
+            new Date(SetUtils.startTime(set)) - new Date(lastSetEndTime);
         rest = DateUtils.restInSentenceFormat(restInMS);
     }
     let restVM = {
-        type: "footer",
+        type: 'footer',
         rest,
         setID: set.setID,
         key: set.setID + 'rest',
@@ -306,7 +340,7 @@ const createFooterVM = (set, lastSetEndTime) => {
 // workout sets
 
 const getAnalysisWorkoutSetsChronological = (sets, workoutID) => {
-    let analysisSets = sets.filter((set) => set.workoutID === workoutID);
+    let analysisSets = sets.filter(set => set.workoutID === workoutID);
     analysisSets.sort((set1, set2) => {
         let set1Start = SetUtils.startTime(set1);
         if (set1Start !== null) {
@@ -331,7 +365,21 @@ const getSections = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     SettingsSelectors.getDefaultMetric,
-    (setID, workoutID, allSets, columnsModel, labels, units, defaultMetric) => {
+    KratosColumnsSettingsSelectors.getMetrics,
+    KratosColumnsSettingsSelectors.getColumnLabels,
+    KratosColumnsSettingsSelectors.getColumnUnits,
+    (
+        setID,
+        workoutID,
+        allSets,
+        columnsModel,
+        labels,
+        units,
+        defaultMetric,
+        kratosColumnsModel,
+        kratosColumnLabels,
+        kratosColumnUnits,
+    ) => {
         const sets = getAnalysisWorkoutSetsChronological(allSets, workoutID);
         const sections = createViewModels(
             sets,
@@ -340,6 +388,9 @@ const getSections = createSelector(
             labels,
             units,
             defaultMetric,
+            kratosColumnsModel,
+            kratosColumnLabels,
+            kratosColumnUnits,
         );
         return sections;
     },

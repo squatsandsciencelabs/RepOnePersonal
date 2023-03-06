@@ -17,6 +17,7 @@ import * as WorkoutCollapsedSelectors from 'app/redux/selectors/WorkoutCollapsed
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
+import * as KratosColumnsSettingsSelectors from 'app/redux/selectors/KratosColumnsSettingsSelectors';
 
 // assumes chronological sets
 const createViewModels = (
@@ -26,6 +27,9 @@ const createViewModels = (
     labels,
     units,
     can3D,
+    kratosColumnsModel,
+    kratosColumnLabels,
+    kratosColumnUnits,
 ) => {
     // declare variables
     let section = { key: 1, data: [], isLast: true }; // contains the actual data
@@ -113,8 +117,19 @@ const createViewModels = (
 
         // reps
         if (!isRemoved && !isCollapsed) {
-            const data = createRowViewModels(set, columnsModel);
-            const subheader = createSubheaderModel(set, labels, units);
+            const data = createRowViewModels(
+                set,
+                columnsModel,
+                kratosColumnsModel,
+            );
+            const subheader =
+                set.deviceType === 'Kratos'
+                    ? createSubheaderModel(
+                          set,
+                          kratosColumnLabels,
+                          kratosColumnUnits,
+                      )
+                    : createSubheaderModel(set, labels, units);
 
             array.push({
                 type: 'reps',
@@ -319,7 +334,7 @@ const createSubheaderModel = (set, labels, units) => ({
     units,
 });
 
-const createRowViewModels = (set, columnsModel) => {
+const createRowViewModels = (set, columnsModel, kratosColumnsModel) => {
     let array = [];
 
     for (let i = 0, repCount = 0; i < set.reps.length; i++) {
@@ -343,7 +358,7 @@ const createRowViewModels = (set, columnsModel) => {
             const resultReps = SetUtils.getKratosRepRows(rep);
 
             vm.columns = Object.entries(resultReps).map(([key, value]) => {
-                const model = columnsModel.map(m =>
+                const model = kratosColumnsModel.map(m =>
                     SetUtils.getKratosDisplayMetric(m, value, set),
                 );
                 // last element of the array is rowType - eccentric || concentric
@@ -416,7 +431,20 @@ const getWorkoutSections = createSelector(
     ColumnsSettingsSelectors.getColumnLabels,
     ColumnsSettingsSelectors.getColumnUnits,
     ConnectedDeviceStatusSelectors.getCan3D,
-    (sets, collapsedModel, columnsModel, labels, units, can3D) => {
+    KratosColumnsSettingsSelectors.getMetrics,
+    KratosColumnsSettingsSelectors.getColumnLabels,
+    KratosColumnsSettingsSelectors.getColumnUnits,
+    (
+        sets,
+        collapsedModel,
+        columnsModel,
+        labels,
+        units,
+        can3D,
+        kratosColumnsModel,
+        kratosColumnLabels,
+        kratosColumnUnits,
+    ) => {
         return createViewModels(
             sets,
             collapsedModel,
@@ -424,6 +452,9 @@ const getWorkoutSections = createSelector(
             labels,
             units,
             can3D,
+            kratosColumnsModel,
+            kratosColumnLabels,
+            kratosColumnUnits,
         );
     },
 );

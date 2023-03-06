@@ -88,10 +88,14 @@ const logSelectRowAnalytics = state => {
     const isRepRemoved = WorkoutSelectors.getSelectedRowIsRemoved(state);
     const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
 
-    Analytics.logEventWithAppState('workout_select_row', {
-        is_removed: isRepRemoved,
-        is_working_set: isWorkingSet,
-    });
+    Analytics.logEventWithAppState(
+        'workout_select_row',
+        {
+            is_removed: isRepRemoved,
+            is_working_set: isWorkingSet,
+        },
+        state,
+    );
 };
 
 const logDeselectRowAnalytics = state => {
@@ -99,8 +103,12 @@ const logDeselectRowAnalytics = state => {
     const isRepRemoved = WorkoutSelectors.getSelectedRowIsRemoved(state);
     const isWorkingSet = SetsSelectors.getIsWorkingSet(state, setID);
 
-    Analytics.logEventWithAppState('workout_deselect_row', {
-        is_removed: isRepRemoved,
-        is_working_set: isWorkingSet,
-    });
+    Analytics.logEventWithAppState(
+        'workout_deselect_row',
+        {
+            is_removed: isRepRemoved,
+            is_working_set: isWorkingSet,
+        },
+        state,
+    );
 };
