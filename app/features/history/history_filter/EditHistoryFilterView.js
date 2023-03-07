@@ -21,6 +21,7 @@ import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditHistoryFilterStartDateScreen from './dateRange/startDate/EditHistoryFilterStartScreen';
 import EditHistoryFilterEndDateScreen from './dateRange/endDate/EditHistoryFilterEndScreen';
+import EditHistoryFilterDeviceScreen from './device/EditHistoryFilterDeviceScreen';
 
 class EditHistoryFilterView extends Component {
     _close() {
@@ -395,6 +396,46 @@ class EditHistoryFilterView extends Component {
         }
     }
 
+    _displayDevices() {
+        if (
+            this.props.devices === undefined ||
+            this.props.devices === null ||
+            this.props.devices.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Devices
+                </Text>
+            );
+        }
+
+        let position = 0;
+
+        const pills = this.props.devices.map(device => {
+            return (
+                <Pill
+                    key={position++}
+                    text={device}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />
+            );
+        });
+
+        return <View style={styles.tagField}>{pills}</View>;
+    }
+
+    _renderDevice() {
+        return (
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedDevices()}
+                    underlayColor="#e0e0e0">
+                    {this._displayDevices()}
+                </TouchableHighlight>
+            </View>
+        );
+    }
+
     _renderForms() {
         return (
             <View style={{ marginBottom: 200 }}>
@@ -417,6 +458,10 @@ class EditHistoryFilterView extends Component {
                 <Text style={styles.labelText}>Tags to Exclude:</Text>
                 <View style={{ padding: 5, paddingLeft: 18, paddingRight: 18 }}>
                     {this._renderTagsToExclude()}
+                </View>
+                <Text style={styles.labelText}>Device:</Text>
+                <View style={{ padding: 5, paddingLeft: 18, paddingRight: 18 }}>
+                    {this._renderDevice()}
                 </View>
                 <Text style={styles.labelText}>Date Range:</Text>
                 <View style={{ padding: 5 }}>{this._renderDateRange()}</View>
@@ -444,6 +489,7 @@ class EditHistoryFilterView extends Component {
                 <EditHistoryFilterExerciseScreen />
                 <EditHistoryFilterTagsToIncludeScreen />
                 <EditHistoryFilterTagsToExcludeScreen />
+                <EditHistoryFilterDeviceScreen />
                 <EditHistoryFilterStartDateScreen />
                 <EditHistoryFilterEndDateScreen />
             </View>

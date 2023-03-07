@@ -16,7 +16,10 @@ import {
     WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import THREE from 'three';
-import { getTotalKratosDiscsMass } from 'app/utility/KratosUtils';
+import {
+    getTotalKratosDiscsMass,
+    getTotalKratosDiscsWeights,
+} from 'app/utility/KratosUtils';
 
 export const isDeleted = set => {
     if (set.hasOwnProperty('deleted')) {
@@ -308,9 +311,14 @@ export const checkWeightRange = (
     startingWeightMetric,
     endingWeight,
     endingWeightMetric,
+    deviceType,
+    kratosDiscs,
 ) => {
     // turn into pounds
-    const setWeightLBs = WeightConversion.weightInLBs(setMetric, setWeight);
+    const setWeightLBs =
+        deviceType === 'Kratos'
+            ? getTotalKratosDiscsWeights(kratosDiscs)
+            : WeightConversion.weightInLBs(setMetric, setWeight);
     const startingWeightLBs = WeightConversion.weightInLBs(
         startingWeightMetric,
         startingWeight,
