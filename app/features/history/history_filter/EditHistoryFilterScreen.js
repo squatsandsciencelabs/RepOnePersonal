@@ -43,6 +43,7 @@ const mapStateToProps = state => {
         endWeightMetric:
             HistorySelectors.getEditingHistoryFilterEndingWeightMetric(state),
         showRemoved: HistorySelectors.getEditingShowRemoved(state),
+        devices: HistorySelectors.getEditingHistoryFilterDevices(state),
     };
 };
 
@@ -68,6 +69,7 @@ const mapDispatchToProps = dispatch => {
             toggleShowRemoved: Actions.toggleShowRemoved,
             clearStartDate: Actions.clearStartDate,
             clearEndDate: Actions.clearEndDate,
+            tappedDevices: Actions.presentDevices,
         },
         dispatch,
     );

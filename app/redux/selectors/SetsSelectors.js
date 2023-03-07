@@ -368,6 +368,8 @@ const isValidForHistoryFilter = (
             startingWeightMetric,
             endingWeight,
             endingWeightMetric,
+            set.deviceType,
+            set.kratosDiscs,
         ) &&
         SetUtils.checkRPERange(set.rpe, startingRPE, endingRPE) &&
         SetUtils.checkDateRange(

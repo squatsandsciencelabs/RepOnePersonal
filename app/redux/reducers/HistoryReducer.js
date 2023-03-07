@@ -49,6 +49,9 @@ import {
     DISMISS_HISTORY_KRATOS_DISCS,
     SELECT_HISTORY_REP_ROW,
     DESELECT_HISTORY_REP_ROW,
+    DISMISS_HISTORY_FILTER_DEVICES,
+    PRESENT_HISTORY_FILTER_DEVICES,
+    SAVE_HISTORY_FILTER_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 
 // isEditing for analytics
@@ -112,6 +115,8 @@ const defaultState = {
     editingShowRemoved: false,
     showRemoved: false,
     showHistoryFilter: false,
+    isEditingFilterDevices: false,
+    editingFilterDevices: [],
 
     // highlight
     selectedRowSetID: null,
@@ -443,6 +448,21 @@ const HistoryReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 isEditingEndingDate: false,
+            };
+        case PRESENT_HISTORY_FILTER_DEVICES:
+            return {
+                ...state,
+                isEditingFilterDevices: true,
+            };
+        case DISMISS_HISTORY_FILTER_DEVICES:
+            return {
+                ...state,
+                isEditingFilterDevices: false,
+            };
+        case SAVE_HISTORY_FILTER_DEVICE:
+            return {
+                ...state,
+                editingFilterDevices: action.devices,
             };
         case SELECT_HISTORY_REP_ROW:
             return {

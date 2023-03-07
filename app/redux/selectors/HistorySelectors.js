@@ -192,6 +192,12 @@ export const getIsFiltering = state => {
     );
 };
 
+export const getIsEditingHistoryFilterDevices = state =>
+    stateRoot(state).isEditingFilterDevices;
+
+export const getEditingHistoryFilterDevices = state =>
+    stateRoot(state).editingFilterDevices;
+
 // row highlight
 
 export const getSelectedRowSetID = state => stateRoot(state).selectedRowSetID;

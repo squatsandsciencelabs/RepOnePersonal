@@ -20,6 +20,7 @@ import {
     TOGGLE_SHOW_REMOVED,
     CLEAR_HISTORY_FILTER_START_DATE,
     CLEAR_HISTORY_FILTER_END_DATE,
+    PRESENT_HISTORY_FILTER_DEVICES,
 } from 'app/configs+constants/ActionTypes';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as WeightConversion from 'app/utility/WeightConversion';
@@ -171,4 +172,8 @@ export const clearStartDate = () => ({
 
 export const clearEndDate = () => ({
     type: CLEAR_HISTORY_FILTER_END_DATE,
+});
+
+export const presentDevices = () => ({
+    type: PRESENT_HISTORY_FILTER_DEVICES,
 });

@@ -8,15 +8,21 @@ export const kratosDiscWeights = {
     XL: 11.94,
 };
 
-export const getTotalKratosDiscsMass = kratosDiscs => {
+export const getTotalKratosDiscsWeights = kratosDiscs => {
     if (!kratosDiscs) {
         return null;
     }
 
-    const sum = Object.entries(kratosDiscs)
+    return Object.entries(kratosDiscs)
         .filter(disc => !!disc[1])
         .map(disc => kratosDiscWeights[disc[0]] * disc[1])
         .reduce((acc, disc) => acc + disc, 0);
+};
 
-    return sum === 0 ? null : WeightConversion.weightInKGs('lbs', sum);
+export const getTotalKratosDiscsMass = kratosDiscs => {
+    const sum = getTotalKratosDiscsWeights(kratosDiscs);
+
+    return sum === 0 || sum === null
+        ? null
+        : WeightConversion.weightInKGs('lbs', sum);
 };
