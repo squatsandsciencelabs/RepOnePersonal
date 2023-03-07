@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     },
     bigMetricBackground: {
         alignItems: 'center',
-        justifyContent: 'center',
         flexDirection: 'column',
         backgroundColor: '#fddddd',
         width: 84,
@@ -139,12 +138,14 @@ const styles = StyleSheet.create({
         borderColor: '#fddddd',
         overflow: 'hidden',
         marginRight: 3,
+        paddingTop: 14,
     },
     bigMetricText: {
         textAlign: 'center',
         color: '#f0565a',
         fontSize: 18,
         fontWeight: '800',
+        marginTop: 5,
     },
     bigMetric: {
         textAlign: 'center',

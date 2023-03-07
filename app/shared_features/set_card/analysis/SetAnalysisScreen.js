@@ -481,7 +481,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
             break;
     }
 
-    return returnValue ? SetUtils.formatMetric(returnValue) : '---';
+    return returnValue !== null ? SetUtils.formatMetric(returnValue) : '---';
 };
 
 const metricDescription = (
