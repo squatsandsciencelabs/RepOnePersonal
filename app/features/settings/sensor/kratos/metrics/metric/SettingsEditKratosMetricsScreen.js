@@ -19,7 +19,6 @@ import {
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
     LINEAR_3D_AVG_VELOCITY_METRIC,
-    RPE_METRIC,
     FORCE_METRIC,
     FORCE_HEIGHT_METRIC,
     POWER_METRIC,
@@ -50,8 +49,7 @@ const generateItems = rollup => {
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(PKV_METRIC),
-                // pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(RPE_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
             ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
@@ -67,10 +65,9 @@ const generateItems = rollup => {
                 pickerItem(FORCE_HEIGHT_METRIC),
                 pickerItem(POWER_METRIC),
                 pickerItem(POWER_HEIGHT_METRIC),
-                // pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                // pickerItem(LINEAR_3D_ROM_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
-                pickerItem(RPE_METRIC),
             ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
@@ -82,10 +79,9 @@ const generateItems = rollup => {
                 pickerItem(PKV_METRIC),
                 pickerItem(FORCE_METRIC),
                 pickerItem(POWER_METRIC),
-                // pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                // pickerItem(LINEAR_3D_ROM_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
-                pickerItem(RPE_METRIC),
             ];
         default:
             return [
@@ -99,10 +95,9 @@ const generateItems = rollup => {
                 pickerItem(FORCE_HEIGHT_METRIC),
                 pickerItem(POWER_METRIC),
                 pickerItem(POWER_HEIGHT_METRIC),
-                // pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                // pickerItem(LINEAR_3D_ROM_METRIC),
+                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
-                pickerItem(RPE_METRIC),
             ];
     }
 };

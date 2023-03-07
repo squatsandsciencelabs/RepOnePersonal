@@ -595,7 +595,7 @@ export const getKratosDisplayMetric = (metric, rep, set = null) =>
     formatMetric(_getKratosDisplayMetric(metric, rep, set));
 
 export const formatMetric = metric =>
-    metric < 1 ? metric.toString().slice(1) : metric;
+    metric < 1 && metric > 0 ? metric.toString().slice(1) : metric;
 
 const _getDisplayMetric = (metric, rep, set=null) => {
     if (!rep || !rep.isValid) {
