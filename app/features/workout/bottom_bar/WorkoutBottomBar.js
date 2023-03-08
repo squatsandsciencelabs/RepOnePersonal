@@ -1,17 +1,11 @@
 // TODO: disabled state for end workout
 
-import React, {Component} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity
-} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ConnectedDeviceStatusScreen from './device_status/ConnectedDeviceStatusScreen';
 import * as Device from 'app/utility/Device';
 
 class WorkoutBottomBar extends Component {
-    
     _onPressEndWorkout() {
         this.props.endWorkout();
     }
@@ -21,7 +15,9 @@ class WorkoutBottomBar extends Component {
         return (
             <View style={styles.bar}>
                 <ConnectedDeviceStatusScreen />
-                <TouchableOpacity style={{justifyContent: 'center'}} onPress={ () => this._onPressEndWorkout() } >
+                <TouchableOpacity
+                    style={{ justifyContent: 'center' }}
+                    onPress={() => this._onPressEndWorkout()}>
                     <Text style={styles.buttonText}>{message}</Text>
                 </TouchableOpacity>
             </View>
@@ -41,13 +37,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(47, 128, 237, 1)',
         position: 'absolute',
         height: Device.hasNotch() ? 70 : 50,
-        padding:0,
+        padding: 0,
     },
     buttonText: {
-        color:'white',
-        marginRight: 5,
-        marginBottom: Device.hasNotch() ? 25 : 0
-    }
+        color: 'white',
+        marginRight: 20,
+        marginBottom: Device.hasNotch() ? 25 : 0,
+        fontSize: 14,
+        fontWeight: '500',
+    },
 });
 
 export default WorkoutBottomBar;
