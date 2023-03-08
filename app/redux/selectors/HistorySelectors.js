@@ -188,7 +188,8 @@ export const getIsFiltering = state => {
         getHistoryFilterEndingRPE(state) ||
         getHistoryFilterStartingRepRange(state) ||
         getHistoryFilterEndingRepRange(state) ||
-        getShowRemoved(state)
+        getShowRemoved(state) ||
+        getHistoryFilterDevices(state).length > 0
     );
 };
 
