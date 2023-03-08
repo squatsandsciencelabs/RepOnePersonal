@@ -2,7 +2,7 @@ import {
     ADD_HISTORY_FILTER_DEVICE,
     DISMISS_HISTORY_FILTER_DEVICES,
     REMOVE_HISTORY_FILTER_DEVICE,
-    SAVE_HISTORY_FILTER_DEVICE,
+    SAVE_HISTORY_FILTER_DEVICES,
 } from 'app/configs+constants/ActionTypes';
 
 export const addPill = () => ({
@@ -22,6 +22,6 @@ export const dismissDevices = () => ({
 });
 
 export const saveDevices = (devices = []) => ({
-    type: SAVE_HISTORY_FILTER_DEVICE,
+    type: SAVE_HISTORY_FILTER_DEVICES,
     devices,
 });

@@ -419,6 +419,11 @@ export const checkDateRange = (
     }
 };
 
+export const checkDevice = (setDeviceType, devices) =>
+    devices.length === 0
+        ? true
+        : devices.some(device => device.includes(setDeviceType));
+
 // Not sure if this belongs in setutils as it actually requires rep, but whatever
 
 export const getBulkArray = rep => {

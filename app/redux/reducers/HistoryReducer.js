@@ -51,7 +51,7 @@ import {
     DESELECT_HISTORY_REP_ROW,
     DISMISS_HISTORY_FILTER_DEVICES,
     PRESENT_HISTORY_FILTER_DEVICES,
-    SAVE_HISTORY_FILTER_DEVICE,
+    SAVE_HISTORY_FILTER_DEVICES,
 } from 'app/configs+constants/ActionTypes';
 
 // isEditing for analytics
@@ -117,6 +117,7 @@ const defaultState = {
     showHistoryFilter: false,
     isEditingFilterDevices: false,
     editingFilterDevices: [],
+    devices: [],
 
     // highlight
     selectedRowSetID: null,
@@ -241,6 +242,7 @@ const HistoryReducer = (state = defaultState, action) => {
                 editingEndingRepRange: state.endingRepRange,
                 editingShowRemoved: state.showRemoved,
                 showHistoryFilter: false,
+                editingFilterDevices: state.devices,
             };
         case PRESENT_HISTORY_FILTER_EXERCISE:
             return {
@@ -376,6 +378,7 @@ const HistoryReducer = (state = defaultState, action) => {
             const startingRepRange = state.editingStartingRepRange;
             const endingRepRange = state.editingEndingRepRange;
             const showRemoved = state.editingShowRemoved;
+            const devices = state.editingFilterDevices;
 
             return {
                 ...state,
@@ -394,6 +397,7 @@ const HistoryReducer = (state = defaultState, action) => {
                 endingRepRange,
                 showRemoved,
                 showHistoryFilter: false,
+                devices,
 
                 selectedRowSetID: null,
                 selectedRowRep: null,
@@ -459,7 +463,7 @@ const HistoryReducer = (state = defaultState, action) => {
                 ...state,
                 isEditingFilterDevices: false,
             };
-        case SAVE_HISTORY_FILTER_DEVICE:
+        case SAVE_HISTORY_FILTER_DEVICES:
             return {
                 ...state,
                 editingFilterDevices: action.devices,
