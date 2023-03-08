@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, StyleSheet } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
@@ -34,19 +34,50 @@ class SettingsDevicePanelConnected extends Component {
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
                         Connected to {this.props.device}
                     </Text>
-                    {this.props.batteryPercentage !== null && (
-                        <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
-                            Battery: {this.props.batteryPercentage} %
-                        </Text>
-                    )}
                 </View>
-                <View style={SETTINGS_PANEL_STYLES.content}>
+                <View
+                    style={[
+                        SETTINGS_PANEL_STYLES.content,
+                        this.props.batteryPercentage !== null &&
+                            styles.connectedBatteryPercentage,
+                    ]}>
                     {this._renderConnectedIcon()}
+                    {this.props.batteryPercentage !== null && (
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginLeft: 8,
+                                width: 60,
+                            }}>
+                            <Image
+                                source={require('app/appearance/images/battery_percentage.png')}
+                            />
+                            <Text
+                                style={[
+                                    SETTINGS_PANEL_STYLES.subtitleText,
+                                    {
+                                        marginLeft: 3.5,
+                                        fontSize: 12,
+                                        fontWeight: '500',
+                                    },
+                                ]}>
+                                {this.props.batteryPercentage}%
+                            </Text>
+                        </View>
+                    )}
                 </View>
                 {disconnectOption}
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    connectedBatteryPercentage: {
+        flexDirection: 'row',
+        paddingLeft: 73,
+    },
+});
 
 export default SettingsDevicePanelConnected;
