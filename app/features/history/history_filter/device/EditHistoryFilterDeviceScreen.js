@@ -1,16 +1,13 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import SelectTagsModal from 'app/shared_features/tags/SelectTagsModal';
 import * as Actions from './EditHistoryFilterDeviceActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
-import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
-import EditKratosDiscsModal from 'app/shared_features/edit_set/EditKratosDiscsModal';
+import EditFilterModal from 'app/shared_features/edit_filter/EditFilterModal';
 
 const title = 'Choose Devices';
-const placeholder = 'Enter Device Name';
 const text = '';
 const stackValues = false;
+const options = ['Kratos Flywheel', 'RepOne 3D Sensor'];
 
 const mapStateToProps = state => {
     return {
@@ -18,7 +15,7 @@ const mapStateToProps = state => {
         text,
         multipleInput: true,
         inputs: HistorySelectors.getEditingHistoryFilterDevices(state),
-        options: [{ key: 'Kratos Flywheel' }, { key: 'RepOne 3D Sensor' }],
+        options,
         isModalShowing:
             HistorySelectors.getIsEditingHistoryFilterDevices(state),
         stackValues,
@@ -28,7 +25,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            saveSetMultipleInput: (id, devices) => Actions.saveDevices(devices),
+            saveSetMultipleInput: Actions.saveDevices,
             closeModal: Actions.dismissDevices,
             cancelModal: Actions.cancelDevices,
             tappedPill: Actions.tappedPill,
@@ -41,6 +38,6 @@ const mapDispatchToProps = dispatch => {
 const EditHistoryFilterDeviceScreen = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(EditKratosDiscsModal);
+)(EditFilterModal);
 
 export default EditHistoryFilterDeviceScreen;

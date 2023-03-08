@@ -293,6 +293,7 @@ export const getFilteredHistorySets = createSelector(
     HistorySelectors.getHistoryFilterEndingRPE,
     HistorySelectors.getHistoryFilterStartingRepRange,
     HistorySelectors.getHistoryFilterEndingRepRange,
+    HistorySelectors.getHistoryFilterDevices,
     (
         allSets,
         showRemoved,
@@ -309,6 +310,7 @@ export const getFilteredHistorySets = createSelector(
         endingRPE,
         startingRepRange,
         endingRepRange,
+        devices,
     ) => {
         const data = [];
         allSets.forEach(set => {
@@ -330,6 +332,7 @@ export const getFilteredHistorySets = createSelector(
                     startingDate,
                     endingDate,
                     showRemoved,
+                    devices,
                 )
             ) {
                 data.push(set);
@@ -355,6 +358,7 @@ const isValidForHistoryFilter = (
     startingDate,
     endingDate,
     showRemoved,
+    devices,
 ) => {
     return (
         (showRemoved || !SetUtils.isDeleted(set)) &&
@@ -377,7 +381,8 @@ const isValidForHistoryFilter = (
             startingDate,
             endingDate,
         ) &&
-        SetUtils.checkRepRange(set, startingRepRange, endingRepRange)
+        SetUtils.checkRepRange(set, startingRepRange, endingRepRange) &&
+        SetUtils.checkDevice(set.deviceType, devices)
     );
 };
 

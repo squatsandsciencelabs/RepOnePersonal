@@ -1,7 +1,8 @@
 // TODO: expand this into multiple stylesheets that are legit shared across the application
 // TODO: organize this, this is poorly used throughout the application
 
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+import * as Device from 'app/utility/Device';
 
 export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     panel: {
@@ -78,5 +79,54 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     buttonText: {
         textAlign: 'center',
         color: 'white',
+    },
+});
+
+export const HISTORY_STYLES = StyleSheet.create({
+    editFilterModalBG: {
+        backgroundColor: 'rgba(242, 242, 242, 1)',
+    },
+    tappableText: {
+        color: 'rgba(47, 128, 237, 1)',
+    },
+});
+
+export const EDIT_MODAL_STYLES = StyleSheet.create({
+    textField: {
+        height: 35,
+        margin: 10,
+        color: 'rgba(77, 77, 77, 1)',
+        fontSize: 14,
+        paddingBottom: Platform.OS === 'ios' ? 0 : 10,
+    },
+    container: {
+        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
+        alignItems: 'center',
+    },
+    nav: {
+        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+    },
+    navTitle: {
+        paddingTop: 15,
+    },
+    addButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(47, 128, 237, 1)',
+        borderRadius: 5,
+    },
+    disabled: {
+        opacity: 0.3,
+    },
+    addText: {
+        color: 'white',
+    },
+    rowBorders: {
+        borderColor: '#e0e0e0',
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
     },
 });

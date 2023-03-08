@@ -198,6 +198,8 @@ export const getIsEditingHistoryFilterDevices = state =>
 export const getEditingHistoryFilterDevices = state =>
     stateRoot(state).editingFilterDevices;
 
+export const getHistoryFilterDevices = state => stateRoot(state).devices;
+
 // row highlight
 
 export const getSelectedRowSetID = state => stateRoot(state).selectedRowSetID;

@@ -8,12 +8,12 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     Modal,
-    StyleSheet,
     FlatList,
     Platform,
 } from 'react-native';
 import * as Device from 'app/utility/Device';
 import Pill from 'app/shared_features/pill/Pill';
+import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 // EditKratosDiscsModal is basically a EditTextModal component, but without text input logic
 
@@ -439,44 +439,6 @@ class EditKratosDiscsModal extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    textField: {
-        height: 35,
-        margin: 10,
-        color: 'rgba(77, 77, 77, 1)',
-        fontSize: 14,
-        paddingBottom: Platform.os === 'ios' ? 0 : 10,
-    },
-    container: {
-        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
-        alignItems: 'center',
-    },
-    nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
-        paddingRight: 10,
-        paddingBottom: 10,
-        paddingLeft: 10,
-    },
-    navTitle: {
-        paddingTop: 15,
-    },
-    addButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderRadius: 5,
-    },
-    disabled: {
-        opacity: 0.3,
-    },
-    addText: {
-        color: 'white',
-    },
-    rowBorders: {
-        borderColor: '#e0e0e0',
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-    },
-});
+const styles = EDIT_MODAL_STYLES;
 
 export default EditKratosDiscsModal;
