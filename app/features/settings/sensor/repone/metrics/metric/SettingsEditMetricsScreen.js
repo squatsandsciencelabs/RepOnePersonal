@@ -49,16 +49,16 @@ const generateItems = quantifier => {
                 ? [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(PKV_METRIC),
                       pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+                      pickerItem(PKV_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
                   ]
                 : [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
                       pickerItem(PKV_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
                   ];
         case AVG_QUANTIFIER:
@@ -68,26 +68,26 @@ const generateItems = quantifier => {
                 ? [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(PKH_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                       pickerItem(PKV_METRIC),
                       pickerItem(FORCE_METRIC),
-                      pickerItem(FORCE_HEIGHT_METRIC),
                       pickerItem(POWER_METRIC),
-                      pickerItem(POWER_HEIGHT_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_ROM_METRIC),
                       pickerItem(WORK_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(FORCE_HEIGHT_METRIC),
+                      pickerItem(POWER_HEIGHT_METRIC),
                   ]
                 : [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(ROM_METRIC),
-                      pickerItem(PKH_METRIC),
                       pickerItem(PKV_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
                   ];
         case SET_LOSS_QUANTIFIER:
@@ -96,22 +96,22 @@ const generateItems = quantifier => {
                 ? [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                       pickerItem(PKV_METRIC),
                       pickerItem(FORCE_METRIC),
                       pickerItem(POWER_METRIC),
-                      pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                      pickerItem(LINEAR_3D_ROM_METRIC),
                       pickerItem(WORK_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(LINEAR_3D_ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
                   ]
                 : [
                       pickerItem(EMPTY_METRIC),
                       pickerItem(AVG_VELOCITY_METRIC),
-                      pickerItem(DURATION_METRIC),
-                      pickerItem(ROM_METRIC),
                       pickerItem(PKV_METRIC),
+                      pickerItem(ROM_METRIC),
+                      pickerItem(DURATION_METRIC),
                       pickerItem(RPE_METRIC),
                   ];
         default:
@@ -121,16 +121,16 @@ const generateItems = quantifier => {
                       pickerItem(AVG_VELOCITY_METRIC),
                       pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
                       pickerItem(PKV_METRIC),
-                      pickerItem(PKH_METRIC),
                       pickerItem(FORCE_METRIC),
-                      pickerItem(FORCE_HEIGHT_METRIC),
                       pickerItem(POWER_METRIC),
-                      pickerItem(POWER_HEIGHT_METRIC),
+                      pickerItem(WORK_METRIC),
                       pickerItem(ROM_METRIC),
                       pickerItem(LINEAR_3D_ROM_METRIC),
                       pickerItem(DURATION_METRIC),
-                      pickerItem(WORK_METRIC),
                       pickerItem(RPE_METRIC),
+                      pickerItem(PKH_METRIC),
+                      pickerItem(FORCE_HEIGHT_METRIC),
+                      pickerItem(POWER_HEIGHT_METRIC),
                   ]
                 : [
                       pickerItem(EMPTY_METRIC),

@@ -79,9 +79,11 @@ export const getPKHs = set => {
     return getMetrics(
         set,
         r =>
-            (100 * set.deviceType === 'Kratos'
-                ? r.peakVelocityLocation
-                : r.peakHeight) / r.rom,
+            (100 *
+                (set.deviceType === 'Kratos'
+                    ? r.peakVelocityLocation
+                    : r.peakHeight)) /
+            r.rom,
     );
 };
 

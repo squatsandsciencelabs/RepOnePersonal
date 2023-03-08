@@ -510,13 +510,14 @@ const metricDescription = (
         return '';
     }
 
-    const phaseString = phase ? CollapsedMetrics.phaseAbbreviation(phase) : '';
+    const phaseString = phase
+        ? CollapsedMetrics.phaseAbbreviation(phase) + ' '
+        : '';
 
     return (
         CollapsedMetrics.quantifierAbbreviation(quantifier) +
         ' ' +
         phaseString +
-        ' ' +
         CollapsedMetrics.metricAbbreviation(metric)
     );
 };
@@ -537,9 +538,8 @@ const mapStateToProps = (state, ownProps) => {
     };
 
     if (set.deviceType === 'Kratos') {
+        // transforming set reps into the array of objects with 'eccentric' and 'concentric' keys
         const reps = set.reps.map(rep => SetUtils.getKratosRepRows(rep));
-        // transforming set reps into the array of objects with 'eccentric' and 'concentric' keys and assigning them to the set
-        set.reps = reps;
 
         // get all 5 metrics, rollups, phases
         for (let i = 1; i <= METRICS_NUMBER; i++) {

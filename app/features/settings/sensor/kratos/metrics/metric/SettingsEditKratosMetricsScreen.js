@@ -18,12 +18,10 @@ import {
     PERCENT_LOSS_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
-    LINEAR_3D_AVG_VELOCITY_METRIC,
     FORCE_METRIC,
     FORCE_HEIGHT_METRIC,
     POWER_METRIC,
     POWER_HEIGHT_METRIC,
-    LINEAR_3D_ROM_METRIC,
     WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
@@ -39,7 +37,7 @@ const pickerItem = metric => ({
             : CollapsedMetricsUtility.metricAbbreviation(metric),
     value: metric,
 });
-
+// TODO: FORCE_HEIGHT_METRIC and POWER_HEIGHT_METRIC pickerItems should be added when Kratos has it
 const generateItems = rollup => {
     switch (rollup) {
         case MAX_EVER_QUANTIFIER:
@@ -49,7 +47,6 @@ const generateItems = rollup => {
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(DURATION_METRIC),
                 pickerItem(PKV_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
             ];
         case AVG_QUANTIFIER:
         case ABS_LOSS_QUANTIFIER:
@@ -57,47 +54,41 @@ const generateItems = rollup => {
             return [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(PKH_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(FORCE_METRIC),
-                pickerItem(FORCE_HEIGHT_METRIC),
                 pickerItem(POWER_METRIC),
-                pickerItem(POWER_HEIGHT_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(PKH_METRIC),
+                // pickerItem(FORCE_HEIGHT_METRIC),
+                // pickerItem(POWER_HEIGHT_METRIC),
             ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
             return [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(ROM_METRIC),
                 pickerItem(PKV_METRIC),
                 pickerItem(FORCE_METRIC),
                 pickerItem(POWER_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
             ];
         default:
             return [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(ROM_METRIC),
                 pickerItem(PKV_METRIC),
-                pickerItem(PKH_METRIC),
                 pickerItem(FORCE_METRIC),
-                pickerItem(FORCE_HEIGHT_METRIC),
                 pickerItem(POWER_METRIC),
-                pickerItem(POWER_HEIGHT_METRIC),
-                pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-                pickerItem(LINEAR_3D_ROM_METRIC),
                 pickerItem(WORK_METRIC),
+                pickerItem(ROM_METRIC),
+                pickerItem(DURATION_METRIC),
+                pickerItem(PKH_METRIC),
+                // pickerItem(FORCE_HEIGHT_METRIC),
+                // pickerItem(POWER_HEIGHT_METRIC),
             ];
     }
 };
