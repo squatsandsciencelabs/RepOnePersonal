@@ -48,22 +48,6 @@ const generateItems = rollup => {
                 pickerItem(DURATION_METRIC),
                 pickerItem(PKV_METRIC),
             ];
-        case AVG_QUANTIFIER:
-        case ABS_LOSS_QUANTIFIER:
-        case PERCENT_LOSS_QUANTIFIER:
-            return [
-                pickerItem(EMPTY_METRIC),
-                pickerItem(AVG_VELOCITY_METRIC),
-                pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
-                pickerItem(WORK_METRIC),
-                pickerItem(ROM_METRIC),
-                pickerItem(DURATION_METRIC),
-                pickerItem(PKH_METRIC),
-                // pickerItem(FORCE_HEIGHT_METRIC),
-                // pickerItem(POWER_HEIGHT_METRIC),
-            ];
         case SET_LOSS_QUANTIFIER:
         case PEAK_END_QUANTIFIER:
             return [
