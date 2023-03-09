@@ -1,14 +1,9 @@
-import React, {PureComponent} from 'react';
-import {
-    View,
-    StyleSheet,
-    Text
-} from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 class Pill extends PureComponent {
-
     setNativeProps(props: Object) {
-        this.refs['COMMON_THREAD_ROW'].setNativeProps(props)
+        this.refs['COMMON_THREAD_ROW'].setNativeProps(props);
     }
 
     _renderPill() {
@@ -16,7 +11,7 @@ class Pill extends PureComponent {
             // hack to get bug pill working
             // TODO: make this generic rather than specific so you can have multiple pill types
             return (
-                <View style={styles.bugPill} ref='COMMON_THREAD_ROW'>
+                <View style={styles.bugPill} ref="COMMON_THREAD_ROW">
                     <Text style={styles.bugPillText}>{this.props.text}</Text>
                 </View>
             );
@@ -25,19 +20,15 @@ class Pill extends PureComponent {
                 ? this.props.text
                 : this.props.text.toLowerCase();
             return (
-                <View style={styles.pill} ref='COMMON_THREAD_ROW'>
+                <View style={styles.pill} ref="COMMON_THREAD_ROW">
                     <Text style={styles.pillText}>{text}</Text>
-                </View>                
+                </View>
             );
         }
     }
 
     render() {
-        return (
-            <View {...this.props}>
-                {this._renderPill(this.props.text)}
-            </View>
-        );
+        return <View {...this.props}>{this._renderPill(this.props.text)}</View>;
     }
 }
 
@@ -48,7 +39,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         borderBottomWidth: 2,
         borderLeftWidth: 5,
-        borderRightWidth: 5,        
+        borderRightWidth: 5,
         borderRadius: 15,
     },
     pill: {
@@ -57,7 +48,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         borderBottomWidth: 2,
         borderLeftWidth: 5,
-        borderRightWidth: 5,        
+        borderRightWidth: 5,
         borderRadius: 15,
     },
     bugPillText: {
@@ -65,7 +56,7 @@ const styles = StyleSheet.create({
         paddingTop: 2,
         paddingBottom: 2,
         paddingLeft: 5,
-        paddingRight: 5, 
+        paddingRight: 5,
     },
     pillText: {
         color: 'blue',
@@ -73,7 +64,7 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
         paddingLeft: 5,
         paddingRight: 5,
-    }
+    },
 });
 
 export default Pill;

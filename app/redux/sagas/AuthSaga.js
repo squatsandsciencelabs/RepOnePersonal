@@ -11,7 +11,10 @@ import {
     select,
 } from 'redux-saga/effects';
 import { Alert, Platform } from 'react-native';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import {
     STORE_INITIALIZED,
@@ -26,13 +29,13 @@ import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators
 import * as Analytics from 'app/services/Analytics';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
-const AuthSaga = function * AuthSaga() {
+const AuthSaga = function* AuthSaga() {
     // handle anonymous logins
     yield fork(executeAnonymousLogin);
 
     // handle initial authentication
     yield call(executeInitialAuthentication);
-    
+
     while (true) {
         // login
         const loginTask = yield fork(executeLogin);
@@ -45,7 +48,10 @@ const AuthSaga = function * AuthSaga() {
         try {
             // reset and logout
             Analytics.setUserID();
-            const isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
+            const isSignedIn = yield apply(
+                GoogleSignin,
+                GoogleSignin.isSignedIn,
+            );
             if (isSignedIn) {
                 yield apply(GoogleSignin, GoogleSignin.revokeAccess);
                 yield apply(GoogleSignin, GoogleSignin.signOut);
@@ -54,8 +60,8 @@ const AuthSaga = function * AuthSaga() {
             // analytics
             const state = yield select();
             logLogoutAnalytics(state);
-        } catch(error) {
-            console.tron.log("LOGOUT SIGN OUT ERROR " + error);
+        } catch (error) {
+            console.tron.log('LOGOUT SIGN OUT ERROR ' + error);
             const state = yield select();
             logLogoutErrorAnalytics(state, error);
         }
@@ -63,7 +69,7 @@ const AuthSaga = function * AuthSaga() {
 };
 
 function* executeAnonymousLogin() {
-    while(true) {
+    while (true) {
         try {
             yield take([STORE_INITIALIZED, CLEAR_TOKENS, LOGOUT]);
 
@@ -71,21 +77,27 @@ function* executeAnonymousLogin() {
             let refreshToken = yield select(AuthSelectors.getRefreshToken);
             if (!refreshToken) {
                 let json = yield call(API.loginAnonymously);
-                yield put(AuthActionCreators.saveTokens(json.accessToken, json.refreshToken, new Date()));
+                yield put(
+                    AuthActionCreators.saveTokens(
+                        json.accessToken,
+                        json.refreshToken,
+                        new Date(),
+                    ),
+                );
 
                 // analytics
                 const state = yield select();
                 logLoginAnonymouslyAnalytics(state);
             }
-        } catch(error) {
-            console.tron.log("ERROR CODE " + error.code + " ERROR " + error);
+        } catch (error) {
+            console.tron.log('ERROR CODE ' + error.code + ' ERROR ' + error);
             const state = yield select();
             logLoginAnonymouslyErrorAnalytics(state, error);
         }
     }
 }
 
-function *executeInitialAuthentication() {
+function* executeInitialAuthentication() {
     yield take(STORE_INITIALIZED);
     const isLoggedIn = yield select(AuthSelectors.getIsLoggedIn);
     if (!isLoggedIn) {
@@ -98,11 +110,15 @@ function *executeInitialAuthentication() {
             // normal silent sign in
             yield apply(GoogleSignin, GoogleSignin.signInSilently);
         } else {
-            console.tron.log(`Error, redux says you're signed in but google does not agree, calling full reauthentication process`);
+            console.tron.log(
+                `Error, redux says you're signed in but google does not agree, calling full reauthentication process`,
+            );
             yield call(executeReauthenticateLoggedInUser);
         }
     } catch (err) {
-        console.tron.log(`ERROR INITIAL AUTH, not sure what to do so reauthenticating to be safe ${err}`);
+        console.tron.log(
+            `ERROR INITIAL AUTH, not sure what to do so reauthenticating to be safe ${err}`,
+        );
         yield call(executeReauthenticateLoggedInUser);
     }
 }
@@ -124,11 +140,22 @@ function* executeLogin() {
         let json = yield call(API.login, userInfo.idToken);
 
         // success
-        yield put(AuthActionCreators.loginSucceeded(json.accessToken, json.refreshToken, userInfo.user.email, new Date(), json.revision, json.sets));
+        yield put(
+            AuthActionCreators.loginSucceeded(
+                json.accessToken,
+                json.refreshToken,
+                userInfo.user.email,
+                new Date(),
+                json.revision,
+                json.sets,
+            ),
+        );
         state = yield select();
         logLoginAnalytics(state);
-    } catch(error) {
-        console.tron.log("ERROR CODE " + error.code + " ERROR " + JSON.stringify(error));
+    } catch (error) {
+        console.tron.log(
+            'ERROR CODE ' + error.code + ' ERROR ' + JSON.stringify(error),
+        );
         let state = yield select();
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // previously -5 is iOS cancel and 12501 is Android cancel
@@ -183,7 +210,10 @@ function* executeReauthenticateLoggedInUser(manual = false) {
         } else {
             isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
             if (isSignedIn) {
-                userInfo = yield apply(GoogleSignin, GoogleSignin.signInSilently);
+                userInfo = yield apply(
+                    GoogleSignin,
+                    GoogleSignin.signInSilently,
+                );
             } else {
                 userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
             }
@@ -199,20 +229,39 @@ function* executeReauthenticateLoggedInUser(manual = false) {
         const isDifferentUser = origEmail !== userInfo.user.email;
         if (isDifferentUser) {
             // switch accounts, aka lose everything
-            yield put(AuthActionCreators.loginSucceeded(json.accessToken, json.refreshToken, userInfo.user.email, new Date(), json.revision, json.sets));
+            yield put(
+                AuthActionCreators.loginSucceeded(
+                    json.accessToken,
+                    json.refreshToken,
+                    userInfo.user.email,
+                    new Date(),
+                    json.revision,
+                    json.sets,
+                ),
+            );
         } else {
             // success
             // note that we do not utilize the revisions or the set data
             // reason being that we only want to exchange our google token for access and refresh tokens
             // data cannot be pulled yet as they might have data waiting to go to the server first
-            yield put(AuthActionCreators.reauthenticateSucceeded(json.accessToken, json.refreshToken, userInfo.user.email, new Date()));
+            yield put(
+                AuthActionCreators.reauthenticateSucceeded(
+                    json.accessToken,
+                    json.refreshToken,
+                    userInfo.user.email,
+                    new Date(),
+                ),
+            );
         }
         state = yield select();
         logReauthenticatedAnalytics(state, isDifferentUser);
-    } catch(error) {
-        console.tron.log("ERROR CODE " + error.code + " ERROR " + error);
+    } catch (error) {
+        console.tron.log('ERROR CODE ' + error.code + ' ERROR ' + error);
         let state = yield select();
-        if (error.code === statusCodes.SIGN_IN_CANCELLED || error.code === statusCodes.SIGN_IN_REQUIRED) {
+        if (
+            error.code === statusCodes.SIGN_IN_CANCELLED ||
+            error.code === statusCodes.SIGN_IN_REQUIRED
+        ) {
             // previously -5 is iOS cancel and 12501 is Android cancel
             logCancelReauthenticateAnalytics(state);
             // yield put(AuthActionCreators.logout(true)); // this will pop the alert
@@ -235,25 +284,22 @@ function* executeReauthenticateLoggedInUser(manual = false) {
 // ALERTS
 
 const showSignInErrorAlert = () => {
-    alert("Oops!", "Something went wrong during the signin process, please try again.");
+    alert(
+        'Oops!',
+        'Something went wrong during the signin process, please try again.',
+    );
 };
 
 const alert = (title, message) => {
     if (Platform.OS === 'ios') {
         // timeout is required to get around the window switching that the google sign in does on iOS
         // without it, the alert will not show
-        setTimeout(() => { 
-            Alert.alert(
-                title,
-                message,
-            );
+        setTimeout(() => {
+            Alert.alert(title, message);
         }, 500);
     } else {
         // execute immediately on android
-        Alert.alert(
-            title,
-            message,
-        );
+        Alert.alert(title, message);
     }
 };
 
@@ -261,93 +307,88 @@ const alert = (title, message) => {
 
 // login
 
-const logAttemptLoginGoogleAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_login_google', {
-    }, state);
+const logAttemptLoginGoogleAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_login_google', {}, state);
 };
 
-const logAttemptLoginOpenBarbellAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_login_repone', {
-    }, state);
+const logAttemptLoginOpenBarbellAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_login_repone', {}, state);
 };
 
-const logCancelLoginAnalytics = (state) => {
-    Analytics.logEventWithAppState('cancel_login', {
-    }, state);
+const logCancelLoginAnalytics = state => {
+    Analytics.logEventWithAppState('cancel_login', {}, state);
 };
 
 const logLoginErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'login_error', {
-    }, state);
+    Analytics.logErrorWithAppState(error, 'login_error', {}, state);
 };
 
 // TODO: test this
 // this is waiting for a system to test sagas
-const logLoginAnalytics = (state) => {
+const logLoginAnalytics = state => {
     const revision = SetsSelectors.getRevision(state);
     const has_nonzero_revision = revision > 0;
 
-    Analytics.logEventWithAppState('login', {
-        revision: revision,
-        has_nonzero_revision: has_nonzero_revision,
-    }, state);
+    Analytics.logEventWithAppState(
+        'login',
+        {
+            revision: revision,
+            has_nonzero_revision: has_nonzero_revision,
+        },
+        state,
+    );
 };
 
 // reauth
 
-const logAttemptReauthenticateGoogleAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_reauthenticate_google', {
-    }, state);
+const logAttemptReauthenticateGoogleAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_reauthenticate_google', {}, state);
 };
 
-const logAttemptReauthenticateOpenBarbellAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_reauthenticate_repone', {
-    }, state);
+const logAttemptReauthenticateOpenBarbellAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_reauthenticate_repone', {}, state);
 };
 
-const logCancelReauthenticateAnalytics = (state) => {
-    Analytics.logEventWithAppState('cancel_reauthenticate', {
-    }, state);
+const logCancelReauthenticateAnalytics = state => {
+    Analytics.logEventWithAppState('cancel_reauthenticate', {}, state);
 };
 
 const logReauthenticateErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'reauthenticate_error', {
-    }, state);
+    Analytics.logErrorWithAppState(error, 'reauthenticate_error', {}, state);
 };
 
 const logReauthenticatedAnalytics = (state, isDiffUser) => {
-    Analytics.logEventWithAppState('reauthenticated', {
-        is_diff_user: isDiffUser,
-    }, state);
+    Analytics.logEventWithAppState(
+        'reauthenticated',
+        {
+            is_diff_user: isDiffUser,
+        },
+        state,
+    );
 };
 
-const logReauthenticateAnonymousAnalytics = (state) => {
-    Analytics.logEventWithAppState('reauthenticated_anonymous', {
-    }, state);
+const logReauthenticateAnonymousAnalytics = state => {
+    Analytics.logEventWithAppState('reauthenticated_anonymous', {}, state);
 };
 
 // anonymous
 
-const logLoginAnonymouslyAnalytics = (state) => {
-    Analytics.logEventWithAppState('login_anonymously', {
-    }, state);
+const logLoginAnonymouslyAnalytics = state => {
+    Analytics.logEventWithAppState('login_anonymously', {}, state);
 };
 
 const logLoginAnonymouslyErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'login_anonymously_error', {
-    }, state);
+    Analytics.logErrorWithAppState(error, 'login_anonymously_error', {}, state);
 };
 
 // logout
 
 const logLogoutErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'logout_error', {
-    }, state);
+    Analytics.logErrorWithAppState(error, 'logout_error', {}, state);
 };
 
-const logLogoutAnalytics = (state) => {
-    Analytics.logEventWithAppState('logout', {
-    }, state);
+const logLogoutAnalytics = state => {
+    Analytics.logEventWithAppState('logout', {}, state);
 };
 
 export default AuthSaga;

@@ -9,30 +9,39 @@ const title = 'Edit Tags';
 const placeholder = 'Enter Tag';
 const text = '';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     title,
     placeholder,
     text,
     multipleInput: true,
     setID: state.workout.editingTagsSetID,
     inputs: state.workout.editingTags,
-    generateMultipleInputSuggestions: (input, ignore) => { return SuggestionsSelectors.generateTagsSuggestions(state, input, ignore) },
-    isModalShowing: state.workout.editingTagsSetID !== null
+    generateMultipleInputSuggestions: (input, ignore) => {
+        return SuggestionsSelectors.generateTagsSuggestions(
+            state,
+            input,
+            ignore,
+        );
+    },
+    isModalShowing: state.workout.editingTagsSetID !== null,
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSetMultipleInput: Actions.saveTags,
-        closeModal: Actions.dismissTags,
-        cancelModal: Actions.cancelTags,
-        tappedPill: Actions.tappedPill,
-        addPill: Actions.addPill,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSetMultipleInput: Actions.saveTags,
+            closeModal: Actions.dismissTags,
+            cancelModal: Actions.cancelTags,
+            tappedPill: Actions.tappedPill,
+            addPill: Actions.addPill,
+        },
+        dispatch,
+    );
 };
 
 const EditWorkoutTagsScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditTextModal);
 
 export default EditWorkoutTagsScreen;

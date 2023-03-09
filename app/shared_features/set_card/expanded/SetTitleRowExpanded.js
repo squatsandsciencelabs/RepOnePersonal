@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -10,19 +10,25 @@ import {
 import Icon from 'react-native-vector-icons/Entypo';
 
 class SetTitleRowExpanded extends Component {
-
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
-            return (<Text style={[styles.fieldText, styles.placeholderText]}>Exercise</Text>);
+            return (
+                <Text style={[styles.fieldText, styles.placeholderText]}>
+                    Exercise
+                </Text>
+            );
         }
-        return (<Text style={styles.fieldText}>{this.props.exercise}</Text>);
+        return <Text style={styles.fieldText}>{this.props.exercise}</Text>;
     }
 
     _renderSetNumber() {
         if (this.props.removed) {
             return null;
         }
-        if (this.props.setNumber === null || this.props.setNumber === undefined) {
+        if (
+            this.props.setNumber === null ||
+            this.props.setNumber === undefined
+        ) {
             return '#1';
         }
         return '#' + this.props.setNumber;
@@ -32,7 +38,11 @@ class SetTitleRowExpanded extends Component {
         if (this.props.isCollapsable) {
             return (
                 <View>
-                    <Icon name="chevron-with-circle-up" size={20} color='rgba(170, 170, 170, 1)' />
+                    <Icon
+                        name="chevron-with-circle-up"
+                        size={20}
+                        color="rgba(170, 170, 170, 1)"
+                    />
                 </View>
             );
         } else {
@@ -43,21 +53,37 @@ class SetTitleRowExpanded extends Component {
     render() {
         return (
             <View style={[styles.container, styles.border]}>
-                <View style={[styles.field, {flex: 1}]}>
-                    <TouchableHighlight onPress={() => this.props.tappedExercise(this.props.setID, this.props.exercise, this.props.bias)} underlayColor='#e0e0e0'>
+                <View style={[styles.field, { flex: 1 }]}>
+                    <TouchableHighlight
+                        onPress={() =>
+                            this.props.tappedExercise(
+                                this.props.setID,
+                                this.props.exercise,
+                                this.props.bias,
+                            )
+                        }
+                        underlayColor="#e0e0e0">
                         {this._renderExercise()}
                     </TouchableHighlight>
-                    <View style={styles.fieldDetails} pointerEvents='none'>
-                        <Text style={styles.detailText}>{this._renderSetNumber()}</Text>
+                    <View style={styles.fieldDetails} pointerEvents="none">
+                        <Text style={styles.detailText}>
+                            {this._renderSetNumber()}
+                        </Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.chevronContainer} onPress={() => this.props.isCollapsable ? this.props.tappedCollapse(this.props.setID) : false }>
+                <TouchableOpacity
+                    style={styles.chevronContainer}
+                    onPress={() =>
+                        this.props.isCollapsable
+                            ? this.props.tappedCollapse(this.props.setID)
+                            : false
+                    }>
                     {this._renderChevron()}
                 </TouchableOpacity>
             </View>
         );
     }
-};
+}
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
@@ -94,10 +120,10 @@ const styles = StyleSheet.create({
     detailText: {
         fontSize: 13,
         color: 'gray',
-        backgroundColor: 'rgba(0, 0, 0, 0)'
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     placeholderText: {
-        color: 'rgba(189, 189, 189, 1)'
+        color: 'rgba(189, 189, 189, 1)',
     },
     chevronContainer: {
         width: 40,

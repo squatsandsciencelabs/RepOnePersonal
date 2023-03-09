@@ -10,31 +10,40 @@ const title = 'Tags to Include';
 const placeholder = 'Enter Tag';
 const text = '';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     // TODO move tags suggestion out
     return {
         title,
         placeholder,
         text,
         inputs: HistorySelectors.getEditingFilterTagsToInclude(state),
-        generateSuggestions: (input, ignore) => SetsSelectors.getHistoryFilterTagsToIncludeSuggestions(state, input, ignore),
-        isModalShowing: HistorySelectors.getIsEditingHistoryFilterTagsToInclude(state),
-    }
+        generateSuggestions: (input, ignore) =>
+            SetsSelectors.getHistoryFilterTagsToIncludeSuggestions(
+                state,
+                input,
+                ignore,
+            ),
+        isModalShowing:
+            HistorySelectors.getIsEditingHistoryFilterTagsToInclude(state),
+    };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        save: Actions.saveTags,
-        closeModal: Actions.dismissTags,
-        cancelModal: Actions.cancelTags,
-        tappedPill: Actions.tappedPill,
-        addPill: Actions.addPill,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            save: Actions.saveTags,
+            closeModal: Actions.dismissTags,
+            cancelModal: Actions.cancelTags,
+            tappedPill: Actions.tappedPill,
+            addPill: Actions.addPill,
+        },
+        dispatch,
+    );
 };
 
 const EditHistoryFilterTagsToIncludeScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SelectTagsModal);
 
 export default EditHistoryFilterTagsToIncludeScreen;

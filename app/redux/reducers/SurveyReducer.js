@@ -26,7 +26,10 @@ const SurveyReducer = (state = defaultState, action) => {
         case COMPLETE_SURVEY:
             if (state.surveyURL) {
                 return Object.assign({}, state, {
-                    completedSurveyURLs: [...state.completedSurveyURLs, state.surveyURL],
+                    completedSurveyURLs: [
+                        ...state.completedSurveyURLs,
+                        state.surveyURL,
+                    ],
                     isFillingOutSurvey: false,
                 });
             }
@@ -37,7 +40,10 @@ const SurveyReducer = (state = defaultState, action) => {
         case OPT_OUT_END_WORKOUT_SURVEY_PROMPT:
             return {
                 ...state,
-                optedOutEndWorkoutPromptSurveyURLs: [...state.optedOutEndWorkoutPromptSurveyURLs, state.surveyURL],
+                optedOutEndWorkoutPromptSurveyURLs: [
+                    ...state.optedOutEndWorkoutPromptSurveyURLs,
+                    state.surveyURL,
+                ],
             };
         default:
             return state;

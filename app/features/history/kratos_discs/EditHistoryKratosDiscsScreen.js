@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 
 import EditKratosDiscsModal from 'app/shared_features/edit_set/EditKratosDiscsModal';
 import * as Actions from './EditHistoryKratosDiscsActions';
-import {
-    kratosDiscsOptions,
-} from 'app/configs+constants/KratosConfig';
+import { kratosDiscsOptions } from 'app/configs+constants/KratosConfig';
 
 const title = 'Choose Flywheels';
 const stackValues = true;
@@ -20,7 +18,7 @@ const mapKratosDiscToArray = kratosDiscs => {
         });
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     title,
     text,
     multipleInput: true,
@@ -32,7 +30,7 @@ const mapStateToProps = (state) => ({
     noTextTransform,
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             saveSetMultipleInput: Actions.saveKratosDiscs,
@@ -47,7 +45,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const EditHistoryKratosDiscsScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditKratosDiscsModal);
 
 export default EditHistoryKratosDiscsScreen;

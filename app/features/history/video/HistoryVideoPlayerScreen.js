@@ -5,22 +5,25 @@ import VideoPlayer from 'app/shared_features/video/VideoPlayer';
 import * as Actions from './HistoryVideoPlayerActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isModalShowing: HistorySelectors.getIsVideoPlayerVisible(state),
     setID: HistorySelectors.getWatchSetID(state),
-    video: HistorySelectors.getWatchFileURL(state)
+    video: HistorySelectors.getWatchFileURL(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        deleteVideo: Actions.deleteVideo,
-        closeModal: Actions.closeModal,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            deleteVideo: Actions.deleteVideo,
+            closeModal: Actions.closeModal,
+        },
+        dispatch,
+    );
 };
 
 const HistoryVideoPlayerScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(VideoPlayer);
 
 export default HistoryVideoPlayerScreen;

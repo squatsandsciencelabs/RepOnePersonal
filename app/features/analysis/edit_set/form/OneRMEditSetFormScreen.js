@@ -6,14 +6,18 @@ import SetForm from 'app/shared_features/set_card/expanded/SetForm';
 import * as Actions from './OneRMEditSetFormActions';
 import * as DateUtils from 'app/utility/DateUtils';
 
-const makeSelector = () => createSelector(
-    (state, props) => props.initialStartTime,
-    initialStartTime => {
-        return {
-            rpeDisabled: !DateUtils.checkDateWithinRange(7, initialStartTime),
-        };
-    }
-);
+const makeSelector = () =>
+    createSelector(
+        (state, props) => props.initialStartTime,
+        initialStartTime => {
+            return {
+                rpeDisabled: !DateUtils.checkDateWithinRange(
+                    7,
+                    initialStartTime,
+                ),
+            };
+        },
+    );
 
 const makeMapStateToProps = () => {
     const getModel = makeSelector();
@@ -22,24 +26,27 @@ const makeMapStateToProps = () => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSet: Actions.saveSet,
-        tapExercise: Actions.presentExercise,
-        tapTags: Actions.presentTags,
-        tapRPE: Actions.editRPE,
-        tapWeight: Actions.editWeight,
-        dismissRPE: Actions.dismissRPE,
-        dismissWeight: Actions.dismissWeight,
-        toggleMetric: Actions.toggleMetric,
-        updateWeight: Actions.updateWeight,
-        updateRPE: Actions.updateRPE,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSet: Actions.saveSet,
+            tapExercise: Actions.presentExercise,
+            tapTags: Actions.presentTags,
+            tapRPE: Actions.editRPE,
+            tapWeight: Actions.editWeight,
+            dismissRPE: Actions.dismissRPE,
+            dismissWeight: Actions.dismissWeight,
+            toggleMetric: Actions.toggleMetric,
+            updateWeight: Actions.updateWeight,
+            updateRPE: Actions.updateRPE,
+        },
+        dispatch,
+    );
 };
 
 const OneRMEditSetFormScreen = connect(
     makeMapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SetForm);
 
 export default OneRMEditSetFormScreen;

@@ -10,7 +10,6 @@ export const tappedDevice = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logWorkoutDeviceAnalytics = (state) => {
-    Analytics.logEventWithAppState('workout_device', {
-    }, state);
+const logWorkoutDeviceAnalytics = state => {
+    Analytics.logEventWithAppState('workout_device', {}, state);
 };

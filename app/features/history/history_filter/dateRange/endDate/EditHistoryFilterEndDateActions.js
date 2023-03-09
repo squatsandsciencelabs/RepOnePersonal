@@ -6,18 +6,22 @@ import {
     DISMISS_HISTORY_FILTER_END_DATE,
 } from 'app/configs+constants/ActionTypes';
 
-export const changeDate = (date) => (dispatch, getState) => {
+export const changeDate = date => (dispatch, getState) => {
     const state = getState();
-    const startDate = HistorySelectors.getEditingHistoryFilterStartingDate(state);
+    const startDate =
+        HistorySelectors.getEditingHistoryFilterStartingDate(state);
     const endDate = date.toString();
 
     if (moment(startDate) < moment(endDate) || !startDate) {
-        dispatch({ 
+        dispatch({
             type: SAVE_HISTORY_FILTER_END_DATE,
             date: endDate,
         });
     } else {
-        Alert.alert("Invalid Date Filter", "Plesae select a date that is after your 'from' date.");
+        Alert.alert(
+            'Invalid Date Filter',
+            "Plesae select a date that is after your 'from' date.",
+        );
     }
 };
 

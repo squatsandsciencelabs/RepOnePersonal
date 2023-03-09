@@ -3,7 +3,7 @@ import {
     RESET_CALIBRATION,
 } from 'app/configs+constants/ActionTypes';
 
-export const tappedCalibrate = () => ({ 
+export const tappedCalibrate = () => ({
     type: SHOW_CALIBRATION_MODAL,
 });
 

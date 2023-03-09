@@ -1,6 +1,4 @@
-import {
-    PRESENT_SURVEY,
-} from 'app/configs+constants/ActionTypes';
+import { PRESENT_SURVEY } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SurveyActionCreators from 'app/redux/shared_actions/SurveyActionCreators';
 import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
@@ -15,8 +13,12 @@ export const presentSurvey = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logPresentSurveyAnalytics = (state) => {
-    Analytics.logEventWithAppState('present_survey', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logPresentSurveyAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'present_survey',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };

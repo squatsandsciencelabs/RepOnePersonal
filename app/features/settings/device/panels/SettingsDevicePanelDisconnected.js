@@ -5,7 +5,7 @@ import {
     Image,
     TouchableOpacity,
     ActivityIndicator,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
@@ -16,7 +16,6 @@ const REFRESH_SCAN = 5 * 1000;
 
 // allows scan, view, and select of scanned devices
 class SettingsDevicePanelDisconnected extends Component {
-
     constructor(props) {
         super(props);
         this.timer = null;
@@ -37,7 +36,7 @@ class SettingsDevicePanelDisconnected extends Component {
 
     // ACTIONS
 
-    _scanForDevices(time, isManualScan=true) {
+    _scanForDevices(time, isManualScan = true) {
         this.props.startDeviceScan(isManualScan);
 
         this.timer = setTimeout(() => {
@@ -54,10 +53,15 @@ class SettingsDevicePanelDisconnected extends Component {
 
     render() {
         return (
-            <View style={ [SETTINGS_PANEL_STYLES.panel] }>
-                <View style={ SETTINGS_PANEL_STYLES.header }>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={ SETTINGS_PANEL_STYLES.headerText }>
+            <View style={[SETTINGS_PANEL_STYLES.panel]}>
+                <View style={SETTINGS_PANEL_STYLES.header}>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={SETTINGS_PANEL_STYLES.headerText}>
                             Tap Unit # to Connect
                         </Text>
                     </View>
@@ -65,8 +69,14 @@ class SettingsDevicePanelDisconnected extends Component {
 
                 {this._renderRefreshButton()}
 
-                <View style={ [SETTINGS_PANEL_STYLES.content, {alignItems: 'stretch'}] }>
-                    { this.props.scannedDevices.scanning ? this._renderScanningMessage() : this._renderDeviceList() }
+                <View
+                    style={[
+                        SETTINGS_PANEL_STYLES.content,
+                        { alignItems: 'stretch' },
+                    ]}>
+                    {this.props.scannedDevices.scanning
+                        ? this._renderScanningMessage()
+                        : this._renderDeviceList()}
                 </View>
             </View>
         );
@@ -74,18 +84,23 @@ class SettingsDevicePanelDisconnected extends Component {
 
     _renderRefreshButton() {
         if (this.props.scannedDevices.scanning) {
-            return (<ActivityIndicator
-                style={{flex: 1, height: 50}}
-                color="gray"
-            />)
+            return (
+                <ActivityIndicator
+                    style={{ flex: 1, height: 50 }}
+                    color="gray"
+                />
+            );
         }
 
         return (
             <View style={{ flex: 1 }}>
-                <TouchableOpacity style={[SETTINGS_PANEL_STYLES.blueButton, {height: 50}]}
-                    disabled={ this.props.scannedDevices.scanning }
-                    onPress={ () => this._scanForDevices(REFRESH_SCAN) }>
-                        <Text style={SETTINGS_PANEL_STYLES.buttonText}>REFRESH</Text>
+                <TouchableOpacity
+                    style={[SETTINGS_PANEL_STYLES.blueButton, { height: 50 }]}
+                    disabled={this.props.scannedDevices.scanning}
+                    onPress={() => this._scanForDevices(REFRESH_SCAN)}>
+                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>
+                        REFRESH
+                    </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -94,28 +109,59 @@ class SettingsDevicePanelDisconnected extends Component {
     _renderDeviceList() {
         if (this.props.scannedDevices.devices.length < 1) {
             return (
-                <TouchableOpacity style={{alignItems: 'center', marginTop: 10}} onPress={ () => this.props.tappedTroubleshooting() }>
-                    <Text style= {[{ textDecorationLine: 'underline'}, styles.centeredText]} >Troubleshooting Tips</Text>
+                <TouchableOpacity
+                    style={{ alignItems: 'center', marginTop: 10 }}
+                    onPress={() => this.props.tappedTroubleshooting()}>
+                    <Text
+                        style={[
+                            { textDecorationLine: 'underline' },
+                            styles.centeredText,
+                        ]}>
+                        Troubleshooting Tips
+                    </Text>
                 </TouchableOpacity>
             );
         }
 
         let deviceRows = [];
-        for (let i=0; i<this.props.scannedDevices.devices.length; i++) {
-            deviceRows.push(this._renderDeviceRow(this.props.scannedDevices.devices[i], this.props.scannedDevices.deviceIds[i]));
+        for (let i = 0; i < this.props.scannedDevices.devices.length; i++) {
+            deviceRows.push(
+                this._renderDeviceRow(
+                    this.props.scannedDevices.devices[i],
+                    this.props.scannedDevices.deviceIds[i],
+                ),
+            );
         }
         return (
-            <View style={{flex: 1, flexDirection: 'column'}}>{deviceRows}</View>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+                {deviceRows}
+            </View>
         );
     }
 
     _renderDeviceRow(device, deviceIdentifier) {
         return (
-            <TouchableOpacity key={device} style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}, styles.deviceRow]}
+            <TouchableOpacity
+                key={device}
+                style={[
+                    {
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    },
+                    styles.deviceRow,
+                ]}
                 alphaOpactity={1}
-                onPress={ () => this.props.connectDevice(device, deviceIdentifier) }>
-                    <View><Text style={styles.deviceRowText}>{ device }</Text></View>
-                    <Image source={require('app/appearance/images/icon_bluetooth_available.png')}/>
+                onPress={() =>
+                    this.props.connectDevice(device, deviceIdentifier)
+                }>
+                <View>
+                    <Text style={styles.deviceRowText}>{device}</Text>
+                </View>
+                <Image
+                    source={require('app/appearance/images/icon_bluetooth_available.png')}
+                />
             </TouchableOpacity>
         );
     }
@@ -127,7 +173,6 @@ class SettingsDevicePanelDisconnected extends Component {
             </Text>
         );
     }
-
 }
 
 const styles = StyleSheet.create({

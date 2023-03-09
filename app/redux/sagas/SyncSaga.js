@@ -1,4 +1,12 @@
-import { take, call, select, put, fork, cancelled, cancel } from 'redux-saga/effects';
+import {
+    take,
+    call,
+    select,
+    put,
+    fork,
+    cancelled,
+    cancel,
+} from 'redux-saga/effects';
 
 import {
     LOGOUT,
@@ -28,11 +36,11 @@ const SyncSaga = function* SyncSaga() {
     yield cancel(task);
 };
 
-function *syncLoop() {
+function* syncLoop() {
     while (true) {
         // sync
         const task = yield fork(executeSync);
-        
+
         // cancel on logout
         yield take(LOGOUT);
         yield cancel(task);
@@ -54,8 +62,8 @@ function* executeSync() {
         ]);
 
         // login check - do not need to check is uploading as relying on the cancel instead
-        const isLoggedIn = yield select(AuthSelectors.getIsLoggedIn);    
-        if (!isLoggedIn)  {
+        const isLoggedIn = yield select(AuthSelectors.getIsLoggedIn);
+        if (!isLoggedIn) {
             yield call(pushAnonymousUpdates);
             // console.tron.log("Not logged in, backing out of sync");
             // const state = yield select();
@@ -67,7 +75,7 @@ function* executeSync() {
     }
 }
 
-function *pushAnonymousUpdates() {
+function* pushAnonymousUpdates() {
     const sets = yield select(SetsSelectors.getSetsToUpload);
     if (sets.length > 0) {
         yield put(SetsActionCreators.beginUploadingSets());
@@ -76,7 +84,9 @@ function *pushAnonymousUpdates() {
             let state = yield select();
             logAttemptPushAnonymousDataAnalytics(state);
             const accessToken = yield select(AuthSelectors.getAccessToken);
-            const lastRefreshDate = yield select(AuthSelectors.getLastRefreshDate);
+            const lastRefreshDate = yield select(
+                AuthSelectors.getLastRefreshDate,
+            );
             const validator = new Validator(accessToken, lastRefreshDate);
             const json = yield call(API.postAnonymousSetData, sets, validator);
 
@@ -84,7 +94,7 @@ function *pushAnonymousUpdates() {
             state = yield select();
             logPushAnonymousDataSucceededAnalytics(state);
             yield put(SetsActionCreators.finishedUploadingSets());
-        } catch(error) {
+        } catch (error) {
             // error
             let state = yield select();
             logPushAnonymousDataErrorAnalytics(state, error);
@@ -92,10 +102,10 @@ function *pushAnonymousUpdates() {
             if (error.type !== undefined || typeof error === 'function') {
                 yield put(error);
             }
-            console.tron.log(JSON.stringify(error));            
+            console.tron.log(JSON.stringify(error));
         } finally {
             if (yield cancelled()) {
-                console.tron.log("Push Anonymous Updates cancelled");            
+                console.tron.log('Push Anonymous Updates cancelled');
                 yield put(SetsActionCreators.failedUploadSets());
             }
         }
@@ -114,9 +124,11 @@ function* pushUpdates() {
             // upload
             let state = yield select();
             logAttemptPushDataAnalytics(state);
-            const initialRevision = yield select(SetsSelectors.getRevision);            
+            const initialRevision = yield select(SetsSelectors.getRevision);
             const accessToken = yield select(AuthSelectors.getAccessToken);
-            const lastRefreshDate = yield select(AuthSelectors.getLastRefreshDate);
+            const lastRefreshDate = yield select(
+                AuthSelectors.getLastRefreshDate,
+            );
             const validator = new Validator(accessToken, lastRefreshDate);
             const json = yield call(API.postUpdatedSetData, sets, validator);
 
@@ -127,7 +139,7 @@ function* pushUpdates() {
 
             // sanity check
             yield call(pullUpdates, initialRevision);
-        } catch(error) {
+        } catch (error) {
             // error
             let state = yield select();
             logPushDataErrorAnalytics(state, error);
@@ -135,10 +147,10 @@ function* pushUpdates() {
             if (error.type !== undefined || typeof error === 'function') {
                 yield put(error);
             }
-            console.tron.log(JSON.stringify(error));            
+            console.tron.log(JSON.stringify(error));
         } finally {
             if (yield cancelled()) {
-                console.tron.log("Push Updates cancelled");            
+                console.tron.log('Push Updates cancelled');
                 yield put(SetsActionCreators.failedUploadSets());
             }
         }
@@ -146,15 +158,17 @@ function* pushUpdates() {
 }
 
 // pull updates from the server
-function* pullUpdates(previousRevision=null) {
-    var revision = yield select(SetsSelectors.getRevision);    
+function* pullUpdates(previousRevision = null) {
+    var revision = yield select(SetsSelectors.getRevision);
     const accessToken = yield select(AuthSelectors.getAccessToken);
     const lastRefreshDate = yield select(AuthSelectors.getLastRefreshDate);
     const validator = new Validator(accessToken, lastRefreshDate);
 
     // check how many changes occured since
     if (previousRevision !== null && revision - previousRevision > 1) {
-        console.tron.log("You just synced but the revision difference is too large, enforce a new sync");
+        console.tron.log(
+            'You just synced but the revision difference is too large, enforce a new sync',
+        );
         revision = previousRevision;
     }
 
@@ -168,11 +182,16 @@ function* pullUpdates(previousRevision=null) {
         state = yield select();
         logPullDataSucceededAnalytics(state);
         if (json !== undefined) {
-            yield put(SetsActionCreators.updateSetDataFromServer(json.revision, json.sets));
+            yield put(
+                SetsActionCreators.updateSetDataFromServer(
+                    json.revision,
+                    json.sets,
+                ),
+            );
         } else {
             yield put(SettingsActionCreators.updateSyncDate());
         }
-    } catch(error) {
+    } catch (error) {
         // error
         let state = yield select();
         logPullDataErrorAnalytics(state, error);
@@ -185,58 +204,66 @@ function* pullUpdates(previousRevision=null) {
 
 // ANALYTICS
 
-const logSyncIgnoredAnalytics = (state) => {
-    Analytics.logEventWithAppState('sync_ignored', {
-    }, state);
+const logSyncIgnoredAnalytics = state => {
+    Analytics.logEventWithAppState('sync_ignored', {}, state);
 };
 
-const logAttemptPullDataAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_pull_data', {
-    }, state);
+const logAttemptPullDataAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_pull_data', {}, state);
 };
 
-const logPullDataSucceededAnalytics = (state) => {
-    Analytics.logEventWithAppState('pull_data_succeeded', {
-    }, state);
+const logPullDataSucceededAnalytics = state => {
+    Analytics.logEventWithAppState('pull_data_succeeded', {}, state);
 };
 
 const logPullDataErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'pull_data_error', {
-        revision: SetsSelectors.getRevision(state),
-    }, state);
+    Analytics.logErrorWithAppState(
+        error,
+        'pull_data_error',
+        {
+            revision: SetsSelectors.getRevision(state),
+        },
+        state,
+    );
 };
 
-const logAttemptPushDataAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_push_data', {
-    }, state);
+const logAttemptPushDataAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_push_data', {}, state);
 };
 
-const logPushDataSucceededAnalytics = (state) => {
-    Analytics.logEventWithAppState('push_data_succeeded', {
-    }, state);
+const logPushDataSucceededAnalytics = state => {
+    Analytics.logEventWithAppState('push_data_succeeded', {}, state);
 };
 
 const logPushDataErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'push_data_error', {
-        revision: SetsSelectors.getRevision(state),
-        num_sets_to_push: SetsSelectors.getNumSetsBeingUploaded(state),
-    }, state);
+    Analytics.logErrorWithAppState(
+        error,
+        'push_data_error',
+        {
+            revision: SetsSelectors.getRevision(state),
+            num_sets_to_push: SetsSelectors.getNumSetsBeingUploaded(state),
+        },
+        state,
+    );
 };
 
-const logAttemptPushAnonymousDataAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_push_anonymous_data', {
-    }, state);
+const logAttemptPushAnonymousDataAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_push_anonymous_data', {}, state);
 };
 
-const logPushAnonymousDataSucceededAnalytics = (state) => {
-    Analytics.logEventWithAppState('push_anonymous_data_succeeded', {
-    }, state);
+const logPushAnonymousDataSucceededAnalytics = state => {
+    Analytics.logEventWithAppState('push_anonymous_data_succeeded', {}, state);
 };
 
 const logPushAnonymousDataErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'push_anonymous_data_error', {
-        num_sets_to_push: SetsSelectors.getNumSetsBeingUploaded(state),
-    }, state);
-}; 
+    Analytics.logErrorWithAppState(
+        error,
+        'push_anonymous_data_error',
+        {
+            num_sets_to_push: SetsSelectors.getNumSetsBeingUploaded(state),
+        },
+        state,
+    );
+};
 
 export default SyncSaga;

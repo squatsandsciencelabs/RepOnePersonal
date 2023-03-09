@@ -1,32 +1,34 @@
-const stateRoot = (state) => state.collapsedSettings;
+const stateRoot = state => state.collapsedSettings;
 
-export const getCurrentCollapsedMetricRank = (state) => stateRoot(state).currentCollapsedMetricRank;
+export const getCurrentCollapsedMetricRank = state =>
+    stateRoot(state).currentCollapsedMetricRank;
 
-export const getMetric1 = (state) => stateRoot(state).metric1;
+export const getMetric1 = state => stateRoot(state).metric1;
 
-export const getMetric2 = (state) => stateRoot(state).metric2;
+export const getMetric2 = state => stateRoot(state).metric2;
 
-export const getMetric3 = (state) => stateRoot(state).metric3;
+export const getMetric3 = state => stateRoot(state).metric3;
 
-export const getMetric4 = (state) => stateRoot(state).metric4;
+export const getMetric4 = state => stateRoot(state).metric4;
 
-export const getMetric5 = (state) => stateRoot(state).metric5;
+export const getMetric5 = state => stateRoot(state).metric5;
 
-export const getQuantifier1 = (state) => stateRoot(state).quantifier1;
+export const getQuantifier1 = state => stateRoot(state).quantifier1;
 
-export const getQuantifier2 = (state) => stateRoot(state).quantifier2;
+export const getQuantifier2 = state => stateRoot(state).quantifier2;
 
-export const getQuantifier3 = (state) => stateRoot(state).quantifier3;
+export const getQuantifier3 = state => stateRoot(state).quantifier3;
 
-export const getQuantifier4 = (state) => stateRoot(state).quantifier4;
+export const getQuantifier4 = state => stateRoot(state).quantifier4;
 
-export const getQuantifier5 = (state) => stateRoot(state).quantifier5;
+export const getQuantifier5 = state => stateRoot(state).quantifier5;
 
-export const getIsEditingMetric = (state) => stateRoot(state).isEditingMetric;
+export const getIsEditingMetric = state => stateRoot(state).isEditingMetric;
 
-export const getIsEditingQuantifier = (state) => stateRoot(state).isEditingQuantifier;
+export const getIsEditingQuantifier = state =>
+    stateRoot(state).isEditingQuantifier;
 
-export const getCurrentMetric = (state) => {
+export const getCurrentMetric = state => {
     const root = stateRoot(state);
     switch (root.currentCollapsedMetricRank) {
         case 1:
@@ -44,7 +46,7 @@ export const getCurrentMetric = (state) => {
     }
 };
 
-export const getCurrentQuantifier = (state) => {
+export const getCurrentQuantifier = state => {
     const root = stateRoot(state);
     switch (root.currentCollapsedMetricRank) {
         case 1:

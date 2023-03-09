@@ -9,9 +9,9 @@ export const saveColumnSetting = (metric, rank) => (dispatch, getState) => {
     const state = getState();
     if (rank === null || rank === undefined) {
         rank = KratosColumnsSettingsSelectors.getEditingMetricRank(state);
-
     }
-    const prevMetric = KratosColumnsSettingsSelectors.getMetrics(state)[rank - 1];
+    const prevMetric =
+        KratosColumnsSettingsSelectors.getMetrics(state)[rank - 1];
     logChangeColumnAnalytics(rank, prevMetric, metric, state);
 
     dispatch({
@@ -32,9 +32,13 @@ export const dismissColumnSetter = () => {
 // ANALYTICS
 
 const logChangeColumnAnalytics = (rank, prevMetric, metric, state) => {
-    Analytics.logEventWithAppState('change_kratos_column_metric', {
-        rank: rank,
-        from_metric: prevMetric,
-        to_metric: metric,
-    }, state);
+    Analytics.logEventWithAppState(
+        'change_kratos_column_metric',
+        {
+            rank: rank,
+            from_metric: prevMetric,
+            to_metric: metric,
+        },
+        state,
+    );
 };

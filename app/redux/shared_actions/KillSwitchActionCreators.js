@@ -4,23 +4,23 @@ import {
     FETCH_VERSION,
     VERSION_OK,
     VERSION_KILLED,
-    VERSION_UNAVAILABLE
+    VERSION_UNAVAILABLE,
 } from 'app/configs+constants/ActionTypes';
 
-export const fetchVersion = () => ( {type: FETCH_VERSION });
+export const fetchVersion = () => ({ type: FETCH_VERSION });
 
-export const versionOk = (currentVersion) => ({
+export const versionOk = currentVersion => ({
     type: VERSION_OK,
-    currentVersion: currentVersion
+    currentVersion: currentVersion,
 });
 
 export const versionKilled = (currentVersion, fetchedVersion) => ({
     type: VERSION_KILLED,
     currentVersion: currentVersion,
-    fetchedVersion: fetchedVersion
+    fetchedVersion: fetchedVersion,
 });
 
-export const versionUnavailable = (currentVersion) => ({
+export const versionUnavailable = currentVersion => ({
     type: VERSION_UNAVAILABLE,
-    currentVersion: currentVersion
+    currentVersion: currentVersion,
 });

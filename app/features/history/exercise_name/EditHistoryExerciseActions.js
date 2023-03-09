@@ -8,11 +8,11 @@ export const dismissExercise = () => {
     Analytics.setCurrentScreen('history');
 
     return {
-        type: DISMISS_HISTORY_EXERCISE
-    }
+        type: DISMISS_HISTORY_EXERCISE,
+    };
 };
 
-export const cancelExercise = (setID) => (dispatch, getState) => {
+export const cancelExercise = setID => (dispatch, getState) => {
     var state = getState();
 
     Analytics.setCurrentScreen('history');
@@ -20,34 +20,42 @@ export const cancelExercise = (setID) => (dispatch, getState) => {
     logCancelEditExerciseNameAnalytics(setID, state);
 
     dispatch({
-        type: DISMISS_HISTORY_EXERCISE
+        type: DISMISS_HISTORY_EXERCISE,
     });
 };
 
 export const saveExerciseName = (setID, exercise) => (dispatch, getState) => {
     var state = getState();
-    
+
     logSaveExerciseNameAnalytics(setID, exercise, state);
-    
+
     dispatch(SetsActionCreators.saveHistoryExerciseName(setID, exercise));
 };
 
 const logSaveExerciseNameAnalytics = (setID, exercise, state) => {
     let duration = DurationsSelectors.getEditHistoryExerciseDuration(state);
 
-    Analytics.logEventWithAppState('save_exercise_name', {
-        value: duration,
-        duration: duration,
-        is_working_set: false,
-    }, state);
+    Analytics.logEventWithAppState(
+        'save_exercise_name',
+        {
+            value: duration,
+            duration: duration,
+            is_working_set: false,
+        },
+        state,
+    );
 };
 
 const logCancelEditExerciseNameAnalytics = (setID, state) => {
     let duration = DurationsSelectors.getEditHistoryExerciseDuration(state);
 
-    Analytics.logEventWithAppState('cancel_edit_exercise_name', {
-        value: duration,
-        duration: duration,
-        is_working_set: false,
-    }, state);
+    Analytics.logEventWithAppState(
+        'cancel_edit_exercise_name',
+        {
+            value: duration,
+            duration: duration,
+            is_working_set: false,
+        },
+        state,
+    );
 };

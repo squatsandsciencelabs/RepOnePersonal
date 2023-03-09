@@ -1,10 +1,5 @@
-import React, {Component} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
@@ -18,8 +13,12 @@ class WorkoutLoginBannerView extends Component {
             );
         } else {
             return (
-                <TouchableOpacity style={styles.container} onPress={ () => this.props.tappedBanner() } >
-                    <Text style={styles.text}>Don't lose all your data - tap to sign in and save it!</Text>
+                <TouchableOpacity
+                    style={styles.container}
+                    onPress={() => this.props.tappedBanner()}>
+                    <Text style={styles.text}>
+                        Don't lose all your data - tap to sign in and save it!
+                    </Text>
                 </TouchableOpacity>
             );
         }
@@ -35,8 +34,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         textAlign: 'center',
-    }
+    },
 });
-
 
 export default WorkoutLoginBannerView;

@@ -5,7 +5,7 @@ import OneRMCalculateView from './OneRMCalculateView';
 import * as Actions from './OneRMCalculateActions';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     velocity: AnalysisSelectors.getVelocitySlider(state),
     exercise: AnalysisSelectors.getExercise(state),
     days: AnalysisSelectors.getDaysRange(state),
@@ -13,21 +13,24 @@ const mapStateToProps = (state) => ({
     tagsToExclude: AnalysisSelectors.getTagsToExclude(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        calcE1RM: Actions.calcE1RM,
-        tappedExercise: Actions.presentSelectExercise,
-        tappedTagsToInclude: Actions.presentTagsToInclude,
-        tappedTagsToExclude: Actions.presentTagsToExclude,
-        changeVelocity: Actions.changeVelocitySlider,
-        changeDays: Actions.changeE1RMDays,
-        presentInfoModal: Actions.presentInfoModal,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            calcE1RM: Actions.calcE1RM,
+            tappedExercise: Actions.presentSelectExercise,
+            tappedTagsToInclude: Actions.presentTagsToInclude,
+            tappedTagsToExclude: Actions.presentTagsToExclude,
+            changeVelocity: Actions.changeVelocitySlider,
+            changeDays: Actions.changeE1RMDays,
+            presentInfoModal: Actions.presentInfoModal,
+        },
+        dispatch,
+    );
 };
 
 const OneRMScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(OneRMCalculateView);
 
 export default OneRMScreen;

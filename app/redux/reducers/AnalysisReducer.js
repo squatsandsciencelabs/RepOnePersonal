@@ -55,7 +55,7 @@ const defaultState = {
     isEditingExcludeTags: false,
 
     // calculate
-    velocitySlider: .01,
+    velocitySlider: 0.01,
     exercise: 'squat',
     daysRange: 7,
     tagsToInclude: [],
@@ -195,9 +195,14 @@ const AnalysisReducer = (state = defaultState, action) => {
             let currentOneRMAnalytics = action.oneRMAnalytics;
 
             // filter out existing exercise + tags combos
-            storedOneRMAnalytics = storedOneRMAnalytics.filter((storedOneRMAnalytic) => {
-                return !compareByExerciseAndTags(storedOneRMAnalytic, currentOneRMAnalytics);
-            });
+            storedOneRMAnalytics = storedOneRMAnalytics.filter(
+                storedOneRMAnalytic => {
+                    return !compareByExerciseAndTags(
+                        storedOneRMAnalytic,
+                        currentOneRMAnalytics,
+                    );
+                },
+            );
 
             return {
                 ...state,
@@ -213,7 +218,10 @@ const AnalysisReducer = (state = defaultState, action) => {
                 maxY: action.maxY,
                 isRegressionNegative: action.isRegressionNegative,
                 scroll: !state.scroll,
-                oneRMAnalytics: [ ...storedOneRMAnalytics, currentOneRMAnalytics ],
+                oneRMAnalytics: [
+                    ...storedOneRMAnalytics,
+                    currentOneRMAnalytics,
+                ],
             };
         case CLEAR_1RM_ANALYTICS:
             return {
@@ -288,7 +296,7 @@ const AnalysisReducer = (state = defaultState, action) => {
                 ...state,
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
-        };    
+        }
         case SAVE_WORKOUT_VIDEO: // workout sets will use save workout video
         case SAVE_HISTORY_VIDEO: // history sets will use save history video
         case DISMISS_1RM_VIDEO_RECORDER:
@@ -317,7 +325,7 @@ const AnalysisReducer = (state = defaultState, action) => {
         case DELETE_HISTORY_VIDEO: // history sets will use delete history video
             return Object.assign({}, state, {
                 watchSetID: null,
-                watchFileURL: null
+                watchFileURL: null,
             });
 
         // analytics
@@ -363,8 +371,14 @@ const AnalysisReducer = (state = defaultState, action) => {
 
 const compareByExerciseAndTags = (calc1, calc2) => {
     const areExercisesEqual = calc1.exercise === calc2.exercise;
-    const areTagsToIncludeEqual = areArraysEqual(calc1.tags_to_include, calc2.tags_to_include);
-    const areTagsToExcludeEqual = areArraysEqual(calc1.tags_to_exclude, calc2.tags_to_exclude);
+    const areTagsToIncludeEqual = areArraysEqual(
+        calc1.tags_to_include,
+        calc2.tags_to_include,
+    );
+    const areTagsToExcludeEqual = areArraysEqual(
+        calc1.tags_to_exclude,
+        calc2.tags_to_exclude,
+    );
 
     return areExercisesEqual && areTagsToIncludeEqual && areTagsToExcludeEqual;
 };

@@ -23,7 +23,7 @@ export const presentSelectExercise = () => (dispatch, getState) => {
     dispatch({ type: PRESENT_SELECT_EXERCISE });
 };
 
-export const changeVelocitySlider = (velocity) => (dispatch, getState) => {
+export const changeVelocitySlider = velocity => (dispatch, getState) => {
     const state = getState();
     logEditVelocityAnalytics(state, velocity);
 
@@ -33,7 +33,7 @@ export const changeVelocitySlider = (velocity) => (dispatch, getState) => {
     });
 };
 
-export const changeE1RMDays = (days) => (dispatch, getState) => {
+export const changeE1RMDays = days => (dispatch, getState) => {
     days = Math.abs(days);
 
     const state = getState();
@@ -75,7 +75,15 @@ export const calcE1RM = () => (dispatch, getState) => {
     const metric = SettingsSelectors.getDefaultMetric(state);
 
     // calculate
-    const results = OneRMCalculator.calculate1RM(exercise, tagsToInclude, tagsToExclude, daysRange, velocity, metric, allSets);
+    const results = OneRMCalculator.calculate1RM(
+        exercise,
+        tagsToInclude,
+        tagsToExclude,
+        daysRange,
+        velocity,
+        metric,
+        allSets,
+    );
 
     // analytics
     const oneRMAnalyticsParams = analyticsParams(
@@ -98,7 +106,7 @@ export const calcE1RM = () => (dispatch, getState) => {
         metric,
     );
 
-    const storedAnalyticsParams = { 
+    const storedAnalyticsParams = {
         ...oneRMAnalyticsParams,
         tags_to_include: tagsToInclude,
         tags_to_exclude: tagsToExclude,
@@ -134,34 +142,57 @@ export const presentInfoModal = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logEditExerciseAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_edit_exercise', {
-    }, state);
+const logEditExerciseAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_edit_exercise', {}, state);
 };
 
 const logEditDateRangeAnalytics = (state, days) => {
-    Analytics.logEventWithAppState('one_rm_set_date_range', {
-        to_days: days,
-    }, state);
+    Analytics.logEventWithAppState(
+        'one_rm_set_date_range',
+        {
+            to_days: days,
+        },
+        state,
+    );
 };
 
 const logEditVelocityAnalytics = (state, velocity) => {
-    Analytics.logEventWithAppState('one_rm_set_velocity', {
-        to_velocity: velocity,
-    }, state);
+    Analytics.logEventWithAppState(
+        'one_rm_set_velocity',
+        {
+            to_velocity: velocity,
+        },
+        state,
+    );
 };
 
-const logEditIncludeTagsAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_edit_include_tags', {
-    }, state);
+const logEditIncludeTagsAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_edit_include_tags', {}, state);
 };
 
-const logEditExcludeTagsAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_edit_exclude_tags', {
-    }, state);
+const logEditExcludeTagsAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_edit_exclude_tags', {}, state);
 };
 
-const analyticsParams = (exercise, numIncludeTags, numExcludeTags, daysRange, velocity, oneRepMax, r2, numActivePoints, numErrorPoints, numUnusedPoints, hasNegSlope, slope, minWeight, maxWeight, minVelocity, maxVelocity, metric) => {
+const analyticsParams = (
+    exercise,
+    numIncludeTags,
+    numExcludeTags,
+    daysRange,
+    velocity,
+    oneRepMax,
+    r2,
+    numActivePoints,
+    numErrorPoints,
+    numUnusedPoints,
+    hasNegSlope,
+    slope,
+    minWeight,
+    maxWeight,
+    minVelocity,
+    maxVelocity,
+    metric,
+) => {
     return {
         exercise: exercise,
         num_include_tags: numIncludeTags,
@@ -177,7 +208,10 @@ const analyticsParams = (exercise, numIncludeTags, numExcludeTags, daysRange, ve
         slope: slope,
         min_lb_weight: WeightConversion.weightInLBs(metric, minWeight),
         max_lb_weight: WeightConversion.weightInLBs(metric, maxWeight),
-        weight_lb_range: WeightConversion.weightInLBs(metric, (maxWeight - minWeight)),
+        weight_lb_range: WeightConversion.weightInLBs(
+            metric,
+            maxWeight - minWeight,
+        ),
         min_velocity: minVelocity,
         max_velocity: maxVelocity,
         velocity_range: maxVelocity - minVelocity,
@@ -189,7 +223,6 @@ const logCalculate1RMAnalytics = (analyticsParams, state) => {
     Analytics.logEventWithAppState('one_rm_calculate', analyticsParams, state);
 };
 
-const logInfoAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_info', {
-    }, state);
+const logInfoAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_info', {}, state);
 };

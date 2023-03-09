@@ -1,6 +1,4 @@
-import {
-    Dimensions,
-} from 'react-native';
+import { Dimensions } from 'react-native';
 import {
     PRESENT_COLLAPSED_METRIC,
     PRESENT_QUANTIFIER,
@@ -31,7 +29,6 @@ import {
     LINEAR_3D_ROM_METRIC,
     FORCE_HEIGHT_METRIC,
     POWER_HEIGHT_METRIC,
-
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -71,31 +68,41 @@ const CollapsedSettingsReducer = (state = createDefaultState(), action) => {
             switch (state.currentCollapsedMetricRank) {
                 case 1:
                     changes.metric1 = action.metric;
-                    if (shouldResetQuantifier(state.quantifier1, action.metric)) {
+                    if (
+                        shouldResetQuantifier(state.quantifier1, action.metric)
+                    ) {
                         changes.quantifier1 = EMPTY_QUANTIFIER;
                     }
                     break;
                 case 2:
                     changes.metric2 = action.metric;
-                    if (shouldResetQuantifier(state.quantifier2, action.metric)) {
+                    if (
+                        shouldResetQuantifier(state.quantifier2, action.metric)
+                    ) {
                         changes.quantifier2 = EMPTY_QUANTIFIER;
                     }
                     break;
                 case 3:
                     changes.metric3 = action.metric;
-                    if (shouldResetQuantifier(state.quantifier3, action.metric)) {
+                    if (
+                        shouldResetQuantifier(state.quantifier3, action.metric)
+                    ) {
                         changes.quantifier3 = EMPTY_QUANTIFIER;
                     }
                     break;
                 case 4:
                     changes.metric4 = action.metric;
-                    if (shouldResetQuantifier(state.quantifier4, action.metric)) {
+                    if (
+                        shouldResetQuantifier(state.quantifier4, action.metric)
+                    ) {
                         changes.quantifier4 = EMPTY_QUANTIFIER;
                     }
                     break;
                 case 5:
                     changes.metric5 = action.metric;
-                    if (shouldResetQuantifier(state.quantifier5, action.metric)) {
+                    if (
+                        shouldResetQuantifier(state.quantifier5, action.metric)
+                    ) {
                         changes.quantifier5 = EMPTY_QUANTIFIER;
                     }
                     break;
@@ -242,10 +249,24 @@ const shouldResetMetric = (quantifier, metric) => {
     if (metric === RPE_METRIC) {
         return true;
     }
-    if ((quantifier === SET_LOSS_QUANTIFIER || quantifier === PEAK_END_QUANTIFIER) && (metric === PKH_METRIC || metric === FORCE_HEIGHT_METRIC || metric === POWER_HEIGHT_METRIC)) {
+    if (
+        (quantifier === SET_LOSS_QUANTIFIER ||
+            quantifier === PEAK_END_QUANTIFIER) &&
+        (metric === PKH_METRIC ||
+            metric === FORCE_HEIGHT_METRIC ||
+            metric === POWER_HEIGHT_METRIC)
+    ) {
         return true;
     }
-    if ((quantifier === MAX_EVER_QUANTIFIER || quantifier === MIN_EVER_QUANTIFIER) && (metric === PKH_METRIC || metric === FORCE_HEIGHT_METRIC || metric === POWER_HEIGHT_METRIC || metric === ROM_METRIC || metric === LINEAR_3D_ROM_METRIC)) {
+    if (
+        (quantifier === MAX_EVER_QUANTIFIER ||
+            quantifier === MIN_EVER_QUANTIFIER) &&
+        (metric === PKH_METRIC ||
+            metric === FORCE_HEIGHT_METRIC ||
+            metric === POWER_HEIGHT_METRIC ||
+            metric === ROM_METRIC ||
+            metric === LINEAR_3D_ROM_METRIC)
+    ) {
         return true;
     }
     return false;

@@ -15,24 +15,27 @@ const selectMapStateToProps = createSelector(
         if (!date) {
             date = new Date();
         }
-        
+
         return {
             date,
             isVisible,
         };
-    }
+    },
 );
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        changeDate: Actions.changeDate,
-        closePicker: Actions.dismissPicker,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            changeDate: Actions.changeDate,
+            closePicker: Actions.dismissPicker,
+        },
+        dispatch,
+    );
 };
 
 const EditHistoryFilterStartDateScreen = connect(
     selectMapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(DatePicker);
 
 export default EditHistoryFilterStartDateScreen;

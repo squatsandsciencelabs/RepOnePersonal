@@ -1,8 +1,6 @@
-import {
-    Linking,
-} from 'react-native';
+import { Linking } from 'react-native';
 
-import { 
+import {
     SAVE_1RM_EXERCISE,
     PRESENT_ALGORITHM,
     PRESENT_BEST_RESULTS,
@@ -19,16 +17,16 @@ export const saveSelected1RMExercise = (exercise = 'Squat') => ({
 export const presentAlgorithm = () => (dispatch, getState) => {
     const state = getState();
     logAlgorithmAnalytics(state);
-    
-    Linking.openURL("https://www.reponestrength.com/1rmalgorithm/");
+
+    Linking.openURL('https://www.reponestrength.com/1rmalgorithm/');
     dispatch({ type: PRESENT_ALGORITHM });
 };
 
 export const presentBestResults = () => (dispatch, getState) => {
     const state = getState();
     logBestResultsAnalytics(state);
-    
-    Linking.openURL("https://www.reponestrength.com/1rmbestresults/");
+
+    Linking.openURL('https://www.reponestrength.com/1rmbestresults/');
     dispatch({ type: PRESENT_BEST_RESULTS });
 };
 
@@ -38,14 +36,12 @@ export const analysisDragged = () => ({
 
 // ANALYTICS
 
-const logAlgorithmAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_about_algorithm', {
-    }, state);
+const logAlgorithmAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_about_algorithm', {}, state);
 };
 
-const logBestResultsAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_best_results', {
-    }, state);
+const logBestResultsAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_best_results', {}, state);
 };
 
 export const clear1RMAnalytics = () => ({

@@ -5,15 +5,18 @@ import SetTitleRowCollapsed from 'app/shared_features/set_card/collapsed/SetTitl
 import * as Actions from './EditWorkoutTitleCollapsedActions';
 import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSet: Actions.saveSet,
-        tappedExpand: Actions.expandCard,
-        tappedWatch: Actions.presentWatchVideo,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSet: Actions.saveSet,
+            tappedExpand: Actions.expandCard,
+            tappedWatch: Actions.presentWatchVideo,
+        },
+        dispatch,
+    );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isSavingVideo: WorkoutSelectors.getIsSavingVideo(state),
 });
 

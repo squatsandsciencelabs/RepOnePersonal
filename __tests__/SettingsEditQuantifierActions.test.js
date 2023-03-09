@@ -16,14 +16,16 @@ import {
 import * as Analytics from 'app/services/Analytics';
 import * as sut from 'app/features/settings/metrics/quantifier/SettingsEditQuantifiersActions';
 
-const middlewares = [ thunk ];
+const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 var logEventSpy = null;
 var store = null;
 
 describe('collapsedMetric Analysis', () => {
     beforeEach(() => {
-        logEventSpy = jest.spyOn(Analytics, 'logEventWithAppState').mockImplementation(() => {});        
+        logEventSpy = jest
+            .spyOn(Analytics, 'logEventWithAppState')
+            .mockImplementation(() => {});
         store = mockStore({
             collapsedSettings: {
                 metric1: AVG_VELOCITY_METRIC,
@@ -38,18 +40,18 @@ describe('collapsedMetric Analysis', () => {
                 quantifier5: ABS_LOSS_QUANTIFIER,
                 currentCollapsedMetricRank: 2,
                 isEditingMetric: false,
-                isEditingQuantifier: false,                
-            }
+                isEditingQuantifier: false,
+            },
         });
     });
 
     afterEach(() => {
-        logEventSpy.mockReset();        
+        logEventSpy.mockReset();
     });
 
     afterAll(() => {
         logEventSpy.mockRestore();
-    });   
+    });
 
     describe('change quantifier', () => {
         test('quantifier changes', () => {
@@ -61,7 +63,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(2);
-            expect(params.from_quantifier).toBe(EMPTY_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(EMPTY_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
 
@@ -74,7 +76,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(1);
-            expect(params.from_quantifier).toBe(LAST_REP_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(LAST_REP_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
 
@@ -87,7 +89,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(2);
-            expect(params.from_quantifier).toBe(EMPTY_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(EMPTY_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
 
@@ -100,7 +102,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(3);
-            expect(params.from_quantifier).toBe(MIN_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(MIN_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
 
@@ -113,7 +115,7 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(4);
-            expect(params.from_quantifier).toBe(MIN_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(MIN_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
 
@@ -126,9 +128,8 @@ describe('collapsedMetric Analysis', () => {
             const params = logEventSpy.mock.calls[0][1];
             expect(event).toEqual('change_quantifier');
             expect(params.rank).toBe(5);
-            expect(params.from_quantifier).toBe(ABS_LOSS_QUANTIFIER);   
+            expect(params.from_quantifier).toBe(ABS_LOSS_QUANTIFIER);
             expect(params.to_quantifier).toBe(expectedQuantifier);
         });
     });
-
 });

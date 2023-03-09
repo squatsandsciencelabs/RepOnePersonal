@@ -9,16 +9,21 @@ import * as KillSwitchActionCreators from 'app/redux/shared_actions/KillSwitchAc
 import {
     FETCH_VERSION,
     VERSION_OK,
-    VERSION_KILLED
+    VERSION_KILLED,
 } from 'app/configs+constants/ActionTypes';
 
-const KillSwitchSaga = function * KillSwitchSaga() {
+const KillSwitchSaga = function* KillSwitchSaga() {
     yield take(FETCH_VERSION);
     try {
         const fetchedVersion = yield call(fetchVersion);
         const currentVersion = yield call(getVersion);
         if (semver.lt(currentVersion, fetchedVersion)) {
-            yield put(KillSwitchActionCreators.versionKilled(currentVersion, fetchedVersion));
+            yield put(
+                KillSwitchActionCreators.versionKilled(
+                    currentVersion,
+                    fetchedVersion,
+                ),
+            );
         } else {
             yield put(KillSwitchActionCreators.versionOk(currentVersion));
         }
@@ -31,17 +36,18 @@ const fetchVersion = () => {
     return new Promise((resolve, reject) => {
         fetch(OpenBarbellConfig.killSwitchURL, {
             headers: {
-                'Cache-Control': 'no-cache'
-            }
+                'Cache-Control': 'no-cache',
+            },
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            var fetchedVersion = responseJson[Platform.OS]['minimum_version'];
-            resolve(fetchedVersion);
-        })
-        .catch((error) => {
-            reject(error);
-        });
+            .then(response => response.json())
+            .then(responseJson => {
+                var fetchedVersion =
+                    responseJson[Platform.OS]['minimum_version'];
+                resolve(fetchedVersion);
+            })
+            .catch(error => {
+                reject(error);
+            });
     });
 };
 

@@ -6,15 +6,17 @@ import {
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 
-export const saveTags = (tags = []) => (dispatch, getState) => {
-    const state = getState();
-    logSaveTagsAnalytics(state);
+export const saveTags =
+    (tags = []) =>
+    (dispatch, getState) => {
+        const state = getState();
+        logSaveTagsAnalytics(state);
 
-    dispatch({
-        type: SAVE_INCLUDES_TAGS,
-        tags: tags,
-    });
-};
+        dispatch({
+            type: SAVE_INCLUDES_TAGS,
+            tags: tags,
+        });
+    };
 
 export const dismissTags = () => {
     Analytics.setCurrentScreen('analysis');
@@ -45,22 +47,22 @@ export const addPill = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logSaveTagsAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_select_include_tags', {
-    }, state);
+const logSaveTagsAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_select_include_tags', {}, state);
 };
 
-const logCancelEditTagsAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_cancel_edit_include_tags', {
-    }, state);
+const logCancelEditTagsAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'one_rm_cancel_edit_include_tags',
+        {},
+        state,
+    );
 };
 
-const logRemovedTagAnalytics = (state) => {
-    Analytics.logEventWithAppState('remove_tag', {
-    }, state);
+const logRemovedTagAnalytics = state => {
+    Analytics.logEventWithAppState('remove_tag', {}, state);
 };
 
-const logAddTagAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_add_tag', {
-    }, state);
+const logAddTagAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_add_tag', {}, state);
 };

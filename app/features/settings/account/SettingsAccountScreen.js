@@ -7,28 +7,31 @@ import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 import SettingsAccountPanel from './SettingsAccountPanel';
 import * as Actions from './SettingsAccountActions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         email: AuthSelectors.getEmail(state),
         isLoggingIn: AuthSelectors.getIsLoggingIn(state),
         syncDate: state.settings.syncDate.toLocaleString(),
         hasChangesToSync: SetsSelectors.hasChangesToSync(state),
-        isExportingCSV: SettingsSelectors.getIsExportingCSV(state)
-    }
+        isExportingCSV: SettingsSelectors.getIsExportingCSV(state),
+    };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        signIn: Actions.signIn,
-        signOut: Actions.signOut,
-        exportCSV: Actions.exportCSV,
-        cancelSignOut: Actions.cancelSignOut,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            signIn: Actions.signIn,
+            signOut: Actions.signOut,
+            exportCSV: Actions.exportCSV,
+            cancelSignOut: Actions.cancelSignOut,
+        },
+        dispatch,
+    );
 };
 
 const SettingsAccountScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SettingsAccountPanel);
 
 export default SettingsAccountScreen;

@@ -5,29 +5,32 @@ import VideoRecorder from 'app/shared_features/camera/VideoRecorder';
 import * as Actions from './WorkoutVideoRecorderActions';
 import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     setID: WorkoutSelectors.getRecordingSetID(state),
     videoType: WorkoutSelectors.getRecordingVideoType(state),
     cameraType: WorkoutSelectors.getCameraType(state),
     isModalShowing: WorkoutSelectors.getIsCameraVisible(state),
     isRecording: WorkoutSelectors.getIsRecording(state),
-    isSaving: WorkoutSelectors.getIsSavingVideo(state)
+    isSaving: WorkoutSelectors.getIsSavingVideo(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        closeModal: Actions.dismissRecording,
-        tappedStart: Actions.startRecording,
-        tappedStop: Actions.stopRecording,
-        saveVideo: Actions.saveVideo,
-        saveVideoError: Actions.saveVideoError,
-        toggleCameraType: Actions.toggleCameraType,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            closeModal: Actions.dismissRecording,
+            tappedStart: Actions.startRecording,
+            tappedStop: Actions.stopRecording,
+            saveVideo: Actions.saveVideo,
+            saveVideoError: Actions.saveVideoError,
+            toggleCameraType: Actions.toggleCameraType,
+        },
+        dispatch,
+    );
 };
 
 const WorkoutVideoRecorderScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(VideoRecorder);
 
 export default WorkoutVideoRecorderScreen;

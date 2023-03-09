@@ -3,15 +3,12 @@ import { connect } from 'react-redux';
 
 import EditKratosDiscsModal from 'app/shared_features/edit_set/EditKratosDiscsModal';
 import * as Actions from './EditWorkoutKratosDiscsActions';
-import {
-    kratosDiscsOptions,
-} from 'app/configs+constants/KratosConfig';
+import { kratosDiscsOptions } from 'app/configs+constants/KratosConfig';
 
 const title = 'Choose Flywheels';
 const stackValues = true;
 const noTextTransform = true;
 const text = '';
-
 
 const mapKratosDiscToArray = kratosDiscs => {
     return Object.keys(kratosDiscs)

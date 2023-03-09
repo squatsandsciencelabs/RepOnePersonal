@@ -7,7 +7,7 @@ import {
 import * as Analytics from 'app/services/Analytics';
 
 // note: analytics are done in surveysaga instead
-export const saveSurveyURL = (url) => ({
+export const saveSurveyURL = url => ({
     type: SAVE_SURVEY_URL,
     surveyURL: url,
 });
@@ -16,7 +16,7 @@ export const presentSurvey = () => {
     Analytics.setCurrentScreen('survey');
 
     return {
-        type: PRESENT_SURVEY
+        type: PRESENT_SURVEY,
     };
 };
 

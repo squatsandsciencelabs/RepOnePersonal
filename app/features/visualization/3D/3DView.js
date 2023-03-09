@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import * as THREE from 'three';
-import * as TWEEN from "@tweenjs/tween.js";
+import * as TWEEN from '@tweenjs/tween.js';
 import TargetCircle from 'app/shared_features/target/TargetCircle';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
@@ -47,8 +47,8 @@ const material = new THREE.ShaderMaterial({
         scale: { value: 10 },
     },
     defines: {
-        USE_MAP: "",
-        USE_SIZEATTENUATION: ""
+        USE_MAP: '',
+        USE_SIZEATTENUATION: '',
     },
     vertexShader: `
         uniform float size;
@@ -102,7 +102,7 @@ const material = new THREE.ShaderMaterial({
                 gl_FragColor = vec4(vColor, step(ll, 0.5));
             }
         }
-        `
+        `,
 });
 
 export default function App(props) {
@@ -157,7 +157,9 @@ export default function App(props) {
         };
     }, []);
 
-    console.tron.log(`initialize 3d mode, prev ${props.prevRepIndex} next ${props.nextRepIndex}`);
+    console.tron.log(
+        `initialize 3d mode, prev ${props.prevRepIndex} next ${props.nextRepIndex}`,
+    );
 
     const rerender = () => setState({ ...state });
 
@@ -170,7 +172,10 @@ export default function App(props) {
         for (let i = 0; i < numPoints; i++) {
             state.selected.push(i === newIndex ? 1.0 : 0.0);
         }
-        state.points.geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1));
+        state.points.geometry.setAttribute(
+            'selected',
+            new THREE.Float32BufferAttribute(state.selected, 1),
+        );
 
         // rerender if needed
         // called on prev, next, and the default camera positions
@@ -180,24 +185,36 @@ export default function App(props) {
     };
 
     const zoomTo = (newIndex, shouldRender = false) => {
-        if (newIndex !== undefined && newIndex < 0 || newIndex >= numPoints) {
+        if ((newIndex !== undefined && newIndex < 0) || newIndex >= numPoints) {
             return;
         }
 
-        if (state.cameraTween) { state.cameraTween.stop(); }
+        if (state.cameraTween) {
+            state.cameraTween.stop();
+        }
 
         const target = orbitControls.current.getControls().target;
         const from = { x: target.x, y: target.y, z: target.z };
         const coords = { x: target.x, y: target.y, z: target.z };
-        const to = { x: data[newIndex].x / renderScale, y: data[newIndex].y / renderScale, z: data[newIndex].z / renderScale };
+        const to = {
+            x: data[newIndex].x / renderScale,
+            y: data[newIndex].y / renderScale,
+            z: data[newIndex].z / renderScale,
+        };
         const cameraOrig = camera.position.clone();
 
         state.cameraTween = new TWEEN.Tween(coords)
             .to(to, 500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(() => {
-                camera.position.set(coords.x - from.x + cameraOrig.x, coords.y - from.y + cameraOrig.y, coords.z - from.z + cameraOrig.z);
-                orbitControls.current.getControls().target.set(coords.x, coords.y, coords.z);
+                camera.position.set(
+                    coords.x - from.x + cameraOrig.x,
+                    coords.y - from.y + cameraOrig.y,
+                    coords.z - from.z + cameraOrig.z,
+                );
+                orbitControls.current
+                    .getControls()
+                    .target.set(coords.x, coords.y, coords.z);
                 orbitControls.current.getControls().update();
             })
             .onComplete(() => {
@@ -208,8 +225,14 @@ export default function App(props) {
     };
 
     const lookTop = () => {
-        camera.position.set(initialX + .0000001, initialY, initialZ + zoomDistance + (initialZ - initialX));
-        orbitControls.current.getControls().target.set(initialX, initialY, initialZ);
+        camera.position.set(
+            initialX + 0.0000001,
+            initialY,
+            initialZ + zoomDistance + (initialZ - initialX),
+        );
+        orbitControls.current
+            .getControls()
+            .target.set(initialX, initialY, initialZ);
         orbitControls.current.getControls().update();
         updateIndex(0, true);
     };
@@ -229,25 +252,22 @@ export default function App(props) {
     };
 
     const openPeakOptions = () => {
-        showActionSheetWithOptions(
-            actionsheetConfig,
-            buttonIndex => {
-                switch (buttonIndex) {
-                    case 0:
-                        zoomTo(props.peakIndices.peakVelocityIndex, true);
-                        break;
-                    case 1:
-                        zoomTo(props.peakIndices.peakForceIndex, true);
-                        break;
-                    case 2:
-                        zoomTo(props.peakIndices.peakPowerIndex, true);
-                        break;
-                }
-            },
-        );
+        showActionSheetWithOptions(actionsheetConfig, buttonIndex => {
+            switch (buttonIndex) {
+                case 0:
+                    zoomTo(props.peakIndices.peakVelocityIndex, true);
+                    break;
+                case 1:
+                    zoomTo(props.peakIndices.peakForceIndex, true);
+                    break;
+                case 2:
+                    zoomTo(props.peakIndices.peakPowerIndex, true);
+                    break;
+            }
+        });
     };
 
-    const onContextCreate = async (gl) => {
+    const onContextCreate = async gl => {
         console.tron.log(`on context create`);
         const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
 
@@ -257,7 +277,12 @@ export default function App(props) {
         renderer.setClearColor(0xffffff);
 
         // camera
-        const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10000);
+        const camera = new THREE.PerspectiveCamera(
+            70,
+            width / height,
+            0.01,
+            10000,
+        );
         camera.position.set(midX, midY + zoomDistance, midZ);
         setCamera(camera);
 
@@ -302,7 +327,9 @@ export default function App(props) {
         // scene.add(helper4)
 
         // sensor
-        const sensor = await loadAsync(require('app/appearance/models/sensor.obj'));
+        const sensor = await loadAsync(
+            require('app/appearance/models/sensor.obj'),
+        );
         sensor.position.set(initialX, initialY, initialZ - 10);
         sensor.rotateX(Math.PI * 0.5);
         sensor.rotateY(Math.PI * 0.5);
@@ -316,19 +343,30 @@ export default function App(props) {
 
         // draw
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-        geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1));
+        geometry.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(vertices, 3),
+        );
+        geometry.setAttribute(
+            'color',
+            new THREE.Float32BufferAttribute(colors, 3),
+        );
+        geometry.setAttribute(
+            'selected',
+            new THREE.Float32BufferAttribute(state.selected, 1),
+        );
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         state.points = points;
         state.vertices = vertices;
 
         // Setup an animation loop
-        const render = (time) => {
+        const render = time => {
             // was remved from view hierarchy
             if (!orbitControls.current) {
-                console.tron.log(`render, but orbshit removed from view hierarchy`);
+                console.tron.log(
+                    `render, but orbshit removed from view hierarchy`,
+                );
                 return;
             }
             const controls = orbitControls.current.getControls();
@@ -350,7 +388,9 @@ export default function App(props) {
                     if (!state.sphereVisible) {
                         state.sphereVisible = true;
 
-                        if (state.sphereTween) { state.sphereTween.stop() }
+                        if (state.sphereTween) {
+                            state.sphereTween.stop();
+                        }
 
                         const opacity = { value: sphere.material.opacity };
                         state.sphereTween = new TWEEN.Tween(opacity)
@@ -367,7 +407,9 @@ export default function App(props) {
                 } else if (state.sphereVisible) {
                     state.sphereVisible = false;
 
-                    if (state.sphereTween) { state.sphereTween.stop() }
+                    if (state.sphereTween) {
+                        state.sphereTween.stop();
+                    }
 
                     const opacity = { value: sphere.material.opacity };
                     state.sphereTween = new TWEEN.Tween(opacity)
@@ -392,7 +434,12 @@ export default function App(props) {
     };
 
     // update points
-    if ((props.repIndex !== state.repIndex || vertices !== state.vertices) && state.scene && state.points && state.sensor) {
+    if (
+        (props.repIndex !== state.repIndex || vertices !== state.vertices) &&
+        state.scene &&
+        state.points &&
+        state.sensor
+    ) {
         // reset rep index and vertices
         state.repIndex = props.repIndex;
         state.vertices = vertices;
@@ -402,9 +449,18 @@ export default function App(props) {
 
         // recreate points
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-        geometry.setAttribute('selected', new THREE.Float32BufferAttribute(state.selected, 1)); // selected will be recreate with look side, so no need to redo it here
+        geometry.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(vertices, 3),
+        );
+        geometry.setAttribute(
+            'color',
+            new THREE.Float32BufferAttribute(colors, 3),
+        );
+        geometry.setAttribute(
+            'selected',
+            new THREE.Float32BufferAttribute(state.selected, 1),
+        ); // selected will be recreate with look side, so no need to redo it here
         const points = new THREE.Points(geometry, material);
         state.scene.add(points);
         state.points = points;
@@ -422,118 +478,210 @@ export default function App(props) {
     let cameraControls = null;
     let errorMessage = null;
     if (hasData) {
-        summary = (<React.Fragment>
-            <View style={styles.column}>
-                <View>
-                    {props.labels.map(l => <Text style={styles.label}>{l}</Text>)}
-                </View>
-                <View>
-                    {props.metrics.map(m => <Text style={styles.data}>{m}</Text>)}
-                </View>
-            </View>
-            <TargetCircle style={styles.circle} color={data[state.currentIndex].color} size={10} />
-            <View style={styles.column}>
-                <View>
-                    <Text style={styles.label}>VEL</Text>
-                    <Text style={styles.label}>ACC</Text>
-                    <Text style={styles.label}>FORCE</Text>
-                    <Text style={styles.label}>POW</Text>
-                    <Text style={styles.label}>POS</Text>
-                    <Text style={styles.label}>TIME</Text>
-                </View>
-                <View>
-                    <Text style={styles.data}>{data[state.currentIndex].displayVelocity}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].displayAcceleration}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].displayForce}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].displayPower}</Text>
-                    <Text style={styles.data}>{state.currentIndex + 1}</Text>
-                    <Text style={styles.data}>{data[state.currentIndex].displayTime}</Text>
-                </View>
-            </View>
-        </React.Fragment>);
-
-        cameraControls = (<View style={styles.presetCamera}>
-            <TouchableHighlight style={styles.cameraItem} onPress={lookFront}><Text style={styles.cameraText}>FRONT</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.cameraItem} onPress={lookSide}><Text style={styles.cameraText} >SIDE</Text></TouchableHighlight>
-            <TouchableHighlight style={[styles.cameraItem, styles.lastCameraItem]} onPress={lookTop}><Text style={styles.cameraText}>TOP</Text></TouchableHighlight>
-            <TouchableHighlight style={styles.peakItem} onPress={openPeakOptions}><Text style={styles.cameraText}>PEAK</Text></TouchableHighlight>
-        </View>);
-
-        sliderControls = (<React.Fragment>
-            <View style={styles.sliderContainer}>
-                <View style={styles.sliderRotateContainer}>
-                    <View style={styles.sliderLayout}>
-                        {/* prev */}
-                        <TouchableOpacity style={styles.sliderPrev} onPress={() => {
-                            zoomTo(state.currentIndex - 1, true);
-                        }}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
-
-                        {/* slider */}
-                        <Slider
-                            value={state.currentIndex}
-                            style={styles.slider}
-                            onValueChange={(value) => zoomTo(value)}
-                            minimumValue={0}
-                            maximumValue={numPoints - 1}
-                            step={1}
-                            thumbTintColor={thumbTintColor}
-                            minimumTrackTintColor={'#D1D1D1'}
-                            maximumTrackTintColor={'#D1D1D1'}
-                            animateTransitions={true}
-                            onSlidingComplete={rerender}
-                        />
-
-                        {/* next */}
-                        <TouchableOpacity style={styles.sliderNext} onPress={() => {
-                            zoomTo(state.currentIndex + 1, true);
-                        }}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
+        summary = (
+            <React.Fragment>
+                <View style={styles.column}>
+                    <View>
+                        {props.labels.map(l => (
+                            <Text style={styles.label}>{l}</Text>
+                        ))}
+                    </View>
+                    <View>
+                        {props.metrics.map(m => (
+                            <Text style={styles.data}>{m}</Text>
+                        ))}
                     </View>
                 </View>
+                <TargetCircle
+                    style={styles.circle}
+                    color={data[state.currentIndex].color}
+                    size={10}
+                />
+                <View style={styles.column}>
+                    <View>
+                        <Text style={styles.label}>VEL</Text>
+                        <Text style={styles.label}>ACC</Text>
+                        <Text style={styles.label}>FORCE</Text>
+                        <Text style={styles.label}>POW</Text>
+                        <Text style={styles.label}>POS</Text>
+                        <Text style={styles.label}>TIME</Text>
+                    </View>
+                    <View>
+                        <Text style={styles.data}>
+                            {data[state.currentIndex].displayVelocity}
+                        </Text>
+                        <Text style={styles.data}>
+                            {data[state.currentIndex].displayAcceleration}
+                        </Text>
+                        <Text style={styles.data}>
+                            {data[state.currentIndex].displayForce}
+                        </Text>
+                        <Text style={styles.data}>
+                            {data[state.currentIndex].displayPower}
+                        </Text>
+                        <Text style={styles.data}>
+                            {state.currentIndex + 1}
+                        </Text>
+                        <Text style={styles.data}>
+                            {data[state.currentIndex].displayTime}
+                        </Text>
+                    </View>
+                </View>
+            </React.Fragment>
+        );
+
+        cameraControls = (
+            <View style={styles.presetCamera}>
+                <TouchableHighlight
+                    style={styles.cameraItem}
+                    onPress={lookFront}>
+                    <Text style={styles.cameraText}>FRONT</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.cameraItem}
+                    onPress={lookSide}>
+                    <Text style={styles.cameraText}>SIDE</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={[styles.cameraItem, styles.lastCameraItem]}
+                    onPress={lookTop}>
+                    <Text style={styles.cameraText}>TOP</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.peakItem}
+                    onPress={openPeakOptions}>
+                    <Text style={styles.cameraText}>PEAK</Text>
+                </TouchableHighlight>
             </View>
+        );
 
+        sliderControls = (
+            <React.Fragment>
+                <View style={styles.sliderContainer}>
+                    <View style={styles.sliderRotateContainer}>
+                        <View style={styles.sliderLayout}>
+                            {/* prev */}
+                            <TouchableOpacity
+                                style={styles.sliderPrev}
+                                onPress={() => {
+                                    zoomTo(state.currentIndex - 1, true);
+                                }}>
+                                <Image
+                                    source={require('app/appearance/images/left_arrow.png')}
+                                />
+                            </TouchableOpacity>
 
-        </React.Fragment>);
+                            {/* slider */}
+                            <Slider
+                                value={state.currentIndex}
+                                style={styles.slider}
+                                onValueChange={value => zoomTo(value)}
+                                minimumValue={0}
+                                maximumValue={numPoints - 1}
+                                step={1}
+                                thumbTintColor={thumbTintColor}
+                                minimumTrackTintColor={'#D1D1D1'}
+                                maximumTrackTintColor={'#D1D1D1'}
+                                animateTransitions={true}
+                                onSlidingComplete={rerender}
+                            />
+
+                            {/* next */}
+                            <TouchableOpacity
+                                style={styles.sliderNext}
+                                onPress={() => {
+                                    zoomTo(state.currentIndex + 1, true);
+                                }}>
+                                <Image
+                                    source={require('app/appearance/images/right_arrow.png')}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </React.Fragment>
+        );
     }
     if (props.errorMessage) {
-        errorMessage = <View style={styles.errorContainer}><Text style={styles.errorMessage}>{props.errorMessage}</Text></View>
+        errorMessage = (
+            <View style={styles.errorContainer}>
+                <Text style={styles.errorMessage}>{props.errorMessage}</Text>
+            </View>
+        );
     }
 
     // render
-    return (<View style={{ flex: 1, backgroundColor: 'white' }}>
+    return (
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+            {/* 3d */}
+            <OrbitControlsView
+                style={{ flex: 1 }}
+                camera={camera}
+                ref={orbitControls}>
+                <GLView
+                    style={{ flex: 1 }}
+                    onContextCreate={onContextCreate}
+                    key="d"
+                />
+            </OrbitControlsView>
 
-        {/* 3d */}
-        <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControls}>
-            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
-        </OrbitControlsView>
+            {/* error */}
+            {errorMessage}
 
-        {/* error */}
-        {errorMessage}
+            {/* summary information */}
+            <View style={styles.description}>
+                <Text style={styles.exercise}>{props.exercise}</Text>
+                <Text style={styles.repTitle}>{props.title}</Text>
+                {summary}
+            </View>
 
-        {/* summary information */}
-        <View style={styles.description}>
-            <Text style={styles.exercise}>{props.exercise}</Text>
-            <Text style={styles.repTitle}>{props.title}</Text>
-            {summary}
+            {/* camera presets */}
+            {cameraControls}
+
+            {/* slider */}
+            {sliderControls}
+
+            {/* navigate */}
+            <View style={styles.navigation}>
+                <Text style={styles.navigationText}>
+                    {props.navigationText}
+                </Text>
+            </View>
+
+            {/* navigate prev */}
+            <TouchableOpacity
+                style={styles.navPrevRep}
+                onPress={() =>
+                    props.prevRepIndex !== -1
+                        ? props.navigateToRep(props.prevRepIndex)
+                        : false
+                }>
+                <Image
+                    source={require('app/appearance/images/left_arrow.png')}
+                />
+            </TouchableOpacity>
+
+            {/* navigate next */}
+            <TouchableOpacity
+                style={styles.navNextRep}
+                onPress={() =>
+                    props.nextRepIndex !== -1
+                        ? props.navigateToRep(props.nextRepIndex)
+                        : false
+                }>
+                <Image
+                    source={require('app/appearance/images/right_arrow.png')}
+                />
+            </TouchableOpacity>
+
+            {/* close */}
+            <TouchableOpacity
+                style={styles.close}
+                onPress={() => props.tappedClose()}>
+                <Image source={require('app/appearance/images/x.png')} />
+            </TouchableOpacity>
         </View>
-
-        {/* camera presets */}
-        {cameraControls}
-
-        {/* slider */}
-        {sliderControls}
-
-        {/* navigate */}
-        <View style={styles.navigation}><Text style={styles.navigationText}>{props.navigationText}</Text></View>
-
-        {/* navigate prev */}
-        <TouchableOpacity style={styles.navPrevRep} onPress={() => props.prevRepIndex !== -1 ? props.navigateToRep(props.prevRepIndex) : false}><Image source={require('app/appearance/images/left_arrow.png')} /></TouchableOpacity>
-
-        {/* navigate next */}
-        <TouchableOpacity style={styles.navNextRep} onPress={() => props.nextRepIndex !== -1 ? props.navigateToRep(props.nextRepIndex) : false}><Image source={require('app/appearance/images/right_arrow.png')} /></TouchableOpacity>
-
-        {/* close */}
-        <TouchableOpacity style={styles.close} onPress={() => props.tappedClose()}><Image source={require('app/appearance/images/x.png')} /></TouchableOpacity>
-    </View>);
+    );
 }
 
 const windowHeight = Dimensions.get('window').height;
@@ -696,5 +844,5 @@ const styles = StyleSheet.create({
     errorMessage: {
         color: 'rgba(130, 130, 130, 1)',
         fontWeight: 'bold',
-    }
+    },
 });

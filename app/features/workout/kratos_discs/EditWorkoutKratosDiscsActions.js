@@ -56,7 +56,8 @@ export const addPill = setID => (dispatch, getState) => {
 
 const logSaveKratosDiscsAnalytics = (state, setID) => {
     const is_working_set = SetsSelectors.getIsWorkingSet(state, setID);
-    const duration = DurationsSelectors.getEditWorkoutKratosDiscsDuration(state);
+    const duration =
+        DurationsSelectors.getEditWorkoutKratosDiscsDuration(state);
 
     Analytics.logEventWithAppState(
         'save_kratos_discs',

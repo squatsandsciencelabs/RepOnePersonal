@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -48,26 +48,36 @@ class SetTitleRowCollapsed extends Component {
 
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
-            return (<Text style={[styles.fieldText, styles.placeholderText]}>Exercise</Text>);
+            return (
+                <Text style={[styles.fieldText, styles.placeholderText]}>
+                    Exercise
+                </Text>
+            );
         }
-        return (<Text style={styles.fieldText}>{this.props.exercise}</Text>);
+        return <Text style={styles.fieldText}>{this.props.exercise}</Text>;
     }
 
     _renderSetNumber() {
         if (this.props.removed) {
             return null;
         }
-        if (this.props.setNumber === null || this.props.setNumber === undefined) {
+        if (
+            this.props.setNumber === null ||
+            this.props.setNumber === undefined
+        ) {
             var text = '#1';
         } else {
             var text = '#' + this.props.setNumber;
         }
-        return (<Text style={styles.detailText}> {text}</Text>);
+        return <Text style={styles.detailText}> {text}</Text>;
     }
 
     // TODO: make this into its own component
     _renderVideo() {
-        if (this.props.videoFileURL === null || this.props.videoFileURL === undefined) {
+        if (
+            this.props.videoFileURL === null ||
+            this.props.videoFileURL === undefined
+        ) {
             return null;
         }
 
@@ -98,11 +108,16 @@ class SetTitleRowCollapsed extends Component {
 
     _renderChevron() {
         return (
-            <TouchableOpacity style={styles.chevronContainer}
+            <TouchableOpacity
+                style={styles.chevronContainer}
                 onPress={() => this.props.tappedExpand(this.props.setID)}>
-                    <View>
-                        <Icon name="chevron-with-circle-down" size={20} color='rgba(170, 170, 170, 1)' />
-                    </View>
+                <View>
+                    <Icon
+                        name="chevron-with-circle-down"
+                        size={20}
+                        color="rgba(170, 170, 170, 1)"
+                    />
+                </View>
             </TouchableOpacity>
         );
     }
@@ -125,7 +140,7 @@ class SetTitleRowCollapsed extends Component {
             </View>
         );
     }
-};
+}
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
@@ -149,7 +164,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     placeholderText: {
-        color: 'rgba(189, 189, 189, 1)'
+        color: 'rgba(189, 189, 189, 1)',
     },
     videoButtonContainer: {
         position: 'absolute',

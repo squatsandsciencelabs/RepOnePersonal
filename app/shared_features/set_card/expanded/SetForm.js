@@ -2,7 +2,7 @@
 // reason for doing so is because this intended to be used multiple times in a giant listview
 // it's therefore easier to keep the state attached to the component rather than build a giant array in redux
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -19,7 +19,6 @@ import Pill from 'app/shared_features/pill/Pill';
 import * as Analytics from 'app/services/Analytics';
 
 class SetForm extends Component {
-
     constructor(props) {
         super(props);
 
@@ -40,7 +39,9 @@ class SetForm extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             tags: nextProps.tags,
-            weight: this.state.weightFocused ? this.state.weight : nextProps.weight,
+            weight: this.state.weightFocused
+                ? this.state.weight
+                : nextProps.weight,
             metric: nextProps.metric,
             rpe: this.state.rpeFocused ? this.state.rpe : nextProps.rpe,
             removed: nextProps.removed,
@@ -52,7 +53,12 @@ class SetForm extends Component {
     // KEYBOARD
 
     componentWillMount() {
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => { this._keyboardDidHide() });
+        this.keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                this._keyboardDidHide();
+            },
+        );
     }
 
     componentWillUnmount() {
@@ -65,56 +71,58 @@ class SetForm extends Component {
     }
 
     _onChangeWeight(weight) {
-        this.setState({
-            weight: weight,
-        }, () => {
-            if (this.props.hasOwnProperty('updateWeight')) {
-                this.props.updateWeight(weight);
-            }
-        });
+        this.setState(
+            {
+                weight: weight,
+            },
+            () => {
+                if (this.props.hasOwnProperty('updateWeight')) {
+                    this.props.updateWeight(weight);
+                }
+            },
+        );
     }
 
     _onChangeRPE(rpe) {
-        this.setState({
-            rpe: rpe,
-        }, () => {
-            if (this.props.hasOwnProperty('updateRPE')) {
-                this.props.updateRPE(rpe);
-            }
-        });
+        this.setState(
+            {
+                rpe: rpe,
+            },
+            () => {
+                if (this.props.hasOwnProperty('updateRPE')) {
+                    this.props.updateRPE(rpe);
+                }
+            },
+        );
     }
 
     _tapDisabledRPE() {
         // TODO: move this to actions, it doesn't belong here
         // doing it here right now for raw speed as no time
         Analytics.logEvent('old_rpe_alert', {});
-        Alert.alert(
-            '',
-            "It has been too long since this set to log RPE.",
-            [
-                {text: 'Close', style: 'cancel'},
-            ]
-        );
+        Alert.alert('', 'It has been too long since this set to log RPE.', [
+            { text: 'Close', style: 'cancel' },
+        ]);
     }
 
     _onBeginEditWeight() {
-        this.setState({weightFocused: true});
+        this.setState({ weightFocused: true });
         this.props.tapWeight(this.props.setID);
     }
 
     _onEndEditWeight() {
-        this.setState({weightFocused: false});
+        this.setState({ weightFocused: false });
         this._save();
         this.props.dismissWeight(this.props.setID);
     }
 
     _onBeginEditRPE() {
-        this.setState({rpeFocused: true});
+        this.setState({ rpeFocused: true });
         this.props.tapRPE(this.props.setID);
     }
 
     _onEndEditRPE() {
-        this.setState({rpeFocused: false});
+        this.setState({ rpeFocused: false });
         this._save();
         this.props.dismissRPE(this.props.setID);
     }
@@ -128,19 +136,26 @@ class SetForm extends Component {
     }
 
     _save() {
-        if (this.props.weight !== this.state.weight
-            || this.props.metric !== this.state.metric
-            || this.props.rpe !== this.state.rpe) {
-            this.props.saveSet(this.props.setID, this.state.weight, this.state.metric, this.state.rpe);
+        if (
+            this.props.weight !== this.state.weight ||
+            this.props.metric !== this.state.metric ||
+            this.props.rpe !== this.state.rpe
+        ) {
+            this.props.saveSet(
+                this.props.setID,
+                this.state.weight,
+                this.state.metric,
+                this.state.rpe,
+            );
         }
     }
 
     _toggleMetric() {
         if (this.state.metric === 'kgs') {
-            this.setState({metric: 'lbs'});
+            this.setState({ metric: 'lbs' });
             this.props.toggleMetric(this.props.setID);
         } else if (this.state.metric === 'lbs') {
-            this.setState({metric: 'kgs'});
+            this.setState({ metric: 'kgs' });
             this.props.toggleMetric(this.props.setID);
         }
     }
@@ -148,51 +163,68 @@ class SetForm extends Component {
     // RENDER
 
     _displayTags() {
-        if (this.state.tags === undefined || this.state.tags === null || this.state.tags.length === 0) {
-            return (<Text style={[styles.tagText, styles.placeholderText]}>Tags</Text>);
+        if (
+            this.state.tags === undefined ||
+            this.state.tags === null ||
+            this.state.tags.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Tags
+                </Text>
+            );
         }
 
         var pills = [];
         let position = 0;
-        this.state.tags.map((tag) => {
+        this.state.tags.map(tag => {
             let key = position;
             pills.push(
-                <Pill key={key} text={tag} style={{paddingRight: 5, paddingBottom: 3, paddingTop: 3}} />
+                <Pill
+                    key={key}
+                    text={tag}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />,
             );
             position++;
         });
 
-        return (<View style={styles.tagField}>{pills}</View>);
+        return <View style={styles.tagField}>{pills}</View>;
     }
 
     _displayMetric() {
         if (this.state.metric === 'kgs') {
-            return "KGs";
+            return 'KGs';
         } else if (this.state.metric === 'lbs') {
-            return "LBs";
+            return 'LBs';
         }
     }
 
     _renderWeight() {
         return (
-            <View style={[styles.field, {flex: 3, marginRight: 5}]}>
+            <View style={[styles.field, { flex: 3, marginRight: 5 }]}>
                 <TextInput
                     style={styles.fieldText}
                     keyboardType={'numeric'}
                     underlineColorAndroid={'transparent'}
-                    editable = {true}
+                    editable={true}
                     placeholder="Weight"
                     placeholderTextColor={'rgba(189, 189, 189, 1)'}
                     value={this.state.weight}
-
-                    onEndEditing={() => this._onEndEditWeight() }
-                    onFocus={() => this._onBeginEditWeight() }
-                    onChangeText={(weight) => this._onChangeWeight(weight) }
+                    onEndEditing={() => this._onEndEditWeight()}
+                    onFocus={() => this._onBeginEditWeight()}
+                    onChangeText={weight => this._onChangeWeight(weight)}
                 />
                 <View style={styles.fieldDetails}>
                     <TouchableOpacity onPress={() => this._toggleMetric()}>
-                        <View style={{flexDirection: 'row', alignItems: 'center', }}>
-                            <Text style={styles.detailText}>{this._displayMetric()} </Text>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                            <Text style={styles.detailText}>
+                                {this._displayMetric()}{' '}
+                            </Text>
                             <Icon name="refresh" size={10} color="gray" />
                         </View>
                     </TouchableOpacity>
@@ -204,19 +236,19 @@ class SetForm extends Component {
     _renderRPE() {
         if (this.props.rpeDisabled) {
             return (
-                <View style={[styles.field, {flex: 2}]}>
+                <View style={[styles.field, { flex: 2 }]}>
                     <TouchableOpacity onPress={() => this._tapDisabledRPE()}>
                         <TextInput
                             style={styles.fieldText}
                             keyboardType={'numeric'}
                             underlineColorAndroid={'transparent'}
-                            editable = {false}
+                            editable={false}
                             placeholder="RPE"
                             placeholderTextColor={'rgba(189, 189, 189, 1)'}
-                            value = {this.state.rpe}   
-                            pointerEvents='none'
+                            value={this.state.rpe}
+                            pointerEvents="none"
                         />
-                        <View style={styles.fieldDetails} pointerEvents='none'>
+                        <View style={styles.fieldDetails} pointerEvents="none">
                             <Text style={styles.detailText}>RPE</Text>
                         </View>
                     </TouchableOpacity>
@@ -224,20 +256,20 @@ class SetForm extends Component {
             );
         } else {
             return (
-                <View style={[styles.field, {flex: 2}]}>
+                <View style={[styles.field, { flex: 2 }]}>
                     <TextInput
                         style={styles.fieldText}
                         keyboardType={'numeric'}
                         underlineColorAndroid={'transparent'}
-                        editable = {true}
+                        editable={true}
                         placeholder="RPE"
-                        onEndEditing={() => this._onEndEditRPE() }
+                        onEndEditing={() => this._onEndEditRPE()}
                         placeholderTextColor={'rgba(189, 189, 189, 1)'}
-                        value = {this.state.rpe}
-                        onFocus={() => this._onBeginEditRPE() }
-                        onChangeText={(rpe) => this._onChangeRPE(rpe) }
+                        value={this.state.rpe}
+                        onFocus={() => this._onBeginEditRPE()}
+                        onChangeText={rpe => this._onChangeRPE(rpe)}
                     />
-                    <View style={styles.fieldDetails} pointerEvents='none'>
+                    <View style={styles.fieldDetails} pointerEvents="none">
                         <Text style={styles.detailText}>RPE</Text>
                     </View>
                 </View>
@@ -247,8 +279,12 @@ class SetForm extends Component {
 
     _renderTags() {
         return (
-            <View style={[styles.field, {flex: 1}]}>
-                <TouchableHighlight onPress={() => this.props.tapTags(this.props.setID, this.state.tags)} underlayColor='#e0e0e0'>
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() =>
+                        this.props.tapTags(this.props.setID, this.state.tags)
+                    }
+                    underlayColor="#e0e0e0">
                     {this._displayTags()}
                 </TouchableHighlight>
             </View>
@@ -256,7 +292,6 @@ class SetForm extends Component {
     }
 
     _renderKratosDiscs() {
-
         if (this.state.deviceType !== 'Kratos') {
             return null;
         }
@@ -308,7 +343,6 @@ class SetForm extends Component {
                     </View>,
                 );
             }
-
         });
 
         return (
@@ -328,9 +362,24 @@ class SetForm extends Component {
 
     render() {
         return (
-            <View style={[{flex: 1, flexDirection: 'column'}, styles.border]}>
-                <View style={[{flex: 1, flexDirection: 'column', paddingLeft: 12, paddingRight: 12, paddingTop: 0, paddingBottom: 7}]}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={[{ flex: 1, flexDirection: 'column' }, styles.border]}>
+                <View
+                    style={[
+                        {
+                            flex: 1,
+                            flexDirection: 'column',
+                            paddingLeft: 12,
+                            paddingRight: 12,
+                            paddingTop: 0,
+                            paddingBottom: 7,
+                        },
+                    ]}>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
                         <View style={{ flex: 1 }}>
                             {this.state.deviceType !== 'Kratos' && (
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -339,16 +388,15 @@ class SetForm extends Component {
                                 </View>
                             )}
                             <View>{this._renderKratosDiscs()}</View>
-                            <View>{ this._renderTags() }</View>
+                            <View>{this._renderTags()}</View>
                         </View>
 
-                        <View>{ this.props.renderDetailComponent() }</View>
+                        <View>{this.props.renderDetailComponent()}</View>
                     </View>
                 </View>
             </View>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -393,17 +441,17 @@ const styles = StyleSheet.create({
         paddingRight: 0,
     },
     placeholderText: {
-        color: 'rgba(189, 189, 189, 1)'
+        color: 'rgba(189, 189, 189, 1)',
     },
     detailText: {
         fontSize: 13,
         color: 'gray',
-        backgroundColor: 'rgba(0, 0, 0, 0)'
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     disabledText: {
         fontSize: 13,
         color: 'rgba(189, 189, 189, 1)',
-        backgroundColor: 'rgba(0, 0, 0, 0)'
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     border: {
         borderBottomColor: '#f2f2f2',

@@ -25,7 +25,7 @@ import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 import * as WeightConversion from 'app/utility/WeightConversion';
 import * as Analytics from 'app/services/Analytics';
 
-export const presentSelectExercise = () => ({ 
+export const presentSelectExercise = () => ({
     type: PRESENT_HISTORY_FILTER_EXERCISE,
 });
 
@@ -37,11 +37,11 @@ export const dismissHistoryFilter = () => {
     };
 };
 
-export const presentTagsToInclude = () => ({ 
-    type: PRESENT_HISTORY_FILTER_INCLUDES_TAGS, 
+export const presentTagsToInclude = () => ({
+    type: PRESENT_HISTORY_FILTER_INCLUDES_TAGS,
 });
 
-export const presentTagsToExclude = () => ({ 
+export const presentTagsToExclude = () => ({
     type: PRESENT_HISTORY_FILTER_EXCLUDES_TAGS,
 });
 
@@ -53,32 +53,32 @@ export const presentEndDate = () => ({
     type: PRESENT_HISTORY_FILTER_END_DATE,
 });
 
-export const updateStartWeight = (weight) => ({
+export const updateStartWeight = weight => ({
     type: SAVE_HISTORY_FILTER_START_WEIGHT,
     startWeight: weight,
 });
 
-export const updateEndWeight = (weight) => ({
+export const updateEndWeight = weight => ({
     type: SAVE_HISTORY_FILTER_END_WEIGHT,
     endWeight: weight,
 });
 
-export const updateStartRPE = (rpe) => ({
+export const updateStartRPE = rpe => ({
     type: SAVE_HISTORY_FILTER_START_RPE,
     rpe: rpe,
 });
 
-export const updateEndRPE = (rpe) => ({
+export const updateEndRPE = rpe => ({
     type: SAVE_HISTORY_FILTER_END_RPE,
     rpe: rpe,
 });
 
-export const updateStartingRepRange = (reps) => ({
+export const updateStartingRepRange = reps => ({
     type: SAVE_HISTORY_FILTER_STARTING_REP_RANGE,
     startingRepRange: reps,
 });
 
-export const updateEndingRepRange = (reps) => ({
+export const updateEndingRepRange = reps => ({
     type: SAVE_HISTORY_FILTER_ENDING_REP_RANGE,
     endingRepRange: reps,
 });
@@ -93,34 +93,60 @@ export const saveHistoryFilter = () => (dispatch, getState) => {
     // TODO: Consider putting some of this logic into utils
 
     // weight
-    const startWeight = HistorySelectors.getEditingHistoryFilterStartingWeight(state);
-    const startWeightMetric = HistorySelectors.getEditingHistoryFilterStartingWeightMetric(state);
-    const startLbs = WeightConversion.weightInLBs(startWeightMetric, startWeight);
-    const endWeight = HistorySelectors.getEditingHistoryFilterEndingWeight(state);
-    const endWeightMetric = HistorySelectors.getEditingHistoryFilterEndingWeightMetric(state);
+    const startWeight =
+        HistorySelectors.getEditingHistoryFilterStartingWeight(state);
+    const startWeightMetric =
+        HistorySelectors.getEditingHistoryFilterStartingWeightMetric(state);
+    const startLbs = WeightConversion.weightInLBs(
+        startWeightMetric,
+        startWeight,
+    );
+    const endWeight =
+        HistorySelectors.getEditingHistoryFilterEndingWeight(state);
+    const endWeightMetric =
+        HistorySelectors.getEditingHistoryFilterEndingWeightMetric(state);
     const endLbs = WeightConversion.weightInLBs(endWeightMetric, endWeight);
 
     // rpe
-    const startingRPE = HistorySelectors.getEditingHistoryFilterStartingRPE(state);
-    const startingRPEWithoutCommas = startingRPE ? Number(startingRPE.toString().replace(',','.')) : startingRPE;
+    const startingRPE =
+        HistorySelectors.getEditingHistoryFilterStartingRPE(state);
+    const startingRPEWithoutCommas = startingRPE
+        ? Number(startingRPE.toString().replace(',', '.'))
+        : startingRPE;
     const endingRPE = HistorySelectors.getEditingHistoryFilterEndingRPE(state);
-    const endingRPEWithoutCommas = endingRPE ? Number(endingRPE.toString().replace(',','.')) : endingRPE;
+    const endingRPEWithoutCommas = endingRPE
+        ? Number(endingRPE.toString().replace(',', '.'))
+        : endingRPE;
 
     // reps
-    const startingReps = HistorySelectors.getEditingHistoryFilterStartingRepRange(state);
-    const endingReps = HistorySelectors.getEditingHistoryFilterEndingRepRange(state);
+    const startingReps =
+        HistorySelectors.getEditingHistoryFilterStartingRepRange(state);
+    const endingReps =
+        HistorySelectors.getEditingHistoryFilterEndingRepRange(state);
 
     if (startLbs && endLbs && startLbs > endLbs) {
-        Alert.alert("Invalid Weight Range", "Please enter a minimum weight that is less than your maximum weight.");
-    } else if (startingRPEWithoutCommas && endingRPEWithoutCommas && startingRPEWithoutCommas > endingRPEWithoutCommas) {
-        Alert.alert("Invalid RPE Range", "Please enter a minimum RPE that is less than your maximum RPE.");
+        Alert.alert(
+            'Invalid Weight Range',
+            'Please enter a minimum weight that is less than your maximum weight.',
+        );
+    } else if (
+        startingRPEWithoutCommas &&
+        endingRPEWithoutCommas &&
+        startingRPEWithoutCommas > endingRPEWithoutCommas
+    ) {
+        Alert.alert(
+            'Invalid RPE Range',
+            'Please enter a minimum RPE that is less than your maximum RPE.',
+        );
     } else if (startingReps && endingReps && startingReps > endingReps) {
-        Alert.alert("Invalid Rep Range", "Please enter a minimum number of reps that is less than your maximum number of reps.");
+        Alert.alert(
+            'Invalid Rep Range',
+            'Please enter a minimum number of reps that is less than your maximum number of reps.',
+        );
     } else {
         Analytics.setCurrentScreen('history');
-        Analytics.logEventWithAppState('apply_filters', {
-        }, state);
-    
+        Analytics.logEventWithAppState('apply_filters', {}, state);
+
         dispatch({
             type: SAVE_HISTORY_FILTER,
         });
@@ -137,7 +163,7 @@ export const toggleEndWeightMetric = () => ({
 
 export const toggleShowRemoved = () => ({
     type: TOGGLE_SHOW_REMOVED,
-})
+});
 
 export const clearStartDate = () => ({
     type: CLEAR_HISTORY_FILTER_START_DATE,

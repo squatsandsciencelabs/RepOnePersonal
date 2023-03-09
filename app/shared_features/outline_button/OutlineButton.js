@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 export default props => {
-    const [ isPress, setIsPress ] = React.useState(false);
+    const [isPress, setIsPress] = React.useState(false);
 
     const touchProps = {
         activeOpacity: 1,
@@ -18,12 +18,31 @@ export default props => {
         onPress: () => true,
     };
 
-    return (<TouchableHighlight {...touchProps} onPress={props.onPress} style={props.style}>
-        <View style={[isPress ? styles.pressed : styles.normal, styles.button]}>
-            {props.image ? <Image source={props.image} style={[isPress ? styles.pressedImage : styles.normalImage, styles.image]} /> : null}
-            <Text style={isPress ? styles.pressedText : styles.normalText}>{props.text}</Text>
-        </View>
-    </TouchableHighlight>)
+    return (
+        <TouchableHighlight
+            {...touchProps}
+            onPress={props.onPress}
+            style={props.style}>
+            <View
+                style={[
+                    isPress ? styles.pressed : styles.normal,
+                    styles.button,
+                ]}>
+                {props.image ? (
+                    <Image
+                        source={props.image}
+                        style={[
+                            isPress ? styles.pressedImage : styles.normalImage,
+                            styles.image,
+                        ]}
+                    />
+                ) : null}
+                <Text style={isPress ? styles.pressedText : styles.normalText}>
+                    {props.text}
+                </Text>
+            </View>
+        </TouchableHighlight>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -49,15 +68,15 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     normalImage: {
-        tintColor: 'rgba(47, 128, 237, 1)'
+        tintColor: 'rgba(47, 128, 237, 1)',
     },
     pressedImage: {
-        tintColor: 'white'
+        tintColor: 'white',
     },
     normalText: {
         color: 'rgba(47, 128, 237, 1)',
     },
     pressedText: {
         color: 'white',
-    }
+    },
 });

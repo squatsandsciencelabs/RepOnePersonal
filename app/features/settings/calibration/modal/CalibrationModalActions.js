@@ -4,14 +4,14 @@ import {
     CANCEL_CALIBRATION,
 } from 'app/configs+constants/ActionTypes';
 
-export const startCalibration = () => ({ 
+export const startCalibration = () => ({
     type: START_CALIBRATION,
 });
 
-export const finishCalibration = () => ({ 
+export const finishCalibration = () => ({
     type: FINISH_CALIBRATION,
 });
 
-export const cancelCalibration = () => ({ 
+export const cancelCalibration = () => ({
     type: CANCEL_CALIBRATION,
 });

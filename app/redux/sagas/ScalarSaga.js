@@ -1,5 +1,12 @@
-
-import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
+import {
+    take,
+    takeEvery,
+    select,
+    put,
+    call,
+    all,
+    apply,
+} from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import { bytesToString } from 'convert-string';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
@@ -19,17 +26,25 @@ export default function* ScalarSaga() {
             takeEvery(ATTEMPT_LOG_REP_END_POSITION, logEnd),
         ]);
     }
-};
+}
 
 function* logStart(action) {
     try {
-        const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-        const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+        const deviceIdentifier = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+        );
+        const formatVersion = yield select(
+            ConnectedDeviceStatusSelectors.getAPIFormatVersion,
+        );
         if (deviceIdentifier && formatVersion && formatVersion >= 2) {
-            const response = yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20282']);
+            const response = yield apply(BleManager, BleManager.read, [
+                deviceIdentifier,
+                'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                'A5183278-CA65-45B7-B6C3-A68552F20282',
+            ]);
 
             let responseString = bytesToString(response);
-            responseString = responseString.replace(/\s+/g, "");
+            responseString = responseString.replace(/\s+/g, '');
             const array = responseString.split(/,|:/);
             const x = array[array.length - 5];
             const y = array[array.length - 3];
@@ -45,7 +60,9 @@ function* logStart(action) {
                 console.tron.log(`ignoring nan for log start position`);
             }
         } else {
-            console.tron.log(`skipping get rep start format version ${formatVersion} is not >= 2`);
+            console.tron.log(
+                `skipping get rep start format version ${formatVersion} is not >= 2`,
+            );
         }
     } catch (err) {
         console.tron.log(`failed read start position ${err.toString()}`);
@@ -54,13 +71,21 @@ function* logStart(action) {
 
 function* logEnd(action) {
     try {
-        const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-        const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+        const deviceIdentifier = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+        );
+        const formatVersion = yield select(
+            ConnectedDeviceStatusSelectors.getAPIFormatVersion,
+        );
         if (deviceIdentifier && formatVersion && formatVersion >= 2) {
-            const response = yield apply(BleManager, BleManager.read, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20282']);
+            const response = yield apply(BleManager, BleManager.read, [
+                deviceIdentifier,
+                'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                'A5183278-CA65-45B7-B6C3-A68552F20282',
+            ]);
 
             let responseString = bytesToString(response);
-            responseString = responseString.replace(/\s+/g, "");
+            responseString = responseString.replace(/\s+/g, '');
             const array = responseString.split(/,|:/);
             const x = array[array.length - 5];
             const y = array[array.length - 3];
@@ -76,7 +101,9 @@ function* logEnd(action) {
                 console.tron.log(`ignoring nan for log end position`);
             }
         } else {
-            console.tron.log(`skipping get rep end format version ${formatVersion} is not >= 2`);
+            console.tron.log(
+                `skipping get rep end format version ${formatVersion} is not >= 2`,
+            );
         }
     } catch (err) {
         console.tron.log(`failed read end position ${err.toString()}`);

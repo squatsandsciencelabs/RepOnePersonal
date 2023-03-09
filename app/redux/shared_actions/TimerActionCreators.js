@@ -9,7 +9,7 @@ import {
     PAUSE_END_SET_TIMER,
     RESUME_END_SET_TIMER,
     START_END_SET_TIMER,
-    STOP_END_SET_TIMER
+    STOP_END_SET_TIMER,
 } from 'app/configs+constants/ActionTypes';
 import { Platform } from 'react-native';
 
@@ -19,16 +19,20 @@ var timeRemaining = null;
 var isPaused = false;
 
 const runTimer = (duration, dispatch) => {
-    console.tron.log("Running timer with duration " + duration);
+    console.tron.log('Running timer with duration ' + duration);
     startTime = Date.now();
-    isPaused = false;    
+    isPaused = false;
     timer = BackgroundTimer.setTimeout(() => {
-        console.tron.log("End set timer executed with duration " + duration + "! time to end set");
+        console.tron.log(
+            'End set timer executed with duration ' +
+                duration +
+                '! time to end set',
+        );
         timeRemaining = null;
         startTime = null;
         timer = null;
         isPaused = false;
-        dispatch(SetsActionCreators.endSet());        
+        dispatch(SetsActionCreators.endSet());
     }, duration);
 };
 
@@ -38,7 +42,7 @@ export const startEndSetTimer = () => (dispatch, getState) => {
     timeRemaining = null;
     startTime = null;
     isPaused = false;
-    
+
     let state = getState();
     let durationInSeconds = state.settings.endSetTimerDuration;
     let isEditing = WorkoutSelectors.getIsEditing(state);
@@ -54,11 +58,11 @@ export const startEndSetTimer = () => (dispatch, getState) => {
             type: START_END_SET_TIMER,
             projectedEndSetTime: null,
             timerDuration: timeRemaining,
-            timerRemaining: timeRemaining
+            timerRemaining: timeRemaining,
         });
         dispatch({
             type: PAUSE_END_SET_TIMER,
-            timerRemaining: timeRemaining            
+            timerRemaining: timeRemaining,
         });
     } else {
         timeRemaining = durationInSeconds * 1000;
@@ -69,33 +73,35 @@ export const startEndSetTimer = () => (dispatch, getState) => {
             type: START_END_SET_TIMER,
             projectedEndSetTime: projectedEndSetTime,
             timerDuration: timeRemaining,
-            timerRemaining: timeRemaining            
+            timerRemaining: timeRemaining,
         });
     }
-    
-    console.tron.log("New end set timer is now " + timer);
+
+    console.tron.log('New end set timer is now ' + timer);
 };
 
-export const resumeEndSetTimer = () => (dispatch) => {
+export const resumeEndSetTimer = () => dispatch => {
     //valid check
     if (!isPaused) {
         return;
     }
 
     if (timeRemaining < 10000) {
-        console.tron.log("time remaining " + timeRemaining + " too small, making it 10000");
+        console.tron.log(
+            'time remaining ' + timeRemaining + ' too small, making it 10000',
+        );
         timeRemaining = 10000;
     }
     runTimer(timeRemaining, dispatch);
-    let projectedEndSetTime = Date.now() + timeRemaining;    
+    let projectedEndSetTime = Date.now() + timeRemaining;
     dispatch({
         type: RESUME_END_SET_TIMER,
         projectedEndSetTime: projectedEndSetTime,
-        timerRemaining: timeRemaining        
+        timerRemaining: timeRemaining,
     });
 };
 
-export const pauseEndSetTimer = () => (dispatch) => {
+export const pauseEndSetTimer = () => dispatch => {
     //valid check
     if (timer === null) {
         return;
@@ -108,15 +114,20 @@ export const pauseEndSetTimer = () => (dispatch) => {
     let currentTime = Date.now();
     let timeElapsed = currentTime - startTime;
     timeRemaining -= timeElapsed;
-    console.tron.log("Pause timer, time elapsed " + timeElapsed + " time remaining " + timeRemaining);
+    console.tron.log(
+        'Pause timer, time elapsed ' +
+            timeElapsed +
+            ' time remaining ' +
+            timeRemaining,
+    );
 
     dispatch({
         type: PAUSE_END_SET_TIMER,
-        timerRemaining: timeRemaining        
+        timerRemaining: timeRemaining,
     });
 };
 
-export const stopEndSetTimer = () =>  {
+export const stopEndSetTimer = () => {
     BackgroundTimer.clearTimeout(timer);
     timer = null;
     isPaused = false;
@@ -124,17 +135,21 @@ export const stopEndSetTimer = () =>  {
     startTime = null;
 
     return {
-        type: STOP_END_SET_TIMER
-    }
+        type: STOP_END_SET_TIMER,
+    };
 };
 
 // sanity check - should set have ended during this time?
 export const sanityCheckTimer = () => (dispatch, getState) => {
     if (Platform.OS === 'ios') {
-        let state = getState();        
-        let projectedEndSetTime = WorkoutSelectors.getProjectedEndSetTime(state);
+        let state = getState();
+        let projectedEndSetTime =
+            WorkoutSelectors.getProjectedEndSetTime(state);
         let currentTime = Date.now();
-        if (projectedEndSetTime !== null && currentTime >= projectedEndSetTime) {
+        if (
+            projectedEndSetTime !== null &&
+            currentTime >= projectedEndSetTime
+        ) {
             dispatch(SetsActionCreators.endSet(false, true));
         }
     }

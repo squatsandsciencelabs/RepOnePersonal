@@ -71,25 +71,25 @@ const WorkoutReducer = (state = defaultState, action) => {
                 editingExerciseSetID: action.setID,
                 editingExerciseName: action.exercise,
                 editingExerciseBias: action.bias,
-                isEditing: true
+                isEditing: true,
             });
         case DISMISS_WORKOUT_EXERCISE:
             return Object.assign({}, state, {
                 editingExerciseSetID: null,
                 editingExerciseName: '',
-                isEditing: false
+                isEditing: false,
             });
         case PRESENT_WORKOUT_TAGS:
             return Object.assign({}, state, {
                 editingTagsSetID: action.setID,
                 editingTags: action.tags,
-                isEditing: true
+                isEditing: true,
             });
         case DISMISS_WORKOUT_TAGS:
             return Object.assign({}, state, {
                 editingTagsSetID: null,
                 editingTags: [],
-                isEditing: false
+                isEditing: false,
             });
         case PRESENT_WORKOUT_KRATOS_DISCS:
             return {
@@ -112,7 +112,7 @@ const WorkoutReducer = (state = defaultState, action) => {
                 cameraType: action.isCommentary ? 'front' : 'back',
                 isRecording: false,
                 isSavingVideo: false,
-                isEditing: true             
+                isEditing: true,
             });
         case TOGGLE_WORKOUT_CAMERA_TYPE: {
             let cameraType = state.cameraType;
@@ -121,7 +121,7 @@ const WorkoutReducer = (state = defaultState, action) => {
                 ...state,
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
-        };
+        }
         case SAVE_WORKOUT_VIDEO:
         case DISMISS_WORKOUT_VIDEO_RECORDER:
             return Object.assign({}, state, {
@@ -129,31 +129,31 @@ const WorkoutReducer = (state = defaultState, action) => {
                 recordingVideoType: null,
                 isRecording: false,
                 isSavingVideo: false,
-                isEditing: false                
+                isEditing: false,
             });
         case START_RECORDING_WORKOUT:
             return Object.assign({}, state, {
                 isRecording: true,
-                isEditing: true
+                isEditing: true,
             });
         case STOP_RECORDING_WORKOUT:
             return Object.assign({}, state, {
                 isRecording: false,
                 isSavingVideo: true,
-                isEditing: false
+                isEditing: false,
             });
         case PRESENT_WORKOUT_VIDEO_PLAYER:
             return Object.assign({}, state, {
                 watchSetID: action.setID,
                 watchFileURL: action.videoFileURL,
-                isEditing: true
+                isEditing: true,
             });
         case DELETE_WORKOUT_VIDEO:
         case DISMISS_WORKOUT_VIDEO_PLAYER:
             return Object.assign({}, state, {
                 watchSetID: null,
                 watchFileURL: null,
-                isEditing: false
+                isEditing: false,
             });
         case START_EDITING_WORKOUT_RPE:
             return Object.assign({}, state, {
@@ -176,35 +176,35 @@ const WorkoutReducer = (state = defaultState, action) => {
                 projectedEndSetTime: action.projectedEndSetTime,
                 timerDuration: action.timerDuration,
                 timerRemaining: action.timerRemaining,
-                timerStatus: 'started'
+                timerStatus: 'started',
             });
         case RESUME_END_SET_TIMER:
             return Object.assign({}, state, {
                 projectedEndSetTime: action.projectedEndSetTime,
                 timerRemaining: action.timerRemaining,
-                timerStatus: 'resumed'
+                timerStatus: 'resumed',
             });
         case STOP_END_SET_TIMER:
             return Object.assign({}, state, {
                 projectedEndSetTime: null,
                 timerDuration: null,
                 timerRemaining: null,
-                timerStatus: 'stopped'
+                timerStatus: 'stopped',
             });
         case PAUSE_END_SET_TIMER:
             return Object.assign({}, state, {
                 projectedEndSetTime: null,
                 timerRemaining: action.timerRemaining,
-                timerStatus: 'paused'
+                timerStatus: 'paused',
             });
         case SAVE_WORKOUT_REP:
             if (action.removed === true) {
                 return Object.assign({}, state, {
-                    removedCounter: state.removedCounter + 1
+                    removedCounter: state.removedCounter + 1,
                 });
             } else if (action.removed === false) {
                 return Object.assign({}, state, {
-                    restoredCounter: state.restoredCounter + 1
+                    restoredCounter: state.restoredCounter + 1,
                 });
             } else {
                 return state;
@@ -237,7 +237,7 @@ const WorkoutReducer = (state = defaultState, action) => {
     }
 };
 
-const isModalVisible = (state) => {
+const isModalVisible = state => {
     return (
         state.editingExerciseSetID !== null ||
         state.editingTagsSetID !== null ||

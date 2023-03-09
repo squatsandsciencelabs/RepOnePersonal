@@ -1,12 +1,11 @@
-import {
-    DISMISS_INFO_MODAL,
-} from 'app/configs+constants/ActionTypes';
+import { DISMISS_INFO_MODAL } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as AnalysisActionCreators from 'app/redux/shared_actions/AnalysisActionCreators';
 
 export const presentAlgorithm = () => AnalysisActionCreators.presentAlgorithm();
 
-export const presentBestResults = () => AnalysisActionCreators.presentBestResults();
+export const presentBestResults = () =>
+    AnalysisActionCreators.presentBestResults();
 
 export const dismissInfoModal = () => (dispatch, getState) => {
     const state = getState();
@@ -18,7 +17,6 @@ export const dismissInfoModal = () => (dispatch, getState) => {
 
 // ANALYTICS
 
-const logDismissInfoAnalytics = (state) => {
-    Analytics.logEventWithAppState('one_rm_close_info', {
-    }, state);
+const logDismissInfoAnalytics = state => {
+    Analytics.logEventWithAppState('one_rm_close_info', {}, state);
 };

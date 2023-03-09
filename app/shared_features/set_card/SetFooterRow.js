@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-    View,
-    StyleSheet,
-    Text,
-    Alert,
-    TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
@@ -32,22 +26,37 @@ export default props => {
     };
 
     if (props.item.show3D) {
-        var button =<OutlineButton
-            style={styles.accessoryButton}
-            image={image}
-            onPress={tapped3DButton}
-            text='3D' />;
+        var button = (
+            <OutlineButton
+                style={styles.accessoryButton}
+                image={image}
+                onPress={tapped3DButton}
+                text="3D"
+            />
+        );
     } else if (!props.item.isWorkingSet && !props.item.isCollapsed) {
-        var button = <TouchableOpacity onPress={tappedDeleteButton} style={styles.accessoryButton}>
-            <Text style={styles.deleteText}>Delete Set</Text>
-        </TouchableOpacity>
+        var button = (
+            <TouchableOpacity
+                onPress={tappedDeleteButton}
+                style={styles.accessoryButton}>
+                <Text style={styles.deleteText}>Delete Set</Text>
+            </TouchableOpacity>
+        );
     } else {
         var button = null;
     }
 
     return (
         <View style={[styles.border, styles.container]}>
-            <Text style={{textAlign: 'center', color: 'gray', marginBottom, marginTop}}>{ props.item.rest }</Text>
+            <Text
+                style={{
+                    textAlign: 'center',
+                    color: 'gray',
+                    marginBottom,
+                    marginTop,
+                }}>
+                {props.item.rest}
+            </Text>
             {button}
         </View>
     );
@@ -55,10 +64,10 @@ export default props => {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:'white',
+        backgroundColor: 'white',
         textAlign: 'center',
         position: 'relative',
         marginBottom: 15,

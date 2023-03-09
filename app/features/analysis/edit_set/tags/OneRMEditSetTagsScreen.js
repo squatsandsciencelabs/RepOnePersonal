@@ -10,7 +10,7 @@ const title = 'Edit Tags';
 const placeholder = 'Enter Tag';
 const text = '';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const setID = AnalysisSelectors.getEditingTagsSetID(state);
 
     return {
@@ -20,24 +20,33 @@ const mapStateToProps = (state) => {
         multipleInput: true,
         setID: setID,
         inputs: AnalysisSelectors.getEditingTags(state),
-        generateMultipleInputSuggestions: (input, ignore) => { return SuggestionsSelectors.generateTagsSuggestions(state, input, ignore) },
+        generateMultipleInputSuggestions: (input, ignore) => {
+            return SuggestionsSelectors.generateTagsSuggestions(
+                state,
+                input,
+                ignore,
+            );
+        },
         isModalShowing: setID !== null,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSetMultipleInput: Actions.saveTags,
-        closeModal: Actions.dismissTags,
-        cancelModal: Actions.cancelTags,
-        tappedPill: Actions.tappedPill,
-        addPill: Actions.addPill,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSetMultipleInput: Actions.saveTags,
+            closeModal: Actions.dismissTags,
+            cancelModal: Actions.cancelTags,
+            tappedPill: Actions.tappedPill,
+            addPill: Actions.addPill,
+        },
+        dispatch,
+    );
 };
 
 const OneRMEditSetTagsScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditTextModal);
 
 export default OneRMEditSetTagsScreen;

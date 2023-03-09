@@ -6,8 +6,7 @@ import {
     DELETE_HISTORY_SET,
 } from 'app/configs+constants/ActionTypes';
 
-const defaultState = {
-};
+const defaultState = {};
 
 const HistoryCollapsedReducer = (state = defaultState, action) => {
     let changes = null;

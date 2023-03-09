@@ -20,63 +20,91 @@ export const endWorkout = () => (dispatch, getState) => {
     logEndWorkoutAnalytics(true, state);
 
     if (!isWorkoutEmpty && isLoggedIn) {
-        dispatch({ type: END_WORKOUT, manual: true, defaultMetric: defaultMetric });
-    } else if(!isLoggedIn) {
+        dispatch({
+            type: END_WORKOUT,
+            manual: true,
+            defaultMetric: defaultMetric,
+        });
+    } else if (!isLoggedIn) {
         Alert.alert(
             'Heads up!',
-            "You are not logged in, the data from this workout will be lost,\nPlease sign in under settings to save your data to the cloud",
+            'You are not logged in, the data from this workout will be lost,\nPlease sign in under settings to save your data to the cloud',
             [
-              {text: 'Delete Workout', style: 'destructive', onPress: () => dispatch({ type: END_WORKOUT, manual: true, defaultMetric: defaultMetric })},
-              {text: 'Cancel', style: 'cancel'},,
+                {
+                    text: 'Delete Workout',
+                    style: 'destructive',
+                    onPress: () =>
+                        dispatch({
+                            type: END_WORKOUT,
+                            manual: true,
+                            defaultMetric: defaultMetric,
+                        }),
+                },
+                { text: 'Cancel', style: 'cancel' },
+                ,
             ],
-            { cancelable: false }
-        )
+            { cancelable: false },
+        );
     }
 };
 
-export const autoEndWorkout = () => (dispatch, getState) => { 
+export const autoEndWorkout = () => (dispatch, getState) => {
     var state = getState();
     var defaultMetric = SettingsSelectors.getDefaultMetric(state);
 
     logEndWorkoutAnalytics(false, state);
 
-    dispatch({ type: END_WORKOUT, manual: false, defaultMetric: defaultMetric });
+    dispatch({
+        type: END_WORKOUT,
+        manual: false,
+        defaultMetric: defaultMetric,
+    });
 };
 
-const logEndWorkoutAnalytics = (manuallyEnded, state) => {    
+const logEndWorkoutAnalytics = (manuallyEnded, state) => {
     var timeStartActive = null;
     var timeEndActive = null;
     var percentAppActive = null;
     let num_sets = SetsSelectors.getNumWorkoutSets(state);
     let num_sets_with_fields = SetsSelectors.getNumWorkoutSetsWithFields(state);
-    let percent_sets_fields = SetsSelectors.getPercentWorkoutSetsWithFields(state);
-    let num_reps = SetsSelectors.getNumWorkoutReps(state);    
+    let percent_sets_fields =
+        SetsSelectors.getPercentWorkoutSetsWithFields(state);
+    let num_reps = SetsSelectors.getNumWorkoutReps(state);
     let num_removes = WorkoutSelectors.getRemovedCounter(state);
     let num_restores = WorkoutSelectors.getRestoredCounter(state);
-    let num_disconnects = ConnectedDeviceStatusSelectors.getNumDisconnects(state);
-    let num_auto_reconnects = ConnectedDeviceStatusSelectors.getNumReconnects(state);
+    let num_disconnects =
+        ConnectedDeviceStatusSelectors.getNumDisconnects(state);
+    let num_auto_reconnects =
+        ConnectedDeviceStatusSelectors.getNumReconnects(state);
     let num_history_views = HistorySelectors.getHistoryViewedCounter(state);
     let workout_duration = SetsSelectors.getWorkoutDuration(state);
-    let num_sets_with_all_fields = SetsSelectors.getNumWorkoutSetsWithAllFields(state);
-    let percent_sets_with_all_fields = SetsSelectors.getPercentWorkoutSetsWithAllFields(state);
+    let num_sets_with_all_fields =
+        SetsSelectors.getNumWorkoutSetsWithAllFields(state);
+    let percent_sets_with_all_fields =
+        SetsSelectors.getPercentWorkoutSetsWithAllFields(state);
     let num_sets_with_rpe = SetsSelectors.getNumWorkoutSetsWithRPE(state);
-    let percent_sets_with_rpe = SetsSelectors.getPercentWorkoutSetsWithRPE(state);
+    let percent_sets_with_rpe =
+        SetsSelectors.getPercentWorkoutSetsWithRPE(state);
 
-    Analytics.logEventWithAppState('end_workout', {
-        num_history_views: num_history_views,
-        num_disconnects: num_disconnects,
-        num_auto_reconnects: num_auto_reconnects,
-        num_sets: num_sets,
-        num_reps: num_reps,
-        num_removes: num_removes,
-        num_restores: num_restores,
-        num_sets_with_fields: num_sets_with_fields,
-        percent_sets_fields: percent_sets_fields,
-        num_sets_with_all_fields: num_sets_with_all_fields,
-        percent_sets_with_all_fields: percent_sets_with_all_fields,
-        num_sets_with_rpe: num_sets_with_rpe,
-        percent_sets_with_rpe: percent_sets_with_rpe,
-        workout_duration: workout_duration,
-        manually_ended: manuallyEnded,
-    }, state);    
+    Analytics.logEventWithAppState(
+        'end_workout',
+        {
+            num_history_views: num_history_views,
+            num_disconnects: num_disconnects,
+            num_auto_reconnects: num_auto_reconnects,
+            num_sets: num_sets,
+            num_reps: num_reps,
+            num_removes: num_removes,
+            num_restores: num_restores,
+            num_sets_with_fields: num_sets_with_fields,
+            percent_sets_fields: percent_sets_fields,
+            num_sets_with_all_fields: num_sets_with_all_fields,
+            percent_sets_with_all_fields: percent_sets_with_all_fields,
+            num_sets_with_rpe: num_sets_with_rpe,
+            percent_sets_with_rpe: percent_sets_with_rpe,
+            workout_duration: workout_duration,
+            manually_ended: manuallyEnded,
+        },
+        state,
+    );
 };

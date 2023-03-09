@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 class DatePicker extends Component {
-
-    render () {
+    render() {
         return (
             <DateTimePicker
                 date={this.props.date}
@@ -13,7 +12,6 @@ class DatePicker extends Component {
             />
         );
     }
-    
 }
 
 export default DatePicker;

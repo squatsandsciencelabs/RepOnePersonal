@@ -12,17 +12,17 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DateUtils from 'app/utility/DateUtils';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
-const EndOldWorkoutSaga = function * EndOldWorkoutSaga() {
+const EndOldWorkoutSaga = function* EndOldWorkoutSaga() {
     yield all([
         takeEvery(CHANGE_TAB, endOldWorkout),
-        takeEvery(STORE_INITIALIZED, endOldWorkout)        
+        takeEvery(STORE_INITIALIZED, endOldWorkout),
     ]);
 };
 
 function* endOldWorkout() {
     // check end time
     var endTime = yield select(SetsSelectors.lastWorkoutRepTime);
-    console.tron.log("End time originally " + endTime);
+    console.tron.log('End time originally ' + endTime);
     endTime = DateUtils.getDate(endTime);
     if (endTime === null) {
         return;
@@ -31,15 +31,27 @@ function* endOldWorkout() {
     // compare
     var currentTime = new Date();
     var timeDifference = Math.abs(currentTime - endTime);
-    console.tron.log("Time difference is " + timeDifference + " comparing " + endTime + " against " + currentTime + " with config timer " + OpenBarbellConfig.endWorkoutTimer);
+    console.tron.log(
+        'Time difference is ' +
+            timeDifference +
+            ' comparing ' +
+            endTime +
+            ' against ' +
+            currentTime +
+            ' with config timer ' +
+            OpenBarbellConfig.endWorkoutTimer,
+    );
 
-    const isLoggedIn = yield select(AuthSelectors.getIsLoggedIn);    
+    const isLoggedIn = yield select(AuthSelectors.getIsLoggedIn);
     if (timeDifference >= OpenBarbellConfig.endWorkoutTimer) {
         yield put(WorkoutActionCreators.autoEndWorkout());
-        if(isLoggedIn) {
-            Alert.alert("Ending Workout", "You can find your last workout on the History screen.");
+        if (isLoggedIn) {
+            Alert.alert(
+                'Ending Workout',
+                'You can find your last workout on the History screen.',
+            );
         }
     }
-};
+}
 
 export default EndOldWorkoutSaga;

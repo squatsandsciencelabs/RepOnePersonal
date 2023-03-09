@@ -29,17 +29,17 @@ const mapStateToProps = state => {
         vertices: VisualizationSelectors.getVertices(state),
         numPoints: VisualizationSelectors.getNumPoints(state),
         midpointIndex: VisualizationSelectors.getMidpointIndex(state),
-   };
+    };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        navigateToRep: Actions.navigateToRep,
-        tappedClose: Actions.tappedClose,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            navigateToRep: Actions.navigateToRep,
+            tappedClose: Actions.tappedClose,
+        },
+        dispatch,
+    );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(View);
+export default connect(mapStateToProps, mapDispatchToProps)(View);

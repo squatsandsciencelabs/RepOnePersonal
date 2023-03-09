@@ -133,47 +133,47 @@ const HistoryReducer = (state = defaultState, action) => {
             });
         case LOADING_HISTORY:
             return Object.assign({}, state, {
-                isLoadingHistory: action.isLoading
+                isLoadingHistory: action.isLoading,
             });
         case PRESENT_HISTORY_EXERCISE:
             return Object.assign({}, state, {
                 editingExerciseSetID: action.setID,
-                editingExerciseName: action.exercise
+                editingExerciseName: action.exercise,
             });
         case PRESENT_HISTORY_TAGS:
             return Object.assign({}, state, {
                 editingTagsSetID: action.setID,
-                editingTags: action.tags
+                editingTags: action.tags,
             });
         case PRESENT_HISTORY_KRATOS_DISCS:
             return {
                 ...state,
                 editingKratosDiscsSetID: action.setID,
                 editingKratosDiscs: action.kratosDiscs,
-            }
+            };
         case DISMISS_HISTORY_EXERCISE:
             return Object.assign({}, state, {
                 editingExerciseSetID: null,
-                editingExerciseName: ''
+                editingExerciseName: '',
             });
         case DISMISS_HISTORY_TAGS:
             return Object.assign({}, state, {
                 editingTagsSetID: null,
-                editingTags: []
+                editingTags: [],
             });
         case DISMISS_HISTORY_KRATOS_DISCS:
-            return{
+            return {
                 ...state,
                 editingKratosDiscsSetID: null,
-                editingKratosDiscs: {}
-            }
+                editingKratosDiscs: {},
+            };
         case PRESENT_HISTORY_VIDEO_RECORDER:
             return Object.assign({}, state, {
                 recordingSetID: action.setID,
                 recordingVideoType: action.isCommentary ? 'commentary' : 'lift',
                 cameraType: action.isCommentary ? 'front' : 'back',
                 isRecording: false,
-                isSavingVideo: false
+                isSavingVideo: false,
             });
         case TOGGLE_HISTORY_CAMERA_TYPE: {
             let cameraType = state.cameraType;
@@ -182,34 +182,34 @@ const HistoryReducer = (state = defaultState, action) => {
                 ...state,
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
-        };    
+        }
         case SAVE_HISTORY_VIDEO:
         case DISMISS_HISTORY_VIDEO_RECORDER:
             return Object.assign({}, state, {
                 recordingSetID: null,
                 recordingVideoType: null,
                 isRecording: false,
-                isSavingVideo: false
+                isSavingVideo: false,
             });
         case START_RECORDING_HISTORY:
             return Object.assign({}, state, {
-                isRecording: true
+                isRecording: true,
             });
         case STOP_RECORDING_HISTORY:
             return Object.assign({}, state, {
                 isRecording: false,
-                isSavingVideo: true
+                isSavingVideo: true,
             });
         case PRESENT_HISTORY_VIDEO_PLAYER:
             return Object.assign({}, state, {
                 watchSetID: action.setID,
-                watchFileURL: action.videoFileURL
+                watchFileURL: action.videoFileURL,
             });
         case DISMISS_HISTORY_VIDEO_PLAYER:
         case DELETE_HISTORY_VIDEO:
             return Object.assign({}, state, {
                 watchSetID: null,
-                watchFileURL: null
+                watchFileURL: null,
             });
         case PRESENT_HISTORY_FILTER:
             return {
@@ -404,22 +404,23 @@ const HistoryReducer = (state = defaultState, action) => {
 
             return {
                 ...state,
-                editingStartingWeightMetric: newStartingWeightMetric
+                editingStartingWeightMetric: newStartingWeightMetric,
             };
         }
         case TOGGLE_END_WEIGHT_METRIC: {
             const endingWeightMetric = state.editingEndingWeightMetric;
-            const newEndingWeightMetric = endingWeightMetric === 'kgs' ? 'lbs' : 'kgs';
+            const newEndingWeightMetric =
+                endingWeightMetric === 'kgs' ? 'lbs' : 'kgs';
 
             return {
                 ...state,
-                editingEndingWeightMetric: newEndingWeightMetric
+                editingEndingWeightMetric: newEndingWeightMetric,
             };
         }
         case TOGGLE_SHOW_REMOVED:
             return {
                 ...state,
-                editingShowRemoved: !state.editingShowRemoved
+                editingShowRemoved: !state.editingShowRemoved,
             };
         case CLEAR_HISTORY_FILTER_START_DATE:
             return {

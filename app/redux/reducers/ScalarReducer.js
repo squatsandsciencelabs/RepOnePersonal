@@ -8,9 +8,9 @@ const defaultState = {
     start: [], // contains objects of x, y, z
     end: [], // contains objects of x, y, z
     results: [], // contains objects rom, start{avgx, avgy, avgz}, end{avgx, avgy, avgz}
-}
+};
 
-const calculateAverageStart = (state, newStartObj=null) => {
+const calculateAverageStart = (state, newStartObj = null) => {
     let count = state.start.length + (newStartObj === null ? 0 : 1);
     if (count === 0) {
         return null;
@@ -31,13 +31,13 @@ const calculateAverageStart = (state, newStartObj=null) => {
         z += parseFloat(newStartObj.z);
     }
     return {
-        x: x/count,
-        y: y/count,
-        z: z/count,
+        x: x / count,
+        y: y / count,
+        z: z / count,
     };
 };
 
-const calculateAverageEnd = (state, newEndObj=null) => {
+const calculateAverageEnd = (state, newEndObj = null) => {
     let count = state.end.length + (newEndObj === null ? 0 : 1);
     if (count === 0) {
         return null;
@@ -62,30 +62,43 @@ const calculateAverageEnd = (state, newEndObj=null) => {
         console.tron.log(`final calc avg end x ${x} y ${y} z ${z}`);
     }
 
-    console.tron.log(`calc avg end divi check x ${typeof x} y ${typeof y} z ${typeof z} count ${typeof count} len ${typeof state.end.length}`);
-    console.tron.log(`calc avg end divi check x ${x/count} y ${y/count} z ${z/count}`);
+    console.tron.log(
+        `calc avg end divi check x ${typeof x} y ${typeof y} z ${typeof z} count ${typeof count} len ${typeof state
+            .end.length}`,
+    );
+    console.tron.log(
+        `calc avg end divi check x ${x / count} y ${y / count} z ${z / count}`,
+    );
     return {
-        x: x/count,
-        y: y/count,
-        z: z/count,
+        x: x / count,
+        y: y / count,
+        z: z / count,
     };
 };
 
 const calculateDistance = (startObj, endObj) => {
-    return Math.sqrt(Math.pow(endObj.x-startObj.x, 2) + Math.pow(endObj.y-startObj.y, 2) + Math.pow(endObj.z-startObj.z, 2));
+    return Math.sqrt(
+        Math.pow(endObj.x - startObj.x, 2) +
+            Math.pow(endObj.y - startObj.y, 2) +
+            Math.pow(endObj.z - startObj.z, 2),
+    );
 };
 
 // TODO: needs to replace the last result if it exists
-const calculateResults = (state, newStartObj=null, newEndObj=null) => {
+const calculateResults = (state, newStartObj = null, newEndObj = null) => {
     const averageStart = calculateAverageStart(state, newStartObj);
     const averageEnd = calculateAverageEnd(state, newEndObj);
-    console.tron.log(`aclculate results start ${JSON.stringify(averageStart)} ${JSON.stringify(averageEnd)}`);
+    console.tron.log(
+        `aclculate results start ${JSON.stringify(
+            averageStart,
+        )} ${JSON.stringify(averageEnd)}`,
+    );
     if (averageStart === null || averageEnd === null) {
         return state.results;
     }
 
     const rom = calculateDistance(averageStart, averageEnd);
-    const results = state.results.slice(0, state.results.length-1);
+    const results = state.results.slice(0, state.results.length - 1);
     results.push({
         rom,
         averageStart,
@@ -98,7 +111,7 @@ const calculateResults = (state, newStartObj=null, newEndObj=null) => {
 const ScalarReducer = (state = defaultState, action) => {
     switch (action.type) {
         case LOG_REP_START_POSITION: {
-            const startObj = {x: action.x, y: action.y, z: action.z};
+            const startObj = { x: action.x, y: action.y, z: action.z };
             return {
                 ...state,
                 start: [...state.start, startObj],
@@ -106,7 +119,7 @@ const ScalarReducer = (state = defaultState, action) => {
             };
         }
         case LOG_REP_END_POSITION: {
-            const endObj = {x: action.x, y: action.y, z: action.z};
+            const endObj = { x: action.x, y: action.y, z: action.z };
             return {
                 ...state,
                 end: [...state.end, endObj],
@@ -119,9 +132,12 @@ const ScalarReducer = (state = defaultState, action) => {
                 ...state,
                 start: [],
                 end: [],
-                results: [...state.results, {rom: null, averageStart: null, averageEnd: null}]
+                results: [
+                    ...state.results,
+                    { rom: null, averageStart: null, averageEnd: null },
+                ],
             };
-        default: 
+        default:
             return state;
     }
 };
