@@ -27,6 +27,8 @@ import {
     MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
+    ECCENTRIC,
+    CONCENTRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import SetAnalysis from './SetAnalysis';
 import * as CollapsedSettingsSelectors from 'app/redux/selectors/CollapsedSettingsSelectors';
@@ -540,6 +542,14 @@ const mapStateToProps = (state, ownProps) => {
     if (set.deviceType === 'Kratos') {
         // transforming set reps into the array of objects with 'eccentric' and 'concentric' keys
         const reps = set.reps.map(rep => SetUtils.getKratosRepRows(rep));
+        const setConcentric = {
+            ...set,
+            reps: reps.map(rep => rep.concentric),
+        };
+        const setEccentric = {
+            ...set,
+            reps: reps.map(rep => rep.eccentric),
+        };
 
         // get all 5 metrics, rollups, phases
         for (let i = 1; i <= METRICS_NUMBER; i++) {
@@ -560,15 +570,9 @@ const mapStateToProps = (state, ownProps) => {
                 );
             // assigning to the set.reps the 'concentric' or 'eccentric' value - normalizing the set to be consistent with the RepOne
             // taking the key from the selected phase value
-            set.reps = reps.map(rep => rep[phase.toLowerCase()]);
+            const setData = phase === CONCENTRIC ? setConcentric : setEccentric;
 
-            model[`value${i}`] = metricValue(
-                set,
-                allSets,
-                rollup,
-                metric,
-                phase,
-            );
+            model[`value${i}`] = metricValue(setData, allSets, rollup, metric);
             model[`unit${i}`] = unit(metric, rollup);
             model[`description${i}`] = metricDescription(
                 rollup,
