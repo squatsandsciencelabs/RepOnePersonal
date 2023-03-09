@@ -6,45 +6,33 @@ class SettingsOTAAvailablePanel extends Component {
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
-                Connect a RepOne Sensor to compare versions.
+                There is an updated firmware available with new features and
+                fixes. The connected RepOne hardware is version{' '}
+                {this.props.deviceFirmwareVersion || 1.23}.
             </Text>
         );
-        if (this.props.deviceFirmwareVersion) {
-            deviceFirmwareText = (
-                <Text style={styles.description}>
-                    The connected RepOne Sensor is{' '}
-                    <Text style={{ fontWeight: 'bold' }}>
-                        Version {this.props.deviceFirmwareVersion}
-                    </Text>
-                </Text>
-            );
-        }
+
         return (
             <View>
-                <View style={{}}>
-                    <Text style={styles.description}>
-                        <Text style={{ fontWeight: 'bold' }}>
-                            Version {this.props.firmwareVersion}
-                        </Text>{' '}
-                        {this.props.firmwareDescription}
-                    </Text>
-                </View>
+                {deviceFirmwareText}
                 <TouchableOpacity
                     style={[
                         SETTINGS_PANEL_STYLES.blueButton,
                         {
-                            height: 50,
-                            width: 200,
-                            marginTop: 10,
-                            marginBottom: 10,
+                            height: 40,
+                            marginTop: 25,
+                            alignSelf: 'flex-start',
                         },
                     ]}
                     onPress={this.props.download.bind(this)}>
-                    <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        Download Version {this.props.firmwareVersion}
+                    <Text
+                        style={[
+                            SETTINGS_PANEL_STYLES.buttonText,
+                            styles.installButtonText,
+                        ]}>
+                        Install version {this.props.firmwareVersion}
                     </Text>
                 </TouchableOpacity>
-                {deviceFirmwareText}
             </View>
         );
     }
@@ -55,8 +43,15 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: 'rgba(77, 77, 77, 1)',
         fontSize: 14,
-        paddingTop: 10,
+        paddingTop: 15,
         paddingBottom: 10,
+    },
+    installButton: {
+        marginTop: 25,
+    },
+    installButtonText: {
+        fontSize: 14,
+        paddingHorizontal: 14,
     },
 });
 

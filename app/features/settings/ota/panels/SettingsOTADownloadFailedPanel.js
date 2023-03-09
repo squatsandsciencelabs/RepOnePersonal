@@ -9,29 +9,31 @@ class SettingsOTADownloadFailedPanel extends Component {
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.subtitleText,
-                        { fontWeight: 'bold' },
+                        SETTINGS_PANEL_STYLES.redText,
+                        { fontWeight: '500' },
                     ]}>
-                    Download Failed
+                    Version {this.props.firmwareVersion} files failed to
+                    download
                 </Text>
                 <Image
-                    style={{ marginTop: 25, marginBottom: 25 }}
+                    style={{ marginVertical: 25 }}
                     source={require('app/appearance/images/ota_failed.png')}
                 />
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.tappableText,
-                        { fontWeight: 'bold', paddingBottom: 7 },
+                        { fontWeight: '500' },
                     ]}
                     onPress={this.props.download.bind(this)}>
-                    Retry download
+                    Retry
                 </Text>
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.footerCancelText,
                         {
-                            paddingTop: 7,
+                            paddingTop: 25,
                             paddingBottom: 10,
-                            fontWeight: 'bold',
+                            fontWeight: '500',
                         },
                     ]}
                     onPress={this.props.cancelDownload.bind(this)}>

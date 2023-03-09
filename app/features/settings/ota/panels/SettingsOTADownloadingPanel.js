@@ -1,27 +1,68 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator } from 'react-native';
+import {
+    Text,
+    View,
+    ActivityIndicator,
+    Image,
+    Animated,
+    Easing,
+} from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTADownloadingPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            spinValue: new Animated.Value(0),
+        };
+    }
+
+    componentDidMount = () => {
+        this.startImageRotateFunction();
+    };
+    startImageRotateFunction = () => {
+        Animated.loop(
+            Animated.timing(this.state.spinValue, {
+                toValue: 1,
+                duration: 1000,
+                easing: Easing.linear,
+                useNativeDriver: false,
+            }),
+        ).start();
+    };
+
     render() {
         return (
             <View style={SETTINGS_PANEL_STYLES.footer}>
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.subtitleText,
-                        { fontWeight: 'bold' },
+                        { fontWeight: '500', marginTop: 10 },
                     ]}>
-                    Downloading Version {this.props.firmwareVersion}
+                    Version {this.props.firmwareVersion} downloading update...
                 </Text>
-                <ActivityIndicator
-                    color="#4F4F4F"
-                    size="large"
-                    style={{ paddingTop: 15, paddingBottom: 15 }}
+                <Animated.Image
+                    style={{
+                        margin: 16,
+                        transform: [
+                            {
+                                rotate: this.state.spinValue.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: ['0deg', '360deg'],
+                                }),
+                            },
+                        ],
+                    }}
+                    source={require('app/appearance/images/ellipse_install_firmware.png')}
                 />
+                <Text style={[SETTINGS_PANEL_STYLES.subtitleText]}>
+                    Installing on RepOne{' '}
+                    {this.props.unit && `#${this.props.unit}`}
+                </Text>
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.footerCancelText,
-                        { fontWeight: 'bold' },
+                        { fontWeight: '500', marginTop: 25 },
                     ]}
                     onPress={this.props.cancelDownload.bind(this)}>
                     Cancel
