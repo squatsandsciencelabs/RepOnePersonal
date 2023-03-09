@@ -1,4 +1,13 @@
-import { take, takeEvery, select, put, call, all, apply, spawn } from 'redux-saga/effects';
+import {
+    take,
+    takeEvery,
+    select,
+    put,
+    call,
+    all,
+    apply,
+    spawn,
+} from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import Toast from 'react-native-root-toast';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
@@ -27,16 +36,24 @@ export default function* BulkDataSaga() {
             takeEvery(LOGOUT, clearAll),
         ]);
     }
-};
+}
 
 function* mapBulkData(action) {
     if (!action.deviceRepID) {
-        console.tron.log(`not updating bulk data logic as action lacks deviceRepID ${JSON.stringify(action)}`);
+        console.tron.log(
+            `not updating bulk data logic as action lacks deviceRepID ${JSON.stringify(
+                action,
+            )}`,
+        );
         return;
     }
 
     if (action.totalSampleCount === null) {
-        console.tron.log(`not updating bulk data logic as action lacks total sample count ${JSON.stringify(action)}`);
+        console.tron.log(
+            `not updating bulk data logic as action lacks total sample count ${JSON.stringify(
+                action,
+            )}`,
+        );
         return;
     }
 
@@ -57,7 +74,9 @@ function* mapBulkData(action) {
 
     // force notify if the current is not working
     if (currentDeviceRepID !== null && !map[currentDeviceRepID]) {
-        console.tron.log(`Cannot find map for ${currentDeviceRepID}, tell sensor to finish`);
+        console.tron.log(
+            `Cannot find map for ${currentDeviceRepID}, tell sensor to finish`,
+        );
         yield spawn(notifyBulkDataReceived, currentDeviceRepID);
     }
 }
@@ -72,20 +91,32 @@ function* completeCheck(action) {
     const state = yield select();
     const set = SetsSelectors.getSet(state, action.setID);
     if (!set) {
-        console.tron.log(`Unable to send complete message for bulk data, set not found for action ${JSON.stringify(action)}`);
+        console.tron.log(
+            `Unable to send complete message for bulk data, set not found for action ${JSON.stringify(
+                action,
+            )}`,
+        );
         return;
     }
 
     // get rep
     const rep = set.reps[action.repIndex];
     if (!rep) {
-        console.tron.log(`Unable to send complete message for bulk data, rep not found for action ${JSON.stringify(action)}`);
+        console.tron.log(
+            `Unable to send complete message for bulk data, rep not found for action ${JSON.stringify(
+                action,
+            )}`,
+        );
         return;
     }
 
     // get device rep id
     if (!rep.deviceRepID) {
-        console.tron.log(`Unable to send complete message for bulk data, deviceRepID not found for rep ${JSON.stringify(rep)} action ${JSON.stringify(action)}`);
+        console.tron.log(
+            `Unable to send complete message for bulk data, deviceRepID not found for rep ${JSON.stringify(
+                rep,
+            )} action ${JSON.stringify(action)}`,
+        );
         return;
     }
 
@@ -107,21 +138,36 @@ function* notifyBulkDataReceived(deviceRepID, completed = false) {
     const data = Array.from(data8);
 
     while (true) {
-        // fail out upon disconnect 
-        let deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
+        // fail out upon disconnect
+        let deviceIdentifier = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+        );
         if (!deviceIdentifier) {
-            console.tron.log(`not connected, ignoring notifying bulk data received`);
+            console.tron.log(
+                `not connected, ignoring notifying bulk data received`,
+            );
             return;
         }
 
         try {
             // write to sensor
-            console.tron.log(`Attempt notify bulk data received for ${deviceRepID}`);
-            yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274', data]);
-            console.tron.log(`Succeeded notify bulk data received for ${deviceRepID}`);
+            console.tron.log(
+                `Attempt notify bulk data received for ${deviceRepID}`,
+            );
+            yield apply(BleManager, BleManager.write, [
+                deviceIdentifier,
+                'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                'A5183278-CA65-45B7-B6C3-A68552F20274',
+                data,
+            ]);
+            console.tron.log(
+                `Succeeded notify bulk data received for ${deviceRepID}`,
+            );
 
             // success, bail
-            const msg = completed ? `Bulk Data Received For ${deviceRepID}` : `Ignored bulk data for ${deviceRepID}`;
+            const msg = completed
+                ? `Bulk Data Received For ${deviceRepID}`
+                : `Ignored bulk data for ${deviceRepID}`;
             Toast.show(msg, {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.BOTTOM,
@@ -132,7 +178,9 @@ function* notifyBulkDataReceived(deviceRepID, completed = false) {
             });
             return;
         } catch (err) {
-            console.tron.log(`Error notifying bulk data received for ${deviceRepID} ${err.toString()}`);
+            console.tron.log(
+                `Error notifying bulk data received for ${deviceRepID} ${err.toString()}`,
+            );
         }
     }
 }
@@ -141,8 +189,14 @@ function* notifyBulkDataReceived(deviceRepID, completed = false) {
 
 export async function addBulkData(raw, deviceRepID, sampleID, time, x, y, z) {
     // clear map
-    if (currentDeviceRepID !== null && currentDeviceRepID !== deviceRepID && map[currentDeviceRepID]) {
-        console.tron.log(`clearing map for ${currentDeviceRepID} and switching to ${deviceRepID}`);
+    if (
+        currentDeviceRepID !== null &&
+        currentDeviceRepID !== deviceRepID &&
+        map[currentDeviceRepID]
+    ) {
+        console.tron.log(
+            `clearing map for ${currentDeviceRepID} and switching to ${deviceRepID}`,
+        );
         delete map[currentDeviceRepID];
     }
     currentDeviceRepID = deviceRepID;
@@ -163,7 +217,9 @@ export async function addBulkData(raw, deviceRepID, sampleID, time, x, y, z) {
         map[deviceRepID].receivedSampleCount += 1;
 
         // debug logging
-        console.tron.log(`rep:${deviceRepID} ${raw} values are sample_id:${sampleID} time:${time} x:${x} y:${y} z:${z} having received ${map[deviceRepID].receivedSampleCount} of ${map[deviceRepID].totalSampleCount}`);
+        console.tron.log(
+            `rep:${deviceRepID} ${raw} values are sample_id:${sampleID} time:${time} x:${x} y:${y} z:${z} having received ${map[deviceRepID].receivedSampleCount} of ${map[deviceRepID].totalSampleCount}`,
+        );
     }
 }
 
@@ -180,7 +236,9 @@ export function getBulkData(deviceRepID) {
     }
 
     // completed check
-    if (map[deviceRepID].receivedSampleCount < map[deviceRepID].totalSampleCount) {
+    if (
+        map[deviceRepID].receivedSampleCount < map[deviceRepID].totalSampleCount
+    ) {
         return false;
     }
 

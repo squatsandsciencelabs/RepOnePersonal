@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-    View,
-    StyleSheet,
-    Alert
-} from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 
 import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 
@@ -12,25 +8,27 @@ import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 const image = require('app/appearance/images/3d.png');
 
 export default props => {
-
     const tappedButton = () => {
         props.open3D(props.setID);
     };
 
-    return (<View style={styles.container}>
-        <View style={styles.border} />
-        <OutlineButton
-            image={image}
-            onPress={tappedButton}
-            text='3D View' />
-    </View>);
+    return (
+        <View style={styles.container}>
+            <View style={styles.border} />
+            <OutlineButton
+                image={image}
+                onPress={tappedButton}
+                text="3D View"
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',    
+        alignItems: 'center',
         position: 'relative',
         height: 32,
         backgroundColor: 'white',
@@ -46,5 +44,5 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 100,
-    }
+    },
 });

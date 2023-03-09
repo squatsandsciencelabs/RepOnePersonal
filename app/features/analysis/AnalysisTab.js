@@ -1,11 +1,5 @@
-import React, {Component} from 'react';
-import {
-    ScrollView,
-    Image,
-    View,
-    Text,
-    findNodeHandle,
-} from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, Image, View, Text, findNodeHandle } from 'react-native';
 
 import OneRMDebugScreen from './debug/OneRMDebugScreen';
 import OneRMCalculateScreen from './calculate/OneRMCalculateScreen';
@@ -26,7 +20,7 @@ class AnalysisTab extends Component {
         if (nextProps.scroll !== this.state.lastScroll) {
             // save new props
             this.setState({
-                lastScroll: nextProps.scroll
+                lastScroll: nextProps.scroll,
             });
 
             // scroll
@@ -34,8 +28,12 @@ class AnalysisTab extends Component {
                 this.results.measureLayout(
                     findNodeHandle(this.scrollView),
                     (x, y, width, height, pageX, pageY) => {
-                        this.scrollView.scrollTo({x: 0, y: y, animated: true});
-                    }
+                        this.scrollView.scrollTo({
+                            x: 0,
+                            y: y,
+                            animated: true,
+                        });
+                    },
                 );
             }
         }
@@ -46,14 +44,21 @@ class AnalysisTab extends Component {
             // TODO: test the hack still works on Android
             return (
                 <ScrollView
-                    style={{flex: 1}}
-                    keyboardDismissMode='on-drag'
-                    keyboardShouldPersistTaps='always'
-                    onScrollBeginDrag = {() => this.props.dragged() }
-                    ref={(ref) => { this.scrollView = ref}}>
+                    style={{ flex: 1 }}
+                    keyboardDismissMode="on-drag"
+                    keyboardShouldPersistTaps="always"
+                    onScrollBeginDrag={() => this.props.dragged()}
+                    ref={ref => {
+                        this.scrollView = ref;
+                    }}>
                     <OneRMDebugScreen />
                     <OneRMCalculateScreen />
-                    <View ref={(ref) => { this.results = ref }} onLayout={() => {}} collapsable={false} >
+                    <View
+                        ref={ref => {
+                            this.results = ref;
+                        }}
+                        onLayout={() => {}}
+                        collapsable={false}>
                         <OneRMResultsScreen />
                     </View>
                     <OneRMProtocolView />

@@ -1,8 +1,6 @@
 import { Alert } from 'react-native';
 
-import {
-    DISMISS_SURVEY,
-} from 'app/configs+constants/ActionTypes';
+import { DISMISS_SURVEY } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 import * as AppStateSelectors from 'app/redux/selectors/AppStateSelectors';
@@ -14,31 +12,27 @@ export const closeSurvey = () => (dispatch, getState) => {
     logCloseSurveyAnalytics(state);
 
     // present
-    Alert.alert(
-        "Finished taking our survey?",
-        null,
-        [
-            {
-                text: 'Later',
-                onPress: () => {
-                    dispatch(later());
-                },
+    Alert.alert('Finished taking our survey?', null, [
+        {
+            text: 'Later',
+            onPress: () => {
+                dispatch(later());
             },
-            {
-                text: "Finished",
-                onPress: () => {
-                    dispatch(finish());
-                },
+        },
+        {
+            text: 'Finished',
+            onPress: () => {
+                dispatch(finish());
             },
-            {
-                text: 'I Hate Data',
-                onPress: () => {
-                    dispatch(optout());
-                },
-                style: 'destructive'
+        },
+        {
+            text: 'I Hate Data',
+            onPress: () => {
+                dispatch(optout());
             },
-        ]
-    );
+            style: 'destructive',
+        },
+    ]);
 };
 
 export const optout = () => (dispatch, getState) => {
@@ -71,10 +65,10 @@ export const later = () => (dispatch, getState) => {
 };
 
 // TODO: make sure to handle new tabs here as well
-const resetScreen = (state) => {
+const resetScreen = state => {
     const tabIndex = AppStateSelectors.getTabIndex(state);
 
-    switch(tabIndex) {
+    switch (tabIndex) {
         case 0:
             Analytics.setCurrentScreen('workout');
             break;
@@ -84,7 +78,7 @@ const resetScreen = (state) => {
         case 2:
             Analytics.setCurrentScreen('analysis');
             break;
-        case 3: 
+        case 3:
             Analytics.setCurrentScreen('settings');
             break;
         default:
@@ -94,26 +88,42 @@ const resetScreen = (state) => {
 
 // ANALYTICS
 
-const logCloseSurveyAnalytics = (state) => {
-    Analytics.logEventWithAppState('close_survey', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logCloseSurveyAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'close_survey',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logFinishSurveyAnalytics = (state) => {
-    Analytics.logEventWithAppState('finish_survey', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logFinishSurveyAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'finish_survey',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logOptOutSurveyAnalytics = (state) => {
-    Analytics.logEventWithAppState('opt_out_survey', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logOptOutSurveyAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'opt_out_survey',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logFillSurveyLaterAnalytics = (state) => {
-    Analytics.logEventWithAppState('fill_survey_later', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logFillSurveyLaterAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'fill_survey_later',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };

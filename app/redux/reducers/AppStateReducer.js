@@ -3,7 +3,7 @@ import {
     LOCKED_SCREEN,
     MULTI_TASK_SCREEN,
     END_WORKOUT,
-    CHANGE_TAB
+    CHANGE_TAB,
 } from 'app/configs+constants/ActionTypes';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 
@@ -12,7 +12,7 @@ const defaultState = {
     lockedCounter: 0,
     multiTaskCounter: 0,
     tabIndex: NavigationConfig.initialIndex,
-}
+};
 
 const AppStateReducer = (state = defaultState, action) => {
     switch (action.type) {
@@ -33,13 +33,13 @@ const AppStateReducer = (state = defaultState, action) => {
             return Object.assign({}, state, {
                 screenStatus: 'multiView',
                 multiTaskCounter: state.multiTaskCounter + 1,
-            })
+            });
         case END_WORKOUT:
             return Object.assign({}, state, {
                 lockedCounter: 0,
-                multiTaskCounter: 0
+                multiTaskCounter: 0,
             });
-        default: 
+        default:
             return state;
     }
 };

@@ -4,22 +4,25 @@ import { connect } from 'react-redux';
 import OneRMDebugView from './OneRMDebugView';
 import * as Actions from './OneRMDebugActions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     // TODO: set this to false to remove it from the live production app
     return {
         visible: __DEV__,
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        onPressButton: Actions.test1RM,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            onPressButton: Actions.test1RM,
+        },
+        dispatch,
+    );
 };
 
 const OneRMDebugScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(OneRMDebugView);
 
 export default OneRMDebugScreen;

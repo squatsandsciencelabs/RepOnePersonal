@@ -1,4 +1,12 @@
-import { take, takeEvery, select, put, call, all, apply } from 'redux-saga/effects';
+import {
+    take,
+    takeEvery,
+    select,
+    put,
+    call,
+    all,
+    apply,
+} from 'redux-saga/effects';
 import BleManager from 'react-native-ble-manager';
 import Toast from 'react-native-root-toast';
 import { stringToBytes } from 'convert-string';
@@ -26,24 +34,37 @@ export default function* CalibrationSaga() {
             // note: shoulnd't need cancel calibration as cancel is disabled once you tap start
         ]);
     }
-};
+}
 
 function* startCalibration(action) {
     calibrating = false;
     while (true) {
         try {
-            const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-            const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+            const deviceIdentifier = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+            );
+            const formatVersion = yield select(
+                ConnectedDeviceStatusSelectors.getAPIFormatVersion,
+            );
             if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('startcal');
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
+                yield apply(BleManager, BleManager.write, [
+                    deviceIdentifier,
+                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    writeData,
+                ]);
             } else {
-                console.tron.log(`skipping start calibration as format version ${formatVersion} is not >= 2`);
+                console.tron.log(
+                    `skipping start calibration as format version ${formatVersion} is not >= 2`,
+                );
             }
             calibrating = true;
             break; // exit the loop due tosuccess
         } catch (err) {
-            console.tron.log(`failed to start calibration ${err.toString()}, trying again`);
+            console.tron.log(
+                `failed to start calibration ${err.toString()}, trying again`,
+            );
         }
     }
 }
@@ -51,19 +72,34 @@ function* startCalibration(action) {
 function* finishCalibration(action) {
     while (true) {
         try {
-            const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-            const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+            const deviceIdentifier = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+            );
+            const formatVersion = yield select(
+                ConnectedDeviceStatusSelectors.getAPIFormatVersion,
+            );
             if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('endcal');
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
-                toast('Your RepOne Sensor is now calibrated for accurate 3D readings.');
+                yield apply(BleManager, BleManager.write, [
+                    deviceIdentifier,
+                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    writeData,
+                ]);
+                toast(
+                    'Your RepOne Sensor is now calibrated for accurate 3D readings.',
+                );
             } else {
-                console.tron.log(`skipping finish calibration as format version ${formatVersion} is not >= 2`);
+                console.tron.log(
+                    `skipping finish calibration as format version ${formatVersion} is not >= 2`,
+                );
             }
             calibrating = false;
             break; // exit the loop due to success
         } catch (err) {
-            console.tron.log(`failed to end calibration ${err.toString()}, trying again`);
+            console.tron.log(
+                `failed to end calibration ${err.toString()}, trying again`,
+            );
         }
     }
 }
@@ -75,26 +111,43 @@ function* forceEndCalibration(action) {
     }
 
     calibrating = false;
-    toast("You disconnected from your sensor, please reconnect and try calibrating again");
+    toast(
+        'You disconnected from your sensor, please reconnect and try calibrating again',
+    );
     yield put({ type: CANCEL_CALIBRATION });
 }
 
 function* resetCalibration(action) {
     while (true) {
         try {
-            const deviceIdentifier = yield select(ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier);
-            const formatVersion = yield select(ConnectedDeviceStatusSelectors.getAPIFormatVersion);
+            const deviceIdentifier = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+            );
+            const formatVersion = yield select(
+                ConnectedDeviceStatusSelectors.getAPIFormatVersion,
+            );
             if (deviceIdentifier && formatVersion && formatVersion >= 2) {
                 const writeData = stringToBytes('reset');
-                yield apply(BleManager, BleManager.write, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20281', writeData]);
-                toast('Your RepOne Sensor has reset its calibration for 3D readings.');
+                yield apply(BleManager, BleManager.write, [
+                    deviceIdentifier,
+                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    writeData,
+                ]);
+                toast(
+                    'Your RepOne Sensor has reset its calibration for 3D readings.',
+                );
             } else {
-                console.tron.log(`skipping reset calibration as format version ${formatVersion} is not >= 2`);
+                console.tron.log(
+                    `skipping reset calibration as format version ${formatVersion} is not >= 2`,
+                );
             }
             calibrating = false;
             break; // exit the loop due to success
         } catch (err) {
-            console.tron.log(`failed to end calibration ${err.toString()}, trying again`);
+            console.tron.log(
+                `failed to end calibration ${err.toString()}, trying again`,
+            );
         }
     }
 }

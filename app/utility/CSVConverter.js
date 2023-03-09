@@ -22,7 +22,12 @@ export const convert = data => {
 
     // filter removed sets
     // NOTE: removed is for backwards compatibility, as delete is the new variable used
-    sets = sets.filter(set => (set.deleted === false || set.deleted === undefined && set.removed === false) && set.reps.length > 0);
+    sets = sets.filter(
+        set =>
+            (set.deleted === false ||
+                (set.deleted === undefined && set.removed === false)) &&
+            set.reps.length > 0,
+    );
 
     if (!isKratosEnabled) {
         sets = sets.filter(set => set.deviceType !== 'Kratos');

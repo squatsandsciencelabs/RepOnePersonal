@@ -25,15 +25,15 @@ class OneRMView extends Component {
 
         this.state = {
             velocity: this.props.velocity,
-            days: this.props.days
+            days: this.props.days,
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             velocity: nextProps.velocity,
-            days: nextProps.days
-        })
+            days: nextProps.days,
+        });
     }
 
     // ACTIONS
@@ -53,23 +53,39 @@ class OneRMView extends Component {
     // RENDER
 
     _displayTagsToInclude() {
-        if (this.props.tagsToInclude === undefined || this.props.tagsToInclude === null || this.props.tagsToInclude.length === 0) {
-            return (<Text style={[styles.tagText, styles.placeholderText]}>Tags</Text>);
+        if (
+            this.props.tagsToInclude === undefined ||
+            this.props.tagsToInclude === null ||
+            this.props.tagsToInclude.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Tags
+                </Text>
+            );
         }
 
         let position = 0;
 
-        const pills = this.props.tagsToInclude.map((tag) => {
-            return <Pill key={position++} text={tag} style={{paddingRight: 5, paddingBottom: 3, paddingTop: 3}} />
+        const pills = this.props.tagsToInclude.map(tag => {
+            return (
+                <Pill
+                    key={position++}
+                    text={tag}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />
+            );
         });
 
-        return (<View style={styles.tagField}>{pills}</View>);
+        return <View style={styles.tagField}>{pills}</View>;
     }
 
     _renderTagsToInclude() {
         return (
-            <View style={[styles.field, {flex: 1}]}>
-                <TouchableHighlight onPress={() => this.props.tappedTagsToInclude()} underlayColor='#e0e0e0'>
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedTagsToInclude()}
+                    underlayColor="#e0e0e0">
                     {this._displayTagsToInclude()}
                 </TouchableHighlight>
             </View>
@@ -77,23 +93,39 @@ class OneRMView extends Component {
     }
 
     _displayTagsToExclude() {
-        if (this.props.tagsToExclude === undefined || this.props.tagsToExclude === null || this.props.tagsToExclude.length === 0) {
-            return (<Text style={[styles.tagText, styles.placeholderText]}>Tags</Text>);
+        if (
+            this.props.tagsToExclude === undefined ||
+            this.props.tagsToExclude === null ||
+            this.props.tagsToExclude.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Tags
+                </Text>
+            );
         }
 
         let position = 0;
 
-        const pills = this.props.tagsToExclude.map((tag) => {
-            return <Pill key={position++} text={tag} style={{paddingRight: 5, paddingBottom: 3, paddingTop: 3}} />
+        const pills = this.props.tagsToExclude.map(tag => {
+            return (
+                <Pill
+                    key={position++}
+                    text={tag}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />
+            );
         });
 
-        return (<View style={styles.tagField}>{pills}</View>);
+        return <View style={styles.tagField}>{pills}</View>;
     }
 
     _renderTagsToExclude() {
         return (
-            <View style={[styles.field, {flex: 1}]}>
-                <TouchableHighlight onPress={() => this.props.tappedTagsToExclude()} underlayColor='#e0e0e0'>
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedTagsToExclude()}
+                    underlayColor="#e0e0e0">
                     {this._displayTagsToExclude()}
                 </TouchableHighlight>
             </View>
@@ -105,19 +137,43 @@ class OneRMView extends Component {
             return (
                 <View>
                     <View>
-                        <TouchableOpacity onPress={() => this._tappedExercise()} style={[SETTINGS_PANEL_STYLES.blueButton, {flex: 1, marginBottom: 20}]}>
-                            <Text style={{fontSize: 18, color: 'white', textAlign: 'center'}}>
+                        <TouchableOpacity
+                            onPress={() => this._tappedExercise()}
+                            style={[
+                                SETTINGS_PANEL_STYLES.blueButton,
+                                { flex: 1, marginBottom: 20 },
+                            ]}>
+                            <Text
+                                style={{
+                                    fontSize: 18,
+                                    color: 'white',
+                                    textAlign: 'center',
+                                }}>
                                 {this.props.exercise}
                             </Text>
-                            <Icon name="caret-down" size={10} color='white' style={{right: 5, position:'absolute'}} />
+                            <Icon
+                                name="caret-down"
+                                size={10}
+                                color="white"
+                                style={{ right: 5, position: 'absolute' }}
+                            />
                         </TouchableOpacity>
                         <Text style={styles.labelText}>Tags Must Include:</Text>
-                        <View style={{marginTop: 5, marginBottom: 10}}>{ this._renderTagsToInclude() }</View>
+                        <View style={{ marginTop: 5, marginBottom: 10 }}>
+                            {this._renderTagsToInclude()}
+                        </View>
                         <Text style={styles.labelText}>Tags to Exclude:</Text>
-                        <View style={{marginTop: 5}}>{ this._renderTagsToExclude() }</View>
+                        <View style={{ marginTop: 5 }}>
+                            {this._renderTagsToExclude()}
+                        </View>
                     </View>
                     <ExercisePicker />
-                    <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'column',
+                            backgroundColor: 'white',
+                        }}>
                         <EditAnalysisTagsToIncludeScreen />
                         <EditAnalysisTagsToExcludeScreen />
                     </View>
@@ -126,14 +182,28 @@ class OneRMView extends Component {
         } else {
             return (
                 <View>
-                    <View style={[{flex: 1, marginBottom: 15}, styles.dropdownButton]}>
+                    <View
+                        style={[
+                            { flex: 1, marginBottom: 15 },
+                            styles.dropdownButton,
+                        ]}>
                         <ExercisePicker color={'white'} />
                     </View>
                     <Text style={styles.labelText}>Tags Must Include:</Text>
-                    <View style={{marginTop: 5, marginBottom: 10}}>{ this._renderTagsToInclude() }</View>
+                    <View style={{ marginTop: 5, marginBottom: 10 }}>
+                        {this._renderTagsToInclude()}
+                    </View>
                     <Text style={styles.labelText}>Tags to Exclude:</Text>
-                    <View style={{marginTop: 5}}>{ this._renderTagsToExclude() }</View>
-                    <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white', marginBottom: 0 }}>
+                    <View style={{ marginTop: 5 }}>
+                        {this._renderTagsToExclude()}
+                    </View>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'column',
+                            backgroundColor: 'white',
+                            marginBottom: 0,
+                        }}>
                         <EditAnalysisTagsToIncludeScreen />
                         <EditAnalysisTagsToExcludeScreen />
                     </View>
@@ -151,17 +221,27 @@ class OneRMView extends Component {
 
         return (
             <View style={{ marginTop: Platform.OS === 'ios' ? 20 : 15 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>    
-                    <Text style={styles.labelText}>
-                        Date Range
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}>
+                    <Text style={styles.labelText}>Date Range</Text>
+                    <Text style={styles.numberStyle}>
+                        {Math.abs(this.state.days)} days
                     </Text>
-                    <Text style={styles.numberStyle}>{Math.abs(this.state.days)} days</Text>
                 </View>
                 <Slider
-                    value={this.props.days * -1} 
+                    value={this.props.days * -1}
                     style={styles.slider}
-                    onValueChange={(value) => this.setState({ slidingDays: true, days: Number(value.toFixed(2)) })}
-                    onSlidingComplete={(value) => this._changeDaysSlider(value)}
+                    onValueChange={value =>
+                        this.setState({
+                            slidingDays: true,
+                            days: Number(value.toFixed(2)),
+                        })
+                    }
+                    onSlidingComplete={value => this._changeDaysSlider(value)}
                     minimumValue={-60}
                     maximumValue={-1}
                     step={1}
@@ -169,20 +249,33 @@ class OneRMView extends Component {
                     minimumTrackTintColor={'#368fff'}
                     animateTransitions={true}
                 />
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                    <Text style={styles.labelText}>
-                        Velocity at 1RM
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 10,
+                    }}>
+                    <Text style={styles.labelText}>Velocity at 1RM</Text>
+                    <Text style={styles.numberStyle}>
+                        {this.state.velocity} m/s
                     </Text>
-                    <Text style={styles.numberStyle}>{this.state.velocity} m/s</Text>
                 </View>
                 <Slider
                     value={this.props.velocity}
                     style={styles.slider}
-                    onValueChange={(value) => this.setState({ slidingVelocity: true, velocity: Number(value.toFixed(2)) })}
-                    onSlidingComplete={(value) => this._changeVelocitySlider(value)}
-                    minimumValue={.01}
-                    maximumValue={.41}
-                    step={.01}
+                    onValueChange={value =>
+                        this.setState({
+                            slidingVelocity: true,
+                            velocity: Number(value.toFixed(2)),
+                        })
+                    }
+                    onSlidingComplete={value =>
+                        this._changeVelocitySlider(value)
+                    }
+                    minimumValue={0.01}
+                    maximumValue={0.41}
+                    step={0.01}
                     thumbTintColor={thumbTintColor}
                     minimumTrackTintColor={'#368fff'}
                     animateTransitions={true}
@@ -193,8 +286,8 @@ class OneRMView extends Component {
 
     _renderCalculate1RM() {
         return (
-            <View style={[styles.button, {marginTop: 25}]}>
-                <TouchableOpacity onPress={ () => this.props.calcE1RM() }>
+            <View style={[styles.button, { marginTop: 25 }]}>
+                <TouchableOpacity onPress={() => this.props.calcE1RM()}>
                     <Text style={styles.buttonText}>Calculate</Text>
                 </TouchableOpacity>
             </View>
@@ -203,11 +296,32 @@ class OneRMView extends Component {
 
     render() {
         return (
-            <View style={ [SETTINGS_PANEL_STYLES.panel, { flexDirection: 'column' }] }>
-                <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
-                    <Text style={[{marginBottom: 25}, styles.titleText]}>Estimated One-Rep Max</Text>
-                    <TouchableOpacity style={{alignItems: 'center', position: 'absolute', right: 0, top: 0}} onPress={ () => this.props.presentInfoModal() }>
-                        <Icon name="question-circle" size={20} color='rgba(47, 128, 237, 1)'></Icon>
+            <View
+                style={[
+                    SETTINGS_PANEL_STYLES.panel,
+                    { flexDirection: 'column' },
+                ]}>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'stretch',
+                        justifyContent: 'center',
+                    }}>
+                    <Text style={[{ marginBottom: 25 }, styles.titleText]}>
+                        Estimated One-Rep Max
+                    </Text>
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                        }}
+                        onPress={() => this.props.presentInfoModal()}>
+                        <Icon
+                            name="question-circle"
+                            size={20}
+                            color="rgba(47, 128, 237, 1)"></Icon>
                     </TouchableOpacity>
                     <WhatIsOneRMScreen />
                     {this._renderForms()}
@@ -215,7 +329,7 @@ class OneRMView extends Component {
                     {this._renderCalculate1RM()}
                 </View>
             </View>
-        )     
+        );
     }
 }
 
@@ -224,7 +338,7 @@ const styles = StyleSheet.create({
         color: 'rgba(77, 77, 77, 1)',
         textAlign: 'center',
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     labelText: {
         color: 'rgba(77, 77, 77, 1)',
@@ -283,21 +397,21 @@ const styles = StyleSheet.create({
         paddingRight: 0,
     },
     placeholderText: {
-        color: 'rgba(189, 189, 189, 1)'
+        color: 'rgba(189, 189, 189, 1)',
     },
     slider: {
-        marginTop: Platform.OS === 'ios' ? -5 : 10
+        marginTop: Platform.OS === 'ios' ? -5 : 10,
     },
     button: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderColor: 'rgba(47, 128, 237, 1)',        
+        borderColor: 'rgba(47, 128, 237, 1)',
         borderWidth: 5,
         borderRadius: 15,
     },
     buttonText: {
         color: 'white',
         padding: 5,
-        textAlign: 'center'
+        textAlign: 'center',
     },
 });
 

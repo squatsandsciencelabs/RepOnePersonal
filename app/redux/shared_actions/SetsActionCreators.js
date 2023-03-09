@@ -24,23 +24,35 @@ export const getDefaultMetric = () => (dispatch, getState) => {
     var state = getState();
     var defaultMetric = state.settings.defaultMetric;
 
-    dispatch({ 
-        type: SAVE_DEFAULT_METRIC, 
-        defaultMetric: defaultMetric
+    dispatch({
+        type: SAVE_DEFAULT_METRIC,
+        defaultMetric: defaultMetric,
     });
-}
+};
 
 // WORKOUT
 
-export const saveWorkoutExerciseName = (setID, exercise = null) => saveWorkoutSet(setID, exercise);
+export const saveWorkoutExerciseName = (setID, exercise = null) =>
+    saveWorkoutSet(setID, exercise);
 
-export const saveWorkoutForm = (setID, weight = null, metric = null, rpe = null) => {
+export const saveWorkoutForm = (
+    setID,
+    weight = null,
+    metric = null,
+    rpe = null,
+) => {
     return saveWorkoutSet(setID, null, weight, metric, rpe);
-}        
+};
 
-const saveWorkoutSet = (setID, exercise = null, weight = null, metric = null, rpe = null) => {   
-    var action  = {
-        type: SAVE_WORKOUT_SET
+const saveWorkoutSet = (
+    setID,
+    exercise = null,
+    weight = null,
+    metric = null,
+    rpe = null,
+) => {
+    var action = {
+        type: SAVE_WORKOUT_SET,
     };
 
     action.setID = setID;
@@ -61,7 +73,7 @@ const saveWorkoutSet = (setID, exercise = null, weight = null, metric = null, rp
     return action;
 };
 
-export const deleteWorkoutSet = (setID) => (dispatch, getState) => {
+export const deleteWorkoutSet = setID => (dispatch, getState) => {
     const state = getState();
     logDeleteSetAnalytics(state, setID);
 
@@ -71,7 +83,7 @@ export const deleteWorkoutSet = (setID) => (dispatch, getState) => {
     });
 };
 
-export const restoreWorkoutSet = (setID) => (dispatch, getState) => {
+export const restoreWorkoutSet = setID => (dispatch, getState) => {
     const state = getState();
     logRestoreSetAnalytics(state, setID);
 
@@ -105,33 +117,47 @@ export const restoreWorkoutRep = (setID, repIndex) => (dispatch, getState) => {
     });
 };
 
-export const endSet = (manuallyStarted=false, wasSanityCheck=false) => (dispatch, getState) => {
-    const state = getState();
-    const set = SetsSelectors.getWorkingSet(state);
-    
-    // check if set form has any data
-    if (!SetUtils.isUntouched(set)) {
-        logEndSetAnalytics(manuallyStarted, wasSanityCheck, state);
-        const defaultMetric = state.settings.defaultMetric;        
+export const endSet =
+    (manuallyStarted = false, wasSanityCheck = false) =>
+    (dispatch, getState) => {
+        const state = getState();
+        const set = SetsSelectors.getWorkingSet(state);
 
-        dispatch({
-            type: END_SET,
-            defaultMetric: defaultMetric
-        });
-    }
-};
+        // check if set form has any data
+        if (!SetUtils.isUntouched(set)) {
+            logEndSetAnalytics(manuallyStarted, wasSanityCheck, state);
+            const defaultMetric = state.settings.defaultMetric;
+
+            dispatch({
+                type: END_SET,
+                defaultMetric: defaultMetric,
+            });
+        }
+    };
 
 // HISTORY
 
-export const saveHistoryExerciseName = (setID, exercise = null) => saveHistorySet(setID, exercise);
+export const saveHistoryExerciseName = (setID, exercise = null) =>
+    saveHistorySet(setID, exercise);
 
-export const saveHistoryForm = (setID, weight = null, metric = null, rpe = null) => {
+export const saveHistoryForm = (
+    setID,
+    weight = null,
+    metric = null,
+    rpe = null,
+) => {
     return saveHistorySet(setID, null, weight, metric, rpe);
-}    
+};
 
-const saveHistorySet = (setID, exercise = null, weight = null, metric = null, rpe = null) => {
+const saveHistorySet = (
+    setID,
+    exercise = null,
+    weight = null,
+    metric = null,
+    rpe = null,
+) => {
     var action = {
-        type: SAVE_HISTORY_SET
+        type: SAVE_HISTORY_SET,
     };
 
     action.setID = setID;
@@ -152,7 +178,7 @@ const saveHistorySet = (setID, exercise = null, weight = null, metric = null, rp
     return action;
 };
 
-export const deleteHistorySet = (setID) => (dispatch, getState) => {
+export const deleteHistorySet = setID => (dispatch, getState) => {
     const state = getState();
     logDeleteSetAnalytics(state, setID);
 
@@ -162,7 +188,7 @@ export const deleteHistorySet = (setID) => (dispatch, getState) => {
     });
 };
 
-export const restoreHistorySet = (setID) => (dispatch, getState) => {
+export const restoreHistorySet = setID => (dispatch, getState) => {
     const state = getState();
     logRestoreSetAnalytics(state, setID);
 
@@ -180,7 +206,7 @@ export const removeHistoryRep = (setID, repIndex) => (dispatch, getState) => {
         type: SAVE_HISTORY_REP,
         setID: setID,
         repIndex: repIndex,
-        removed: true
+        removed: true,
     });
 };
 
@@ -192,7 +218,7 @@ export const restoreHistoryRep = (setID, repIndex) => (dispatch, getState) => {
         type: SAVE_HISTORY_REP,
         setID: setID,
         repIndex: repIndex,
-        removed: false
+        removed: false,
     });
 };
 
@@ -200,28 +226,32 @@ export const restoreHistoryRep = (setID, repIndex) => (dispatch, getState) => {
 
 export const beginUploadingSets = () => ({ type: BEGIN_UPLOADING_SETS });
 
-export const updateSetDataFromServer = (revision, sets=null, syncDate=new Date()) => ({
+export const updateSetDataFromServer = (
+    revision,
+    sets = null,
+    syncDate = new Date(),
+) => ({
     type: UPDATE_SET_DATA_FROM_SERVER,
     sets: sets,
     revision: revision,
-    syncDate: syncDate
+    syncDate: syncDate,
 });
 
-export const finishedUploadingSets = (revision=null) => ({
+export const finishedUploadingSets = (revision = null) => ({
     type: FINISH_UPLOADING_SETS,
-    revision: revision
+    revision: revision,
 });
 
 export const failedUploadSets = () => ({ type: FAILED_UPLOAD_SETS });
 
 // UTILITY
 
-const fixRPE = (rpe) => {
+const fixRPE = rpe => {
     if (rpe === null || rpe === '') {
         return rpe;
     }
 
-    const rpeWithoutCommas = rpe.replace(',','.');
+    const rpeWithoutCommas = rpe.replace(',', '.');
 
     if (Number(rpeWithoutCommas) <= 5.5 || isNaN(rpeWithoutCommas)) {
         if (rpe.includes(',')) {
@@ -242,8 +272,10 @@ const fixRPE = (rpe) => {
 
 const logEndSetAnalytics = (manuallyStarted, wasSanityCheck, state) => {
     var set = SetsSelectors.getWorkingSet(state);
-    var previous_set_has_reps = !SetsSelectors.getWorkoutPreviousSetHasEmptyReps(state);
-    var is_previous_set_fields_filled = SetsSelectors.getIsPreviousWorkoutSetFilled(state);
+    var previous_set_has_reps =
+        !SetsSelectors.getWorkoutPreviousSetHasEmptyReps(state);
+    var is_previous_set_fields_filled =
+        SetsSelectors.getIsPreviousWorkoutSetFilled(state);
     let num_fields_entered = SetUtils.numFieldsEntered(set);
     let has_reps = !SetUtils.hasEmptyReps(set);
     let auto_end_timer = 0;
@@ -252,60 +284,80 @@ const logEndSetAnalytics = (manuallyStarted, wasSanityCheck, state) => {
 
     if (!manuallyStarted) {
         auto_end_timer = endSetTimerDuration;
-    };
+    }
 
-    Analytics.logEventWithAppState('start_new_set', {   
-        value: num_fields_entered,
-        auto_end_timer: auto_end_timer,
-        has_exercise_name: Boolean(set.exercise),
-        has_weight: Boolean(set.weight),
-        has_rpe: Boolean(set.rpe),
-        has_tags: Boolean(set.tags.length),
-        has_video: Boolean(set.videoFileURL),
-        has_reps: has_reps,
-        is_previous_set_fields_filled: is_previous_set_fields_filled,
-        num_fields_entered: num_fields_entered,
-        is_default_end_timer: is_default_end_timer,
-        manually_started: manuallyStarted,
-        was_sanity_check: wasSanityCheck,
-        previous_set_has_reps: previous_set_has_reps      
-    }, state);    
+    Analytics.logEventWithAppState(
+        'start_new_set',
+        {
+            value: num_fields_entered,
+            auto_end_timer: auto_end_timer,
+            has_exercise_name: Boolean(set.exercise),
+            has_weight: Boolean(set.weight),
+            has_rpe: Boolean(set.rpe),
+            has_tags: Boolean(set.tags.length),
+            has_video: Boolean(set.videoFileURL),
+            has_reps: has_reps,
+            is_previous_set_fields_filled: is_previous_set_fields_filled,
+            num_fields_entered: num_fields_entered,
+            is_default_end_timer: is_default_end_timer,
+            manually_started: manuallyStarted,
+            was_sanity_check: wasSanityCheck,
+            previous_set_has_reps: previous_set_has_reps,
+        },
+        state,
+    );
 };
 
 const logDeleteSetAnalytics = (state, setID) => {
-    Analytics.logEventWithAppState('delete_set', {
-        set_id: setID,
-    }, state);
+    Analytics.logEventWithAppState(
+        'delete_set',
+        {
+            set_id: setID,
+        },
+        state,
+    );
 };
 
 const logRestoreSetAnalytics = (state, setID) => {
-    Analytics.logEventWithAppState('restore_set', {
-        set_id: setID,
-    }, state);
+    Analytics.logEventWithAppState(
+        'restore_set',
+        {
+            set_id: setID,
+        },
+        state,
+    );
 };
 
-const logRemoveRepAnalytics = (state, setID, isWorkout=false) => {
+const logRemoveRepAnalytics = (state, setID, isWorkout = false) => {
     if (isWorkout) {
         var is_working_set = SetsSelectors.getIsWorkingSet(state, setID);
     } else {
         var is_working_set = false;
     }
 
-    Analytics.logEventWithAppState('remove_rep', {
-        is_working_set: is_working_set,
-        set_id: setID,
-    }, state);
+    Analytics.logEventWithAppState(
+        'remove_rep',
+        {
+            is_working_set: is_working_set,
+            set_id: setID,
+        },
+        state,
+    );
 };
 
-const logRestoreRepAnalytics = (state, setID, isWorkout=false) => {
+const logRestoreRepAnalytics = (state, setID, isWorkout = false) => {
     if (isWorkout) {
         var is_working_set = SetsSelectors.getIsWorkingSet(state, setID);
     } else {
         var is_working_set = false;
     }
 
-    Analytics.logEventWithAppState('restore_rep', {
-        is_working_set: is_working_set,
-        set_id: setID,
-    }, state);
+    Analytics.logEventWithAppState(
+        'restore_rep',
+        {
+            is_working_set: is_working_set,
+            set_id: setID,
+        },
+        state,
+    );
 };

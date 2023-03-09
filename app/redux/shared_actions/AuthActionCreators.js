@@ -17,45 +17,62 @@ export const requestLogin = () => ({
     type: LOGIN_REQUEST,
 });
 
-export const loginSucceeded = (accessToken, refreshToken, email, date = new Date(), revision = null, sets = null) => ({
+export const loginSucceeded = (
+    accessToken,
+    refreshToken,
+    email,
+    date = new Date(),
+    revision = null,
+    sets = null,
+) => ({
     type: LOGIN_SUCCESS,
     accessToken: accessToken,
     refreshToken: refreshToken,
     email: email,
     syncDate: date,
     revision: revision,
-    sets: sets
+    sets: sets,
 });
 
-export const logout = (forceLogout=false) => (dispatch, getState) => {
-    const state = getState();
+export const logout =
+    (forceLogout = false) =>
+    (dispatch, getState) => {
+        const state = getState();
 
-    if (!AuthSelectors.getIsLoggedIn(state)) {
-        // you're already logged out, just grab new tokens
-        dispatch({
-            type: CLEAR_TOKENS
-        });
-    } else {
-        // you're logged in
+        if (!AuthSelectors.getIsLoggedIn(state)) {
+            // you're already logged out, just grab new tokens
+            dispatch({
+                type: CLEAR_TOKENS,
+            });
+        } else {
+            // you're logged in
 
-        // force logout if it's a 401
-        if (forceLogout) {
-            logForceLogoutAnalytics(state);
-            Alert.alert("Important", "As it's been awhile since you've signed on, you've been logged out! Please login again.");        
+            // force logout if it's a 401
+            if (forceLogout) {
+                logForceLogoutAnalytics(state);
+                Alert.alert(
+                    'Important',
+                    "As it's been awhile since you've signed on, you've been logged out! Please login again.",
+                );
+            }
+
+            // logout, be it forced or from user manually logging out
+            dispatch({
+                type: LOGOUT,
+            });
         }
-
-        // logout, be it forced or from user manually logging out
-        dispatch({
-            type: LOGOUT
-        });
-    }
-};
+    };
 
 export const requestReauthenticate = () => ({
     type: REAUTHENTICATE_REQUEST,
 });
 
-export const reauthenticateSucceeded = (accessToken, refreshToken, email, date = new Date()) => ({
+export const reauthenticateSucceeded = (
+    accessToken,
+    refreshToken,
+    email,
+    date = new Date(),
+) => ({
     type: REAUTHENTICATE_SUCCESS,
     accessToken: accessToken,
     refreshToken: refreshToken,
@@ -67,14 +84,13 @@ export const saveTokens = (accessToken, refreshToken, lastRefreshDate) => ({
     type: SAVE_TOKENS,
     accessToken: accessToken,
     refreshToken: refreshToken,
-    lastRefreshDate: lastRefreshDate
+    lastRefreshDate: lastRefreshDate,
 });
 
 export const tokensReady = () => ({ type: TOKENS_READY });
 
 // ANALYTICS
 
-const logForceLogoutAnalytics = (state) => {
-    Analytics.logEventWithAppState('force_logout', {
-    }, state);
+const logForceLogoutAnalytics = state => {
+    Analytics.logEventWithAppState('force_logout', {}, state);
 };

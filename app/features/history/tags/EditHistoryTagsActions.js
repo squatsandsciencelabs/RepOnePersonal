@@ -9,10 +9,10 @@ import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
 
 export const dismissTags = () => {
     Analytics.setCurrentScreen('history');
-    
+
     return {
-        type: DISMISS_HISTORY_TAGS
-    }
+        type: DISMISS_HISTORY_TAGS,
+    };
 };
 
 export const cancelTags = () => (dispatch, getState) => {
@@ -21,22 +21,24 @@ export const cancelTags = () => (dispatch, getState) => {
     logCancelEditTagsAnalytics(state);
 
     dispatch({
-        type: DISMISS_HISTORY_TAGS
+        type: DISMISS_HISTORY_TAGS,
     });
 };
 
-export const saveTags = (setID, tags = []) => (dispatch, getState) => {
-    const state = getState();
-    logSaveTagsAnalytics(state);
+export const saveTags =
+    (setID, tags = []) =>
+    (dispatch, getState) => {
+        const state = getState();
+        logSaveTagsAnalytics(state);
 
-    dispatch({
-        type: SAVE_HISTORY_SET_TAGS,
-        setID: setID,
-        tags: tags
-    });
-};
+        dispatch({
+            type: SAVE_HISTORY_SET_TAGS,
+            setID: setID,
+            tags: tags,
+        });
+    };
 
-export const tappedPill = (setID) => (dispatch, getState) => {
+export const tappedPill = setID => (dispatch, getState) => {
     const state = getState();
     logRemovedTagAnalytics(state);
     dispatch({
@@ -44,7 +46,7 @@ export const tappedPill = (setID) => (dispatch, getState) => {
     });
 };
 
-export const addPill = (setID) => (dispatch, getState) => {
+export const addPill = setID => (dispatch, getState) => {
     const state = getState();
     logAddTagAnalytics(state);
     dispatch({
@@ -52,34 +54,50 @@ export const addPill = (setID) => (dispatch, getState) => {
     });
 };
 
-const logSaveTagsAnalytics = (state) => {
+const logSaveTagsAnalytics = state => {
     const duration = DurationsSelectors.getEditHistoryTagsDuration(state);
 
-    Analytics.logEventWithAppState('save_tags', {
-        value: duration,
-        duration: duration,
-        is_working_set: false,
-    }, state);
+    Analytics.logEventWithAppState(
+        'save_tags',
+        {
+            value: duration,
+            duration: duration,
+            is_working_set: false,
+        },
+        state,
+    );
 };
 
-const logCancelEditTagsAnalytics = (state) => {
+const logCancelEditTagsAnalytics = state => {
     const duration = DurationsSelectors.getEditHistoryTagsDuration(state);
 
-    Analytics.logEventWithAppState('cancel_edit_tags', {
-        value: duration,
-        duration: duration,
-        is_working_set: false,
-    }, state);
+    Analytics.logEventWithAppState(
+        'cancel_edit_tags',
+        {
+            value: duration,
+            duration: duration,
+            is_working_set: false,
+        },
+        state,
+    );
 };
 
-const logRemovedTagAnalytics = (state) => {
-    Analytics.logEventWithAppState('remove_tag', {
-        is_working_set: false,
-    }, state);
+const logRemovedTagAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'remove_tag',
+        {
+            is_working_set: false,
+        },
+        state,
+    );
 };
 
-const logAddTagAnalytics = (state) => {
-    Analytics.logEventWithAppState('add_tag', {
-        is_working_set: false,
-    }, state);
+const logAddTagAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'add_tag',
+        {
+            is_working_set: false,
+        },
+        state,
+    );
 };

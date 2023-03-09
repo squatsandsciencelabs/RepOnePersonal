@@ -1,7 +1,7 @@
 import { takeEvery, select, put, call, all } from 'redux-saga/effects';
 import BackgroundTimer from 'react-native-background-timer';
 
-import { 
+import {
     PRESENT_WORKOUT_EXERCISE,
     PRESENT_WORKOUT_TAGS,
     START_EDITING_WORKOUT_RPE,
@@ -19,13 +19,13 @@ import {
     END_SET,
     END_WORKOUT,
     PRESENT_WORKOUT_KRATOS_DISCS,
-    DISMISS_WORKOUT_KRATOS_DISCS
+    DISMISS_WORKOUT_KRATOS_DISCS,
 } from 'app/configs+constants/ActionTypes';
 
 import * as TimerActionCreators from 'app/redux/shared_actions/TimerActionCreators';
 import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 
-const TimerSaga = function * TimerSaga() {
+const TimerSaga = function* TimerSaga() {
     yield all([
         takeEvery(PRESENT_WORKOUT_EXERCISE, pauseTimer),
         takeEvery(PRESENT_WORKOUT_TAGS, pauseTimer),
@@ -44,21 +44,21 @@ const TimerSaga = function * TimerSaga() {
         takeEvery(DISMISS_WORKOUT_KRATOS_DISCS, resumeTimer),
         takeEvery(STOP_RECORDING_WORKOUT, resumeTimer),
         takeEvery(END_SET, stopTimer),
-        takeEvery(END_WORKOUT, stopTimer)
+        takeEvery(END_WORKOUT, stopTimer),
     ]);
 };
 
 function* pauseTimer() {
     yield put(TimerActionCreators.pauseEndSetTimer());
-};
+}
 
 function* resumeTimer() {
     let isEditing = yield select(WorkoutSelectors.getIsEditing);
     if (!isEditing) {
         yield put(TimerActionCreators.resumeEndSetTimer());
     }
-    console.tron.log("isEditing on resume check " + isEditing);
-};
+    console.tron.log('isEditing on resume check ' + isEditing);
+}
 
 function* stopTimer() {
     yield put(TimerActionCreators.stopEndSetTimer());

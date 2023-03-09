@@ -4,7 +4,11 @@ import {
     CANCEL_CALIBRATION,
     FINISH_CALIBRATION,
 } from 'app/configs+constants/ActionTypes';
-import { INSTRUCTIONS, CALIBRATING, CLOSED } from 'app/configs+constants/CalibrationModeTypes';
+import {
+    INSTRUCTIONS,
+    CALIBRATING,
+    CLOSED,
+} from 'app/configs+constants/CalibrationModeTypes';
 
 const defaultState = {
     mode: CLOSED,

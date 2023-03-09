@@ -7,21 +7,18 @@ import * as Analytics from 'app/services/Analytics';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as AnalysisActionCreators from 'app/redux/shared_actions/AnalysisActionCreators';
 
-import {
-    STORE_INITIALIZED,
-} from 'app/configs+constants/ActionTypes';
+import { STORE_INITIALIZED } from 'app/configs+constants/ActionTypes';
 
-const OneRMAnalyticsSaga = function * OneRMAnalyticsSaga() {
+const OneRMAnalyticsSaga = function* OneRMAnalyticsSaga() {
     yield take(STORE_INITIALIZED);
     const state = yield select();
 
     const e1RMLastCalcs = AnalysisSelectors.get1RMAnalytics(state);
 
-    e1RMLastCalcs.forEach((e1RMLastCalc) => {
-    
+    e1RMLastCalcs.forEach(e1RMLastCalc => {
         logLast1RMCalcAnalytics(
             e1RMLastCalc.exercise,
-            e1RMLastCalc.num_include_tags, 
+            e1RMLastCalc.num_include_tags,
             e1RMLastCalc.num_exclude_tags,
             e1RMLastCalc.days_range,
             e1RMLastCalc.velocity,
@@ -41,35 +38,58 @@ const OneRMAnalyticsSaga = function * OneRMAnalyticsSaga() {
             e1RMLastCalc.metric,
             state,
         );
-
     });
 
     yield put(AnalysisActionCreators.clear1RMAnalytics());
 };
 
-
-const logLast1RMCalcAnalytics = (exercise, numIncludeTags, numExcludeTags, daysRange, velocity, oneRepMaxLB, r2, numActivePoints, numErrorPoints, numUnusedPoints, hasNegSlope, slope, minWeightLB, maxWeightLB, weightLBRange, minVelocity, maxVelocity, velocityRange, metric, state) => {
-    Analytics.logEventWithAppState('one_rm_last_calculate', {
-        exercise: exercise,
-        num_include_tags: numIncludeTags,
-        num_exclude_tags: numExcludeTags,
-        days_range: daysRange,
-        velocity: velocity,
-        one_rep_max_lb: oneRepMaxLB,
-        r2: r2,
-        num_active_points: numActivePoints,
-        num_error_points: numErrorPoints,
-        num_unused_points: numUnusedPoints,
-        has_negative_slope: hasNegSlope,
-        slope: slope,
-        min_lb_weight: minWeightLB,
-        max_lb_weight: maxWeightLB,
-        weight_lb_range: weightLBRange,
-        min_velocity: minVelocity,
-        max_velocity: maxVelocity,
-        velocity_range: velocityRange,
-        metric: metric
-    }, state);
+const logLast1RMCalcAnalytics = (
+    exercise,
+    numIncludeTags,
+    numExcludeTags,
+    daysRange,
+    velocity,
+    oneRepMaxLB,
+    r2,
+    numActivePoints,
+    numErrorPoints,
+    numUnusedPoints,
+    hasNegSlope,
+    slope,
+    minWeightLB,
+    maxWeightLB,
+    weightLBRange,
+    minVelocity,
+    maxVelocity,
+    velocityRange,
+    metric,
+    state,
+) => {
+    Analytics.logEventWithAppState(
+        'one_rm_last_calculate',
+        {
+            exercise: exercise,
+            num_include_tags: numIncludeTags,
+            num_exclude_tags: numExcludeTags,
+            days_range: daysRange,
+            velocity: velocity,
+            one_rep_max_lb: oneRepMaxLB,
+            r2: r2,
+            num_active_points: numActivePoints,
+            num_error_points: numErrorPoints,
+            num_unused_points: numUnusedPoints,
+            has_negative_slope: hasNegSlope,
+            slope: slope,
+            min_lb_weight: minWeightLB,
+            max_lb_weight: maxWeightLB,
+            weight_lb_range: weightLBRange,
+            min_velocity: minVelocity,
+            max_velocity: maxVelocity,
+            velocity_range: velocityRange,
+            metric: metric,
+        },
+        state,
+    );
 };
 
 // TODO: write a unit test for this

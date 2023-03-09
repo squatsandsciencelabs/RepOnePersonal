@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     StatusBar,
@@ -7,13 +7,12 @@ import {
     TouchableOpacity,
     Platform,
     StyleSheet,
- }  from 'react-native';
- import WebView from 'react-native-webview';
- import Icon from 'react-native-vector-icons/FontAwesome';
- import * as Device from 'app/utility/Device';
+} from 'react-native';
+import WebView from 'react-native-webview';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Device from 'app/utility/Device';
 
- class SurveyModalView extends Component {
-
+class SurveyModalView extends Component {
     _close() {
         this.props.closeModal();
     }
@@ -32,7 +31,14 @@ import {
                 </View>
             );
         } else if (Platform.OS === 'ios') {
-            var statusBar = (<View style={{height: 20, width: 9001, backgroundColor: 'black'}}></View>);
+            var statusBar = (
+                <View
+                    style={{
+                        height: 20,
+                        width: 9001,
+                        backgroundColor: 'black',
+                    }}></View>
+            );
         } else {
             var statusBar = null;
         }
@@ -40,58 +46,59 @@ import {
         // TODO: consider using close icon instead of X text
         return (
             <View style={styles.container}>
-                { statusBar }
+                {statusBar}
 
-                <View style={{position: 'absolute', left: 0, top: 0}}>
-                    <TouchableOpacity onPress={() => this._close() }>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => this._close()}>
                         <View style={styles.nav}>
-                            <Icon name="times-circle" size={20} color='red' />
+                            <Icon name="times-circle" size={20} color="red" />
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.navTitle}>
-                    <Text style={{color: 'rgba(77, 77, 77, 1)'}}>Survey</Text>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>Survey</Text>
                 </View>
-
             </View>
-        )
+        );
     }
 
     render() {
         return (
             <Modal
-                animationType={"slide"}
+                animationType={'slide'}
                 transparent={true}
-                visible={this.props.isModalShowing} >
-
-                <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
+                visible={this.props.isModalShowing}>
+                <View
+                    style={{
+                        flex: 1,
+                        paddingTop: Device.hasNotch() ? 40 : 0,
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(242, 242, 242, 1)',
+                    }}>
                     {this._renderNavigation()}
 
                     <WebView
-                        source={{uri: this.props.url}}
-                        style={{flex:1}}
+                        source={{ uri: this.props.url }}
+                        style={{ flex: 1 }}
                     />
-
                 </View>
-
             </Modal>
         );
     }
-
- }
+}
 
 const styles = StyleSheet.create({
     container: {
         height: Platform.OS === 'ios' ? 70 : 50,
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     nav: {
         paddingTop: Platform.OS === 'ios' ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
-        paddingLeft: 10
+        paddingLeft: 10,
     },
     navTitle: {
         paddingTop: 15,

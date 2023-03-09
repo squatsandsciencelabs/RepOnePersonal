@@ -53,36 +53,57 @@ class OneRMEditSetView extends Component {
                 </View>
             );
         } else if (Platform.OS === 'ios') {
-            var statusBar = (<View style={{height: 20, width: 9001, backgroundColor: 'black'}}></View>);
+            var statusBar = (
+                <View
+                    style={{
+                        height: 20,
+                        width: 9001,
+                        backgroundColor: 'black',
+                    }}></View>
+            );
         } else {
             var statusBar = null;
         }
 
         return (
             <View style={styles.container}>
-                { statusBar }
+                {statusBar}
 
                 <View style={styles.navTitle}>
-                    <Text style={{color: 'rgba(77, 77, 77, 1)', fontWeight: 'bold'}}>{this.props.title}</Text>
+                    <Text
+                        style={{
+                            color: 'rgba(77, 77, 77, 1)',
+                            fontWeight: 'bold',
+                        }}>
+                        {this.props.title}
+                    </Text>
                 </View>
 
-                <View style={{position: 'absolute', left: 0, top: 0}}>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this.props.dismissModal()}>
                         <View style={styles.nav}>
-                            <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>Close</Text>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Close
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-
             </View>
-        )
+        );
     }
 
     _renderSectionHeader(section) {
         return (
             <View>
-                <View style={{height:35, justifyContent: 'flex-end', alignItems: 'center'}}>
-                    <Text style={{color: 'rgba(77, 77, 77, 1)'}}>{section.key}</Text>
+                <View
+                    style={{
+                        height: 35,
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                    }}>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                        {section.key}
+                    </Text>
                 </View>
             </View>
         );
@@ -102,23 +123,25 @@ class OneRMEditSetView extends Component {
                         tags={item.tags}
                     />
                 );
-            case "title":
-                return (<View style={{borderTopWidth: 1, borderColor: '#e0e0e0'}}>
+            case 'title':
+                return (
+                    <View style={{ borderTopWidth: 1, borderColor: '#e0e0e0' }}>
                         <OneRMEditSetTitleScreen
                             setID={item.setID}
                             exercise={item.exercise}
                             removed={item.removed}
                             setNumber={item.setNumber}
-                                isCollapsable={false} />
-                        </View>);
-            case "analysis":
-                return (
-                    <SetAnalysisScreen set={item.set} />
+                            isCollapsable={false}
+                        />
+                    </View>
                 );
-            case "form":
+            case 'analysis':
+                return <SetAnalysisScreen set={item.set} />;
+            case 'form':
                 // note: on focus will avoid the Redux store for simplicity and just do it through the callback function
                 // technically an action to scroll should be application state and therefore should go through the global store
-                return (<View style={{backgroundColor: 'white'}}>
+                return (
+                    <View style={{ backgroundColor: 'white' }}>
                         <OneRMEditSetFormScreen
                             setID={item.setID}
                             initialStartTime={item.initialStartTime}
@@ -127,21 +150,48 @@ class OneRMEditSetView extends Component {
                             weight={item.weight}
                             metric={item.metric}
                             rpe={item.rpe}
-                                renderDetailComponent={()=> {
-                                    if (item.videoFileURL !== null && item.videoFileURL !== undefined) {
-                                        return (<OneRMEditSetVideoButtonScreen setID={item.setID} mode='watch' videoFileURL={item.videoFileURL} />);
+                            renderDetailComponent={() => {
+                                if (
+                                    item.videoFileURL !== null &&
+                                    item.videoFileURL !== undefined
+                                ) {
+                                    return (
+                                        <OneRMEditSetVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="watch"
+                                            videoFileURL={item.videoFileURL}
+                                        />
+                                    );
                                 } else {
-                                        return (<OneRMEditSetVideoButtonScreen setID={item.setID} mode='commentary' />);
+                                    return (
+                                        <OneRMEditSetVideoButtonScreen
+                                            setID={item.setID}
+                                            mode="commentary"
+                                        />
+                                    );
                                 }
                             }}
                         />
-                        </View>);
-            case "open 3d button":
+                    </View>
+                );
+            case 'open 3d button':
                 return (
                     <Open3DRow setID={item.setID} open3D={this.props.open3D} />
                 );
-            case "border":
-                return (<View style={{flex: 1, backgroundColor: 'white', borderColor: '#e0e0e0', borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, height: 10}} />);
+            case 'border':
+                return (
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'white',
+                            borderColor: '#e0e0e0',
+                            borderLeftWidth: 1,
+                            borderRightWidth: 1,
+                            borderBottomWidth: 1,
+                            height: 10,
+                        }}
+                    />
+                );
             case 'reps':
                 return (
                     <SetData
@@ -177,9 +227,14 @@ class OneRMEditSetView extends Component {
                         onRowDeselect={this.props.deselectRow}
                     />
                 );
-            case "footer":
+            case 'footer':
                 // shouldn't need open 3d as it should never open 3d from here
-                return (<SetFooterRow item={item} onPressDelete={this.props.deleteSet} />);
+                return (
+                    <SetFooterRow
+                        item={item}
+                        onPressDelete={this.props.deleteSet}
+                    />
+                );
             default:
                 break;
         }
@@ -188,21 +243,35 @@ class OneRMEditSetView extends Component {
     render() {
         var list = null;
         if (this.props.sections.length > 0) {
-            list = (<SectionList
-                ref={(ref) => { this.sectionList = ref; }}
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps='always'
+            list = (
+                <SectionList
+                    ref={ref => {
+                        this.sectionList = ref;
+                    }}
+                    keyboardDismissMode="on-drag"
+                    keyboardShouldPersistTaps="always"
                     initialNumToRender={13}
                     stickySectionHeadersEnabled={false}
-                renderItem={({item, index, section}) => this._renderRow(section, index, item)}
-                renderSectionHeader={({section}) => this._renderSectionHeader(section) }
+                    renderItem={({ item, index, section }) =>
+                        this._renderRow(section, index, item)
+                    }
+                    renderSectionHeader={({ section }) =>
+                        this._renderSectionHeader(section)
+                    }
                     sections={this.props.sections}
-                style = {{padding: 10, backgroundColor: '#f2f2f2'}}
-            />);
+                    style={{ padding: 10, backgroundColor: '#f2f2f2' }}
+                />
+            );
         }
         return (
-            <Modal visible={this.props.isModalShowing} animationType='fade'>
-                <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
+            <Modal visible={this.props.isModalShowing} animationType="fade">
+                <View
+                    style={{
+                        flex: 1,
+                        paddingTop: Device.hasNotch() ? 40 : 0,
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(242, 242, 242, 1)',
+                    }}>
                     <OneRMEditSetExerciseScreen />
                     <OneRMEditSetTagsScreen />
                     <OneRMEditSetVideoRecorderScreen />
@@ -216,7 +285,6 @@ class OneRMEditSetView extends Component {
             </Modal>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -230,7 +298,7 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
-        paddingLeft: 10
+        paddingLeft: 10,
     },
     navTitle: {
         paddingTop: 15,

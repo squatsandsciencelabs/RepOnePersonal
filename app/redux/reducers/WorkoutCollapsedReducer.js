@@ -5,8 +5,7 @@ import {
     DELETE_WORKOUT_SET,
 } from 'app/configs+constants/ActionTypes';
 
-const defaultState = {
-};
+const defaultState = {};
 
 const WorkoutCollapsedReducer = (state = defaultState, action) => {
     let changes = null;

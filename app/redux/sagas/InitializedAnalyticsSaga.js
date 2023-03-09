@@ -6,11 +6,9 @@ import { take, select } from 'redux-saga/effects';
 import * as Analytics from 'app/services/Analytics';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
-import {
-    STORE_INITIALIZED,
-} from 'app/configs+constants/ActionTypes';
+import { STORE_INITIALIZED } from 'app/configs+constants/ActionTypes';
 
-const InitializedAnalyticsSaga = function * InitializedAnalyticsSaga() {
+const InitializedAnalyticsSaga = function* InitializedAnalyticsSaga() {
     yield take(STORE_INITIALIZED);
     const state = yield select();
     if (SetsSelectors.getIsWorkoutEmpty(state)) {
@@ -19,9 +17,13 @@ const InitializedAnalyticsSaga = function * InitializedAnalyticsSaga() {
         var numWorkoutSets = SetsSelectors.getNumWorkoutSets(state);
     }
 
-    Analytics.logEventWithAppState('initialized', {
-        num_workout_sets: numWorkoutSets,
-    }, state);
+    Analytics.logEventWithAppState(
+        'initialized',
+        {
+            num_workout_sets: numWorkoutSets,
+        },
+        state,
+    );
 };
 
 // TODO: write a unit test for this

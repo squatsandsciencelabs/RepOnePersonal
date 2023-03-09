@@ -9,28 +9,15 @@
 // https://stackoverflow.com/questions/48033184/how-to-test-redux-saga-with-jest
 
 describe('SurveySaga Analytics', () => {
+    test.skip('update_survey_url', () => {});
 
-    test.skip('update_survey_url', () => {
-    });
+    test.skip('update_survey_url_error inactive', () => {});
 
-    test.skip('update_survey_url_error inactive', () => {
+    test.skip('update_survey_url_error general', () => {});
 
-    });
+    test.skip('prompt_survey', () => {});
 
-    test.skip('update_survey_url_error general', () => {
+    test.skip('prompt_survey_fill_later', () => {});
 
-    });
-
-    test.skip('prompt_survey', () => {
-
-    });
-
-    test.skip('prompt_survey_fill_later', () => {
-
-    });
-
-    test.skip('prompt_survey_take_now', () => {
-
-    });
-
+    test.skip('prompt_survey_take_now', () => {});
 });

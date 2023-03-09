@@ -1,9 +1,7 @@
 // TODO: expand this into multiple stylesheets that are legit shared across the application
 // TODO: organize this, this is poorly used throughout the application
 
-import {
-    StyleSheet
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     panel: {
@@ -22,12 +20,12 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 10,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
     },
     subtitleText: {
         fontSize: 14,
         textAlign: 'center',
-        color: 'rgba(77, 77, 77, 1)',        
+        color: 'rgba(77, 77, 77, 1)',
     },
     headerText: {
         fontSize: 20,
@@ -40,7 +38,7 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     tappableText: {
         fontSize: 16,
         textAlign: 'center',
-        color: 'rgba(47, 128, 237, 1)'
+        color: 'rgba(47, 128, 237, 1)',
     },
     content: {
         flex: 1,
@@ -54,7 +52,7 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         flex: 1,
         alignSelf: 'stretch',
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
     },
     footer: {
         flex: 1,
@@ -63,11 +61,11 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 5,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
     },
     footerCancelText: {
         textAlign: 'center',
-        color: 'crimson'
+        color: 'crimson',
     },
     blueButton: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
@@ -75,10 +73,10 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         borderWidth: 3,
         borderColor: 'rgba(47, 128, 237, 1)',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     buttonText: {
         textAlign: 'center',
         color: 'white',
-    }
+    },
 });

@@ -1,7 +1,7 @@
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from 'expo-file-system';
 
-export const generateThumbnail = async (videoPath) => {
+export const generateThumbnail = async videoPath => {
     try {
         const { uri } = await VideoThumbnails.getThumbnailAsync(videoPath);
         return uri;

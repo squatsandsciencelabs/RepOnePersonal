@@ -1,14 +1,7 @@
-import {
-    takeEvery,
-    put,
-    apply,
-    all,
-    call,
-    select,
-} from 'redux-saga/effects';
+import { takeEvery, put, apply, all, call, select } from 'redux-saga/effects';
 import { Alert } from 'react-native';
 
-import { 
+import {
     CONFIG_READY,
     CHANGE_TAB,
     END_WORKOUT,
@@ -20,7 +13,7 @@ import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 
 var configReady = false;
 
-const SurveySaga = function * SurveySaga() {
+const SurveySaga = function* SurveySaga() {
     yield all([
         takeEvery(CONFIG_READY, onReady),
         takeEvery(CHANGE_TAB, fetchAndUpdateSurveyURL),
@@ -28,14 +21,16 @@ const SurveySaga = function * SurveySaga() {
     ]);
 };
 
-function *onReady() {
+function* onReady() {
     configReady = true;
     yield call(updateSurveyURL);
 }
 
 function* fetchAndUpdateSurveyURL() {
     if (!configReady) {
-        console.tron.log(`cannot fetch and update survey url as config isn't ready yet`);
+        console.tron.log(
+            `cannot fetch and update survey url as config isn't ready yet`,
+        );
     }
 
     const fbconfig = firebase.remoteConfig();
@@ -47,7 +42,7 @@ function* fetchAndUpdateSurveyURL() {
         // activate
         const activated = yield apply(fbconfig, fbconfig.activate);
         if (!activated) {
-            console.tron.log("Fetched data not activated");
+            console.tron.log('Fetched data not activated');
             // NOTE: not logging this as it appears to still work regardless of activation?
             // state = yield select();
             // logUpdateSurveyURLErrorAnalytics(state, 'fetched data not activated');
@@ -70,7 +65,7 @@ function* updateSurveyURL() {
         // get url
         const snapshot = fbconfig.getValue('survey_url');
         const url = snapshot.asString();
-        
+
         // analytics
         state = yield select();
         logUpdateSurveyURLAnalytics(state, url);
@@ -96,7 +91,9 @@ function* askSurvey(action) {
     if (!surveyAvailable) {
         return;
     }
-    const canPromptSurvey = yield select(SurveySelectors.getCanPromptEndWorkoutSurvey);
+    const canPromptSurvey = yield select(
+        SurveySelectors.getCanPromptEndWorkoutSurvey,
+    );
     if (!canPromptSurvey) {
         return;
     }
@@ -114,7 +111,7 @@ function* askSurvey(action) {
         state = yield select();
         logPromptSurveyTakeNowAnalytics(state);
         yield put(SurveyActionCreators.presentSurvey());
-    } catch(error) {
+    } catch (error) {
         if (error === 'Later') {
             // was canceled
             state = yield select();
@@ -141,7 +138,7 @@ function showSurveyAlert() {
                     },
                 },
                 {
-                    text: "Sure",
+                    text: 'Sure',
                     onPress: () => {
                         resolve();
                     },
@@ -151,48 +148,67 @@ function showSurveyAlert() {
                     onPress: () => {
                         reject('I Hate Data');
                     },
-                    style: 'destructive'
+                    style: 'destructive',
                 },
-            ]
+            ],
         );
     });
 }
 
 // ANALYTICS
 
-const logPromptSurveyAnalytics = (state) => {
-    Analytics.logEventWithAppState('prompt_survey', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logPromptSurveyAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'prompt_survey',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logPromptSurveyFillLaterAnalytics = (state) => {
-    Analytics.logEventWithAppState('prompt_survey_fill_later', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logPromptSurveyFillLaterAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'prompt_survey_fill_later',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logPromptSurveyOptOutAnalytics = (state) => {
-    Analytics.logEventWithAppState('prompt_survey_opt_out', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logPromptSurveyOptOutAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'prompt_survey_opt_out',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
-const logPromptSurveyTakeNowAnalytics = (state) => {
-    Analytics.logEventWithAppState('prompt_survey_take_now', {
-        url: SurveySelectors.getURL(state),
-    }, state);
+const logPromptSurveyTakeNowAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'prompt_survey_take_now',
+        {
+            url: SurveySelectors.getURL(state),
+        },
+        state,
+    );
 };
 
 const logUpdateSurveyURLAnalytics = (state, url) => {
-    Analytics.logEventWithAppState('update_survey_url', {
-        url: url,
-    }, state);
+    Analytics.logEventWithAppState(
+        'update_survey_url',
+        {
+            url: url,
+        },
+        state,
+    );
 };
 
 const logUpdateSurveyURLErrorAnalytics = (state, error) => {
-    Analytics.logErrorWithAppState(error, 'update_survey_url_error', {
-    }, state);
+    Analytics.logErrorWithAppState(error, 'update_survey_url_error', {}, state);
 };
 
 export default SurveySaga;

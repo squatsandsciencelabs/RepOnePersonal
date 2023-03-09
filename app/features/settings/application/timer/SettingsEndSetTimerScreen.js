@@ -6,35 +6,38 @@ import * as DateUtils from 'app/utility/DateUtils';
 import * as Actions from './SettingsEndSetTimerActions';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 
-const itemForDuration = (duration) => {
+const itemForDuration = duration => {
     return {
         label: DateUtils.timerDurationDescription(duration),
-        value: duration
+        value: duration,
     };
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isModalShowing: SettingsSelectors.getIsEditingEndSetTimer(state),
     items: [
         itemForDuration(0),
         itemForDuration(30),
         itemForDuration(60),
         itemForDuration(120),
-        itemForDuration(300)
+        itemForDuration(300),
     ],
-    selectedValue: SettingsSelectors.getEndSetTimerDuration(state)
+    selectedValue: SettingsSelectors.getEndSetTimerDuration(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        selectValue: Actions.saveEndSetTimer,
-        closeModal: Actions.dismissEndSetTimer
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            selectValue: Actions.saveEndSetTimer,
+            closeModal: Actions.dismissEndSetTimer,
+        },
+        dispatch,
+    );
 };
 
 const SettingsEndSetTimerScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(PickerModal);
 
 export default SettingsEndSetTimerScreen;

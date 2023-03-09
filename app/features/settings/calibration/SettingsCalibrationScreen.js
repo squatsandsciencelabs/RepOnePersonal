@@ -13,19 +13,22 @@ const selectMapStateToProps = createSelector(
         return {
             isVisible: format !== null && format >= 2,
         };
-    }
-)
+    },
+);
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        tappedCalibrate: Actions.tappedCalibrate,
-        tappedReset: Actions.tappedReset,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            tappedCalibrate: Actions.tappedCalibrate,
+            tappedReset: Actions.tappedReset,
+        },
+        dispatch,
+    );
 };
 
 const SettingsCalibrationScreen = connect(
     selectMapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SettingsCalibrationPanel);
 
 export default SettingsCalibrationScreen;

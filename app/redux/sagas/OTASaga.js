@@ -1,12 +1,6 @@
-import {
-    takeEvery,
-    put,
-    apply,
-    all,
-    select,
-} from 'redux-saga/effects';
+import { takeEvery, put, apply, all, select } from 'redux-saga/effects';
 import * as FileSystem from 'expo-file-system';
-import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu";
+import { NordicDFU, DFUEmitter } from 'react-native-nordic-dfu';
 import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import DeviceInfo from 'react-native-device-info';
@@ -21,7 +15,6 @@ import {
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
-
     INSTALL_OTA_PROGRESS,
     INSTALL_OTA_ATTEMPT,
     INSTALL_OTA_DFU_STATE_CHANGED,
@@ -31,11 +24,14 @@ import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
-import { isVersionLessThanOrEqual, isVersionGreaterThanOrEqual } from 'app/math/VersionComparison';
+import {
+    isVersionLessThanOrEqual,
+    isVersionGreaterThanOrEqual,
+} from 'app/math/VersionComparison';
 
 let downloadTask = null;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
-const filePath =`${FileSystem.documentDirectory}firmware.zip`;
+const filePath = `${FileSystem.documentDirectory}firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
@@ -47,17 +43,17 @@ export default function* OTASaga(dispatch) {
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);
-};
+}
 
 function* checkOTA(dispatch, action) {
     // listen for dfu
-    DFUEmitter.addListener("DFUProgress", ({ percent }) => {
+    DFUEmitter.addListener('DFUProgress', ({ percent }) => {
         dispatch({
             type: INSTALL_OTA_PROGRESS,
             progress: percent,
         });
     });
-    DFUEmitter.addListener("DFUStateChanged", ({ state }) => {
+    DFUEmitter.addListener('DFUStateChanged', ({ state }) => {
         console.tron.log(`DFU state: ${state}`);
         dispatch({
             type: INSTALL_OTA_DFU_STATE_CHANGED,
@@ -65,17 +61,17 @@ function* checkOTA(dispatch, action) {
         });
     });
 
-    // get json from server 
+    // get json from server
     let json = null;
     try {
         const response = yield fetch(OpenBarbellConfig.firmwareURL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Cache-Control': 'no-store, no-cache, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
+                Pragma: 'no-cache',
+                Expires: '0',
             },
         });
         json = yield response.json();
@@ -98,13 +94,17 @@ function* checkOTA(dispatch, action) {
         const osVersion = DeviceInfo.getSystemVersion();
         const result = checkFirmwareUpdates(appVersion, osVersion, json);
         if (result === null) {
-            console.tron.log(`Firmware version checked failed, result was null`);
+            console.tron.log(
+                `Firmware version checked failed, result was null`,
+            );
             return;
         } else {
             needsUpgrade = result.updateApp;
             firmwareVersion = result.firmwareVersion;
             firmwareDescription = json.firmware_descriptions[firmwareVersion];
-            console.tron.log(`Received firmware check for app ${appVersion} os ${osVersion} as ${firmwareVersion} with description ${firmwareDescription} and upgrade ${needsUpgrade}`);
+            console.tron.log(
+                `Received firmware check for app ${appVersion} os ${osVersion} as ${firmwareVersion} with description ${firmwareDescription} and upgrade ${needsUpgrade}`,
+            );
         }
     } catch (err) {
         console.tron.log(`Firmware version check failed, ${err}`);
@@ -128,7 +128,9 @@ function* checkOTA(dispatch, action) {
             try {
                 // NOTE: This always runs as you aren't connected to a sensor at startup, so currentVersion defaults to 0.0.1
                 // Leaving it as it's fine
-                console.tron.log(`deleting on disk as curr ${currentVersion} !== firm ${firmwareVersion}`);
+                console.tron.log(
+                    `deleting on disk as curr ${currentVersion} !== firm ${firmwareVersion}`,
+                );
                 yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
             } catch (err) {
                 console.tron.log(`failed to delete download ${err}`);
@@ -145,7 +147,9 @@ function* checkOTA(dispatch, action) {
 
         // TODO: confirm it works on iOS as this failed for the temp camera cache directory
         // check against disk
-        const dirInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [filePath]);
+        const dirInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [
+            filePath,
+        ]);
         if (dirInfo.exists) {
             yield put({
                 type: OTA_DOWNLOAD_READY,
@@ -164,17 +168,22 @@ function* checkOTA(dispatch, action) {
 function* startDownload(action) {
     try {
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
-        downloadTask = FileSystem.createDownloadResumable(`https://firmware.reponestrength.com/${currentVersion}.zip`, filePath)
+        downloadTask = FileSystem.createDownloadResumable(
+            `https://firmware.reponestrength.com/${currentVersion}.zip`,
+            filePath,
+        );
         const result = yield apply(downloadTask, downloadTask.downloadAsync);
 
-        console.tron.log(`download should be finished to ${result.uri} when filepath is ${filePath}`);
+        console.tron.log(
+            `download should be finished to ${result.uri} when filepath is ${filePath}`,
+        );
         yield put({
             type: OTA_DOWNLOAD_SUCCEEDED,
         });
         const state = yield select();
         logOTAAnalytics(state, 'firmware_download_succeeded');
     } catch (err) {
-        console.tron.log(`Failed to download ${(err)}`);
+        console.tron.log(`Failed to download ${err}`);
         if (err.message !== 'canceled') {
             yield put({
                 type: OTA_DOWNLOAD_FAILED,
@@ -189,7 +198,7 @@ function* startDownload(action) {
 function* cancelDownload(action) {
     try {
         yield apply(downloadTask, downloadTask.cancelAsync);
-        yield apply(FileSystem, FileSystem.deleteAsync , [filePath]);
+        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
     } catch (err) {
         console.tron.log(`failed to cancel download ${err}`);
     }
@@ -205,21 +214,36 @@ function* deleteDownload(action) {
 
 function* startInstall(action) {
     const state = yield select();
-    const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+    const deviceIdentifier =
+        ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
-    const repCharacteristic = ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic(state);
+    const repCharacteristic =
+        ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic(
+            state,
+        );
 
     try {
-        yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', repCharacteristic]); // reps
+        yield apply(BleManager, BleManager.stopNotification, [
+            deviceIdentifier,
+            'A5183278-CA65-45B7-B6C3-A68552F2026D',
+            repCharacteristic,
+        ]); // reps
         if (OpenBarbellConfig.bulkEnabled) {
-            yield apply(BleManager, BleManager.stopNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
+            yield apply(BleManager, BleManager.stopNotification, [
+                deviceIdentifier,
+                'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                'A5183278-CA65-45B7-B6C3-A68552F20274',
+            ]); // bulk data
         }
-        const path = Platform.OS === 'ios' ? filePath : filePath.replace('file://', '');
+        const path =
+            Platform.OS === 'ios' ? filePath : filePath.replace('file://', '');
         console.tron.log(`passing in path ${path}`);
-        yield apply(NordicDFU, NordicDFU.startDFU, [{
-            deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
-            filePath: path,
-        }]);
+        yield apply(NordicDFU, NordicDFU.startDFU, [
+            {
+                deviceAddress: deviceIdentifier, // TODO: this i need to handle differently for iOS and Android and needs testing
+                filePath: path,
+            },
+        ]);
     } catch (err) {
         const state = yield select();
         if (OTASelectors.getProgress(state) !== 100) {
@@ -232,12 +256,22 @@ function* startInstall(action) {
                 type: OTA_DOWNLOAD_READY,
             });
             try {
-                yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', repCharacteristic]); // reps
+                yield apply(BleManager, BleManager.startNotification, [
+                    deviceIdentifier,
+                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    repCharacteristic,
+                ]); // reps
                 if (OpenBarbellConfig.bulkEnabled) {
-                    yield apply(BleManager, BleManager.startNotification, [deviceIdentifier, 'A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F20274']); // bulk data
+                    yield apply(BleManager, BleManager.startNotification, [
+                        deviceIdentifier,
+                        'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                        'A5183278-CA65-45B7-B6C3-A68552F20274',
+                    ]); // bulk data
                 }
             } catch (err) {
-                console.tron.log(`Error attempting to restart rep notifications after failed dfu ${err}`);
+                console.tron.log(
+                    `Error attempting to restart rep notifications after failed dfu ${err}`,
+                );
             }
         } else {
             console.tron.log(`ignore installation failure as this is a reboot`);
@@ -266,14 +300,17 @@ function* reboot(action) {
         console.tron.log(`Firmware install success`);
         // Alert.alert(`Firmware successfully installed`);
         logOTAAnalytics(state, 'firmware_install_succeeded');
-        
+
         // disconnect attempt due to somehow it not disconnecting post reboot
         // NOTE: NOT going through device action creators disconnect as I actually want it to reconnect
-        const deviceIdentifier = ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
+        const deviceIdentifier =
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
         try {
             yield apply(BleManager, BleManager.disconnect, [deviceIdentifier]);
         } catch (err) {
-            console.tron.log(`Error attempt to disconnect during reboot ${err}`);
+            console.tron.log(
+                `Error attempt to disconnect during reboot ${err}`,
+            );
         }
     }
 }
@@ -283,10 +320,15 @@ function* cancelInstall(action) {
 }
 
 const logOTAAnalytics = (state, event) => {
-    Analytics.logEventWithAppState(event, {
-        device_firmware_version: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
-        server_firmware_version: OTASelectors.getFirmwareVersion(state),
-    }, state);
+    Analytics.logEventWithAppState(
+        event,
+        {
+            device_firmware_version:
+                ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+            server_firmware_version: OTASelectors.getFirmwareVersion(state),
+        },
+        state,
+    );
 };
 
 // version helpers
@@ -294,20 +336,35 @@ const logOTAAnalytics = (state, event) => {
 const compareFirmwareVersions = (appVersion, json) => {
     let index = 0;
     for (let firmware_config of json.firmware_updates) {
-        if (!firmware_config.min_app_version && !firmware_config.max_app_version) {
-            console.tron.log(`check firmware updates error, cannot process lack of min or max app version`);
+        if (
+            !firmware_config.min_app_version &&
+            !firmware_config.max_app_version
+        ) {
+            console.tron.log(
+                `check firmware updates error, cannot process lack of min or max app version`,
+            );
             return null;
         }
 
         if (firmware_config.min_app_version) {
-            if (!isVersionGreaterThanOrEqual(appVersion, firmware_config.min_app_version)) {
+            if (
+                !isVersionGreaterThanOrEqual(
+                    appVersion,
+                    firmware_config.min_app_version,
+                )
+            ) {
                 // no good
                 index++;
                 continue;
             }
         }
         if (firmware_config.max_app_version) {
-            if (!isVersionLessThanOrEqual(appVersion, firmware_config.max_app_version)) {
+            if (
+                !isVersionLessThanOrEqual(
+                    appVersion,
+                    firmware_config.max_app_version,
+                )
+            ) {
                 // no good
                 index++;
                 continue;
@@ -347,21 +404,36 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
     } else {
         // you are not latest, see if upgrading the app is possible
         let nextAppVersion = null;
-        const appUpdateArray = Platform.OS === 'ios' ? json.app_updates.ios : json.app_updates.android;
+        const appUpdateArray =
+            Platform.OS === 'ios'
+                ? json.app_updates.ios
+                : json.app_updates.android;
         for (let app_config of appUpdateArray) {
             if (!app_config.min_os_version && !app_config.max_os_version) {
-                console.tron.log(`check firmware updates error, cannot process lack of min and max os`);
+                console.tron.log(
+                    `check firmware updates error, cannot process lack of min and max os`,
+                );
                 return null;
             }
 
             if (app_config.min_os_version) {
-                if (!isVersionGreaterThanOrEqual(osVersion, app_config.min_os_version)) {
+                if (
+                    !isVersionGreaterThanOrEqual(
+                        osVersion,
+                        app_config.min_os_version,
+                    )
+                ) {
                     // no good
                     continue;
                 }
             }
             if (app_config.max_os_version) {
-                if (!isVersionLessThanOrEqual(osVersion, app_config.max_os_version)) {
+                if (
+                    !isVersionLessThanOrEqual(
+                        osVersion,
+                        app_config.max_os_version,
+                    )
+                ) {
                     // no good
                     continue;
                 }

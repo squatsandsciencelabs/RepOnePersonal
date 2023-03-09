@@ -1,7 +1,4 @@
-import {
-    NativeModules,
-    Linking,
-} from 'react-native';
+import { NativeModules, Linking } from 'react-native';
 
 import {
     STOP_RECONNECT,
@@ -10,7 +7,7 @@ import {
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as Analytics from 'app/services/Analytics';
 
-export const startDeviceScan = (isManual=false) => {
+export const startDeviceScan = (isManual = false) => {
     return DeviceActionCreators.startDeviceScan(isManual);
 };
 
@@ -33,33 +30,29 @@ export const stopReconnect = () => (dispatch, getState) => {
     logCancelReconnectAnalytics(state);
 
     dispatch({
-        type: STOP_RECONNECT
+        type: STOP_RECONNECT,
     });
-}
+};
 
 export const presentTroubleshootingTips = () => (dispatch, getState) => {
-    Linking.openURL("https://www.reponestrength.com/troubleshoot/");
+    Linking.openURL('https://www.reponestrength.com/troubleshoot/');
 
     const state = getState();
     logTroubleshootingTipsAnalytics(state);
 
     dispatch({
-        type: TROUBLESHOOTING_TIPS
+        type: TROUBLESHOOTING_TIPS,
     });
 };
 
-const logAttemptDisconnectDeviceAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_disconnect_device', {
-    }, state);
+const logAttemptDisconnectDeviceAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_disconnect_device', {}, state);
 };
 
-const logCancelReconnectAnalytics = (state) => {
-    Analytics.logEventWithAppState('cancel_reconnect', {
-
-    }, state);
+const logCancelReconnectAnalytics = state => {
+    Analytics.logEventWithAppState('cancel_reconnect', {}, state);
 };
 
-const logTroubleshootingTipsAnalytics = (state) => {
-    Analytics.logEventWithAppState('troubleshooting_tips', {
-    }, state);
+const logTroubleshootingTipsAnalytics = state => {
+    Analytics.logEventWithAppState('troubleshooting_tips', {}, state);
 };

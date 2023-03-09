@@ -4,17 +4,20 @@ import { connect } from 'react-redux';
 import SetTitleRowExpanded from 'app/shared_features/set_card/expanded/SetTitleRowExpanded';
 import * as Actions from './EditHistoryTitleExpandedActions';
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSet: Actions.saveSet,
-        tappedExercise: Actions.presentExercise,
-        tappedCollapse: Actions.collapseCard,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSet: Actions.saveSet,
+            tappedExercise: Actions.presentExercise,
+            tappedCollapse: Actions.collapseCard,
+        },
+        dispatch,
+    );
 };
 
 const EditHistoryTitleExpandedScreen = connect(
     null,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SetTitleRowExpanded);
 
 export default EditHistoryTitleExpandedScreen;

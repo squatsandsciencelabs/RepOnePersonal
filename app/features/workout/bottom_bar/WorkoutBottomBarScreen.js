@@ -5,19 +5,22 @@ import WorkoutBottomBar from './WorkoutBottomBar';
 import * as Actions from './WorkoutBottomBarActions';
 import * as AuthSelectors from 'app/redux/selectors/AuthSelectors';
 
-const mapStateToProps = (state) => ({
-    isLoggedIn: AuthSelectors.getIsLoggedIn(state)
+const mapStateToProps = state => ({
+    isLoggedIn: AuthSelectors.getIsLoggedIn(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        endWorkout: Actions.endWorkout
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            endWorkout: Actions.endWorkout,
+        },
+        dispatch,
+    );
 };
 
 const WorkoutBottomBarScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(WorkoutBottomBar);
 
 export default WorkoutBottomBarScreen;

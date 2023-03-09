@@ -10,42 +10,59 @@ export const upload = async (accessToken, name, content, completionHandler) => {
     try {
         await executeUpload(accessToken, name, content, completionHandler);
     } catch (err) {
-        if (Platform.OS === 'ios' && err.code === 403 && err.message.includes('nsufficient')) {
+        if (
+            Platform.OS === 'ios' &&
+            err.code === 403 &&
+            err.message.includes('nsufficient')
+        ) {
             await GoogleSignin.addScopes({
-                scopes: ["https://www.googleapis.com/auth/drive.file"],
+                scopes: ['https://www.googleapis.com/auth/drive.file'],
             });
             const result = await GoogleSignin.getTokens();
-            await executeUpload(result.accessToken, name, content, completionHandler);
+            await executeUpload(
+                result.accessToken,
+                name,
+                content,
+                completionHandler,
+            );
         } else {
             throw err;
         }
     }
-}
+};
 
 const executeUpload = async (accessToken, name, content, completionHandler) => {
     // length
     let length = getByteLen(content);
 
     // setup the upload
-    let response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Upload-Content-Type': 'text/csv',
-            'X-Upload-Content-Length': length,
-            'Authorization': 'Bearer ' + accessToken
+    let response = await fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Upload-Content-Type': 'text/csv',
+                'X-Upload-Content-Length': length,
+                Authorization: 'Bearer ' + accessToken,
+            },
+            body: JSON.stringify({
+                name: name,
+                mimeType: 'application/vnd.google-apps.spreadsheet',
+            }),
         },
-        body: JSON.stringify({
-            "name": name,
-            "mimeType": 'application/vnd.google-apps.spreadsheet'
-        })
-    });
+    );
     let status = await response.status;
 
     // error check
     if (status !== 200) {
         let json = await response.json();
-        console.tron.log('Error, received status ' + status + ' body ' + JSON.stringify(json));
+        console.tron.log(
+            'Error, received status ' +
+                status +
+                ' body ' +
+                JSON.stringify(json),
+        );
         if (json.error) {
             throw json.error;
         } else {
@@ -58,16 +75,18 @@ const executeUpload = async (accessToken, name, content, completionHandler) => {
     response = await fetch(location, {
         method: 'PUT',
         headers: {
-            'Content-Length' : length,
-            'Content-Type' : 'text/csv'
+            'Content-Length': length,
+            'Content-Type': 'text/csv',
         },
-        body: content
+        body: content,
     });
     status = await response.status;
 
     // error check
     if (status !== 200) {
-        console.tron.log('Error, received status ' + status + ' response ' + response);
+        console.tron.log(
+            'Error, received status ' + status + ' response ' + response,
+        );
         throw new Error('Did not receive 200 for upload');
     }
 
@@ -78,19 +97,27 @@ const executeUpload = async (accessToken, name, content, completionHandler) => {
 };
 
 // from https://codereview.stackexchange.com/questions/37512/count-byte-length-of-string
-const getByteLen = (normal_val) => {
+const getByteLen = normal_val => {
     // Force string type
     normal_val = String(normal_val);
 
     var byteLen = 0;
     for (var i = 0; i < normal_val.length; i++) {
         var c = normal_val.charCodeAt(i);
-        byteLen += c < (1 <<  7) ? 1 :
-                   c < (1 << 11) ? 2 :
-                   c < (1 << 16) ? 3 :
-                   c < (1 << 21) ? 4 :
-                   c < (1 << 26) ? 5 :
-                   c < (1 << 31) ? 6 : Number.NaN;
+        byteLen +=
+            c < 1 << 7
+                ? 1
+                : c < 1 << 11
+                ? 2
+                : c < 1 << 16
+                ? 3
+                : c < 1 << 21
+                ? 4
+                : c < 1 << 26
+                ? 5
+                : c < 1 << 31
+                ? 6
+                : Number.NaN;
     }
     return byteLen;
-}
+};

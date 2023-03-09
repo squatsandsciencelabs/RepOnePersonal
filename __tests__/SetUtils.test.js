@@ -21,7 +21,7 @@ describe('hasAllFields', () => {
 
         const result = sut.hasAllFields(set);
 
-        expect(result).toBe(false);;
+        expect(result).toBe(false);
     });
 
     test('true when all filled', () => {
@@ -139,7 +139,6 @@ describe('hasAllFields', () => {
 
         expect(result).toBe(false);
     });
-
 });
 
 describe('hasEmptyFields', () => {
@@ -155,7 +154,7 @@ describe('hasEmptyFields', () => {
 
         const result = sut.hasEmptyFields(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('true when empty', () => {
@@ -168,7 +167,7 @@ describe('hasEmptyFields', () => {
 
         const result = sut.hasEmptyFields(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('false w/ exercise name', () => {
@@ -233,12 +232,12 @@ describe('hasEmptyData', () => {
             weight: null,
             rpe: null,
             tags: [],
-            videoFileURL: null
+            videoFileURL: null,
         };
 
         const result = sut.hasEmptyData(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('true when empty', () => {
@@ -247,12 +246,12 @@ describe('hasEmptyData', () => {
             weight: '',
             rpe: '',
             tags: [],
-            videoFileURL: ''
+            videoFileURL: '',
         };
 
         const result = sut.hasEmptyData(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('false w/ exercise name', () => {
@@ -261,7 +260,7 @@ describe('hasEmptyData', () => {
             weight: '',
             rpe: '',
             tags: [],
-            videoFileURL: ''
+            videoFileURL: '',
         };
 
         const result = sut.hasEmptyData(set);
@@ -275,7 +274,7 @@ describe('hasEmptyData', () => {
             weight: '300',
             rpe: '',
             tags: [],
-            videoFileURL: ''
+            videoFileURL: '',
         };
 
         const result = sut.hasEmptyData(set);
@@ -289,7 +288,7 @@ describe('hasEmptyData', () => {
             weight: '',
             rpe: '5.5',
             tags: [],
-            videoFileURL: ''
+            videoFileURL: '',
         };
 
         const result = sut.hasEmptyData(set);
@@ -303,7 +302,7 @@ describe('hasEmptyData', () => {
             weight: '',
             rpe: '',
             tags: [{}],
-            videoFileURL: ''
+            videoFileURL: '',
         };
 
         const result = sut.hasEmptyData(set);
@@ -317,7 +316,7 @@ describe('hasEmptyData', () => {
             weight: '',
             rpe: '',
             tags: [],
-            videoFileURL: 'hello'
+            videoFileURL: 'hello',
         };
 
         const result = sut.hasEmptyData(set);
@@ -329,36 +328,35 @@ describe('hasEmptyData', () => {
 describe('hasNoReps', () => {
     test('0 reps true', () => {
         const set = {
-            reps: []
+            reps: [],
         };
 
         const result = sut.hasNoReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('undefined true', () => {
-        const set = {
-        };
+        const set = {};
 
         const result = sut.hasNoReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('null true', () => {
         const set = {
-            reps: null
+            reps: null,
         };
 
         const result = sut.hasNoReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('false', () => {
         const set = {
-            reps: [{}]
+            reps: [{}],
         };
 
         const result = sut.hasNoReps(set);
@@ -370,56 +368,55 @@ describe('hasNoReps', () => {
 describe('hasEmptyReps', () => {
     test('0 reps true', () => {
         const set = {
-            reps: []
+            reps: [],
         };
 
         const result = sut.hasEmptyReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('undefined true', () => {
-        const set = {
-        };
+        const set = {};
 
         const result = sut.hasEmptyReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('null true', () => {
         const set = {
-            reps: null
+            reps: null,
         };
 
         const result = sut.hasEmptyReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('true when only undefined removes', () => {
         const set = {
-            reps: [{}, {}]
+            reps: [{}, {}],
         };
 
         const result = sut.hasEmptyReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('true when everything is removed', () => {
         const set = {
-            reps: [{removed: true}, {removed: true}]
+            reps: [{ removed: true }, { removed: true }],
         };
 
         const result = sut.hasEmptyReps(set);
 
-        expect(result).toBe(true);;
+        expect(result).toBe(true);
     });
 
     test('false when at least one not removed', () => {
         const set = {
-            reps: [{removed: true}, {}, {removed: false}]
+            reps: [{ removed: true }, {}, { removed: false }],
         };
 
         const result = sut.hasEmptyReps(set);
@@ -432,38 +429,114 @@ describe('hasEmptyReps', () => {
 describe.skip('usableReps', () => {
     // test for removed or invalid reps
     // test for INF
-    // test for > 0 and < 10 
+    // test for > 0 and < 10
     // test peak is < 10
     test('returns usable reps only', () => {
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '1.2', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '10', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', undefined, '1', '2']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', undefined, '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: false, isValid: true, data: ['-2', '4', undefined, '1', '2']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'INF', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '1.2', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '10', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', undefined, '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', undefined, '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', undefined, '1', '2'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'INF', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
         };
 
         const result = sut.usableReps(set);
 
         expect(result).toEqual([
-            {removed: false, isValid: true, data: ['-2', '3', '1.2', '1', '7']}, 
-            {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-            {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-            {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
+            {
+                removed: false,
+                isValid: true,
+                data: ['-2', '3', '1.2', '1', '7'],
+            },
+            { removed: false, isValid: true, data: ['0', '2', '7', '1', '8'] },
+            { removed: false, isValid: true, data: ['-1', '3', '5', '1', '8'] },
+            {
+                removed: false,
+                isValid: true,
+                data: [null, null, '5', '1', '2'],
+            },
         ]);
     });
 });
@@ -471,42 +544,118 @@ describe.skip('usableReps', () => {
 describe('hasUnusableReps', () => {
     // test for removed or invalid reps
     // test for INF
-    // test for > 0 and < 10 
+    // test for > 0 and < 10
     // test peak is < 10
     test('returns true if unusable reps', () => {
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '1.2', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '10', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', 'INF', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'INF', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '1.2', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '10', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'INF', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'INF', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
         };
 
         const result = sut.hasUnusableReps(set);
 
         expect(result).toEqual(true);
     });
-    
+
     test('return false if no unusable reps', () => {
         const set = {
             reps: [
-                {removed: false, isValid: true, data: ['-2', '3', '1.2', '1', '7']}, 
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-            ]
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '1.2', '1', '7'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+            ],
         };
 
         const result = sut.hasUnusableReps(set);
@@ -519,22 +668,82 @@ describe('numUsableReps', () => {
     test('return number of usable reps', () => {
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '1.2', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '10', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', 'INF', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'INF', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '1.2', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '10', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'INF', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'INF', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
         };
 
         const result = sut.numUsableReps(set);
@@ -545,26 +754,74 @@ describe('numUsableReps', () => {
     test('return 0 if no usable reps', () => {
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '10', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', 'One Puuuuuuunch', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '14']},
-                {removed: false, isValid: true, data: ['-2', '4', 'Blah', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, 'Kamehkamehhaaa', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
-        }; 
-        
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '10', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', 'One Puuuuuuunch', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'Blah', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'Kamehkamehhaaa', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
+        };
+
         const result = sut.numUsableReps(set);
 
         expect(result).toEqual(0);
-    })
-})
+    });
+});
 
 describe('getFastestUsableAvgVelocity', () => {
     // test with vel > 10
@@ -572,27 +829,91 @@ describe('getFastestUsableAvgVelocity', () => {
     test('return fastest usable avg vel', () => {
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '0', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '0', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '0', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', 'INF', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: []},
-                {removed: false, isValid: true},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'INF', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '0', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '0', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '0', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'INF', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, null, null, null],
+                },
+                { removed: false, isValid: true, data: [] },
+                { removed: false, isValid: true },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'INF', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
         };
-        
+
         const result = sut.getFastestUsableAvgVelocity(set);
 
         expect(result).toBe(7);
@@ -602,13 +923,13 @@ describe('getFastestUsableAvgVelocity', () => {
 describe('weightInLBs', () => {
     // test for valid metric
     test('return null if metric is invalid', () => {
-        const set = { metric: 'triggered', weight: '560' }
+        const set = { metric: 'triggered', weight: '560' };
 
         const result = sut.weightInLBs(set);
 
         expect(result).toBe(null);
-    })
-    
+    });
+
     // test for valid num
     test('return null if weight is invalid num', () => {
         const set = { metric: 'lbs', weight: 'Hooplah' };
@@ -649,12 +970,12 @@ describe('weightInLBs', () => {
 describe('weightInKGs', () => {
     // test for valid metric
     test('return null if metric is invalid', () => {
-        const set = { metric: 'fma brotherhood is better', weight: '425' }
+        const set = { metric: 'fma brotherhood is better', weight: '425' };
 
         const result = sut.weightInKGs(set);
 
         expect(result).toBe(null);
-    })
+    });
 
     // test for valid num
     test('return null if weight is invalid num', () => {
@@ -697,45 +1018,130 @@ describe('validUnremovedReps', () => {
     test('return valid unremoved reps that are not Inf or 0', () => {
         // test for valid and unremoved reps
         // test for INF
-        // test for 0 
+        // test for 0
         const set = {
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '0', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '0', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '0', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', 'Haduken', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: []},
-                {removed: false, isValid: true},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'INF', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
-            ]
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '0', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '0', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '0', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'Haduken', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, null, null, null],
+                },
+                { removed: false, isValid: true, data: [] },
+                { removed: false, isValid: true },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'INF', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
+            ],
         };
 
         const result = sut.validUnremovedReps(set);
 
         expect(result).toEqual([
-            {"data": ["-2", "3", "0", "1", "7"], "isValid": true, "removed": false}, 
-            {"data": ["1", "0", "0", "1", "8"], "isValid": true, "removed": false}, 
-            {"data": ["0", "2", "12", "1", "4"], "isValid": true, "removed": false}, 
-            {"data": ["0", "2", "7", "1", "8"], "isValid": true, "removed": false}, 
-            {"data": ["0", "2", "0", "1", "14"], "isValid": true, "removed": false}, 
-            {"data": ["-1", "3", "5", "1", "8"], "isValid": true, "removed": false}, 
-            {"data": ["-2", "4", "Haduken", "1", "2"], "isValid": true, "removed": false}, 
-            {"data": [null, null, null, null, null], "isValid": true, "removed": false}, 
-            {"data": [], "isValid": true, "removed": false}, {"isValid": true, "removed": false},
-            {"data": [null, null, "5", "1", "2"], "isValid": true, "removed": false}, 
-            {"data": [null, null, "INF", "2", "4"], "isValid": true, "removed": false}, 
-            {"data": ["-1", "3", "5", "1", "INF"], "isValid": true, "removed": false}
+            { data: ['-2', '3', '0', '1', '7'], isValid: true, removed: false },
+            { data: ['1', '0', '0', '1', '8'], isValid: true, removed: false },
+            { data: ['0', '2', '12', '1', '4'], isValid: true, removed: false },
+            { data: ['0', '2', '7', '1', '8'], isValid: true, removed: false },
+            { data: ['0', '2', '0', '1', '14'], isValid: true, removed: false },
+            { data: ['-1', '3', '5', '1', '8'], isValid: true, removed: false },
+            {
+                data: ['-2', '4', 'Haduken', '1', '2'],
+                isValid: true,
+                removed: false,
+            },
+            {
+                data: [null, null, null, null, null],
+                isValid: true,
+                removed: false,
+            },
+            { data: [], isValid: true, removed: false },
+            { isValid: true, removed: false },
+            {
+                data: [null, null, '5', '1', '2'],
+                isValid: true,
+                removed: false,
+            },
+            {
+                data: [null, null, 'INF', '2', '4'],
+                isValid: true,
+                removed: false,
+            },
+            {
+                data: ['-1', '3', '5', '1', 'INF'],
+                isValid: true,
+                removed: false,
+            },
         ]);
     });
 });
@@ -970,21 +1376,81 @@ describe('numValidUnremovedReps', () => {
             weight: 100,
             metric: 'lbs',
             reps: [
-                {removed: true, isValid: true, data: ['-1', '2', '2.5', '2', '8']}, 
-                {removed: false, isValid: true, data: ['-2', '3', '0', '1', '7']}, 
-                {removed: true, isValid: false, data: ['-3', '4', '7.8', '1', '3']}, 
-                {removed: false, isValid: false, data: ['-4', '6', '4', '1', '2']}, 
-                {removed: false, isValid: true, data: ['1', '0', '0', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '12', '1', '4']},
-                {removed: false, isValid: true, data: ['0', '2', '7', '1', '8']},
-                {removed: false, isValid: true, data: ['0', '2', '0', '1', '14']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', '8']},
-                {removed: false, isValid: true, data: ['-2', '4', 'Bah', '1', '2']},
-                {removed: true, isValid: false, data: ['-3', '2', 'INF', '1', '3']},
-                {removed: null, isValid: null, data: [null, null, null, null, null]},
-                {removed: false, isValid: true, data: [null, null, '5', '1', '2']},
-                {removed: false, isValid: true, data: [null, null, 'Blue', '2', '4']},
-                {removed: false, isValid: true, data: ['-1', '3', '5', '1', 'INF']},
+                {
+                    removed: true,
+                    isValid: true,
+                    data: ['-1', '2', '2.5', '2', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '3', '0', '1', '7'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '4', '7.8', '1', '3'],
+                },
+                {
+                    removed: false,
+                    isValid: false,
+                    data: ['-4', '6', '4', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['1', '0', '0', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '12', '1', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '7', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['0', '2', '0', '1', '14'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', '8'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-2', '4', 'Bah', '1', '2'],
+                },
+                {
+                    removed: true,
+                    isValid: false,
+                    data: ['-3', '2', 'INF', '1', '3'],
+                },
+                {
+                    removed: null,
+                    isValid: null,
+                    data: [null, null, null, null, null],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, '5', '1', '2'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: [null, null, 'Blue', '2', '4'],
+                },
+                {
+                    removed: false,
+                    isValid: true,
+                    data: ['-1', '3', '5', '1', 'INF'],
+                },
             ],
         };
 

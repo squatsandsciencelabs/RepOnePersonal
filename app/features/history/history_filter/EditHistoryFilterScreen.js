@@ -11,17 +11,17 @@ const getFormattedStartDate = createSelector(
     HistorySelectors.getEditingHistoryFilterStartingDate,
     startDate => {
         return startDate ? moment(startDate).format('MM/DD/YYYY') : null;
-    }
+    },
 );
 
 const getFormattedEndDate = createSelector(
     HistorySelectors.getEditingHistoryFilterEndingDate,
     endDate => {
         return endDate ? moment(endDate).format('MM/DD/YYYY') : null;
-    }
+    },
 );
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         isModalShowing: HistorySelectors.getShowHistoryFilter(state),
         exercise: HistorySelectors.getEditingFilterExerciseName(state),
@@ -29,45 +29,53 @@ const mapStateToProps = (state) => {
         tagsToExclude: HistorySelectors.getEditingFilterTagsToExclude(state),
         startDate: getFormattedStartDate(state),
         endDate: getFormattedEndDate(state),
-        startWeight: HistorySelectors.getEditingHistoryFilterStartingWeight(state),
+        startWeight:
+            HistorySelectors.getEditingHistoryFilterStartingWeight(state),
         endWeight: HistorySelectors.getEditingHistoryFilterEndingWeight(state),
         startRPE: HistorySelectors.getEditingHistoryFilterStartingRPE(state),
         endRPE: HistorySelectors.getEditingHistoryFilterEndingRPE(state),
-        startingRepRange: HistorySelectors.getEditingHistoryFilterStartingRepRange(state),
-        endingRepRange: HistorySelectors.getEditingHistoryFilterEndingRepRange(state),
-        startWeightMetric: HistorySelectors.getEditingHistoryFilterStartingWeightMetric(state),
-        endWeightMetric: HistorySelectors.getEditingHistoryFilterEndingWeightMetric(state),
+        startingRepRange:
+            HistorySelectors.getEditingHistoryFilterStartingRepRange(state),
+        endingRepRange:
+            HistorySelectors.getEditingHistoryFilterEndingRepRange(state),
+        startWeightMetric:
+            HistorySelectors.getEditingHistoryFilterStartingWeightMetric(state),
+        endWeightMetric:
+            HistorySelectors.getEditingHistoryFilterEndingWeightMetric(state),
         showRemoved: HistorySelectors.getEditingShowRemoved(state),
-    }
+    };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        closeModal: Actions.dismissHistoryFilter,
-        tappedExercise: Actions.presentSelectExercise,
-        tappedTagsToInclude: Actions.presentTagsToInclude,
-        tappedTagsToExclude: Actions.presentTagsToExclude,
-        tappedStartDate: Actions.presentStartDate,
-        tappedEndDate: Actions.presentEndDate,
-        updateStartRPE: Actions.updateStartRPE,
-        updateEndRPE: Actions.updateEndRPE,
-        updateStartingRepRange: Actions.updateStartingRepRange,
-        updateEndingRepRange: Actions.updateEndingRepRange,
-        updateStartWeight: Actions.updateStartWeight,
-        updateEndWeight: Actions.updateEndWeight,
-        clear: Actions.clearHistoryFilter,
-        save: Actions.saveHistoryFilter,
-        toggleStartWeightMetric: Actions.toggleStartWeightMetric,
-        toggleEndWeightMetric: Actions.toggleEndWeightMetric,
-        toggleShowRemoved: Actions.toggleShowRemoved,
-        clearStartDate: Actions.clearStartDate,
-        clearEndDate: Actions.clearEndDate,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            closeModal: Actions.dismissHistoryFilter,
+            tappedExercise: Actions.presentSelectExercise,
+            tappedTagsToInclude: Actions.presentTagsToInclude,
+            tappedTagsToExclude: Actions.presentTagsToExclude,
+            tappedStartDate: Actions.presentStartDate,
+            tappedEndDate: Actions.presentEndDate,
+            updateStartRPE: Actions.updateStartRPE,
+            updateEndRPE: Actions.updateEndRPE,
+            updateStartingRepRange: Actions.updateStartingRepRange,
+            updateEndingRepRange: Actions.updateEndingRepRange,
+            updateStartWeight: Actions.updateStartWeight,
+            updateEndWeight: Actions.updateEndWeight,
+            clear: Actions.clearHistoryFilter,
+            save: Actions.saveHistoryFilter,
+            toggleStartWeightMetric: Actions.toggleStartWeightMetric,
+            toggleEndWeightMetric: Actions.toggleEndWeightMetric,
+            toggleShowRemoved: Actions.toggleShowRemoved,
+            clearStartDate: Actions.clearStartDate,
+            clearEndDate: Actions.clearEndDate,
+        },
+        dispatch,
+    );
 };
 
 const EditHistoryFilterScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditHistoryFilterView);
 
 export default EditHistoryFilterScreen;

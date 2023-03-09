@@ -2,9 +2,8 @@ import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as DateUtils from 'app/utility/DateUtils';
 
 export default class Validator {
-
     constructor(accessToken, lastRefreshDate) {
-        this.accessToken = accessToken
+        this.accessToken = accessToken;
         if (!lastRefreshDate) {
             // no refresh date, invalid
             this.isValid = false;
@@ -16,5 +15,4 @@ export default class Validator {
             this.isValid = msBetween < OpenBarbellConfig.apiWaitTimer;
         }
     }
-
-};
+}

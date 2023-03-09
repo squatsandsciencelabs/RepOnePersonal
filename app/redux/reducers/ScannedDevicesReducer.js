@@ -12,7 +12,7 @@ const defaultState = {
     isManualScan: false,
 };
 
-const ScannedDevicesReducer = ( state = defaultState, action) => {
+const ScannedDevicesReducer = (state = defaultState, action) => {
     switch (action.type) {
         case START_DEVICE_SCAN:
             return Object.assign({}, state, {
@@ -43,15 +43,9 @@ const ScannedDevicesReducer = ( state = defaultState, action) => {
             } else {
                 //new entry
                 return Object.assign({}, state, {
-                    devices: [
-                        ...state.devices,
-                        action.deviceName,
-                    ],
-                    deviceIds: [
-                        ...state.deviceIds,
-                        action.deviceIdentifier,
-                    ],
-                    scanning: state.scanning
+                    devices: [...state.devices, action.deviceName],
+                    deviceIds: [...state.deviceIds, action.deviceIdentifier],
+                    scanning: state.scanning,
                 });
             }
         default:

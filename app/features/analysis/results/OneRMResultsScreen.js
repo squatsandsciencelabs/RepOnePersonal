@@ -13,12 +13,14 @@ const getShouldDisplayRegression = createSelector(
     AnalysisSelectors.getActiveChartData,
     AnalysisSelectors.getIsRegressionNegative,
     (isR2HighEnough, regressionPoints, activeChartData, isNegative) => {
-        return isR2HighEnough
-        && regressionPoints
-        && regressionPoints.length === 2
-        && activeChartData.length >= 5
-        && isNegative
-    }
+        return (
+            isR2HighEnough &&
+            regressionPoints &&
+            regressionPoints.length === 2 &&
+            activeChartData.length >= 5 &&
+            isNegative
+        );
+    },
 );
 
 const getRegLeftPoint = createSelector(
@@ -29,7 +31,7 @@ const getRegLeftPoint = createSelector(
             return null;
         }
         return points[0];
-    }
+    },
 );
 
 const getRegRightPoint = createSelector(
@@ -40,7 +42,7 @@ const getRegRightPoint = createSelector(
             return null;
         }
         return points[1];
-    }
+    },
 );
 
 const getE1RM = createSelector(
@@ -51,15 +53,12 @@ const getE1RM = createSelector(
             return null;
         }
         return e1RM;
-    }
+    },
 );
 
-const getMinX = createSelector(
-    AnalysisSelectors.getMinX,
-    x => {
-        return x * 0.9;
-    }
-);
+const getMinX = createSelector(AnalysisSelectors.getMinX, x => {
+    return x * 0.9;
+});
 
 const getMaxX = createSelector(
     AnalysisSelectors.getMaxX,
@@ -70,21 +69,18 @@ const getMaxX = createSelector(
         if (!shouldDisplayRegression) {
             return v;
         }
-        return Math.max(v, regRightPoint.x)
-    }
+        return Math.max(v, regRightPoint.x);
+    },
 );
 
-const getMaxY = createSelector(
-    AnalysisSelectors.getMaxY,
-    y => {
-        return y * 1.1;
-    }
-);
+const getMaxY = createSelector(AnalysisSelectors.getMaxY, y => {
+    return y * 1.1;
+});
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         velocity: AnalysisSelectors.getAnalysisVelocity(state),
-        e1RM: getE1RM(state),    
+        e1RM: getE1RM(state),
         metric: SettingsSelectors.getDefaultMetric(state),
         r2: AnalysisSelectors.getR2(state),
         shouldDisplayRegression: getShouldDisplayRegression(state),
@@ -100,17 +96,20 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        tappedSet: Actions.tappedSet,
-        presentAlgorithm: Actions.presentAlgorithm,
-        presentBestResults: Actions.presentBestResults,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            tappedSet: Actions.tappedSet,
+            presentAlgorithm: Actions.presentAlgorithm,
+            presentBestResults: Actions.presentBestResults,
+        },
+        dispatch,
+    );
 };
 
 const OneRMChartScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(OneRMResultsView);
 
 export default OneRMChartScreen;

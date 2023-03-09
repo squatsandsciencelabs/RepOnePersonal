@@ -10,9 +10,9 @@ describe('SettingsSelectors', () => {
     test('getEndSetTimeLeft', () => {
         const state = {
             settings: {
-                endSetTimerDuration: 1000
-            }
-        }
+                endSetTimerDuration: 1000,
+            },
+        };
         Date.now = () => 3000;
 
         const result = sut.getEndSetTimeLeft(state);

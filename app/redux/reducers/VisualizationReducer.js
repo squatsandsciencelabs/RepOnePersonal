@@ -5,8 +5,8 @@ import {
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
-   setID: null,
-   repIndex: null,
+    setID: null,
+    repIndex: null,
 };
 
 export default (state = defaultState, action) => {

@@ -1,9 +1,9 @@
-const stateRoot = (state) => state.appState;
+const stateRoot = state => state.appState;
 
-export const getScreenStatus = (state) => stateRoot(state).screenStatus;
+export const getScreenStatus = state => stateRoot(state).screenStatus;
 
-export const getNumLocks = (state) => stateRoot(state).lockedCounter;
+export const getNumLocks = state => stateRoot(state).lockedCounter;
 
-export const getNumMultiTask = (state) => stateRoot(state).multiTaskCounter;
+export const getNumMultiTask = state => stateRoot(state).multiTaskCounter;
 
-export const getTabIndex = (state) => stateRoot(state).tabIndex;
+export const getTabIndex = state => stateRoot(state).tabIndex;

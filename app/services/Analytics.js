@@ -1,7 +1,5 @@
 import firebase from 'app/services/Firebase';
-import {
-    AppState
-} from 'react-native';
+import { AppState } from 'react-native';
 import * as ScannedDevicesSelectors from 'app/redux/selectors/ScannedDevicesSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
@@ -35,13 +33,13 @@ export const setUserID = async userID => {
         value: userID,
         preview: userID,
         important: true,
-        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'
+        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png',
     });
 };
 
 // Screens
 
-export const setCurrentScreen = (screen) => {
+export const setCurrentScreen = screen => {
     firebase.app().analytics().logScreenView({ screen_name: screen });
 
     console.tron.display({
@@ -49,7 +47,7 @@ export const setCurrentScreen = (screen) => {
         value: screen,
         preview: screen,
         important: true,
-        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'
+        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png',
     });
 };
 
@@ -61,9 +59,9 @@ export const setUserProp = (name, value) => {
     console.tron.display({
         name: 'SetUserProp',
         value: value,
-        preview: name + " = " + value,
+        preview: name + ' = ' + value,
         important: true,
-        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'
+        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png',
     });
 };
 
@@ -78,7 +76,7 @@ export const logEvent = (event, params) => {
         value: params,
         preview: event,
         important: true,
-        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'
+        image: 'https://firebase.google.com/_static/images/firebase/touchicon-180.png',
     });
 };
 
@@ -109,7 +107,7 @@ export const logEventWithAppState = (event, params, state) => {
     let devices = ScannedDevicesSelectors.getScannedDevices(state);
     if (devices.length > 25) {
         devices = devices.slice(0, 25);
-    };
+    }
     // const connectedDeviceStatus = ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state);
     const isWorkoutEmpty = SetsSelectors.getIsWorkoutEmpty(state);
     const isSurveyVisible = SurveySelectors.getSurveyAvailable(state);
@@ -142,7 +140,7 @@ const addErrorToParams = (error, event, params) => {
             var errorString = JSON.stringify(error);
         }
     } else {
-        var errorString = "";
+        var errorString = '';
     }
 
     // create params
@@ -150,14 +148,14 @@ const addErrorToParams = (error, event, params) => {
         params.error = errorString;
         params.event = event;
     } else {
-        params = {error: errorString, event};
+        params = { error: errorString, event };
     }
 
     return params;
 };
 
 // hacked migration to still allow for error code 9001
-const errorWithCode = (error) => {
+const errorWithCode = error => {
     if (error && error.code && !isNaN(error.code)) {
         return error;
     } else if (error) {
@@ -170,7 +168,7 @@ const errorWithCode = (error) => {
 
 const logCrashlyticsError = async (event, params) => {
     let message = JSON.stringify(params);
-    await firebase.crashlytics().setAttribute("error_params", message);
+    await firebase.crashlytics().setAttribute('error_params', message);
 
     firebase.crashlytics().recordError(errorWithCode(event));
 };

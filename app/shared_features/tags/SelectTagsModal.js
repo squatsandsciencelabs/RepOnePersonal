@@ -1,6 +1,6 @@
 // TODO: consider splitting this component into two different ones rather than using if statements everywhere
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     View,
     StatusBar,
@@ -12,13 +12,12 @@ import {
     StyleSheet,
     FlatList,
     Platform,
-}  from 'react-native';
+} from 'react-native';
 import * as Device from 'app/utility/Device';
 
 import Pill from 'app/shared_features/pill/Pill';
 
 class SelectTagsModal extends Component {
-
     constructor(props) {
         super(props);
 
@@ -35,7 +34,7 @@ class SelectTagsModal extends Component {
         } else {
             var inputs = [];
         }
-        this.setState({inputs: inputs});
+        this.setState({ inputs: inputs });
 
         // set text
         let text = nextProps.text;
@@ -50,13 +49,13 @@ class SelectTagsModal extends Component {
 
     // HELPERS
 
-    _addNewPill(input, resetText=false) {
+    _addNewPill(input, resetText = false) {
         // valid check
         if (this.state.inputs.includes(input) || input == '') {
             return;
         }
 
-        this.props.addPill();        
+        this.props.addPill();
 
         if (resetText) {
             var text = '';
@@ -69,7 +68,7 @@ class SelectTagsModal extends Component {
 
         let inputs = [...this.state.inputs, input];
         this.setState({
-            inputs: inputs
+            inputs: inputs,
         });
         this._updateSuggestions(text, inputs);
     }
@@ -78,7 +77,7 @@ class SelectTagsModal extends Component {
         let inputsCopy = [...this.state.inputs];
         inputsCopy.splice(index, 1);
         this.setState({
-            inputs: inputsCopy
+            inputs: inputsCopy,
         });
         this._updateSuggestions(this.state.text, inputsCopy);
     }
@@ -90,10 +89,12 @@ class SelectTagsModal extends Component {
         this._updateSuggestions(input);
     }
 
-    _updateSuggestions(input=this.state.text, inputs=this.state.inputs) {
+    _updateSuggestions(input = this.state.text, inputs = this.state.inputs) {
         var suggestions = this.props.generateSuggestions(input, inputs);
 
-        let suggestionsVM = suggestions.map((suggestion) => { return {key: suggestion}} );
+        let suggestionsVM = suggestions.map(suggestion => {
+            return { key: suggestion };
+        });
         this.setState({
             suggestions: suggestionsVM,
         });
@@ -122,7 +123,7 @@ class SelectTagsModal extends Component {
             var inputs = this.state.inputs;
         }
 
-        this.props.save(inputs);            
+        this.props.save(inputs);
 
         this.props.closeModal();
     }
@@ -130,7 +131,6 @@ class SelectTagsModal extends Component {
     _tappedEnter() {
         // this is android only, iOS instead uses the \n check in onChangeText
         this._addNewPill(this.state.text, true);
-
     }
 
     _tappedPill(index) {
@@ -152,47 +152,65 @@ class SelectTagsModal extends Component {
                 </View>
             );
         } else if (Platform.OS === 'ios') {
-            var statusBar = (<View style={{height: 20, width: 9001, backgroundColor: 'black'}}></View>);
+            var statusBar = (
+                <View
+                    style={{
+                        height: 20,
+                        width: 9001,
+                        backgroundColor: 'black',
+                    }}></View>
+            );
         } else {
             var statusBar = null;
         }
 
         return (
             <View style={styles.container}>
-                { statusBar }
+                {statusBar}
 
-                <View style={{position: 'absolute', left: 0, top: 0}}>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this.props.cancelModal()}>
                         <View style={styles.nav}>
-                            <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>Cancel</Text>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Cancel
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.navTitle}>
-                    <Text style={{color: 'rgba(77, 77, 77, 1)'}}>{this.props.title}</Text>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                        {this.props.title}
+                    </Text>
                 </View>
 
-                <View style={{position: 'absolute', right: 0, top: 0}}>
-                    <TouchableOpacity onPress={() => this._tappedDone() }>
+                <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => this._tappedDone()}>
                         <View style={styles.nav}>
-                            <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>Done</Text>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Done
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
             </View>
-        )
+        );
     }
 
     _renderHeader() {
         var pills = [];
-        this.state.inputs.map((input) => {
+        this.state.inputs.map(input => {
             let position = pills.length;
             let text = input;
             pills.push(
-                <TouchableOpacity key={position} onPress={() => this._tappedPill(position) }>
-                    <Pill text={text} style={{paddingRight: 5, paddingBottom: 3}} />
-                </TouchableOpacity>
+                <TouchableOpacity
+                    key={position}
+                    onPress={() => this._tappedPill(position)}>
+                    <Pill
+                        text={text}
+                        style={{ paddingRight: 5, paddingBottom: 3 }}
+                    />
+                </TouchableOpacity>,
             );
         });
 
@@ -200,7 +218,14 @@ class SelectTagsModal extends Component {
             return;
         } else {
             return (
-                <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingLeft: 10, paddingRight: 5, marginBottom: 5}}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        paddingLeft: 10,
+                        paddingRight: 5,
+                        marginBottom: 5,
+                    }}>
                     {pills}
                 </View>
             );
@@ -209,46 +234,71 @@ class SelectTagsModal extends Component {
 
     _renderTextField() {
         var returnKeyType = 'go';
-        
-        if (this.state.inputs.includes(this.state.text) || this.state.text == '') {
+
+        if (
+            this.state.inputs.includes(this.state.text) ||
+            this.state.text == ''
+        ) {
             var button = (
-                <View style={[{width: 50, height: 50, marginRight: 10}, styles.addButton, styles.disabled]}>
+                <View
+                    style={[
+                        { width: 50, height: 50, marginRight: 10 },
+                        styles.addButton,
+                        styles.disabled,
+                    ]}>
                     <Text style={styles.addText}>Add</Text>
                 </View>
             );
         } else {
             var button = (
                 <TouchableOpacity onPress={() => this._tappedEnter()}>
-                    <View style={[{width: 50, height: 50, marginRight: 10}, styles.addButton]}>
+                    <View
+                        style={[
+                            { width: 50, height: 50, marginRight: 10 },
+                            styles.addButton,
+                        ]}>
                         <Text style={styles.addText}>Add</Text>
                     </View>
                 </TouchableOpacity>
             );
         }
 
-
         return (
-            <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-                <View style={[{flex: 1, height: 50, marginHorizontal: 10, backgroundColor: 'white', borderWidth: 1, borderColor: '#e0e0e0'}]}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                <View
+                    style={[
+                        {
+                            flex: 1,
+                            height: 50,
+                            marginHorizontal: 10,
+                            backgroundColor: 'white',
+                            borderWidth: 1,
+                            borderColor: '#e0e0e0',
+                        },
+                    ]}>
                     <TextInput
                         style={styles.textField}
                         placeholderTextColor={'rgba(189, 189, 189, 1)'}
                         underlineColorAndroid={'transparent'}
-                        editable = {true}
+                        editable={true}
                         autoFocus={true}
                         autoCapitalize={'none'}
                         placeholder={this.props.placeholder}
                         returnKeyType={returnKeyType}
                         value={this.state.text}
-                        multiline={Platform.os === 'ios' ? true : false } //Android multiline screws up spacing
-                        onSubmitEditing = {() => this._tappedEnter()}
-                        onChangeText={(text) => this._onChangeText(text) }
-                        clearButtonMode = {'while-editing'}
+                        multiline={Platform.os === 'ios' ? true : false} //Android multiline screws up spacing
+                        onSubmitEditing={() => this._tappedEnter()}
+                        onChangeText={text => this._onChangeText(text)}
+                        clearButtonMode={'while-editing'}
                     />
                 </View>
                 {button}
             </View>
-        )
+        );
     }
 
     _renderList() {
@@ -260,17 +310,17 @@ class SelectTagsModal extends Component {
 
         return (
             <FlatList
-                style = {{padding: 10}}
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps='always'
+                style={{ padding: 10 }}
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps="always"
                 initialNumToRender={13}
                 data={data}
                 ListHeaderComponent={this._renderTopBorder}
                 ListFooterComponent={this._renderBottomBorder}
-                renderItem={({item}) => this._renderRow(item)}
-                ItemSeparatorComponent = {this._renderSeparator}
+                renderItem={({ item }) => this._renderRow(item)}
+                ItemSeparatorComponent={this._renderSeparator}
             />
-        )
+        );
     }
 
     _renderRow(item) {
@@ -279,16 +329,40 @@ class SelectTagsModal extends Component {
             // TODO: make this generic rather than specific so you can have multiple pill types
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center'}, styles.rowBorders]}>
-                        <Text style={{marginHorizontal: 10, color: 'red'}}>{item.key}</Text>
+                    <View
+                        style={[
+                            {
+                                backgroundColor: 'white',
+                                height: 50,
+                                justifyContent: 'center',
+                            },
+                            styles.rowBorders,
+                        ]}>
+                        <Text style={{ marginHorizontal: 10, color: 'red' }}>
+                            {item.key}
+                        </Text>
                     </View>
                 </TouchableHighlight>
-            );            
+            );
         } else {
             return (
                 <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
-                    <View style={[{backgroundColor: 'white', height: 50, justifyContent: 'center'}, styles.rowBorders]}>
-                        <Text style={{marginHorizontal: 10, color: 'rgba(77, 77, 77, 1)'}}>{item.key}</Text>
+                    <View
+                        style={[
+                            {
+                                backgroundColor: 'white',
+                                height: 50,
+                                justifyContent: 'center',
+                            },
+                            styles.rowBorders,
+                        ]}>
+                        <Text
+                            style={{
+                                marginHorizontal: 10,
+                                color: 'rgba(77, 77, 77, 1)',
+                            }}>
+                            {item.key}
+                        </Text>
                     </View>
                 </TouchableHighlight>
             );
@@ -298,29 +372,47 @@ class SelectTagsModal extends Component {
     // TODO: move 242 gray from global stylesheet
     _renderSeparator() {
         return (
-            <View style={[{ backgroundColor: 'white'}, styles.rowBorders]}>
-                <View style={{marginHorizontal: 10, backgroundColor: 'rgba(242, 242, 242, 1)', height: 1}}></View>
+            <View style={[{ backgroundColor: 'white' }, styles.rowBorders]}>
+                <View
+                    style={{
+                        marginHorizontal: 10,
+                        backgroundColor: 'rgba(242, 242, 242, 1)',
+                        height: 1,
+                    }}></View>
             </View>
         );
     }
 
     _renderTopBorder() {
         return (
-            <View style={{ backgroundColor: '#e0e0e0', flex: 1, height: 1}} />
+            <View style={{ backgroundColor: '#e0e0e0', flex: 1, height: 1 }} />
         );
     }
 
     _renderBottomBorder() {
         return (
-            <View style={{ backgroundColor: '#e0e0e0', flex: 1, height: 1, marginBottom: 20}} />
+            <View
+                style={{
+                    backgroundColor: '#e0e0e0',
+                    flex: 1,
+                    height: 1,
+                    marginBottom: 20,
+                }}
+            />
         );
     }
 
     // TODO: move 242 gray from global stylesheet
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType='fade'>
-                <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column', backgroundColor: 'rgba(242, 242, 242, 1)'}}>
+            <Modal visible={this.props.isModalShowing} animationType="fade">
+                <View
+                    style={{
+                        flex: 1,
+                        paddingTop: Device.hasNotch() ? 40 : 0,
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(242, 242, 242, 1)',
+                    }}>
                     {this._renderNavigation()}
                     {this._renderHeader()}
                     {this._renderTextField()}
@@ -329,7 +421,6 @@ class SelectTagsModal extends Component {
             </Modal>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -342,13 +433,13 @@ const styles = StyleSheet.create({
     },
     container: {
         height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     nav: {
         paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
-        paddingLeft: 10
+        paddingLeft: 10,
     },
     navTitle: {
         paddingTop: 15,
@@ -357,19 +448,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderRadius: 5
+        borderRadius: 5,
     },
     disabled: {
-        opacity: 0.3
+        opacity: 0.3,
     },
     addText: {
-        color: 'white'
+        color: 'white',
     },
     rowBorders: {
         borderColor: '#e0e0e0',
         borderLeftWidth: 1,
         borderRightWidth: 1,
-    }
+    },
 });
 
 export default SelectTagsModal;

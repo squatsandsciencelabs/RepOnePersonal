@@ -6,15 +6,15 @@
  */
 
 module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-  resolver: {
-    assetExts: ['obj', 'png', 'jpg'],
-  },
+    transformer: {
+        getTransformOptions: async () => ({
+            transform: {
+                experimentalImportSupport: false,
+                inlineRequires: true,
+            },
+        }),
+    },
+    resolver: {
+        assetExts: ['obj', 'png', 'jpg'],
+    },
 };

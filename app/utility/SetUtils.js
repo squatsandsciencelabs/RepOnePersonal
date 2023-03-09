@@ -18,7 +18,7 @@ import {
 import THREE from 'three';
 import { getTotalKratosDiscsMass } from 'app/utility/KratosUtils';
 
-export const isDeleted = (set) => {
+export const isDeleted = set => {
     if (set.hasOwnProperty('deleted')) {
         // new sets used the deleted flag
         return set.deleted;
@@ -29,55 +29,68 @@ export const isDeleted = (set) => {
 };
 
 // no data and no active reps
-export const isEmpty = (set) => {
+export const isEmpty = set => {
     return hasEmptyData(set) && hasEmptyReps(set);
 };
 
 // no data and no reps at all
-export const isUntouched = (set) => {
+export const isUntouched = set => {
     return hasEmptyData(set) && hasNoReps(set);
 };
 
-export const hasAllFields = (set) => {
-    if (set.exercise && set.weight && set.rpe && set.tags && set.tags.length > 0) {
+export const hasAllFields = set => {
+    if (
+        set.exercise &&
+        set.weight &&
+        set.rpe &&
+        set.tags &&
+        set.tags.length > 0
+    ) {
         return true;
     }
     return false;
 };
 
-export const hasEmptyFields = (set) => {
-    return !set.exercise && (!set.weight || set.weight === '') && (!set.rpe || set.rpe === '') && (!set.tags || set.tags === undefined || set.tags.length === 0);
+export const hasEmptyFields = set => {
+    return (
+        !set.exercise &&
+        (!set.weight || set.weight === '') &&
+        (!set.rpe || set.rpe === '') &&
+        (!set.tags || set.tags === undefined || set.tags.length === 0)
+    );
 };
 
-export const hasEmptyData = (set) => {
+export const hasEmptyData = set => {
     return hasEmptyFields(set) && !set.videoFileURL;
 };
 
-export const hasNoReps = (set) => {
+export const hasNoReps = set => {
     if (set.reps === null || set.reps === undefined) {
         return true;
     }
     return set.reps.length === 0;
 };
 
-export const hasEmptyReps = (set) => {
+export const hasEmptyReps = set => {
     if (hasNoReps(set)) {
         return true;
     }
 
-    let activeRep = set.reps.find((rep) => { return rep.removed === false; });
+    let activeRep = set.reps.find(rep => {
+        return rep.removed === false;
+    });
     return activeRep === undefined;
 };
 
 // NOTE: this considers infinity / 0 invalid
-export const usableReps = (set) => {
+export const usableReps = set => {
     if (!set || !set.hasOwnProperty('reps')) {
         return [];
     }
     return set.reps.filter(rep => !rep.removed && isRepUsable(rep));
 };
 
-export const hasUnremovedRep = (set) => {
+export const hasUnremovedRep = set => {
     if (!set || !set.hasOwnProperty('reps')) {
         return false;
     }
@@ -85,7 +98,7 @@ export const hasUnremovedRep = (set) => {
 };
 
 // NOTE: this does not consider infinity / 0 invalid
-export const validUnremovedReps = (set) => {
+export const validUnremovedReps = set => {
     if (!set || !set.hasOwnProperty('reps')) {
         return [];
     }
@@ -99,28 +112,37 @@ export const hasUnremovedRepWith3D = set => {
     return set.reps.some(rep => !rep.removed && rep.bulkData);
 };
 
-export const weightInLBs = (set) => {
-    if (!set.hasOwnProperty('weight') || set.weight === null || isNaN(set.weight) || !set.metric) {
+export const weightInLBs = set => {
+    if (
+        !set.hasOwnProperty('weight') ||
+        set.weight === null ||
+        isNaN(set.weight) ||
+        !set.metric
+    ) {
         return null;
     }
 
     return WeightConversion.weightInLBs(set.metric, set.weight);
-
 };
 
-export const weightInKGs = (set) => {
-    if (!set.hasOwnProperty('weight') || set.weight === null || isNaN(set.weight) || !set.metric) {
+export const weightInKGs = set => {
+    if (
+        !set.hasOwnProperty('weight') ||
+        set.weight === null ||
+        isNaN(set.weight) ||
+        !set.metric
+    ) {
         return null;
     }
 
     return WeightConversion.weightInKGs(set.metric, set.weight);
 };
 
-export const numFieldsEntered = (set) => {
+export const numFieldsEntered = set => {
     let fields = [set.exercise, set.weight, set.rpe, set.tags.length];
     let num_fields_entered = 0;
 
-    fields.forEach((field) => {
+    fields.forEach(field => {
         if (Boolean(field)) {
             num_fields_entered++;
         }
@@ -130,13 +152,13 @@ export const numFieldsEntered = (set) => {
 };
 
 // NOTE: this does not consider infinity / 0 invalid
-export const numValidUnremovedReps = (set) => validUnremovedReps(set).length;
+export const numValidUnremovedReps = set => validUnremovedReps(set).length;
 
 // NOTE: this considers infinity / 0 invalid
-export const numUsableReps = (set) => usableReps(set).length;
+export const numUsableReps = set => usableReps(set).length;
 
 // NOTE: this considers infinity / 0 invalid
-export const isRepUsable = (rep) => {
+export const isRepUsable = rep => {
     if (!rep.isValid) {
         return false;
     }
@@ -145,12 +167,18 @@ export const isRepUsable = (rep) => {
     return isVelocityUsable(velocity) && isVelocityUsable(peakVelocity);
 };
 
-const isVelocityUsable = (velocity) => {
-    return !(!velocity || isNaN(velocity) || !isFinite(velocity) || Number(velocity) < 0 || Number(velocity) >= 10);
+const isVelocityUsable = velocity => {
+    return !(
+        !velocity ||
+        isNaN(velocity) ||
+        !isFinite(velocity) ||
+        Number(velocity) < 0 ||
+        Number(velocity) >= 10
+    );
 };
 
 // NOTE: this considers infinity / 0 invalid, but only considers not removed reps
-export const hasUnusableReps = (set) => {
+export const hasUnusableReps = set => {
     if (!set || !set.hasOwnProperty('reps')) {
         return false;
     }
@@ -158,13 +186,16 @@ export const hasUnusableReps = (set) => {
 };
 
 // NOTE: this considers infinity / 0 invalid
-export const getFastestUsableAvgVelocity = (set) => {
+export const getFastestUsableAvgVelocity = set => {
     const reps = usableReps(set);
     if (!reps || reps.length === 0) {
         return null;
     }
 
-    return Math.max.apply(Math, reps.map(rep => Number(rep.averageVelocity / 1000)));
+    return Math.max.apply(
+        Math,
+        reps.map(rep => Number(rep.averageVelocity / 1000)),
+    );
 };
 
 export const markerDisplayValue = (set, metric) => {
@@ -173,14 +204,20 @@ export const markerDisplayValue = (set, metric) => {
     } else {
         var weight = weightInKGs(set);
     }
-    return Number(weight).toFixed(2) + metric + ", " + getFastestUsableAvgVelocity(set) + "m/s";
+    return (
+        Number(weight).toFixed(2) +
+        metric +
+        ', ' +
+        getFastestUsableAvgVelocity(set) +
+        'm/s'
+    );
 };
 
 // this is here because of legacy issues
 // originally, sets saved their start and end times
 // however, once rep deletion was added, the rest calculation is off
 
-export const startTime = (set) => {
+export const startTime = set => {
     if (!set) {
         return null;
     } else if (set.startTime === undefined) {
@@ -199,12 +236,12 @@ export const startTime = (set) => {
     }
 };
 
-export const endTime = (set) => {
+export const endTime = set => {
     if (set.endTime === undefined) {
         // time of last rep
         let validReps = validUnremovedReps(set);
         if (validReps.length > 0) {
-            return validReps[validReps.length-1].time;
+            return validReps[validReps.length - 1].time;
         } else {
             return null;
         }
@@ -220,7 +257,9 @@ export const checkExercise = (setExercise, exercise) => {
     } else if (exercise && !setExercise) {
         false;
     } else {
-        return setExercise.trim().toLowerCase() === exercise.trim().toLowerCase();
+        return (
+            setExercise.trim().toLowerCase() === exercise.trim().toLowerCase()
+        );
     }
 };
 
@@ -235,9 +274,13 @@ export const checkIncludesTags = (tags, tagsToInclude) => {
     }
 
     const tagsInsensitive = tags.map(tag => tag.trim().toLowerCase());
-    const includeTagsInsensitive = tagsToInclude.map(tag => tag.trim().toLowerCase());
+    const includeTagsInsensitive = tagsToInclude.map(tag =>
+        tag.trim().toLowerCase(),
+    );
 
-    return includeTagsInsensitive.every((tagToInclude) => tagsInsensitive.includes(tagToInclude));
+    return includeTagsInsensitive.every(tagToInclude =>
+        tagsInsensitive.includes(tagToInclude),
+    );
 };
 
 export const checkExcludesTags = (tags, tagsToExclude) => {
@@ -247,18 +290,35 @@ export const checkExcludesTags = (tags, tagsToExclude) => {
     }
 
     const tagsInsensitive = tags.map(tag => tag.trim().toLowerCase());
-    const excludeTagsInsensitive = tagsToExclude.map(tag => tag.trim().toLowerCase());
+    const excludeTagsInsensitive = tagsToExclude.map(tag =>
+        tag.trim().toLowerCase(),
+    );
 
-    return excludeTagsInsensitive.every((tagToExclude) => !tagsInsensitive.includes(tagToExclude));
+    return excludeTagsInsensitive.every(
+        tagToExclude => !tagsInsensitive.includes(tagToExclude),
+    );
 };
 
 // starting is the minimum, while ending is the maximum
 
-export const checkWeightRange = (setWeight, setMetric, startingWeight, startingWeightMetric, endingWeight, endingWeightMetric) => {
+export const checkWeightRange = (
+    setWeight,
+    setMetric,
+    startingWeight,
+    startingWeightMetric,
+    endingWeight,
+    endingWeightMetric,
+) => {
     // turn into pounds
     const setWeightLBs = WeightConversion.weightInLBs(setMetric, setWeight);
-    const startingWeightLBs = WeightConversion.weightInLBs(startingWeightMetric, startingWeight);
-    const endingWeightLBs = WeightConversion.weightInLBs(endingWeightMetric, endingWeight);
+    const startingWeightLBs = WeightConversion.weightInLBs(
+        startingWeightMetric,
+        startingWeight,
+    );
+    const endingWeightLBs = WeightConversion.weightInLBs(
+        endingWeightMetric,
+        endingWeight,
+    );
 
     if (!startingWeightLBs && !endingWeightLBs) {
         return true;
@@ -269,26 +329,40 @@ export const checkWeightRange = (setWeight, setMetric, startingWeight, startingW
     } else if (startingWeightLBs && !endingWeightLBs) {
         return setWeightLBs >= startingWeightLBs;
     } else {
-        return setWeightLBs >= startingWeightLBs && setWeightLBs <= endingWeightLBs;
+        return (
+            setWeightLBs >= startingWeightLBs && setWeightLBs <= endingWeightLBs
+        );
     }
 };
 
 export const checkRPERange = (setRPE, startingRPE, endingRPE) => {
     // account for commas
-    const setRPEWithoutCommas = setRPE ? Number(setRPE.toString().replace(',','.')) : setRPE;
-    const startingRPEWithoutCommas = startingRPE ? Number(startingRPE.toString().replace(',','.')) : startingRPE;
-    const endingRPEWithoutCommas = endingRPE ? Number(endingRPE.toString().replace(',','.')) : endingRPE;
+    const setRPEWithoutCommas = setRPE
+        ? Number(setRPE.toString().replace(',', '.'))
+        : setRPE;
+    const startingRPEWithoutCommas = startingRPE
+        ? Number(startingRPE.toString().replace(',', '.'))
+        : startingRPE;
+    const endingRPEWithoutCommas = endingRPE
+        ? Number(endingRPE.toString().replace(',', '.'))
+        : endingRPE;
 
     if (!startingRPEWithoutCommas && !endingRPEWithoutCommas) {
         return true;
-    } else if ((startingRPEWithoutCommas || endingRPEWithoutCommas) && !setRPE) {
+    } else if (
+        (startingRPEWithoutCommas || endingRPEWithoutCommas) &&
+        !setRPE
+    ) {
         return false;
-    } else if (!startingRPEWithoutCommas  && endingRPEWithoutCommas) {
+    } else if (!startingRPEWithoutCommas && endingRPEWithoutCommas) {
         return setRPEWithoutCommas <= endingRPEWithoutCommas;
     } else if (startingRPEWithoutCommas && !endingRPEWithoutCommas) {
-        return setRPEWithoutCommas >= startingRPEWithoutCommas ;
+        return setRPEWithoutCommas >= startingRPEWithoutCommas;
     } else {
-        return setRPEWithoutCommas >= startingRPEWithoutCommas && setRPEWithoutCommas <= endingRPEWithoutCommas;
+        return (
+            setRPEWithoutCommas >= startingRPEWithoutCommas &&
+            setRPEWithoutCommas <= endingRPEWithoutCommas
+        );
     }
 };
 
@@ -302,20 +376,38 @@ export const checkRepRange = (set, startingRepRange, endingRepRange) => {
     } else if (startingRepRange && !endingRepRange) {
         return validUnremovedReps >= startingRepRange;
     } else {
-        return validUnremovedReps >= startingRepRange && validUnremovedReps <= endingRepRange;
+        return (
+            validUnremovedReps >= startingRepRange &&
+            validUnremovedReps <= endingRepRange
+        );
     }
 };
 
 // startingDate is the minimum date, ending date is the maximum
-export const checkDateRange = (setInitialStartTime, startingDate, endingDate) => {
+export const checkDateRange = (
+    setInitialStartTime,
+    startingDate,
+    endingDate,
+) => {
     if (!startingDate && !endingDate) {
         return true;
     } else if (startingDate && !endingDate) {
-        return DateUtils.getDate(setInitialStartTime) >= DateUtils.getDate(startingDate);
+        return (
+            DateUtils.getDate(setInitialStartTime) >=
+            DateUtils.getDate(startingDate)
+        );
     } else if (!startingDate && endingDate) {
-        return DateUtils.getDate(setInitialStartTime) <= DateUtils.getDate(endingDate);
+        return (
+            DateUtils.getDate(setInitialStartTime) <=
+            DateUtils.getDate(endingDate)
+        );
     } else {
-        return DateUtils.getDate(setInitialStartTime) >= DateUtils.getDate(startingDate) && DateUtils.getDate(setInitialStartTime) <= DateUtils.getDate(endingDate);
+        return (
+            DateUtils.getDate(setInitialStartTime) >=
+                DateUtils.getDate(startingDate) &&
+            DateUtils.getDate(setInitialStartTime) <=
+                DateUtils.getDate(endingDate)
+        );
     }
 };
 
@@ -336,7 +428,7 @@ export const getBulkArray = rep => {
     return data;
 };
 
-export const getDeltaTimes = (rep, bulkData=null) => {
+export const getDeltaTimes = (rep, bulkData = null) => {
     if (!rep) {
         return [];
     }
@@ -350,10 +442,10 @@ export const getDeltaTimes = (rep, bulkData=null) => {
     const times = [0];
 
     // loop add and modify data
-    for (let i=1; i<bulkData.length; i++) {
+    for (let i = 1; i < bulkData.length; i++) {
         // select points
         const current = bulkData[i];
-        const prev = bulkData[i-1];
+        const prev = bulkData[i - 1];
 
         // calculate times
         const deltaT = (prev.time - current.time) / 1000000.0; // microseconds conversion
@@ -363,9 +455,9 @@ export const getDeltaTimes = (rep, bulkData=null) => {
     }
 
     return times;
-}
+};
 
-export const getVelocities = (rep, times=null, bulkData=null) => {
+export const getVelocities = (rep, times = null, bulkData = null) => {
     if (!rep || !rep.bulkData) {
         return [];
     }
@@ -382,16 +474,18 @@ export const getVelocities = (rep, times=null, bulkData=null) => {
 
     // length check
     if (bulkData.length !== times.length) {
-        console.tron.log(`Error getVelocities, times length ${times.length} not equal to bulk data length ${bulkData.length}`);
+        console.tron.log(
+            `Error getVelocities, times length ${times.length} not equal to bulk data length ${bulkData.length}`,
+        );
         return null;
     }
 
     // loop add and modify data
     const velocities = [0];
-    for (let i=1; i<bulkData.length; i++) {
+    for (let i = 1; i < bulkData.length; i++) {
         // select points
         const current = bulkData[i];
-        const prev = bulkData[i-1];
+        const prev = bulkData[i - 1];
         const deltaT = times[i];
 
         // calculate velocity
@@ -408,7 +502,7 @@ export const getVelocities = (rep, times=null, bulkData=null) => {
     return velocities;
 };
 
-export const getAccelerations = (rep, velocities=null, times=null) => {
+export const getAccelerations = (rep, velocities = null, times = null) => {
     // valid check
     if (!rep || !rep.bulkData) {
         return [];
@@ -426,16 +520,18 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
 
     // length check
     if (times.length !== velocities.length) {
-        console.tron.log(`Error getAccelerations, length of times ${times.length} not equal to velocities ${velocities.length}`);
+        console.tron.log(
+            `Error getAccelerations, length of times ${times.length} not equal to velocities ${velocities.length}`,
+        );
         return null;
     }
 
     // loop add and modify data
     const accelerations = [0];
-    for (let i=1; i<times.length; i++) {
+    for (let i = 1; i < times.length; i++) {
         // select points
         const velocity = velocities[i];
-        const prevVelocity = velocities[i-1];
+        const prevVelocity = velocities[i - 1];
         const deltaT = times[i];
 
         // calculate acceleration
@@ -450,9 +546,10 @@ export const getAccelerations = (rep, velocities=null, times=null) => {
     return accelerations;
 };
 
-const maxIndexFunction = (maxIndex, compareValue, compareIndex, array) => compareValue > array[maxIndex] ? compareIndex : maxIndex;
+const maxIndexFunction = (maxIndex, compareValue, compareIndex, array) =>
+    compareValue > array[maxIndex] ? compareIndex : maxIndex;
 
-export const getPeakVelocityIndex = (rep, velocities=null) => {
+export const getPeakVelocityIndex = (rep, velocities = null) => {
     // get velocities if needed
     if (velocities === null || velocities === undefined) {
         velocities = getVelocities(rep);
@@ -464,7 +561,7 @@ export const getPeakVelocityIndex = (rep, velocities=null) => {
     return velocities.reduce(maxIndexFunction, 0);
 };
 
-export const getPeakAccelerationIndex = (rep, accelerations=null) => {
+export const getPeakAccelerationIndex = (rep, accelerations = null) => {
     // get arrays if needed
     if (accelerations === null || accelerations === undefined) {
         accelerations = getAccelerations(rep);
@@ -474,7 +571,12 @@ export const getPeakAccelerationIndex = (rep, accelerations=null) => {
 };
 
 const gravity = 9.80665;
-export const getForces = (set, rep, accelerations=null, velocities=null) => {
+export const getForces = (
+    set,
+    rep,
+    accelerations = null,
+    velocities = null,
+) => {
     if (!set || !rep || !rep.bulkData) {
         return [];
     }
@@ -494,9 +596,9 @@ export const getForces = (set, rep, accelerations=null, velocities=null) => {
 
     // return
     return accelerations.map(a => (a + gravity) * weight);
-}
+};
 
-export const getPowers = (set, rep, forces=null, velocities=null) => {
+export const getPowers = (set, rep, forces = null, velocities = null) => {
     // get velocities if needed
     if (velocities === null || velocities === undefined) {
         velocities = getVelocities(rep);
@@ -514,14 +616,16 @@ export const getPowers = (set, rep, forces=null, velocities=null) => {
     }
 
     if (forces.length !== velocities.length) {
-        console.tron.log(`Error getPowers, forces length ${forces.length} not equal to velocities length ${velocities.length}`);
+        console.tron.log(
+            `Error getPowers, forces length ${forces.length} not equal to velocities length ${velocities.length}`,
+        );
         return [];
     }
 
     return forces.map((f, i) => f * velocities[i]);
 };
 
-export const getPeakForceIndex = (set, rep, forces=null) => {
+export const getPeakForceIndex = (set, rep, forces = null) => {
     // get forces if needed
     if (forces === null || forces === undefined) {
         forces = getForces(set, rep);
@@ -533,7 +637,7 @@ export const getPeakForceIndex = (set, rep, forces=null) => {
     return forces.reduce(maxIndexFunction, 0);
 };
 
-export const getAverageForce = (set, rep, forces=null) => {
+export const getAverageForce = (set, rep, forces = null) => {
     // get forces if needed
     if (forces === null || forces === undefined) {
         forces = getForces(set, rep);
@@ -546,7 +650,7 @@ export const getAverageForce = (set, rep, forces=null) => {
     return sum / forces.length;
 };
 
-export const getPeakPowerIndex = (set, rep, powers=null) => {
+export const getPeakPowerIndex = (set, rep, powers = null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
@@ -558,7 +662,7 @@ export const getPeakPowerIndex = (set, rep, powers=null) => {
     return powers.reduce(maxIndexFunction, 0);
 };
 
-export const getAveragePower = (set, rep, powers=null) => {
+export const getAveragePower = (set, rep, powers = null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
@@ -578,9 +682,9 @@ export const getPeakHeight = (bulkDataArray, peakIndex) => {
 
     const initial = bulkDataArray[0].z;
     const peak = bulkDataArray[peakIndex].z;
-    const final = bulkDataArray[bulkDataArray.length-1].z;
+    const final = bulkDataArray[bulkDataArray.length - 1].z;
 
-    return Math.round(100 * (peak - initial) / (final - initial));
+    return Math.round((100 * (peak - initial)) / (final - initial));
 };
 
 // display helpers, mayb should go into another file honestly
@@ -597,7 +701,7 @@ export const getKratosDisplayMetric = (metric, rep, set = null) =>
 export const formatMetric = metric =>
     metric < 1 && metric > 0 ? metric.toString().slice(1) : metric;
 
-const _getDisplayMetric = (metric, rep, set=null) => {
+const _getDisplayMetric = (metric, rep, set = null) => {
     if (!rep || !rep.isValid) {
         return INVALID;
     }
@@ -606,17 +710,23 @@ const _getDisplayMetric = (metric, rep, set=null) => {
         case AVG_VELOCITY_METRIC:
             return rep.averageVelocity ? rep.averageVelocity / 1000 : INVALID;
         case LINEAR_3D_AVG_VELOCITY_METRIC:
-            return rep.linear3DAverageVelocity ? rep.linear3DAverageVelocity / 1000 : INVALID;
+            return rep.linear3DAverageVelocity
+                ? rep.linear3DAverageVelocity / 1000
+                : INVALID;
         case PKV_METRIC:
             return rep.peakVelocity ? rep.peakVelocity / 1000 : INVALID;
         case PKH_METRIC:
-            return rep.peakHeight && rep.rom ? Math.round(rep.peakHeight / rep.rom * 100) : INVALID;
+            return rep.peakHeight && rep.rom
+                ? Math.round((rep.peakHeight / rep.rom) * 100)
+                : INVALID;
         case ROM_METRIC:
             return rep.rom ? rep.rom : INVALID;
         case LINEAR_3D_ROM_METRIC:
             return rep.linear3DROM ? rep.linear3DROM : INVALID;
         case DURATION_METRIC:
-            return rep.duration ? DurationCalculator.displayDuration(rep.duration) : INVALID;
+            return rep.duration
+                ? DurationCalculator.displayDuration(rep.duration)
+                : INVALID;
         case FORCE_METRIC:
             return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
         case FORCE_HEIGHT_METRIC:
@@ -722,10 +832,12 @@ export const getKratosRepRows = rep => {
 };
 
 export const getRepHasBulkComputedProperties = r => {
-    return (r.peakForce !== null && r.peakForce !== undefined)
-        || (r.averageForce !== null && r.averageForce !== undefined)
-        || (r.peakPower !== null && r.peakPower !== undefined)
-        || (r.averagePower !== null && r.averagePower !== undefined);
+    return (
+        (r.peakForce !== null && r.peakForce !== undefined) ||
+        (r.averageForce !== null && r.averageForce !== undefined) ||
+        (r.peakPower !== null && r.peakPower !== undefined) ||
+        (r.averagePower !== null && r.averagePower !== undefined)
+    );
 };
 
 export const getCanProcessForceOrMetric = (set, rep) => {

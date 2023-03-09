@@ -23,7 +23,6 @@ import EditHistoryFilterStartDateScreen from './dateRange/startDate/EditHistoryF
 import EditHistoryFilterEndDateScreen from './dateRange/endDate/EditHistoryFilterEndScreen';
 
 class EditHistoryFilterView extends Component {
-
     _close() {
         this.props.closeModal();
     }
@@ -31,23 +30,39 @@ class EditHistoryFilterView extends Component {
     // RENDER
 
     _displayTagsToInclude() {
-        if (this.props.tagsToInclude === undefined || this.props.tagsToInclude === null || this.props.tagsToInclude.length === 0) {
-            return (<Text style={[styles.tagText, styles.placeholderText]}>Tags</Text>);
+        if (
+            this.props.tagsToInclude === undefined ||
+            this.props.tagsToInclude === null ||
+            this.props.tagsToInclude.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Tags
+                </Text>
+            );
         }
 
         let position = 0;
 
-        const pills = this.props.tagsToInclude.map((tag) => {
-            return <Pill key={position++} text={tag} style={{paddingRight: 5, paddingBottom: 3, paddingTop: 3}} />
+        const pills = this.props.tagsToInclude.map(tag => {
+            return (
+                <Pill
+                    key={position++}
+                    text={tag}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />
+            );
         });
 
-        return (<View style={styles.tagField}>{pills}</View>);
+        return <View style={styles.tagField}>{pills}</View>;
     }
 
     _renderTagsToInclude() {
         return (
-            <View style={[styles.field, {flex: 1}]}>
-                <TouchableHighlight onPress={() => this.props.tappedTagsToInclude()} underlayColor='#e0e0e0'>
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedTagsToInclude()}
+                    underlayColor="#e0e0e0">
                     {this._displayTagsToInclude()}
                 </TouchableHighlight>
             </View>
@@ -55,23 +70,39 @@ class EditHistoryFilterView extends Component {
     }
 
     _displayTagsToExclude() {
-        if (this.props.tagsToExclude === undefined || this.props.tagsToExclude === null || this.props.tagsToExclude.length === 0) {
-            return (<Text style={[styles.tagText, styles.placeholderText]}>Tags</Text>);
+        if (
+            this.props.tagsToExclude === undefined ||
+            this.props.tagsToExclude === null ||
+            this.props.tagsToExclude.length === 0
+        ) {
+            return (
+                <Text style={[styles.tagText, styles.placeholderText]}>
+                    Tags
+                </Text>
+            );
         }
 
         let position = 0;
 
-        const pills = this.props.tagsToExclude.map((tag) => {
-            return <Pill key={position++} text={tag} style={{paddingRight: 5, paddingBottom: 3, paddingTop: 3}} />
+        const pills = this.props.tagsToExclude.map(tag => {
+            return (
+                <Pill
+                    key={position++}
+                    text={tag}
+                    style={{ paddingRight: 5, paddingBottom: 3, paddingTop: 3 }}
+                />
+            );
         });
 
-        return (<View style={styles.tagField}>{pills}</View>);
+        return <View style={styles.tagField}>{pills}</View>;
     }
 
     _renderTagsToExclude() {
         return (
-            <View style={[styles.field, {flex: 1}]}>
-                <TouchableHighlight onPress={() => this.props.tappedTagsToExclude()} underlayColor='#e0e0e0'>
+            <View style={[styles.field, { flex: 1 }]}>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedTagsToExclude()}
+                    underlayColor="#e0e0e0">
                     {this._displayTagsToExclude()}
                 </TouchableHighlight>
             </View>
@@ -80,38 +111,56 @@ class EditHistoryFilterView extends Component {
 
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
-            return (<Text style={[styles.fieldText, styles.placeholderText]}>Exercise</Text>);
+            return (
+                <Text style={[styles.fieldText, styles.placeholderText]}>
+                    Exercise
+                </Text>
+            );
         }
-        return (<Text style={styles.fieldText}>{this.props.exercise}</Text>);
+        return <Text style={styles.fieldText}>{this.props.exercise}</Text>;
     }
 
     _renderStartDateDisplay() {
         if (this.props.startDate === null || this.props.startDate === '') {
-            return (<Text style={[styles.fieldText, styles.placeholderText]}>from</Text>);
+            return (
+                <Text style={[styles.fieldText, styles.placeholderText]}>
+                    from
+                </Text>
+            );
         }
-        
-        return (<Text style={styles.fieldText}>{this.props.startDate}</Text>);
+
+        return <Text style={styles.fieldText}>{this.props.startDate}</Text>;
     }
 
     _renderEndDateDisplay() {
         if (this.props.endDate === null || this.props.endDate === '') {
-            return (<Text style={[styles.fieldText, styles.placeholderText]}>to</Text>);
+            return (
+                <Text style={[styles.fieldText, styles.placeholderText]}>
+                    to
+                </Text>
+            );
         }
-        return (<Text style={styles.fieldText}>{this.props.endDate}</Text>);
+        return <Text style={styles.fieldText}>{this.props.endDate}</Text>;
     }
-
 
     _renderStartDate() {
         const width = Device.isSmallDevice() ? 125 : 150;
 
         return (
             <View style={[styles.field, { width: width }]}>
-                <TouchableHighlight onPress={() => this.props.tappedStartDate()} underlayColor='#e0e0e0'>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedStartDate()}
+                    underlayColor="#e0e0e0">
                     {this._renderStartDateDisplay()}
                 </TouchableHighlight>
                 <View style={styles.fieldDetails}>
-                    <TouchableOpacity onPress={() => this.props.clearStartDate()}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <TouchableOpacity
+                        onPress={() => this.props.clearStartDate()}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
                             <Icon name="times-circle" size={15} color="gray" />
                         </View>
                     </TouchableOpacity>
@@ -125,12 +174,18 @@ class EditHistoryFilterView extends Component {
 
         return (
             <View style={[styles.field, { width: width }]}>
-                <TouchableHighlight onPress={() => this.props.tappedEndDate()} underlayColor='#e0e0e0'>
+                <TouchableHighlight
+                    onPress={() => this.props.tappedEndDate()}
+                    underlayColor="#e0e0e0">
                     {this._renderEndDateDisplay()}
                 </TouchableHighlight>
                 <View style={styles.fieldDetails}>
                     <TouchableOpacity onPress={() => this.props.clearEndDate()}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
                             <Icon name="times-circle" size={15} color="gray" />
                         </View>
                     </TouchableOpacity>
@@ -141,7 +196,12 @@ class EditHistoryFilterView extends Component {
 
     _renderDateRange() {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                }}>
                 {this._renderStartDate()}
                 {this._renderEndDate()}
             </View>
@@ -157,11 +217,11 @@ class EditHistoryFilterView extends Component {
                     style={styles.fieldText}
                     keyboardType={'numeric'}
                     underlineColorAndroid={'transparent'}
-                    editable = {true}
+                    editable={true}
                     placeholder={placeholder}
                     placeholderTextColor={'rgba(189, 189, 189, 1)'}
-                    value = {value}
-                    onChangeText={(text) => onChangeText(text)}
+                    value={value}
+                    onChangeText={text => onChangeText(text)}
                 />
             </View>
         );
@@ -169,9 +229,9 @@ class EditHistoryFilterView extends Component {
 
     _displayMetric(metric) {
         if (metric === 'kgs') {
-            return "KGs";
+            return 'KGs';
         } else if (metric === 'lbs') {
-            return "LBs";
+            return 'LBs';
         }
     }
 
@@ -192,16 +252,22 @@ class EditHistoryFilterView extends Component {
                     style={styles.fieldText}
                     keyboardType={'numeric'}
                     underlineColorAndroid={'transparent'}
-                    editable = {true}
+                    editable={true}
                     placeholder={range}
                     placeholderTextColor={'rgba(189, 189, 189, 1)'}
-                    value = {value}
-                    onChangeText={(text) => onChangeText(text)}
+                    value={value}
+                    onChangeText={text => onChangeText(text)}
                 />
                 <View style={styles.fieldDetails}>
                     <TouchableOpacity onPress={() => this._toggleMetric(range)}>
-                        <View style={{flexDirection: 'row', alignItems: 'center', }}>
-                            <Text style={styles.detailText}>{this._displayMetric(metric)} </Text>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                            <Text style={styles.detailText}>
+                                {this._displayMetric(metric)}{' '}
+                            </Text>
                             <Icon name="refresh" size={10} color="gray" />
                         </View>
                     </TouchableOpacity>
@@ -211,34 +277,59 @@ class EditHistoryFilterView extends Component {
     }
 
     _renderStartingRepRange() {
-        return this._renderTextField('min', this.props.startingRepRange, this.props.updateStartingRepRange)
+        return this._renderTextField(
+            'min',
+            this.props.startingRepRange,
+            this.props.updateStartingRepRange,
+        );
     }
 
     _renderEndingRepRange() {
-        return this._renderTextField('max', this.props.endingRepRange, this.props.updateEndingRepRange);
+        return this._renderTextField(
+            'max',
+            this.props.endingRepRange,
+            this.props.updateEndingRepRange,
+        );
     }
 
     _renderRepRange() {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                }}>
                 {this._renderStartingRepRange()}
                 {this._renderEndingRepRange()}
             </View>
-        );        
+        );
     }
 
     _renderStartingRPE() {
-        return this._renderTextField('min', this.props.startRPE, this.props.updateStartRPE);
+        return this._renderTextField(
+            'min',
+            this.props.startRPE,
+            this.props.updateStartRPE,
+        );
     }
 
     _renderEndingRPE() {
-        return this._renderTextField('max', this.props.endRPE, this.props.updateEndRPE);
+        return this._renderTextField(
+            'max',
+            this.props.endRPE,
+            this.props.updateEndRPE,
+        );
     }
-
 
     _renderRPERange() {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                }}>
                 {this._renderStartingRPE()}
                 {this._renderEndingRPE()}
             </View>
@@ -246,20 +337,31 @@ class EditHistoryFilterView extends Component {
     }
 
     _renderStartWeight() {
-        return (
-            this._renderWeightField('min', this.props.startWeight, this.props.updateStartWeight, this.props.startWeightMetric)
+        return this._renderWeightField(
+            'min',
+            this.props.startWeight,
+            this.props.updateStartWeight,
+            this.props.startWeightMetric,
         );
     }
 
     _renderEndWeight() {
-        return (
-            this._renderWeightField('max', this.props.endWeight, this.props.updateEndWeight, this.props.endWeightMetric)
+        return this._renderWeightField(
+            'max',
+            this.props.endWeight,
+            this.props.updateEndWeight,
+            this.props.endWeightMetric,
         );
     }
 
     _renderWeightRange() {
         return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                }}>
                 {this._renderStartWeight()}
                 {this._renderEndWeight()}
             </View>
@@ -270,48 +372,72 @@ class EditHistoryFilterView extends Component {
         if (Platform.OS === 'ios') {
             return (
                 <Switch
-                    style={{backgroundColor: 'white', marginLeft: 20, marginRight: 5}}
+                    style={{
+                        backgroundColor: 'white',
+                        marginLeft: 20,
+                        marginRight: 5,
+                    }}
                     value={this.props.showRemoved}
-                    onValueChange={(isSwitchOn) => this.props.toggleShowRemoved()}
-                    trackColor='rgba(47, 128, 237, 1)'
-                    thumbColor='#e0e0e0'/>
+                    onValueChange={isSwitchOn => this.props.toggleShowRemoved()}
+                    trackColor="rgba(47, 128, 237, 1)"
+                    thumbColor="#e0e0e0"
+                />
             );
         } else {
             return (
                 <Switch
                     value={this.props.showRemoved}
-                    onValueChange={(isSwitchOn) => this.props.toggleShowRemoved()}
-                    trackColor='rgba(47, 128, 237, 1)'
-                    thumbColor='#e0e0e0'/>
+                    onValueChange={isSwitchOn => this.props.toggleShowRemoved()}
+                    trackColor="rgba(47, 128, 237, 1)"
+                    thumbColor="#e0e0e0"
+                />
             );
         }
     }
 
     _renderForms() {
         return (
-            <View style={{marginBottom: 200}}>
-                <Text style={[styles.labelText, {marginTop: 20}]}>Exercise Names Containing</Text>
-                <View style={{padding: 5, paddingLeft: 20, paddingRight: 20}}>
-                    <View style={[styles.field, {flex: 1}]}>
-                        <TouchableHighlight onPress={() => this.props.tappedExercise()} underlayColor='#e0e0e0'>
+            <View style={{ marginBottom: 200 }}>
+                <Text style={[styles.labelText, { marginTop: 20 }]}>
+                    Exercise Names Containing
+                </Text>
+                <View style={{ padding: 5, paddingLeft: 20, paddingRight: 20 }}>
+                    <View style={[styles.field, { flex: 1 }]}>
+                        <TouchableHighlight
+                            onPress={() => this.props.tappedExercise()}
+                            underlayColor="#e0e0e0">
                             {this._renderExercise()}
                         </TouchableHighlight>
                     </View>
                 </View>
                 <Text style={styles.labelText}>Tags to Include:</Text>
-                <View style={{padding: 5, paddingLeft: 20, paddingRight: 20}}>{ this._renderTagsToInclude() }</View>
+                <View style={{ padding: 5, paddingLeft: 20, paddingRight: 20 }}>
+                    {this._renderTagsToInclude()}
+                </View>
                 <Text style={styles.labelText}>Tags to Exclude:</Text>
-                <View style={{padding: 5, paddingLeft: 18, paddingRight: 18}}>{ this._renderTagsToExclude() }</View>
+                <View style={{ padding: 5, paddingLeft: 18, paddingRight: 18 }}>
+                    {this._renderTagsToExclude()}
+                </View>
                 <Text style={styles.labelText}>Date Range:</Text>
-                <View style={{padding: 5}}>{ this._renderDateRange() }</View>
-                <Text style={[styles.labelText, { paddingTop: 10 }]}>Weight Range:</Text>
-                <View style={{padding: 5}}>{ this._renderWeightRange() }</View>
-                <Text style={[styles.labelText, { paddingTop: 10 }]}>RPE Range:</Text>
-                <View style={{padding: 5}}>{ this._renderRPERange() }</View>
-                <Text style={[styles.labelText, { paddingTop: 10 }]}>Rep Range:</Text>
-                <View style={{padding: 5}}>{ this._renderRepRange() }</View>
-                <Text style={[styles.labelText, { paddingTop: 10 }]}>Show deleted sets and reps</Text>
-                <View style={{padding: 5}}>{this._renderRemovedSwitch()}</View>
+                <View style={{ padding: 5 }}>{this._renderDateRange()}</View>
+                <Text style={[styles.labelText, { paddingTop: 10 }]}>
+                    Weight Range:
+                </Text>
+                <View style={{ padding: 5 }}>{this._renderWeightRange()}</View>
+                <Text style={[styles.labelText, { paddingTop: 10 }]}>
+                    RPE Range:
+                </Text>
+                <View style={{ padding: 5 }}>{this._renderRPERange()}</View>
+                <Text style={[styles.labelText, { paddingTop: 10 }]}>
+                    Rep Range:
+                </Text>
+                <View style={{ padding: 5 }}>{this._renderRepRange()}</View>
+                <Text style={[styles.labelText, { paddingTop: 10 }]}>
+                    Show deleted sets and reps
+                </Text>
+                <View style={{ padding: 5 }}>
+                    {this._renderRemovedSwitch()}
+                </View>
                 <TouchableOpacity onPress={() => this.props.clear()}>
                     <Text style={styles.clearButton}>Clear all</Text>
                 </TouchableOpacity>
@@ -335,19 +461,28 @@ class EditHistoryFilterView extends Component {
                 </View>
             );
         } else if (Platform.OS === 'ios') {
-            var statusBar = (<View style={{height: 20, width: 9001, backgroundColor: 'black'}}></View>);
+            var statusBar = (
+                <View
+                    style={{
+                        height: 20,
+                        width: 9001,
+                        backgroundColor: 'black',
+                    }}></View>
+            );
         } else {
             var statusBar = null;
         }
 
         return (
             <View style={styles.container}>
-                { statusBar }
+                {statusBar}
 
-                <View style={{position: 'absolute', left: 0, top: 0}}>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this.props.closeModal()}>
                         <View style={styles.nav}>
-                            <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>X</Text>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                X
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -356,30 +491,39 @@ class EditHistoryFilterView extends Component {
                     <Text style={styles.titleText}>FILTERS</Text>
                 </View>
 
-                <View style={{position: 'absolute', right: 0, top: 0}}>
-                    <TouchableOpacity onPress={() => this.props.save() }>
+                <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => this.props.save()}>
                         <View style={styles.nav}>
-                            <Text style={[{color: 'rgba(47, 128, 237, 1)'}]}>Apply</Text>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Apply
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
             </View>
-        )
+        );
     }
 
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType='fade'>
-                    <View style={{flex: 1, paddingTop: Device.hasNotch() ? 40 : 0, flexDirection: 'column' }}>
-                        {this._renderNavigation()}
-                        <ScrollView
-                            keyboardDismissMode='on-drag'
-                            keyboardShouldPersistTaps='always'
-                            style={{flex: 1, backgroundColor: 'rgba(242, 242, 242, 0)'}}
-                        >
-                            {this._renderForms()}
-                        </ScrollView>
-                    </View>
+            <Modal visible={this.props.isModalShowing} animationType="fade">
+                <View
+                    style={{
+                        flex: 1,
+                        paddingTop: Device.hasNotch() ? 40 : 0,
+                        flexDirection: 'column',
+                    }}>
+                    {this._renderNavigation()}
+                    <ScrollView
+                        keyboardDismissMode="on-drag"
+                        keyboardShouldPersistTaps="always"
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'rgba(242, 242, 242, 0)',
+                        }}>
+                        {this._renderForms()}
+                    </ScrollView>
+                </View>
             </Modal>
         );
     }
@@ -395,19 +539,19 @@ const styles = StyleSheet.create({
     },
     container: {
         height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     nav: {
         paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
         paddingRight: 10,
         paddingBottom: 10,
-        paddingLeft: 10
+        paddingLeft: 10,
     },
     navTitle: {
         paddingTop: 15,
     },
     addText: {
-        color: 'white'
+        color: 'white',
     },
     titleText: {
         color: 'rgba(77, 77, 77, 1)',
@@ -430,7 +574,7 @@ const styles = StyleSheet.create({
     detailText: {
         fontSize: 13,
         color: 'gray',
-        backgroundColor: 'rgba(0, 0, 0, 0)'
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     field: {
         backgroundColor: 'rgba(239, 239, 239, 1)',
@@ -473,15 +617,15 @@ const styles = StyleSheet.create({
         paddingRight: 0,
     },
     placeholderText: {
-        color: 'rgba(189, 189, 189, 1)'
+        color: 'rgba(189, 189, 189, 1)',
     },
     clearButton: {
-        textAlign: 'center', 
-        fontSize: 15, 
+        textAlign: 'center',
+        fontSize: 15,
         marginTop: 20,
         paddingBottom: 50,
         color: 'rgba(47, 128, 237, 1)',
-    }
+    },
 });
 
 export default EditHistoryFilterView;

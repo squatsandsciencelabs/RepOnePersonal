@@ -7,26 +7,29 @@ import * as Analytics from 'app/services/Analytics';
 import * as AppStateSelectors from 'app/redux/selectors/AppStateSelectors';
 import * as sut from 'app/shared_features/survey/SurveyModalActions';
 
-const middlewares = [ thunk ];
+const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 var logEventSpy = null;
 var logScreenSpy = null;
 var store = null;
 
 describe('SettingsSurveyActions Analytics', () => {
-
     const expectedURL = 'foobar';
 
     beforeEach(() => {
-        logEventSpy = jest.spyOn(Analytics, 'logEventWithAppState').mockImplementation(() => {});
-        logScreenSpy = jest.spyOn(Analytics, 'setCurrentScreen').mockImplementation(() => {});
+        logEventSpy = jest
+            .spyOn(Analytics, 'logEventWithAppState')
+            .mockImplementation(() => {});
+        logScreenSpy = jest
+            .spyOn(Analytics, 'setCurrentScreen')
+            .mockImplementation(() => {});
         store = mockStore({
             survey: {
-                surveyURL: expectedURL
+                surveyURL: expectedURL,
             },
             appState: {
-                tabIndex: 2
-            }
+                tabIndex: 2,
+            },
         });
     });
 
@@ -42,7 +45,7 @@ describe('SettingsSurveyActions Analytics', () => {
 
     test('close_survey', () => {
         store.dispatch(sut.closeSurvey());
-        
+
         const event = logEventSpy.mock.calls[0][0];
         const params = logEventSpy.mock.calls[0][1];
         expect(event).toEqual('close_survey');
@@ -51,7 +54,7 @@ describe('SettingsSurveyActions Analytics', () => {
 
     test('opt_out_survey', () => {
         store.dispatch(sut.optout());
-        
+
         const event = logEventSpy.mock.calls[0][0];
         const params = logEventSpy.mock.calls[0][1];
         expect(event).toEqual('opt_out_survey');
@@ -61,22 +64,22 @@ describe('SettingsSurveyActions Analytics', () => {
     test('screen is settings when opt_out_survey', () => {
         store = mockStore({
             survey: {
-                surveyURL: expectedURL
+                surveyURL: expectedURL,
             },
             appState: {
-                tabIndex: 3
-            }
+                tabIndex: 3,
+            },
         });
 
         store.dispatch(sut.optout());
-        
+
         const screen = logScreenSpy.mock.calls[0][0];
         expect(screen).toEqual('settings');
     });
 
     test('finish_survey', () => {
         store.dispatch(sut.finish());
-        
+
         const event = logEventSpy.mock.calls[0][0];
         const params = logEventSpy.mock.calls[0][1];
         expect(event).toEqual('finish_survey');
@@ -86,22 +89,22 @@ describe('SettingsSurveyActions Analytics', () => {
     test('screen is workout when finish_survey', () => {
         store = mockStore({
             survey: {
-                surveyURL: expectedURL
+                surveyURL: expectedURL,
             },
             appState: {
-                tabIndex: 0
-            }
+                tabIndex: 0,
+            },
         });
 
         store.dispatch(sut.finish());
-        
+
         const screen = logScreenSpy.mock.calls[0][0];
         expect(screen).toEqual('workout');
     });
 
     test('fill_survey_later', () => {
         store.dispatch(sut.later());
-        
+
         const event = logEventSpy.mock.calls[0][0];
         const params = logEventSpy.mock.calls[0][1];
         expect(event).toEqual('fill_survey_later');
@@ -111,17 +114,16 @@ describe('SettingsSurveyActions Analytics', () => {
     test('screen is history when fill_survey_later', () => {
         store = mockStore({
             survey: {
-                surveyURL: expectedURL
+                surveyURL: expectedURL,
             },
             appState: {
-                tabIndex: 1
-            }
+                tabIndex: 1,
+            },
         });
 
         store.dispatch(sut.later());
-        
+
         const screen = logScreenSpy.mock.calls[0][0];
         expect(screen).toEqual('history');
     });
-
 });

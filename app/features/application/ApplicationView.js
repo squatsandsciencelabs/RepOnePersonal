@@ -123,26 +123,26 @@ class ApplicationView extends Component {
     );
 
     _renderApplication() {
-         if (Platform.OS === 'ios') {
+        if (Platform.OS === 'ios') {
             var statusBarBG = (
                 <View style={[{ width: 9001 }, styles.statusBar]} />
             );
         } else {
             var statusBarBG = null;
-         }
+        }
 
         return (
             <View style={[{ flex: 1 }, styles.container]}>
                 <StatusBar backgroundColor="#333333" barStyle="light-content" />
                 {statusBarBG}
-                    <TabView
-                        style={{ flex: 1 }}
-                        navigationState={this.state}
-                        renderScene={NavigationConfig.sceneMap}
-                        renderTabBar={this._renderHeader}
-                        onIndexChange={index => this.props.changeTab(index)}
-                    />
-                    <SurveyModalScreen />
+                <TabView
+                    style={{ flex: 1 }}
+                    navigationState={this.state}
+                    renderScene={NavigationConfig.sceneMap}
+                    renderTabBar={this._renderHeader}
+                    onIndexChange={index => this.props.changeTab(index)}
+                />
+                <SurveyModalScreen />
             </View>
         );
     }
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     statusBar: {
         height: Device.hasDynamicIsland() ? 50 : Device.hasNotch() ? 30 : 20,
-        backgroundColor: Device.hasNotch() ? '#333333' : 'black'
+        backgroundColor: Device.hasNotch() ? '#333333' : 'black',
     },
 });
 

@@ -9,11 +9,9 @@ import {
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
-
     INSTALL_OTA_ATTEMPT,
     CANCEL_INSTALL_OTA,
     INSTALL_OTA_PROGRESS,
-
     CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 
@@ -28,7 +26,7 @@ export const OTAStatus = {
 
 // device can be obtained from the deviceReducer
 const defaultState = {
-    firmwareVersion: "0.0.1",
+    firmwareVersion: '0.0.1',
     firmwareDescription: '',
     progress: 0, // 0-100
 

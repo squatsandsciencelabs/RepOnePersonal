@@ -9,25 +9,33 @@ import * as Actions from './EditHistoryFilterExerciseActions';
 const title = 'Edit Exercise';
 const placeholder = 'Enter Exercise';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     title,
     placeholder,
     text: HistorySelectors.getEditingFilterExerciseName(state),
-    generateSingleInputSuggestions: (input) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input) },
+    generateSingleInputSuggestions: input => {
+        return SuggestionsSelectors.generateExerciseNameSuggestions(
+            state,
+            input,
+        );
+    },
     isModalShowing: HistorySelectors.getIsEditingHistoryFilterExercise(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSetSingleInput: Actions.saveExerciseName,
-        closeModal: Actions.dismissExercise,
-        cancelModal: Actions.cancelExercise,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSetSingleInput: Actions.saveExerciseName,
+            closeModal: Actions.dismissExercise,
+            cancelModal: Actions.cancelExercise,
+        },
+        dispatch,
+    );
 };
 
 const EditHistoryFilterExerciseScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditTextModal);
 
 export default EditHistoryFilterExerciseScreen;

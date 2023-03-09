@@ -13,7 +13,7 @@ import {
 
 import * as SuggestionsActionCreators from 'app/redux/shared_actions/SuggestionsActionCreators';
 
-const SuggestionsSaga = function * SuggestionsSaga() {
+const SuggestionsSaga = function* SuggestionsSaga() {
     yield fork(exerciseSuggestions);
     yield fork(tagSuggestions);
     yield fork(bothSuggestions);
@@ -37,7 +37,13 @@ function* tagSuggestions() {
 
 function* bothSuggestions() {
     while (true) {
-        yield take([LOGIN_SUCCESS, LOGOUT, STORE_INITIALIZED, UPDATE_SET_DATA_FROM_SERVER, TEST_1RM]);
+        yield take([
+            LOGIN_SUCCESS,
+            LOGOUT,
+            STORE_INITIALIZED,
+            UPDATE_SET_DATA_FROM_SERVER,
+            TEST_1RM,
+        ]);
         yield put(SuggestionsActionCreators.updateExerciseSuggestions());
         yield put(SuggestionsActionCreators.updateTagSuggestions());
     }

@@ -72,9 +72,21 @@ class VideoButton extends Component {
         switch (this.props.mode) {
             case 'record':
                 return (
-                    <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedRecord()}>
-                        <View style={[{flex:1, flexDirection:'column'}, styles.button, styles.activeButton]}>
-                            <Icon name="camera" size={20} color='rgba(47, 128, 227, 1)' style={{marginTop: 10, marginBottom: 5}} />
+                    <TouchableOpacity
+                        style={{ paddingLeft: 5 }}
+                        onPress={() => this._tappedRecord()}>
+                        <View
+                            style={[
+                                { flex: 1, flexDirection: 'column' },
+                                styles.button,
+                                styles.activeButton,
+                            ]}>
+                            <Icon
+                                name="camera"
+                                size={20}
+                                color="rgba(47, 128, 227, 1)"
+                                style={{ marginTop: 10, marginBottom: 5 }}
+                            />
                             <Text style={styles.activeText}>Record</Text>
                             <Text style={styles.activeText}>Video</Text>
                         </View>
@@ -82,13 +94,34 @@ class VideoButton extends Component {
                 );
             case 'commentary':
                 return (
-                    <View style={{paddingLeft: 5}}>
-                        <View style={[{flex:1}, styles.button, styles.grayButton]}>
-                            <TouchableHighlight onPress={()=> this._tappedCommentary()} underlayColor='#e0e0e0'>
-                                <View style={[styles.buttonContent, {flex:1, flexDirection:'column'}]}>
-                                    <Icon name="camera" size={20} color='gray' style={{marginTop: 10, marginBottom: 5}} />
+                    <View style={{ paddingLeft: 5 }}>
+                        <View
+                            style={[
+                                { flex: 1 },
+                                styles.button,
+                                styles.grayButton,
+                            ]}>
+                            <TouchableHighlight
+                                onPress={() => this._tappedCommentary()}
+                                underlayColor="#e0e0e0">
+                                <View
+                                    style={[
+                                        styles.buttonContent,
+                                        { flex: 1, flexDirection: 'column' },
+                                    ]}>
+                                    <Icon
+                                        name="camera"
+                                        size={20}
+                                        color="gray"
+                                        style={{
+                                            marginTop: 10,
+                                            marginBottom: 5,
+                                        }}
+                                    />
                                     <Text style={styles.grayText}>Add</Text>
-                                    <Text style={styles.grayText}>Video Log</Text>
+                                    <Text style={styles.grayText}>
+                                        Video Log
+                                    </Text>
                                 </View>
                             </TouchableHighlight>
                         </View>
@@ -96,7 +129,9 @@ class VideoButton extends Component {
                 );
             case 'watch':
                 return (
-                    <TouchableOpacity style={{paddingLeft: 5}} onPress={()=> this._tappedWatchVideo() }>
+                    <TouchableOpacity
+                        style={{ paddingLeft: 5 }}
+                        onPress={() => this._tappedWatchVideo()}>
                         <View style={[styles.button, styles.blackButton]}>
                             {this.state.uri !== null && (
                                 <Image
@@ -116,7 +151,9 @@ class VideoButton extends Component {
                     </TouchableOpacity>
                 );
             default:
-                console.tron.log("video button props failed with mode " + this.props.mode);
+                console.tron.log(
+                    'video button props failed with mode ' + this.props.mode,
+                );
                 return null;
         }
     }
@@ -156,11 +193,11 @@ const styles = StyleSheet.create({
     activeText: {
         color: 'rgba(47, 128, 227, 1)',
         fontSize: 11,
-        fontWeight: '500'
+        fontWeight: '500',
     },
     grayText: {
         color: 'rgba(77, 77, 77, 1)',
-        fontSize: 11
+        fontSize: 11,
     },
 });
 

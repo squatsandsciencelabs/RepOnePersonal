@@ -5,12 +5,15 @@ import VideoButton from 'app/shared_features/set_card/expanded/VideoButton';
 import * as Actions from './EditHistorySetFormActions';
 import * as HistorySelectors from 'app/redux/selectors/HistorySelectors';
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        tappedRecord: Actions.presentRecordVideo,
-        tappedCommentary: Actions.presentRecordCommentary,
-        tappedWatch: Actions.presentWatchVideo
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            tappedRecord: Actions.presentRecordVideo,
+            tappedCommentary: Actions.presentRecordCommentary,
+            tappedWatch: Actions.presentWatchVideo,
+        },
+        dispatch,
+    );
 };
 
 const mapStateToProps = state => ({

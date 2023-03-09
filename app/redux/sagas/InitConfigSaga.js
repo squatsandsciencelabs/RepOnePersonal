@@ -1,24 +1,15 @@
-import {
-    takeEvery,
-    put,
-    apply,
-    all,
-    call,
-    select,
-} from 'redux-saga/effects';
+import { takeEvery, put, apply, all, call, select } from 'redux-saga/effects';
 
-import { 
+import {
     STORE_INITIALIZED,
     CONFIG_READY,
 } from 'app/configs+constants/ActionTypes';
 import firebase from 'app/services/Firebase';
 import * as Analytics from 'app/services/Analytics';
 
-export default function * FetchConfigSaga() {
-    yield all([
-        takeEvery(STORE_INITIALIZED, fetchConfig),
-    ]);
-};
+export default function* FetchConfigSaga() {
+    yield all([takeEvery(STORE_INITIALIZED, fetchConfig)]);
+}
 
 function* fetchConfig() {
     try {
@@ -42,6 +33,6 @@ function* fetchConfig() {
     }
 }
 
-const logInitSurveyURLErrorAnalytics = (error) => {
+const logInitSurveyURLErrorAnalytics = error => {
     Analytics.logError(error, 'init_survey_url_error', {});
 };

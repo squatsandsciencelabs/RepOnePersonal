@@ -43,35 +43,35 @@ const DurationsReducer = (state = defaultState, action) => {
     switch (action.type) {
         case PRESENT_WORKOUT_EXERCISE:
             return Object.assign({}, state, {
-                editWorkoutExerciseStart: Date.now()
+                editWorkoutExerciseStart: Date.now(),
             });
         case PRESENT_HISTORY_EXERCISE:
             return Object.assign({}, state, {
-                editHistoryExerciseStart: Date.now()
+                editHistoryExerciseStart: Date.now(),
             });
         case START_EDITING_WORKOUT_RPE:
             return Object.assign({}, state, {
-                editWorkoutRPEStart: Date.now()
+                editWorkoutRPEStart: Date.now(),
             });
         case START_EDITING_HISTORY_RPE:
             return Object.assign({}, state, {
-                editHistoryRPEStart: Date.now()
+                editHistoryRPEStart: Date.now(),
             });
-        case START_EDITING_WORKOUT_WEIGHT: 
+        case START_EDITING_WORKOUT_WEIGHT:
             return Object.assign({}, state, {
-                editWorkoutWeightStart: Date.now()
+                editWorkoutWeightStart: Date.now(),
             });
-        case START_EDITING_HISTORY_WEIGHT: 
+        case START_EDITING_HISTORY_WEIGHT:
             return Object.assign({}, state, {
-                editHistoryWeightStart: Date.now()
+                editHistoryWeightStart: Date.now(),
             });
         case PRESENT_WORKOUT_TAGS:
             return Object.assign({}, state, {
-                editWorkoutTagsStart: Date.now()
+                editWorkoutTagsStart: Date.now(),
             });
         case PRESENT_HISTORY_TAGS:
             return Object.assign({}, state, {
-                editHistoryTagsStart: Date.now()
+                editHistoryTagsStart: Date.now(),
             });
         case PRESENT_HISTORY_KRATOS_DISCS:
             return {
@@ -80,19 +80,19 @@ const DurationsReducer = (state = defaultState, action) => {
             };
         case PRESENT_WORKOUT_VIDEO_RECORDER:
             return Object.assign({}, state, {
-                workoutVideoRecorderStart: Date.now()
+                workoutVideoRecorderStart: Date.now(),
             });
         case PRESENT_HISTORY_VIDEO_RECORDER:
             return Object.assign({}, state, {
-                historyVideoRecorderStart: Date.now()
+                historyVideoRecorderStart: Date.now(),
             });
-        case PRESENT_WORKOUT_VIDEO_PLAYER: 
+        case PRESENT_WORKOUT_VIDEO_PLAYER:
             return Object.assign({}, state, {
-                workoutVideoPlayerStart: Date.now()
+                workoutVideoPlayerStart: Date.now(),
             });
         case PRESENT_HISTORY_VIDEO_PLAYER:
             return Object.assign({}, state, {
-                historyVideoPlayerStart: Date.now()
+                historyVideoPlayerStart: Date.now(),
             });
         case PRESENT_WORKOUT_KRATOS_DISCS:
             return {
@@ -100,7 +100,7 @@ const DurationsReducer = (state = defaultState, action) => {
                 editWorkoutKratosDiscsStart: Date.now(),
             };
         default:
-            return state;                                                                                                                                  
+            return state;
     }
 };
 

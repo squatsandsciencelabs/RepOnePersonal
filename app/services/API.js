@@ -8,19 +8,19 @@ import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators
 // note: dispatch is required on every call in this case specifically so the token system can save the new access and refresh tokens
 // otherwise, rely on the completion handler so the action creator thunk that calls thie API can appropriately handle the action
 const API = {
-
     postUpdatedSetData: (sets, validator) => {
         return new Promise((resolve, reject) => {
             if (validator.isValid) {
                 executeRequest('POST', 'sets', sets, validator.accessToken)
-                .then((json) => {
-                    resolve(json);
-                }).catch((error) => {
-                    // TODO: check if this will work, I'm assuming that the error will always be an action
-                    reject(error);
-                });
+                    .then(json => {
+                        resolve(json);
+                    })
+                    .catch(error => {
+                        // TODO: check if this will work, I'm assuming that the error will always be an action
+                        reject(error);
+                    });
             } else {
-                reject(new Error("has not been atleast two weeks"));
+                reject(new Error('has not been atleast two weeks'));
             }
         });
     },
@@ -28,100 +28,127 @@ const API = {
     postAnonymousSetData: (sets, validator) => {
         return new Promise((resolve, reject) => {
             if (validator.isValid) {
-                executeRequest('POST', 'anonymous-sets', sets, validator.accessToken)
-                .then((json) => {
-                    resolve(json);
-                }).catch((error) => {
-                    // TODO: check if this will work, I'm assuming that the error will always be an action
-                    reject(error);
-                });
+                executeRequest(
+                    'POST',
+                    'anonymous-sets',
+                    sets,
+                    validator.accessToken,
+                )
+                    .then(json => {
+                        resolve(json);
+                    })
+                    .catch(error => {
+                        // TODO: check if this will work, I'm assuming that the error will always be an action
+                        reject(error);
+                    });
             } else {
-                reject(new Error("has not been atleast two weeks"));
+                reject(new Error('has not been atleast two weeks'));
             }
         });
     },
 
-    login: (googleToken) => {
+    login: googleToken => {
         return new Promise((resolve, reject) => {
             executeRequest('POST', 'login', { token: googleToken })
-            .then((json) => {
-                resolve(json);
-            }).catch((error) => {
-                // TODO: check if this will work, I'm assuming that the error will always be an action
-                reject(error);
-            });
+                .then(json => {
+                    resolve(json);
+                })
+                .catch(error => {
+                    // TODO: check if this will work, I'm assuming that the error will always be an action
+                    reject(error);
+                });
         });
     },
 
     loginAnonymously: () => {
         return new Promise((resolve, reject) => {
             executeRequest('POST', 'login-anonymously')
-            .then((json) => {
-                resolve(json);
-            }).catch((error) => {
-                // TODO: check if this will work, I'm assuming that the error will always be an action
-                reject(error);
-            });
+                .then(json => {
+                    resolve(json);
+                })
+                .catch(error => {
+                    // TODO: check if this will work, I'm assuming that the error will always be an action
+                    reject(error);
+                });
         });
     },
 
     sync: (revision, validator) => {
-        console.tron.log("sync with rev " + revision);
+        console.tron.log('sync with rev ' + revision);
         return new Promise((resolve, reject) => {
             if (validator.isValid) {
-                executeRequest('POST', 'sync', { revision: revision }, validator.accessToken)
-                .then((json) => {
-                    // TODO: see if need undefined checks
-                    console.tron.log("sync success " + json);
-                    resolve(json);
-                }).catch((error) => {
-                    // TODO: check if this will work, I'm assuming that the error will always be an action
-                    reject(error);
-                });
+                executeRequest(
+                    'POST',
+                    'sync',
+                    { revision: revision },
+                    validator.accessToken,
+                )
+                    .then(json => {
+                        // TODO: see if need undefined checks
+                        console.tron.log('sync success ' + json);
+                        resolve(json);
+                    })
+                    .catch(error => {
+                        // TODO: check if this will work, I'm assuming that the error will always be an action
+                        reject(error);
+                    });
             } else {
-                reject(new Error('has not been atleast two weeks'))
+                reject(new Error('has not been atleast two weeks'));
             }
         });
     },
 
-    obtainNewTokens: (refreshToken) => {
+    obtainNewTokens: refreshToken => {
         return new Promise((resolve, reject) => {
             if (refreshToken === null || refreshToken === undefined) {
                 // no refresh token, force logout
                 reject(AuthActionCreators.logout(true));
             } else {
                 executeRequest('POST', 'token', { refreshToken: refreshToken })
-                .then((json) => {
-                    resolve(json);
-                }).catch((error) => {
-                    // TODO: check if this will work, I'm assuming that the error will always be an action
-                    reject(error);
-                });
+                    .then(json => {
+                        resolve(json);
+                    })
+                    .catch(error => {
+                        // TODO: check if this will work, I'm assuming that the error will always be an action
+                        reject(error);
+                    });
             }
         });
     },
 
-    obtainNewAnonymousTokens: (refreshToken) => {
+    obtainNewAnonymousTokens: refreshToken => {
         return new Promise((resolve, reject) => {
             if (refreshToken === null || refreshToken === undefined) {
                 // no refresh token, logout
                 reject(AuthActionCreators.logout(false));
             } else {
-                executeRequest('POST', 'anonymous-token', { refreshToken: refreshToken })
-                .then((json) => {
-                    resolve(json);
-                }).catch((error) => {
-                    // TODO: check if this will work, I'm assuming that the error will always be an action
-                    reject(error);
-                });
+                executeRequest('POST', 'anonymous-token', {
+                    refreshToken: refreshToken,
+                })
+                    .then(json => {
+                        resolve(json);
+                    })
+                    .catch(error => {
+                        // TODO: check if this will work, I'm assuming that the error will always be an action
+                        reject(error);
+                    });
             }
         });
     },
 };
 
-const executeRequest = (method, endpoint, body, accessToken=null) => {
+const executeRequest = (method, endpoint, body, accessToken = null) => {
     return new Promise(async (resolve, reject) => {
-        console.tron.log("Executing request " + method + " " + endpoint + " " + JSON.stringify(body) + " " + accessToken);
+        console.tron.log(
+            'Executing request ' +
+                method +
+                ' ' +
+                endpoint +
+                ' ' +
+                JSON.stringify(body) +
+                ' ' +
+                accessToken,
+        );
 
         // build up the properties
         var authorizedRequest = false;
@@ -129,58 +156,78 @@ const executeRequest = (method, endpoint, body, accessToken=null) => {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Cache-Control': 'no-store, no-cache, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
+                Pragma: 'no-cache',
+                Expires: '0',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         };
         if (accessToken !== undefined && accessToken !== null) {
-            requestProperties.headers['Authorization'] = 'Bearer ' + accessToken;
+            requestProperties.headers['Authorization'] =
+                'Bearer ' + accessToken;
             authorizedRequest = true;
         }
 
         try {
-            let response = await fetch(OpenBarbellConfig.baseURL + endpoint, requestProperties);
+            let response = await fetch(
+                OpenBarbellConfig.baseURL + endpoint,
+                requestProperties,
+            );
             let status = await response.status;
 
-            switch(true) {
-                case (status === 401):
-                    console.tron.log("401 on request to " + endpoint);
+            switch (true) {
+                case status === 401:
+                    console.tron.log('401 on request to ' + endpoint);
                     if (authorizedRequest === true) {
-                        console.tron.log("401 on authorized call to " + endpoint + " should invalidate tokens");
+                        console.tron.log(
+                            '401 on authorized call to ' +
+                                endpoint +
+                                ' should invalidate tokens',
+                        );
                         reject(AuthActionCreators.requestReauthenticate());
                     } else {
-                        reject({type: "401"});
+                        reject({ type: '401' });
                     }
                     break;
-                case (status >= 200 && status < 300):
+                case status >= 200 && status < 300:
                     try {
                         // attempt to get json
                         let json = await response.json();
-                        console.tron.log("200! response is " + JSON.stringify(json));
+                        console.tron.log(
+                            '200! response is ' + JSON.stringify(json),
+                        );
                         resolve(json);
                     } catch (err) {
                         // success, this particular request has no JSON
-                        console.tron.log("200 with err " + err.message + " response is not JSON parsable");
+                        console.tron.log(
+                            '200 with err ' +
+                                err.message +
+                                ' response is not JSON parsable',
+                        );
 
                         // success!
                         resolve();
                     }
                     break;
                 default:
-                    console.tron.log("Not 401 or in the 200s, blah");
-                    reject({type:"Oops, something went wrong it's not 200 it's " + status});
+                    console.tron.log('Not 401 or in the 200s, blah');
+                    reject({
+                        type:
+                            "Oops, something went wrong it's not 200 it's " +
+                            status,
+                    });
             }
         } catch (err) {
-            console.tron.log("Error with request " + endpoint + " error: " + err);
+            console.tron.log(
+                'Error with request ' + endpoint + ' error: ' + err,
+            );
             if (err) {
                 var message = JSON.stringify(err);
             } else {
-                var message = "unknown error";
+                var message = 'unknown error';
             }
-            reject({type: message});
+            reject({ type: message });
         }
     });
 };

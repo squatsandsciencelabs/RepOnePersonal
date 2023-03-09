@@ -6,10 +6,12 @@ import * as Actions from './SettingsOTAActions';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        deviceFirmwareVersion: ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
-        connectedDevice: ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
+        deviceFirmwareVersion:
+            ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+        connectedDevice:
+            ConnectedDeviceStatusSelectors.getConnectedDeviceName(state),
         firmwareVersion: OTASelectors.getFirmwareVersion(state),
         firmwareDescription: OTASelectors.getFirmwareDescription(state),
         status: OTASelectors.getStatus(state),
@@ -17,19 +19,22 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        download: Actions.download,
-        cancelDownload: Actions.cancelDownload,
-        deleteDownload: Actions.deleteDownload,
-        install: Actions.install,
-        cancelInstall: Actions.cancelInstall,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            download: Actions.download,
+            cancelDownload: Actions.cancelDownload,
+            deleteDownload: Actions.deleteDownload,
+            install: Actions.install,
+            cancelInstall: Actions.cancelInstall,
+        },
+        dispatch,
+    );
 };
 
 const SettingsOTAScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(SettingsOTAPanel);
 
 export default SettingsOTAScreen;

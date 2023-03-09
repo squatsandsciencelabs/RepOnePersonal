@@ -10,9 +10,13 @@ export const saveTags = (tags = []) => ({
     tags: tags,
 });
 
-export const dismissTags = () => ({ type: DISMISS_HISTORY_FILTER_INCLUDES_TAGS });
+export const dismissTags = () => ({
+    type: DISMISS_HISTORY_FILTER_INCLUDES_TAGS,
+});
 
-export const cancelTags = () => ({ type: DISMISS_HISTORY_FILTER_INCLUDES_TAGS });;
+export const cancelTags = () => ({
+    type: DISMISS_HISTORY_FILTER_INCLUDES_TAGS,
+});
 
 export const tappedPill = () => ({ type: REMOVE_HISTORY_FILTER_INCLUDE_TAG });
 

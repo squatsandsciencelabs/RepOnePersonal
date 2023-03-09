@@ -7,22 +7,25 @@ import * as Actions from './ExercisePickerActions';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isModalShowing: AnalysisSelectors.getIsEditingExercise(state),
     items: SetsSelectors.generateExerciseItems(state),
-    selectedValue: AnalysisSelectors.getExercise(state)
+    selectedValue: AnalysisSelectors.getExercise(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        selectValue: Actions.saveSelected1RMExercise,
-        closeModal: Actions.dismissSelectExercise
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            selectValue: Actions.saveSelected1RMExercise,
+            closeModal: Actions.dismissSelectExercise,
+        },
+        dispatch,
+    );
 };
 
 const ExercisePicker = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(PickerModal);
 
 export default ExercisePicker;

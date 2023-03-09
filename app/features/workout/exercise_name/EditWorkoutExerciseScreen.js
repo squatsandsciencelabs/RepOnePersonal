@@ -9,27 +9,36 @@ import * as Actions from './EditWorkoutExerciseActions';
 const title = 'Edit Exercise';
 const placeholder = 'Enter Exercise';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     title,
     placeholder,
     text: WorkoutSelectors.getEditingExerciseName(state),
     setID: WorkoutSelectors.getEditingExerciseSetID(state),
     bias: WorkoutSelectors.getEditingExerciseBias(state),
-    generateSingleInputSuggestions: (input, bias) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input, bias) },
-    isModalShowing: state.workout.editingExerciseSetID !== null
+    generateSingleInputSuggestions: (input, bias) => {
+        return SuggestionsSelectors.generateExerciseNameSuggestions(
+            state,
+            input,
+            bias,
+        );
+    },
+    isModalShowing: state.workout.editingExerciseSetID !== null,
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSetSingleInput: Actions.saveExerciseName,
-        closeModal: Actions.dismissExercise,
-        cancelModal: Actions.cancelExercise,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSetSingleInput: Actions.saveExerciseName,
+            closeModal: Actions.dismissExercise,
+            cancelModal: Actions.cancelExercise,
+        },
+        dispatch,
+    );
 };
 
 const EditWorkoutExerciseScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditTextModal);
 
 export default EditWorkoutExerciseScreen;

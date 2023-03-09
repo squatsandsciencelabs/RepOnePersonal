@@ -13,52 +13,63 @@ import SettingsOTAInstallingPanel from './panels/SettingsOTAInstallingPanel';
 import SettingsOTAReadyPanel from './panels/SettingsOTAReadyPanel';
 
 class SettingsOTAPanel extends Component {
-
     _renderContents() {
-        switch ( this.props.status ) {
+        switch (this.props.status) {
             case OTAStatus.UPDATE_APP:
-                return <SettingsOTAUpdateAppPanel
+                return (
+                    <SettingsOTAUpdateAppPanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         firmwareDescription={this.props.firmwareDescription}
-                        />
+                    />
+                );
             case OTAStatus.AVAILABLE:
-                return <SettingsOTAAvailablePanel
+                return (
+                    <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         firmwareDescription={this.props.firmwareDescription}
                         download={this.props.download}
-                        />;
+                    />
+                );
             case OTAStatus.DOWNLOADING:
-                return <SettingsOTADownloadingPanel
+                return (
+                    <SettingsOTADownloadingPanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         cancelDownload={this.props.cancelDownload}
-                        />
+                    />
+                );
             case OTAStatus.DOWNLOAD_FAILED:
-                return <SettingsOTADownloadFailedPanel
+                return (
+                    <SettingsOTADownloadFailedPanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         download={this.props.download}
                         cancelDownload={this.props.cancelDownload}
-                        />
+                    />
+                );
             case OTAStatus.READY:
-                return <SettingsOTAReadyPanel
+                return (
+                    <SettingsOTAReadyPanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         connectedDevice={this.props.connectedDevice}
                         deleteDownload={this.props.deleteDownload}
                         install={this.props.install}
-                        />
+                    />
+                );
             case OTAStatus.INSTALLING:
-                return <SettingsOTAInstallingPanel
+                return (
+                    <SettingsOTAInstallingPanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         connectedDevice={this.props.connectedDevice}
                         deleteDownload={this.props.deleteDownload}
                         cancelInstall={this.props.cancelInstall}
                         progress={this.props.progress}
-                        />
+                    />
+                );
             default:
                 return null;
         }
@@ -67,9 +78,9 @@ class SettingsOTAPanel extends Component {
     // TODO: bold the version numbers
     render() {
         return (
-            <View style={ [SETTINGS_PANEL_STYLES.panel, { flex: 1 }] }>
-                <View style={ SETTINGS_PANEL_STYLES.header }>
-                    <Text style={ SETTINGS_PANEL_STYLES.headerText }>
+            <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
+                <View style={SETTINGS_PANEL_STYLES.header}>
+                    <Text style={SETTINGS_PANEL_STYLES.headerText}>
                         Update Firmware
                     </Text>
                 </View>

@@ -1,3 +1,3 @@
-import application from './app/Application'
+import application from './app/Application';
 
-application()
+application();

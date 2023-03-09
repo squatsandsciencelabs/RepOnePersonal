@@ -7,26 +7,29 @@ import * as Actions from './SettingsMetricActions';
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
 
 const items = [
-    {label: 'kgs', value: 'kgs'},
-    {label: 'lbs', value: 'lbs'}
+    { label: 'kgs', value: 'kgs' },
+    { label: 'lbs', value: 'lbs' },
 ];
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isModalShowing: SettingsSelectors.getIsEditingDefaultMetric(state),
     items,
-    selectedValue: SettingsSelectors.getDefaultMetric(state)
+    selectedValue: SettingsSelectors.getDefaultMetric(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        selectValue: Actions.saveDefaultMetricSetting,
-        closeModal: Actions.dismissDefaultMetricSetter
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            selectValue: Actions.saveDefaultMetricSetting,
+            closeModal: Actions.dismissDefaultMetricSetter,
+        },
+        dispatch,
+    );
 };
 
 const SettingsMetric = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(PickerModal);
 
 export default SettingsMetric;

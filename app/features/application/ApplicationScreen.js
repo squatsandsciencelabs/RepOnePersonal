@@ -28,25 +28,28 @@ const isUpgradeAvailable = createSelector(
             return false;
         }
         return isVersionGreaterThan(availableFirmware, deviceFirmware);
-    }
+    },
 );
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     tabIndex: AppStateSelectors.getTabIndex(state),
     killSwitch: state.killSwitch,
     isUpgradeAvailable: isUpgradeAvailable(state),
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        changeTab: Actions.changeTab,
-        load: Actions.load
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            changeTab: Actions.changeTab,
+            load: Actions.load,
+        },
+        dispatch,
+    );
 };
 
 const ApplicationScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(ApplicationView);
 
 export default ApplicationScreen;

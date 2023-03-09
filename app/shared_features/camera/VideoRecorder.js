@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 function record(props, camera) {
     camera.current.startRecording({
-        onRecordingFinished: async (video) => {
+        onRecordingFinished: async video => {
             try {
                 // save to gallery
                 const uri = await CameraRoll.save(video.path);
@@ -32,14 +32,16 @@ function record(props, camera) {
                 props.saveVideoError(props.setID, err);
             }
         },
-        onRecordingError: (err) => {
+        onRecordingError: err => {
             let error = err;
             if (!(err instanceof Error)) {
-                error = new Error(err.message, {cause: err.cause});
+                error = new Error(err.message, { cause: err.cause });
             }
             console.tron.log(`onRecordingError ${JSON.stringify(error)}`);
             props.saveVideoError(props.setID, error);
-            Alert.alert('There was an issue saving your video. Please try again');
+            Alert.alert(
+                'There was an issue saving your video. Please try again',
+            );
         },
     });
 }
@@ -48,14 +50,15 @@ function record(props, camera) {
 // Just wasn't sure that timer could be declared within useEffect as it runs every time isRecording changes
 let timer = null;
 
-export default (props) => {
+export default props => {
     const camera = useRef(null);
     const wideAngleDevices = useCameraDevices(`wide-angle-camera`);
     // We want the default to be wide-camera-angle but it's causing an android camera issue as
-    // not all devices have wide-camera-angle camera type. 
+    // not all devices have wide-camera-angle camera type.
     const devices = useCameraDevices();
     // If there is no wide-camera-angle, use the default one
-    const device = wideAngleDevices[props.cameraType] || devices[props.cameraType];
+    const device =
+        wideAngleDevices[props.cameraType] || devices[props.cameraType];
 
     useEffect(() => {
         if (props.isRecording) {
@@ -86,7 +89,7 @@ export default (props) => {
     }, [props.isRecording]);
     if (device == null) return null;
     return (
-        <Modal visible={props.isModalShowing} animationType='fade'>
+        <Modal visible={props.isModalShowing} animationType="fade">
             {renderCamera(props, camera, device)}
         </Modal>
     );
@@ -99,33 +102,45 @@ function renderCamera(props, camera, device) {
     }
     activateKeepAwake();
 
-    return (<View style={[{ flex: 1 }, styles.container]}>
-        <Camera
-            ref={camera}
-            style={{ flex: 1 }}
-            device={device}
-            video={true}
-            audio={true}
-            isActive={true}
-        />
-        <View style={styles.cancelButton}>
-            <View>
-                <TouchableOpacity onPress={() => {
-                    if (!timer) {
-                        props.closeModal(props.setID);
-                    }
-                }}>
-                    <View><Text style={styles.cancelText}>Cancel</Text></View>
-                </TouchableOpacity>
+    return (
+        <View style={[{ flex: 1 }, styles.container]}>
+            <Camera
+                ref={camera}
+                style={{ flex: 1 }}
+                device={device}
+                video={true}
+                audio={true}
+                isActive={true}
+            />
+            <View style={styles.cancelButton}>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!timer) {
+                                props.closeModal(props.setID);
+                            }
+                        }}>
+                        <View>
+                            <Text style={styles.cancelText}>Cancel</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
 
-        <View style={{ position: 'absolute', bottom: 50, left: 0, right: 0, alignItems: 'center' }}>
-            {renderActionButton(props)}
-        </View>
+            <View
+                style={{
+                    position: 'absolute',
+                    bottom: 50,
+                    left: 0,
+                    right: 0,
+                    alignItems: 'center',
+                }}>
+                {renderActionButton(props)}
+            </View>
 
-        {renderToggleCameraTypeButton(props)}
-    </View>);
+            {renderToggleCameraTypeButton(props)}
+        </View>
+    );
 }
 
 function renderActionButton(props) {
@@ -157,13 +172,23 @@ function renderActionButton(props) {
 function renderToggleCameraTypeButton(props) {
     // need to return empty view as button remains but is not clickable if not returning anything
     if (props.isRecording || props.isSaving) {
-        return <View></View>
+        return <View></View>;
     } else {
         return (
             <View style={styles.flipButton}>
                 <TouchableOpacity onPress={() => props.toggleCameraType()}>
                     <View>
-                        <Icon name="repeat" size={30} style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: 10, borderRadius: 22.5, overflow: 'hidden' }} color='white' />
+                        <Icon
+                            name="repeat"
+                            size={30}
+                            style={{
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                padding: 10,
+                                borderRadius: 22.5,
+                                overflow: 'hidden',
+                            }}
+                            color="white"
+                        />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -173,14 +198,14 @@ function renderToggleCameraTypeButton(props) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'black'
+        backgroundColor: 'black',
     },
     actionButton: {
         width: 70,
         height: 70,
         borderRadius: 70,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     startButton: {
         backgroundColor: 'green',
@@ -189,7 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
     },
     savingButton: {
-        backgroundColor: 'darkgray'
+        backgroundColor: 'darkgray',
     },
     buttonText: {
         color: 'white',
@@ -211,7 +236,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 30,
         paddingTop: 5,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     flipButton: {
         alignItems: 'flex-end',
@@ -219,7 +244,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000000',
         position: 'absolute',
         bottom: 60,
-        right: 0
+        right: 0,
     },
     flipIcon: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

@@ -5,37 +5,37 @@ import configureMockStore from 'redux-mock-store';
 import * as Analytics from 'app/services/Analytics';
 import * as sut from 'app/redux/shared_actions/SurveyActionCreators';
 
-const middlewares = [ thunk ];
+const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 var logScreenSpy = null;
 var store = null;
 
 describe('SettingsActionCreators', () => {
-
     const expectedURL = 'foobar';
 
     beforeEach(() => {
-        logScreenSpy = jest.spyOn(Analytics, 'setCurrentScreen').mockImplementation(() => {});        
+        logScreenSpy = jest
+            .spyOn(Analytics, 'setCurrentScreen')
+            .mockImplementation(() => {});
         store = mockStore({
             survey: {
-                surveyURL: expectedURL
-            }
+                surveyURL: expectedURL,
+            },
         });
     });
 
     afterEach(() => {
-        logScreenSpy.mockReset();        
+        logScreenSpy.mockReset();
     });
 
     afterAll(() => {
         logScreenSpy.mockRestore();
-    });   
+    });
 
     test('presentSurvey sets screen to survey', () => {
         store.dispatch(sut.presentSurvey());
-        
+
         const screen = logScreenSpy.mock.calls[0][0];
         expect(screen).toEqual('survey');
     });
-
 });

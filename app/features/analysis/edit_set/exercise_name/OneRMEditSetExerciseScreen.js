@@ -9,7 +9,7 @@ import * as Actions from './OneRMEditSetExerciseActions';
 const title = 'Edit Exercise';
 const placeholder = 'Enter Exercise';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const setID = AnalysisSelectors.getEditingExerciseSetID(state);
 
     return {
@@ -17,22 +17,30 @@ const mapStateToProps = (state) => {
         placeholder,
         text: AnalysisSelectors.getEditingExerciseName(state),
         setID: setID,
-        generateSingleInputSuggestions: (input) => { return SuggestionsSelectors.generateExerciseNameSuggestions(state, input) },
+        generateSingleInputSuggestions: input => {
+            return SuggestionsSelectors.generateExerciseNameSuggestions(
+                state,
+                input,
+            );
+        },
         isModalShowing: setID !== null,
     };
-}
+};
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        saveSetSingleInput: Actions.saveExerciseName,
-        closeModal: Actions.dismissExercise,
-        cancelModal: Actions.cancelExercise,
-    }, dispatch);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveSetSingleInput: Actions.saveExerciseName,
+            closeModal: Actions.dismissExercise,
+            cancelModal: Actions.cancelExercise,
+        },
+        dispatch,
+    );
 };
 
 const OneRMEditSetExerciseScreen = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(EditTextModal);
 
 export default OneRMEditSetExerciseScreen;

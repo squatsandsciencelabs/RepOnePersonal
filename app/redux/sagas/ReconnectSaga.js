@@ -4,13 +4,13 @@ import { Alert } from 'react-native';
 import {
     DISCONNECTED_FROM_DEVICE,
     FOUND_DEVICE,
-    STOP_RECONNECT
+    STOP_RECONNECT,
 } from 'app/configs+constants/ActionTypes';
 import * as DeviceActionCreators from 'app/redux/shared_actions/DeviceActionCreators';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
 import * as Analytics from 'app/services/Analytics';
 
-const ReconnectSaga = function * ReconnectSaga() {
+const ReconnectSaga = function* ReconnectSaga() {
     while (true) {
         // reconnect
         const task = yield fork(executeReconnect);
@@ -38,13 +38,16 @@ function* executeReconnect() {
 
         // alert
         if (!OTASelectors.getIsInstalling(state)) {
-            Alert.alert("Reconnecting!", "It looks like you disconnected, make sure your phone is within range and reduce interference from other bluetooth devices.");
+            Alert.alert(
+                'Reconnecting!',
+                'It looks like you disconnected, make sure your phone is within range and reduce interference from other bluetooth devices.',
+            );
         }
 
         // set reconnect mode and scan
         yield put(DeviceActionCreators.reconnectingToDevice(reconnectDevice));
         yield put(DeviceActionCreators.startDeviceScan());
-        const restartReconnectTask = yield fork(restartReconnect);        
+        const restartReconnectTask = yield fork(restartReconnect);
 
         // find the device
         let foundDevice = null;
@@ -54,11 +57,13 @@ function* executeReconnect() {
             foundDevice = scanAction.deviceName;
             foundIdentifier = scanAction.deviceIdentifier;
         }
-        yield cancel(restartReconnectTask);        
+        yield cancel(restartReconnectTask);
 
         // stop scan and connect
         yield put(DeviceActionCreators.stopDeviceScan());
-        yield put(DeviceActionCreators.reconnectDevice(foundDevice, foundIdentifier));
+        yield put(
+            DeviceActionCreators.reconnectDevice(foundDevice, foundIdentifier),
+        );
     }
 }
 
@@ -69,9 +74,8 @@ function* restartReconnect() {
     }
 }
 
-const logAttemptReconnectAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_reconnect', {
-    }, state);
+const logAttemptReconnectAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_reconnect', {}, state);
 };
 
 export default ReconnectSaga;

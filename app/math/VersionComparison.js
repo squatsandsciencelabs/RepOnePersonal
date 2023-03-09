@@ -1,4 +1,4 @@
-const versionArrayFromString = (version) => {
+const versionArrayFromString = version => {
     const array = version.split('.').map(n => parseInt(n));
     while (array.length < 3) {
         array.push(0);

@@ -5,36 +5,40 @@
 // TODO: Permissions alert wrapper so don't lose the first iOS permission request
 
 import firebase from 'app/services/Firebase';
-import {request, requestMultiple, PERMISSIONS} from 'react-native-permissions';
-import {Platform} from 'react-native';
+import {
+    request,
+    requestMultiple,
+    PERMISSIONS,
+} from 'react-native-permissions';
+import { Platform } from 'react-native';
 
 export default async function () {
-  if (Platform.OS !== 'ios') {
-    const apiLevel = Platform.Version;
+    if (Platform.OS !== 'ios') {
+        const apiLevel = Platform.Version;
 
-    const permissions =
-      apiLevel >= 31
-        ? [
-            PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-            PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-          ]
-        : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+        const permissions =
+            apiLevel >= 31
+                ? [
+                      PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+                      PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+                  ]
+                : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
 
-    await requestMultiple([
-      ...permissions,
-      PERMISSIONS.ANDROID.CAMERA,
-      PERMISSIONS.ANDROID.RECORD_AUDIO,
-      PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-      PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
-    ]);
-  } else {
-    // TODO: analytics as a user prop
-    // result can have granted true/false or status unknown based on iOS version
-    // see https://rnfirebase.io/docs/v3.2.x/messaging/reference/messaging
-    await firebase.messaging().requestPermission();
-    // await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL); // seems to cause illegal callback invocations, so just do bluetooth separately
-    await request(PERMISSIONS.IOS.CAMERA);
-    await request(PERMISSIONS.IOS.MICROPHONE);
-    await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-  }
+        await requestMultiple([
+            ...permissions,
+            PERMISSIONS.ANDROID.CAMERA,
+            PERMISSIONS.ANDROID.RECORD_AUDIO,
+            PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+            PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+        ]);
+    } else {
+        // TODO: analytics as a user prop
+        // result can have granted true/false or status unknown based on iOS version
+        // see https://rnfirebase.io/docs/v3.2.x/messaging/reference/messaging
+        await firebase.messaging().requestPermission();
+        // await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL); // seems to cause illegal callback invocations, so just do bluetooth separately
+        await request(PERMISSIONS.IOS.CAMERA);
+        await request(PERMISSIONS.IOS.MICROPHONE);
+        await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+    }
 }

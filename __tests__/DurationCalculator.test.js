@@ -51,7 +51,7 @@ describe('DurationCalculator', () => {
 
         expect(actual).toBe(expected);
     });
-    
+
     test('two date numbers', () => {
         const start = 5000;
         const end = 10000;
@@ -72,5 +72,5 @@ describe('DurationCalculator', () => {
         const actual = sut.getDurationBetween(start, end);
 
         expect(actual).toBe(expected);
-    });    
+    });
 });

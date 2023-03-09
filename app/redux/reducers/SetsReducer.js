@@ -232,7 +232,7 @@ const saveDefaultMetric = (state, action) => {
         newWorkoutData[setIndex] = Object.assign({}, latestSet, changes);
     }
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
 
@@ -269,32 +269,80 @@ const saveWorkoutSet = (state, action) => {
     if ('weight' in action || 'metric' in action) {
         // load changed, update computed properties
         newSet.reps = newSet.reps.map(r => {
-            if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+            if (
+                OpenBarbellConfig.bulkMetricsEnabled &&
+                SetUtils.getCanProcessForceOrMetric(newSet, r)
+            ) {
                 // can process
                 const rep = { ...r };
                 const data = SetUtils.getBulkArray(rep);
                 const deltaTs = SetUtils.getDeltaTimes(rep, data);
                 const velocities = SetUtils.getVelocities(rep, deltaTs, data);
-                const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
-                const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
-                const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
+                const accelerations = SetUtils.getAccelerations(
+                    rep,
+                    velocities,
+                    deltaTs,
+                );
+                const forces = SetUtils.getForces(
+                    newSet,
+                    rep,
+                    accelerations,
+                    velocities,
+                );
+                const powers = SetUtils.getPowers(
+                    newSet,
+                    rep,
+                    forces,
+                    velocities,
+                );
 
-                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(rep, velocities);
-                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
+                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(
+                    rep,
+                    velocities,
+                );
+                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(
+                    rep,
+                    accelerations,
+                );
                 rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
-                rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
+                rep.peakForceIndex = SetUtils.getPeakForceIndex(
+                    newSet,
+                    rep,
+                    forces,
+                );
                 rep.peakForce = forces[rep.peakForceIndex];
-                rep.peakForceHeight = SetUtils.getPeakHeight(data, rep.peakForceIndex);
-                rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
-                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(newSet, rep, powers);
+                rep.peakForceHeight = SetUtils.getPeakHeight(
+                    data,
+                    rep.peakForceIndex,
+                );
+                rep.averageForce = SetUtils.getAverageForce(
+                    newSet,
+                    rep,
+                    forces,
+                );
+                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+                    newSet,
+                    rep,
+                    powers,
+                );
                 rep.peakPower = powers[rep.peakPowerIndex];
-                rep.peakPowerHeight = SetUtils.getPeakHeight(data, rep.peakPowerIndex);
-                rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
+                rep.peakPowerHeight = SetUtils.getPeakHeight(
+                    data,
+                    rep.peakPowerIndex,
+                );
+                rep.averagePower = SetUtils.getAveragePower(
+                    newSet,
+                    rep,
+                    powers,
+                );
 
                 return rep;
             } else {
                 // cannot process
-                if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getRepHasBulkComputedProperties(r)) {
+                if (
+                    OpenBarbellConfig.bulkMetricsEnabled &&
+                    SetUtils.getRepHasBulkComputedProperties(r)
+                ) {
                     // need to reset
                     return {
                         ...r,
@@ -364,10 +412,13 @@ const saveWorkoutSetTags = (state, action) => {
     let newWorkoutData = state.workoutData.slice(0);
     let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
-    let tags = action.hasOwnProperty('tags') && action.tags ? action.tags.map((tag) => tag.toLowerCase()) : [];
+    let tags =
+        action.hasOwnProperty('tags') && action.tags
+            ? action.tags.map(tag => tag.toLowerCase())
+            : [];
 
     let changes = {
-        tags: [...tags]
+        tags: [...tags],
     };
     if (!set.initialStartTime) {
         changes.initialStartTime = new Date();
@@ -375,7 +426,7 @@ const saveWorkoutSetTags = (state, action) => {
     newWorkoutData[setIndex] = Object.assign({}, set, changes);
 
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
 
@@ -438,32 +489,80 @@ const saveHistorySet = (state, action) => {
     if ('weight' in action || 'metric' in action) {
         // load changed, update computed properties
         newSet.reps = newSet.reps.map(r => {
-            if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getCanProcessForceOrMetric(newSet, r)) {
+            if (
+                OpenBarbellConfig.bulkMetricsEnabled &&
+                SetUtils.getCanProcessForceOrMetric(newSet, r)
+            ) {
                 // can process
                 const rep = { ...r };
                 const data = SetUtils.getBulkArray(rep);
                 const deltaTs = SetUtils.getDeltaTimes(rep, data);
                 const velocities = SetUtils.getVelocities(rep, deltaTs, data);
-                const accelerations = SetUtils.getAccelerations(rep, velocities, deltaTs);
-                const forces = SetUtils.getForces(newSet, rep, accelerations, velocities);
-                const powers = SetUtils.getPowers(newSet, rep, forces, velocities);
+                const accelerations = SetUtils.getAccelerations(
+                    rep,
+                    velocities,
+                    deltaTs,
+                );
+                const forces = SetUtils.getForces(
+                    newSet,
+                    rep,
+                    accelerations,
+                    velocities,
+                );
+                const powers = SetUtils.getPowers(
+                    newSet,
+                    rep,
+                    forces,
+                    velocities,
+                );
 
-                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(rep, velocities);
-                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(rep, accelerations);
+                rep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(
+                    rep,
+                    velocities,
+                );
+                rep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(
+                    rep,
+                    accelerations,
+                );
                 rep.peakAcceleration = accelerations[rep.peakAccelerationIndex];
-                rep.peakForceIndex = SetUtils.getPeakForceIndex(newSet, rep, forces);
+                rep.peakForceIndex = SetUtils.getPeakForceIndex(
+                    newSet,
+                    rep,
+                    forces,
+                );
                 rep.peakForce = forces[rep.peakForceIndex];
-                rep.peakForceHeight = SetUtils.getPeakHeight(data, rep.peakForceIndex);
-                rep.averageForce = SetUtils.getAverageForce(newSet, rep, forces);
-                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(newSet, rep, powers);
+                rep.peakForceHeight = SetUtils.getPeakHeight(
+                    data,
+                    rep.peakForceIndex,
+                );
+                rep.averageForce = SetUtils.getAverageForce(
+                    newSet,
+                    rep,
+                    forces,
+                );
+                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+                    newSet,
+                    rep,
+                    powers,
+                );
                 rep.peakPower = powers[rep.peakPowerIndex];
-                rep.peakPowerHeight = SetUtils.getPeakHeight(data, rep.peakPowerIndex);
-                rep.averagePower = SetUtils.getAveragePower(newSet, rep, powers);
+                rep.peakPowerHeight = SetUtils.getPeakHeight(
+                    data,
+                    rep.peakPowerIndex,
+                );
+                rep.averagePower = SetUtils.getAveragePower(
+                    newSet,
+                    rep,
+                    powers,
+                );
 
                 return rep;
             } else {
                 // cannot process
-                if (OpenBarbellConfig.bulkMetricsEnabled && SetUtils.getRepHasBulkComputedProperties(r)) {
+                if (
+                    OpenBarbellConfig.bulkMetricsEnabled &&
+                    SetUtils.getRepHasBulkComputedProperties(r)
+                ) {
                     // need to reset
                     return {
                         ...r,
@@ -492,7 +591,7 @@ const saveHistorySet = (state, action) => {
         historyData: {
             ...historyData,
             [setID]: newSet,
-        }
+        },
     };
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
@@ -548,18 +647,21 @@ const saveHistorySetTags = (state, action) => {
     let setID = action.setID;
     let historyData = state.historyData;
     let set = historyData[setID];
-    let tags = action.hasOwnProperty('tags') && action.tags ? action.tags.map((tag) => tag.toLowerCase()) : [];
+    let tags =
+        action.hasOwnProperty('tags') && action.tags
+            ? action.tags.map(tag => tag.toLowerCase())
+            : [];
 
     // new set
     let setChanges = {
-        tags: [...tags]
+        tags: [...tags],
     };
     let newSet = Object.assign({}, set, setChanges);
 
     // state changes
     let stateChanges = {};
     stateChanges.historyData = Object.assign({}, historyData, {
-        [setID]: newSet
+        [setID]: newSet,
     });
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
@@ -591,7 +693,7 @@ const saveHistorySetKratosDiscs = (state, action) => {
     // state changes
     let stateChanges = {};
     stateChanges.historyData = Object.assign({}, historyData, {
-        [setID]: newSet
+        [setID]: newSet,
     });
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
@@ -599,9 +701,9 @@ const saveHistorySetKratosDiscs = (state, action) => {
 
     return {
         ...state,
-        ...stateChanges
+        ...stateChanges,
     };
-}
+};
 
 // ADD_REP_DATA
 
@@ -648,7 +750,7 @@ const addRepData = (state, action) => {
 
     let setChanges = {
         reps: [...set.reps, rep],
-        deleted: false
+        deleted: false,
     };
 
     if (!set.initialStartTime) {
@@ -658,14 +760,13 @@ const addRepData = (state, action) => {
     let newSet = Object.assign({}, set, setChanges);
     let newWorkoutData = [
         ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
-        newSet
+        newSet,
     ];
 
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
-
 
 const addKratosRepData = (state, action) => {
     let workoutData = state.workoutData;
@@ -673,9 +774,11 @@ const addKratosRepData = (state, action) => {
 
     const deviceFamily = 'Kratos';
 
-    const previousRepsAreRemoved = set.reps.every(rep=>!!rep.removed);
+    const previousRepsAreRemoved = set.reps.every(rep => !!rep.removed);
 
-    const removed = previousRepsAreRemoved ? set.reps.length < action.kratosAutoDeleteReps : false;
+    const removed = previousRepsAreRemoved
+        ? set.reps.length < action.kratosAutoDeleteReps
+        : false;
 
     const rep = {
         isValid: action.isValid,
@@ -704,7 +807,7 @@ const addKratosRepData = (state, action) => {
 
     let setChanges = {
         reps: [...set.reps, rep],
-        deleted: false
+        deleted: false,
     };
 
     if (!set.initialStartTime) {
@@ -714,11 +817,11 @@ const addKratosRepData = (state, action) => {
     let newSet = Object.assign({}, set, setChanges);
     let newWorkoutData = [
         ...workoutData.slice(0, workoutData.length - 1), // copy all but the last element
-        newSet
+        newSet,
     ];
 
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
 
@@ -738,11 +841,16 @@ const saveWorkoutRep = (state, action) => {
     var setID = set.setID;
 
     // update set and its rep
-    newWorkoutData[setIndex] = setWithUpdatedRep(set, action.repIndex, action.removed, action.bulkData);
+    newWorkoutData[setIndex] = setWithUpdatedRep(
+        set,
+        action.repIndex,
+        action.removed,
+        action.bulkData,
+    );
 
     // state
     let stateChanges = {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     };
 
     return Object.assign({}, state, stateChanges);
@@ -754,7 +862,12 @@ const saveHistoryRep = (state, action) => {
     // define vars
     let setID = action.setID;
     let historyData = state.historyData;
-    let newSet = setWithUpdatedRep(historyData[setID], action.repIndex, action.removed, action.bulkData);
+    let newSet = setWithUpdatedRep(
+        historyData[setID],
+        action.repIndex,
+        action.removed,
+        action.bulkData,
+    );
 
     // history
     let historyChanges = {};
@@ -763,7 +876,7 @@ const saveHistoryRep = (state, action) => {
 
     // state
     let stateChanges = {
-        historyData: newHistoryData
+        historyData: newHistoryData,
     };
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
@@ -785,11 +898,19 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     }
 
     // update bulk and computed properties
-    if (OpenBarbellConfig.bulkEnabled && OpenBarbellConfig.bulkMetricsEnabled && bulkData !== undefined && bulkData !== null) {
+    if (
+        OpenBarbellConfig.bulkEnabled &&
+        OpenBarbellConfig.bulkMetricsEnabled &&
+        bulkData !== undefined &&
+        bulkData !== null
+    ) {
         newRep.bulkData = { ...bulkData };
 
         // update computed properties
-        if (!newRep.isValid || !SetUtils.getCanProcessForceOrMetric(set, newRep)) {
+        if (
+            !newRep.isValid ||
+            !SetUtils.getCanProcessForceOrMetric(set, newRep)
+        ) {
             // cannot process, null
             newRep.peakVelocityIndex = null;
             newRep.peakAccelerationIndex = null;
@@ -807,20 +928,50 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
             const data = SetUtils.getBulkArray(newRep);
             const deltaTs = SetUtils.getDeltaTimes(newRep, data);
             const velocities = SetUtils.getVelocities(newRep, deltaTs, data);
-            const accelerations = SetUtils.getAccelerations(newRep, velocities, deltaTs);
-            const forces = SetUtils.getForces(set, newRep, accelerations, velocities);
+            const accelerations = SetUtils.getAccelerations(
+                newRep,
+                velocities,
+                deltaTs,
+            );
+            const forces = SetUtils.getForces(
+                set,
+                newRep,
+                accelerations,
+                velocities,
+            );
             const powers = SetUtils.getPowers(set, newRep, forces, velocities);
 
-            newRep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(newRep, velocities);
-            newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(newRep, accelerations);
-            newRep.peakAcceleration = accelerations[newRep.peakAccelerationIndex];
-            newRep.peakForceIndex = SetUtils.getPeakForceIndex(set, newRep, forces);
+            newRep.peakVelocityIndex = SetUtils.getPeakVelocityIndex(
+                newRep,
+                velocities,
+            );
+            newRep.peakAccelerationIndex = SetUtils.getPeakAccelerationIndex(
+                newRep,
+                accelerations,
+            );
+            newRep.peakAcceleration =
+                accelerations[newRep.peakAccelerationIndex];
+            newRep.peakForceIndex = SetUtils.getPeakForceIndex(
+                set,
+                newRep,
+                forces,
+            );
             newRep.peakForce = forces[newRep.peakForceIndex];
-            newRep.peakForceHeight = SetUtils.getPeakHeight(data, newRep.peakForceIndex);
+            newRep.peakForceHeight = SetUtils.getPeakHeight(
+                data,
+                newRep.peakForceIndex,
+            );
             newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
-            newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(set, newRep, powers);
+            newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+                set,
+                newRep,
+                powers,
+            );
             newRep.peakPower = powers[newRep.peakPowerIndex];
-            newRep.peakPowerHeight = SetUtils.getPeakHeight(data, newRep.peakPowerIndex);
+            newRep.peakPowerHeight = SetUtils.getPeakHeight(
+                data,
+                newRep.peakPowerIndex,
+            );
             newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
         }
     }
@@ -829,11 +980,13 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
     let newReps = [
         ...set.reps.slice(0, repIndex),
         newRep,
-        ...set.reps.slice(repIndex + 1)
+        ...set.reps.slice(repIndex + 1),
     ];
 
     // set 0 reps = removed check
-    let activeRep = newReps.find((rep) => { return !rep.removed; });
+    let activeRep = newReps.find(rep => {
+        return !rep.removed;
+    });
     let setWasDeleted = activeRep === undefined;
 
     // set
@@ -862,7 +1015,7 @@ const endSet = (state, action) => {
     ];
 
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
 
@@ -875,7 +1028,7 @@ const saveWorkoutVideo = (state, action) => {
 
     let setChanges = {
         videoFileURL: action.videoFileURL,
-        videoType: action.videoType
+        videoType: action.videoType,
     };
     if (!set.initialStartTime) {
         setChanges.initialStartTime = new Date();
@@ -883,7 +1036,7 @@ const saveWorkoutVideo = (state, action) => {
     newWorkoutData[setIndex] = Object.assign({}, set, setChanges);
 
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
 };
 
@@ -896,13 +1049,13 @@ const saveHistoryVideo = (state, action) => {
 
     let newSet = Object.assign({}, set, {
         videoFileURL: action.videoFileURL,
-        videoType: action.videoType
+        videoType: action.videoType,
     });
 
     // state changes
     let stateChanges = {};
     stateChanges.historyData = Object.assign({}, historyData, {
-        [setID]: newSet
+        [setID]: newSet,
     });
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
@@ -914,19 +1067,18 @@ const saveHistoryVideo = (state, action) => {
 // DELETE_WORKOUT_VIDEO
 
 const deleteWorkoutVideo = (state, action) => {
-
     let newWorkoutData = state.workoutData.slice(0);
     let setIndex = newWorkoutData.findIndex(set => set.setID === action.setID);
     let set = newWorkoutData[setIndex];
 
     newWorkoutData[setIndex] = Object.assign({}, set, {
         videoFileURL: null,
-        videoType: null
+        videoType: null,
     });
     return Object.assign({}, state, {
-        workoutData: newWorkoutData
+        workoutData: newWorkoutData,
     });
-}
+};
 
 // DELETE_HISTORY_VIDEO
 
@@ -937,20 +1089,20 @@ const deleteHistoryVideo = (state, action) => {
 
     let newSet = Object.assign({}, set, {
         videoFileURL: null,
-        videoType: null
+        videoType: null,
     });
 
     // state changes
     let stateChanges = {};
     stateChanges.historyData = Object.assign({}, historyData, {
-        [setID]: newSet
+        [setID]: newSet,
     });
     if (!state.setIDsToUpload.includes(setID)) {
         stateChanges.setIDsToUpload = [...state.setIDsToUpload, setID];
     }
 
     return Object.assign({}, state, stateChanges);
-}
+};
 
 // LOAD_PERSISTED_SET_DATA
 
@@ -996,7 +1148,7 @@ const endWorkout = (state, action) => {
     return Object.assign({}, state, {
         workoutData: newWorkoutData,
         historyData: newHistoryData,
-        setIDsToUpload: newSetIDsToUpload
+        setIDsToUpload: newSetIDsToUpload,
     });
 };
 
@@ -1022,7 +1174,12 @@ const failedUploadSets = (state, action) => {
 
 const updateSetDataFromServer = (state, action) => {
     // valid check
-    if (action.sets === null || action.sets === undefined || action.revision === null || action.revision === undefined) {
+    if (
+        action.sets === null ||
+        action.sets === undefined ||
+        action.revision === null ||
+        action.revision === undefined
+    ) {
         // return empty
         return {
             ...state,
@@ -1035,7 +1192,8 @@ const updateSetDataFromServer = (state, action) => {
 
     let newHistoryData = {};
     for (set of action.sets) {
-        if (set.setID !== null) { // hack check against a bug that showed up in the development database
+        if (set.setID !== null) {
+            // hack check against a bug that showed up in the development database
             newHistoryData[set.setID] = set;
         }
     }
@@ -1093,7 +1251,10 @@ const overrideWithTestData = (state, action) => {
         if (historyData.hasOwnProperty(property)) {
             let set = historyData[property];
             if (set.initialStartTime) {
-                set.initialStartTime = addTime(set.initialStartTime, dateDifference);
+                set.initialStartTime = addTime(
+                    set.initialStartTime,
+                    dateDifference,
+                );
             }
             if (set.startTime) {
                 set.startTime = addTime(set.startTime, dateDifference);
@@ -1110,7 +1271,7 @@ const overrideWithTestData = (state, action) => {
                     rep.averageVelocity = Math.round(data[2] * 1000);
                     rep.rom = Math.round(data[3]);
                     rep.peakVelocity = Math.round(data[4] * 1000);
-                    rep.peakHeight = Math.round(data[5] / 100 * rep.rom); // need to convert % to number
+                    rep.peakHeight = Math.round((data[5] / 100) * rep.rom); // need to convert % to number
                     rep.duration = data[6];
                     rep.totalSampleCount = 100; // bullshit, got no 3d data
                     rep.linear3DAverageVelocity = rep.averageVelocity; // just make it average vel
@@ -1160,12 +1321,15 @@ const add3DPositionsToRep = (state, action) => {
     };
 
     // add set object to workout data
-    const workoutData = state.workoutData.slice(0, state.workoutData.length - 1); // copy all but the last element
+    const workoutData = state.workoutData.slice(
+        0,
+        state.workoutData.length - 1,
+    ); // copy all but the last element
     workoutData.push(set); // add the updated set
     return {
         ...state,
         workoutData,
-    }
+    };
 };
 
 export default SetsReducer;

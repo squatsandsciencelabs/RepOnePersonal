@@ -13,7 +13,7 @@ import * as AuthActionCreators from 'app/redux/shared_actions/AuthActionCreators
 import * as DateUtils from 'app/utility/DateUtils';
 import * as Analytics from 'app/services/Analytics';
 
-const TokenSaga = function * TokenSaga() {
+const TokenSaga = function* TokenSaga() {
     yield all([
         takeEvery(CHANGE_TAB, executeObtainNewTokens),
         takeEvery(STORE_INITIALIZED, executeObtainNewTokens),
@@ -32,9 +32,9 @@ function* executeObtainNewTokens() {
 
 function* obtainNewTokens() {
     // check has token
-    const refreshToken = yield select(AuthSelectors.getRefreshToken);    
+    const refreshToken = yield select(AuthSelectors.getRefreshToken);
     if (refreshToken === null) {
-        console.tron.log("cannot refresh as no refresh token");
+        console.tron.log('cannot refresh as no refresh token');
         return;
     }
 
@@ -42,9 +42,16 @@ function* obtainNewTokens() {
     var lastRefreshDate = yield select(AuthSelectors.getLastRefreshDate);
     lastRefreshDate = DateUtils.getDate(lastRefreshDate);
     if (!shouldRequestNewToken(lastRefreshDate)) {
-        console.tron.log("hasn't been long enough to refresh " + lastRefreshDate + " " + OpenBarbellConfig.obtainTokenTimer + " vs " + Math.abs(new Date() - lastRefreshDate));
+        console.tron.log(
+            "hasn't been long enough to refresh " +
+                lastRefreshDate +
+                ' ' +
+                OpenBarbellConfig.obtainTokenTimer +
+                ' vs ' +
+                Math.abs(new Date() - lastRefreshDate),
+        );
     } else {
-        console.tron.log("refreshing tokens");
+        console.tron.log('refreshing tokens');
 
         try {
             // refresh
@@ -55,14 +62,23 @@ function* obtainNewTokens() {
             // success
             state = yield select();
             logRefreshedTokenAnalytics(state);
-            yield put(AuthActionCreators.saveTokens(json.accessToken, json.refreshToken, new Date()));
-        } catch(error) {
+            yield put(
+                AuthActionCreators.saveTokens(
+                    json.accessToken,
+                    json.refreshToken,
+                    new Date(),
+                ),
+            );
+        } catch (error) {
             let state = yield select();
             logRefreshTokenErrorAnalytics(state, error, refreshToken);
             if (error.type === '401') {
                 // request a sign in because the tokens can't be refreshed
                 yield put(AuthActionCreators.requestReauthenticate());
-            } else if (error.type !== undefined || typeof error === 'function') {
+            } else if (
+                error.type !== undefined ||
+                typeof error === 'function'
+            ) {
                 // unknown error type, just propogate it
                 yield put(error);
             }
@@ -74,11 +90,11 @@ function* obtainNewTokens() {
     yield put(AuthActionCreators.tokensReady());
 }
 
-function *obtainNewAnonymousTokens() {
+function* obtainNewAnonymousTokens() {
     // check has token
-    const refreshToken = yield select(AuthSelectors.getRefreshToken);    
+    const refreshToken = yield select(AuthSelectors.getRefreshToken);
     if (refreshToken === null) {
-        console.tron.log("cannot refresh as no refresh token");
+        console.tron.log('cannot refresh as no refresh token');
         return;
     }
 
@@ -86,9 +102,16 @@ function *obtainNewAnonymousTokens() {
     var lastRefreshDate = yield select(AuthSelectors.getLastRefreshDate);
     lastRefreshDate = DateUtils.getDate(lastRefreshDate);
     if (!shouldRequestNewToken(lastRefreshDate)) {
-        console.tron.log("hasn't been long enough to refresh anonymous " + lastRefreshDate + " " + OpenBarbellConfig.obtainTokenTimer + " vs " + Math.abs(new Date() - lastRefreshDate));
+        console.tron.log(
+            "hasn't been long enough to refresh anonymous " +
+                lastRefreshDate +
+                ' ' +
+                OpenBarbellConfig.obtainTokenTimer +
+                ' vs ' +
+                Math.abs(new Date() - lastRefreshDate),
+        );
     } else {
-        console.tron.log("refreshing anonymous tokens");
+        console.tron.log('refreshing anonymous tokens');
 
         try {
             // refresh
@@ -99,17 +122,26 @@ function *obtainNewAnonymousTokens() {
             // success
             state = yield select();
             logRefreshedAnonymousTokenAnalytics(state);
-            yield put(AuthActionCreators.saveTokens(json.accessToken, json.refreshToken, new Date()));
+            yield put(
+                AuthActionCreators.saveTokens(
+                    json.accessToken,
+                    json.refreshToken,
+                    new Date(),
+                ),
+            );
 
             // ready
             yield put(AuthActionCreators.tokensReady());
-        } catch(error) {
+        } catch (error) {
             let state = yield select();
             logRefreshAnonymousTokenErrorAnalytics(state, error, refreshToken);
             if (error.type === '401') {
                 // request a sign in because the tokens can't be refreshed
                 yield put(AuthActionCreators.requestReauthenticate());
-            } else if (error.type !== undefined || typeof error === 'function') {
+            } else if (
+                error.type !== undefined ||
+                typeof error === 'function'
+            ) {
                 yield put(error);
             }
             console.tron.log(JSON.stringify(error));
@@ -117,40 +149,52 @@ function *obtainNewAnonymousTokens() {
     }
 }
 
-const shouldRequestNewToken = (lastRefreshDate) => lastRefreshDate === null || Math.abs(new Date() - lastRefreshDate) > OpenBarbellConfig.obtainTokenTimer;
+const shouldRequestNewToken = lastRefreshDate =>
+    lastRefreshDate === null ||
+    Math.abs(new Date() - lastRefreshDate) > OpenBarbellConfig.obtainTokenTimer;
 
 // ANALYTICS
 
-const logAttemptRefreshTokenAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_refresh_token', {
-    }, state);
+const logAttemptRefreshTokenAnalytics = state => {
+    Analytics.logEventWithAppState('attempt_refresh_token', {}, state);
 };
 
 const logRefreshTokenErrorAnalytics = (state, error, refreshToken) => {
-    Analytics.logErrorWithAppState(error, 'refresh_token_error', {
-        refresh_token: refreshToken,
-    }, state);
+    Analytics.logErrorWithAppState(
+        error,
+        'refresh_token_error',
+        {
+            refresh_token: refreshToken,
+        },
+        state,
+    );
 };
 
-const logRefreshedTokenAnalytics = (state) => {
-    Analytics.logEventWithAppState('refreshed_token', {
-    }, state);
+const logRefreshedTokenAnalytics = state => {
+    Analytics.logEventWithAppState('refreshed_token', {}, state);
 };
 
-const logAttemptRefreshAnonymousTokenAnalytics = (state) => {
-    Analytics.logEventWithAppState('attempt_refresh_anonymous_token', {
-    }, state);
+const logAttemptRefreshAnonymousTokenAnalytics = state => {
+    Analytics.logEventWithAppState(
+        'attempt_refresh_anonymous_token',
+        {},
+        state,
+    );
 };
 
 const logRefreshAnonymousTokenErrorAnalytics = (state, error, refreshToken) => {
-    Analytics.logErrorWithAppState(error, 'refresh_anonymous_token_error', {
-        refresh_token: refreshToken,
-    }, state);
+    Analytics.logErrorWithAppState(
+        error,
+        'refresh_anonymous_token_error',
+        {
+            refresh_token: refreshToken,
+        },
+        state,
+    );
 };
 
-const logRefreshedAnonymousTokenAnalytics = (state) => {
-    Analytics.logEventWithAppState('refreshed_anonymous_token', {
-    }, state);
+const logRefreshedAnonymousTokenAnalytics = state => {
+    Analytics.logEventWithAppState('refreshed_anonymous_token', {}, state);
 };
 
 export default TokenSaga;
