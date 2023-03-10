@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Text,
-    View,
-    ActivityIndicator,
-    Image,
-    Animated,
-    Easing,
-} from 'react-native';
+import { Text, View, Animated, Easing } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTADownloadingPanel extends Component {
@@ -20,6 +13,7 @@ class SettingsOTADownloadingPanel extends Component {
     componentDidMount = () => {
         this.startImageRotateFunction();
     };
+
     startImageRotateFunction = () => {
         Animated.loop(
             Animated.timing(this.state.spinValue, {
@@ -30,6 +24,10 @@ class SettingsOTADownloadingPanel extends Component {
             }),
         ).start();
     };
+
+    _handleCancelPress() {
+        this.props.cancelDownload();
+    }
 
     render() {
         return (
@@ -57,14 +55,15 @@ class SettingsOTADownloadingPanel extends Component {
                 />
                 <Text style={[SETTINGS_PANEL_STYLES.subtitleText]}>
                     Installing on RepOne{' '}
-                    {this.props.unit && `#${this.props.unit}`}
+                    {this.props.connectedDevice &&
+                        `#${this.props.connectedDevice}`}
                 </Text>
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.footerCancelText,
                         { fontWeight: '500', marginTop: 25 },
                     ]}
-                    onPress={this.props.cancelDownload.bind(this)}>
+                    onPress={this._handleCancelPress}>
                     Cancel
                 </Text>
             </View>

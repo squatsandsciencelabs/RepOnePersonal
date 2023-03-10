@@ -19,6 +19,7 @@ import {
     INSTALL_OTA_ATTEMPT,
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
+    OTA_INSTALL_FAILED,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
@@ -39,9 +40,10 @@ export default function* OTASaga(dispatch) {
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
-        takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
+        // takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
+        takeEvery(OTA_DOWNLOAD_SUCCEEDED, startInstall),
     ]);
 }
 
@@ -253,7 +255,7 @@ function* startInstall(action) {
             Alert.alert(`Error installing firmware on ${name}`);
             logOTAAnalytics(state, 'firmware_install_failed');
             yield put({
-                type: OTA_DOWNLOAD_READY,
+                type: OTA_INSTALL_FAILED,
             });
             try {
                 yield apply(BleManager, BleManager.startNotification, [

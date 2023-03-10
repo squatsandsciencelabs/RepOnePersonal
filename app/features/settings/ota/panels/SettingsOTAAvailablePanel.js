@@ -3,12 +3,16 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAAvailablePanel extends Component {
+    _handleDownloadPress() {
+        this.props.download();
+    }
+
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
                 There is an updated firmware available with new features and
                 fixes. The connected RepOne hardware is version{' '}
-                {this.props.deviceFirmwareVersion || 1.23}.
+                {this.props.deviceFirmwareVersion}.
             </Text>
         );
 
@@ -24,7 +28,7 @@ class SettingsOTAAvailablePanel extends Component {
                             alignSelf: 'flex-start',
                         },
                     ]}
-                    onPress={this.props.download.bind(this)}>
+                    onPress={this._handleDownloadPress}>
                     <Text
                         style={[
                             SETTINGS_PANEL_STYLES.buttonText,

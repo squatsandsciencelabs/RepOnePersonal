@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import { cancelInstall } from '../SettingsOTAActions';
 
 class SettingsOTADownloadFailedPanel extends Component {
     _handleRetryPress() {
-        this.props.download();
+        this.props.install();
     }
 
     _handleCancelPress() {
-        this.props.cancelDownload();
+        this.props.cancelInstall();
     }
 
     render() {
@@ -20,8 +21,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.redText,
                         { fontWeight: '500' },
                     ]}>
-                    Version {this.props.firmwareVersion} files failed to
-                    download
+                    Version {this.props.firmwareVersion} installation failed
                 </Text>
                 <Image
                     style={{ marginVertical: 25 }}

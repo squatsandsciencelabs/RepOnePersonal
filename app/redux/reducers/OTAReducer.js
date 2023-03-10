@@ -13,6 +13,7 @@ import {
     CANCEL_INSTALL_OTA,
     INSTALL_OTA_PROGRESS,
     CONNECTED_TO_DEVICE,
+    OTA_INSTALL_FAILED,
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
@@ -20,8 +21,10 @@ export const OTAStatus = {
     AVAILABLE: 'AVAILABLE',
     DOWNLOADING: 'DOWNLOADING',
     DOWNLOAD_FAILED: 'DOWNLOAD_FAILED',
-    READY: 'READY',
+    DOWNLOAD_READY: 'DOWNLOAD_READY',
     INSTALLING: 'INSTALLING',
+    INSTALL_FAILED: 'INSTALL_FAILED',
+    INSTALL_READY: 'INSTALL_READY',
 };
 
 // device can be obtained from the deviceReducer
@@ -53,7 +56,7 @@ const OTAReducer = (state = defaultState, action) => {
         case OTA_DOWNLOAD_READY:
             return {
                 ...state,
-                status: OTAStatus.READY,
+                status: OTAStatus.DOWNLOAD_READY,
             };
         case OTA_DOWNLOAD_ATTEMPT:
             return {
@@ -68,7 +71,7 @@ const OTAReducer = (state = defaultState, action) => {
         case OTA_DOWNLOAD_SUCCEEDED:
             return {
                 ...state,
-                status: OTAStatus.READY,
+                status: OTAStatus.DOWNLOAD_READY,
             };
         case OTA_DOWNLOAD_FAILED:
             return {
@@ -89,7 +92,7 @@ const OTAReducer = (state = defaultState, action) => {
         case CANCEL_INSTALL_OTA:
             return {
                 ...state,
-                status: OTAStatus.READY,
+                status: OTAStatus.DOWNLOAD_READY,
             };
         case INSTALL_OTA_PROGRESS:
             return {
@@ -101,6 +104,12 @@ const OTAReducer = (state = defaultState, action) => {
                 ...state,
                 progress: 0,
             };
+        case OTA_INSTALL_FAILED:
+            return {
+                ...state,
+                status: OTAStatus.INSTALL_FAILED,
+            };
+
         default:
             return state;
     }
