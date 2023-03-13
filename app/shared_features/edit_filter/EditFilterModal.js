@@ -35,8 +35,11 @@ class EditFilterModal extends Component {
         // inputs
         const inputs =
             nextProps.inputs !== undefined ? [...nextProps.inputs] : [];
+        const options = nextProps.options.filter(
+            option => !inputs.includes(option),
+        );
 
-        this.setState({ inputs, options: nextProps.options });
+        this.setState({ inputs, options: options });
     }
 
     // HELPERS
@@ -50,16 +53,29 @@ class EditFilterModal extends Component {
         this.props.addPill();
 
         let inputs = [...this.state.inputs, input];
+
+        const options = this.state.options.filter(
+            option => !inputs.includes(option),
+        );
+
         this.setState({
             inputs: inputs,
+            options,
         });
     }
 
     _removePill(index) {
         let inputsCopy = [...this.state.inputs];
-        inputsCopy.splice(index, 1);
+        const removed = inputsCopy.splice(index, 1);
+
+        const options = this.props.options.filter(
+            option =>
+                removed.includes(option) || this.state.options.includes(option),
+        );
+
         this.setState({
             inputs: inputsCopy,
+            options,
         });
     }
 
