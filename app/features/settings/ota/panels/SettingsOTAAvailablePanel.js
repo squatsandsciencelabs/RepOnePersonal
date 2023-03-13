@@ -3,10 +3,6 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAAvailablePanel extends Component {
-    _handleDownloadPress() {
-        this.props.download();
-    }
-
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
@@ -28,7 +24,7 @@ class SettingsOTAAvailablePanel extends Component {
                             alignSelf: 'flex-start',
                         },
                     ]}
-                    onPress={this._handleDownloadPress}>
+                    onPress={this.props.download.bind(this)}>
                     <Text
                         style={[
                             SETTINGS_PANEL_STYLES.buttonText,

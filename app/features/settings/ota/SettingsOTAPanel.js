@@ -17,11 +17,7 @@ import * as SensorStatus from 'app/configs+constants/SensorStatus';
 
 class SettingsOTAPanel extends Component {
     _renderContents() {
-        if (
-            this.props.connectedDeviceStatus === SensorStatus.DISCONNECTED ||
-            this.props.connectedDeviceStatus ===
-                SensorStatus.DEVICE_BLUETOOTH_OFF
-        ) {
+        if (this.props.connectedDeviceStatus !== SensorStatus.CONNECTED) {
             return <SettingsOTADeviceNotConnected />;
         }
         switch (this.props.status) {
@@ -61,6 +57,7 @@ class SettingsOTAPanel extends Component {
                     />
                 );
             case OTAStatus.INSTALLING:
+            case OTAStatus.DOWNLOAD_READY:
                 return (
                     <SettingsOTAInstallingPanel
                         firmwareVersion={this.props.firmwareVersion}

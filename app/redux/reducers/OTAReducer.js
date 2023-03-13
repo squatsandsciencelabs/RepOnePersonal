@@ -14,6 +14,7 @@ import {
     INSTALL_OTA_PROGRESS,
     CONNECTED_TO_DEVICE,
     OTA_INSTALL_FAILED,
+    OTA_INSTALL_SUCCEEDED,
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
@@ -64,6 +65,7 @@ const OTAReducer = (state = defaultState, action) => {
                 status: OTAStatus.DOWNLOADING,
             };
         case CANCEL_OTA_DOWNLOAD:
+        case CANCEL_INSTALL_OTA:
             return {
                 ...state,
                 status: OTAStatus.AVAILABLE,
@@ -89,11 +91,6 @@ const OTAReducer = (state = defaultState, action) => {
                 status: OTAStatus.INSTALLING,
                 progress: 0,
             };
-        case CANCEL_INSTALL_OTA:
-            return {
-                ...state,
-                status: OTAStatus.DOWNLOAD_READY,
-            };
         case INSTALL_OTA_PROGRESS:
             return {
                 ...state,
@@ -109,7 +106,8 @@ const OTAReducer = (state = defaultState, action) => {
                 ...state,
                 status: OTAStatus.INSTALL_FAILED,
             };
-
+        case OTA_INSTALL_SUCCEEDED:
+            return { ...state, status: OTAStatus.INSTALL_READY };
         default:
             return state;
     }

@@ -25,10 +25,6 @@ class SettingsOTADownloadingPanel extends Component {
         ).start();
     };
 
-    _handleCancelPress() {
-        this.props.cancelDownload();
-    }
-
     render() {
         return (
             <View style={SETTINGS_PANEL_STYLES.footer}>
@@ -63,7 +59,7 @@ class SettingsOTADownloadingPanel extends Component {
                         SETTINGS_PANEL_STYLES.footerCancelText,
                         { fontWeight: '500', marginTop: 25 },
                     ]}
-                    onPress={this._handleCancelPress}>
+                    onPress={this.props.cancelDownload.bind(this)}>
                     Cancel
                 </Text>
             </View>

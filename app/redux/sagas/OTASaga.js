@@ -20,6 +20,8 @@ import {
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
     OTA_INSTALL_FAILED,
+    OTA_INSTALL_SUCCEEDED,
+    CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
@@ -37,13 +39,14 @@ const filePath = `${FileSystem.documentDirectory}firmware.zip`;
 export default function* OTASaga(dispatch) {
     yield all([
         takeEvery(STORE_INITIALIZED, dispatch, checkOTA),
+        takeEvery(CONNECTED_TO_DEVICE, connectedToDevice),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
-        // takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
-        takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
+        takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(OTA_DOWNLOAD_SUCCEEDED, startInstall),
+        takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);
 }
 
@@ -167,9 +170,33 @@ function* checkOTA(dispatch, action) {
     }
 }
 
+function* connectedToDevice(action) {
+    // if device has the latest firmware version don't install the firmware
+    const currentVersion = yield select(OTASelectors.getFirmwareVersion);
+
+    if (action.firmwareVersion === currentVersion) {
+        yield put({
+            type: OTA_INSTALL_SUCCEEDED,
+        });
+    }
+}
+
 function* startDownload(action) {
     try {
+        const firmwareInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [
+            filePath,
+        ]);
+
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
+
+        // if already downloaded proceed to the installation process
+        if (firmwareInfo.exists) {
+            yield put({
+                type: OTA_DOWNLOAD_SUCCEEDED,
+            });
+            return;
+        }
+
         downloadTask = FileSystem.createDownloadResumable(
             `https://firmware.reponestrength.com/${currentVersion}.zip`,
             filePath,
@@ -246,6 +273,10 @@ function* startInstall(action) {
                 filePath: path,
             },
         ]);
+
+        yield put({
+            type: OTA_INSTALL_SUCCEEDED,
+        });
     } catch (err) {
         const state = yield select();
         if (OTASelectors.getProgress(state) !== 100) {

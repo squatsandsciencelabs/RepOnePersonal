@@ -3,14 +3,6 @@ import { Text, View, Image } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTADownloadFailedPanel extends Component {
-    _handleRetryPress() {
-        this.props.download();
-    }
-
-    _handleCancelPress() {
-        this.props.cancelDownload();
-    }
-
     render() {
         return (
             <View style={SETTINGS_PANEL_STYLES.footer}>
@@ -32,7 +24,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.tappableText,
                         { fontWeight: '500' },
                     ]}
-                    onPress={this._handleRetryPress}>
+                    onPress={this.props.download.bind(this)}>
                     Retry
                 </Text>
                 <Text
@@ -44,7 +36,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                             fontWeight: '500',
                         },
                     ]}
-                    onPress={this._handleCancelPress}>
+                    onPress={this.props.cancelDownload.bind(this)}>
                     Cancel
                 </Text>
             </View>

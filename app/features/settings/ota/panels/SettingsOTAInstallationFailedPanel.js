@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
-import { cancelInstall } from '../SettingsOTAActions';
 
 class SettingsOTADownloadFailedPanel extends Component {
-    _handleRetryPress() {
-        this.props.install();
-    }
-
-    _handleCancelPress() {
-        this.props.cancelInstall();
-    }
-
     render() {
         return (
             <View style={SETTINGS_PANEL_STYLES.footer}>
@@ -32,7 +23,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.tappableText,
                         { fontWeight: '500' },
                     ]}
-                    onPress={this._handleRetryPress}>
+                    onPress={this.props.install.bind(this)}>
                     Retry
                 </Text>
                 <Text
@@ -44,7 +35,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                             fontWeight: '500',
                         },
                     ]}
-                    onPress={this._handleCancelPress}>
+                    onPress={this.props.cancelInstall.bind(this)}>
                     Cancel
                 </Text>
             </View>
