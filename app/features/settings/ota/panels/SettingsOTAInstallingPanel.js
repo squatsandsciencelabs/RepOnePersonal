@@ -15,6 +15,11 @@ class SettingsOTAInstallingPanel extends Component {
     componentDidMount = () => {
         this.startImageRotateFunction();
     };
+
+    componentWillUnmount = () => {
+        this.state.spinValue.stopAnimation();
+    };
+
     startImageRotateFunction = () => {
         Animated.loop(
             Animated.timing(this.state.spinValue, {

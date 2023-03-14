@@ -14,6 +14,10 @@ class SettingsOTADownloadingPanel extends Component {
         this.startImageRotateFunction();
     };
 
+    componentWillUnmount = () => {
+        this.state.spinValue.stopAnimation();
+    };
+
     startImageRotateFunction = () => {
         Animated.loop(
             Animated.timing(this.state.spinValue, {
