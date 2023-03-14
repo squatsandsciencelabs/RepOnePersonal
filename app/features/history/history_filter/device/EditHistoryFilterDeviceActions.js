@@ -4,14 +4,21 @@ import {
     REMOVE_HISTORY_FILTER_DEVICE,
     SAVE_HISTORY_FILTER_DEVICES,
 } from 'app/configs+constants/ActionTypes';
+import * as Analytics from 'app/services/Analytics';
 
-export const addPill = () => ({
-    type: ADD_HISTORY_FILTER_DEVICE,
-});
+export const addPill = () => (dispatch, getState) => {
+    const state = getState();
+    logAddDeviceAnalytics(state);
 
-export const tappedPill = () => ({
-    type: REMOVE_HISTORY_FILTER_DEVICE,
-});
+    dispatch({ type: ADD_HISTORY_FILTER_DEVICE });
+};
+
+export const tappedPill = () => (dispatch, getState) => {
+    const state = getState();
+    logRemovedDeviceAnalytics(state);
+
+    dispatch({ type: REMOVE_HISTORY_FILTER_DEVICE });
+};
 
 export const cancelDevices = () => ({
     type: DISMISS_HISTORY_FILTER_DEVICES,
@@ -25,3 +32,11 @@ export const saveDevices = (devices = []) => ({
     type: SAVE_HISTORY_FILTER_DEVICES,
     devices,
 });
+
+const logAddDeviceAnalytics = state => {
+    Analytics.logEventWithAppState('history_add_device', {}, state);
+};
+
+const logRemovedDeviceAnalytics = state => {
+    Analytics.logEventWithAppState('history_remove_device', {}, state);
+};
