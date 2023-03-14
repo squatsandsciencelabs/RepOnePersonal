@@ -34,7 +34,6 @@ class SettingsOTAPanel extends Component {
                     <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
-                        firmwareDescription={this.props.firmwareDescription}
                         download={this.props.download}
                     />
                 );
@@ -42,7 +41,6 @@ class SettingsOTAPanel extends Component {
                 return (
                     <SettingsOTADownloadingPanel
                         connectedDevice={this.props.connectedDevice}
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         cancelDownload={this.props.cancelDownload}
                     />
@@ -50,7 +48,6 @@ class SettingsOTAPanel extends Component {
             case OTAStatus.DOWNLOAD_FAILED:
                 return (
                     <SettingsOTADownloadFailedPanel
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         download={this.props.download}
                         cancelDownload={this.props.cancelDownload}
