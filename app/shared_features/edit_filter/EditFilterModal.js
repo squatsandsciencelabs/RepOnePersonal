@@ -66,11 +66,10 @@ class EditFilterModal extends Component {
 
     _removePill(index) {
         let inputsCopy = [...this.state.inputs];
-        const removed = inputsCopy.splice(index, 1);
+        inputsCopy.splice(index, 1);
 
         const options = this.props.options.filter(
-            option =>
-                removed.includes(option) || this.state.options.includes(option),
+            option => !inputsCopy.includes(option),
         );
 
         this.setState({
