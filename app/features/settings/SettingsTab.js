@@ -10,7 +10,8 @@ import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
 import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 import SettingsRepOnePanel from './sensor/repone/SettingsRepOnePanel';
-import SettingsKratosPanel from './sensor/kratos/SettingsKratosPanel';
+import firebase from 'app/services/Firebase';
+import SettingsKratosScreen from 'app/features/settings/sensor/kratos/SettingsKratosScreen';
 
 class SettingsTab extends Component {
     render() {
@@ -30,7 +31,7 @@ class SettingsTab extends Component {
                     <SettingsApplicationScreen />
                     <SettingsAccountScreen />
                     <SettingsRepOnePanel />
-                    <SettingsKratosPanel />
+                    <SettingsKratosScreen />
                     <SettingsFeedbackScreen />
                     {OpenBarbellConfig.calibrationEnabled ? (
                         <SettingsCalibrationScreen />

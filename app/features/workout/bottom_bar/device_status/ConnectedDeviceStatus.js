@@ -21,7 +21,7 @@ class ConnectedDeviceStatus extends Component {
                 <View style={styles.statusBar}>
                     {this._renderConnectedIcon()}
                     <Text style={[styles.textStyle, styles.pl7]}>
-                        {this.props.deviceIdentifier}
+                        {this.props.deviceName}
                     </Text>
                     {this.props.batteryPercentage !== null && (
                         <View style={{ flexDirection: 'row', marginLeft: 10 }}>
