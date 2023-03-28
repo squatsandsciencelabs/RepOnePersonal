@@ -276,11 +276,7 @@ class WorkoutList extends Component {
                     <View
                         style={{
                             flex: 1,
-                            backgroundColor: 'white',
-                            borderColor: '#e0e0e0',
-                            borderLeftWidth: 1,
-                            borderRightWidth: 1,
-                            borderBottomWidth: 1,
+                            backgroundColor: '#e0e0e0',
                             height: 1,
                         }}
                     />
