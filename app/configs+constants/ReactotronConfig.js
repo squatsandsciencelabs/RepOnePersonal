@@ -6,7 +6,7 @@ if (__DEV__) {
     // development, enable reactotron
     Reactotron.configure({
         name: 'RepOne',
-        host: '192.168.1.102',
+        host: '192.168.0.209',
     }) // controls connection & communication settings
         .use(sagaPlugin()) // add all built-in react native plugins
         .use(reactotronRedux()) // add all built-in react native plugins

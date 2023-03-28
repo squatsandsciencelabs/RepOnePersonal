@@ -4,6 +4,7 @@ import {
     MULTI_TASK_SCREEN,
     END_WORKOUT,
     CHANGE_TAB,
+    CONFIG_READY,
 } from 'app/configs+constants/ActionTypes';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 
@@ -12,6 +13,7 @@ const defaultState = {
     lockedCounter: 0,
     multiTaskCounter: 0,
     tabIndex: NavigationConfig.initialIndex,
+    isConfigFetched: false,
 };
 
 const AppStateReducer = (state = defaultState, action) => {
@@ -39,6 +41,8 @@ const AppStateReducer = (state = defaultState, action) => {
                 lockedCounter: 0,
                 multiTaskCounter: 0,
             });
+        case CONFIG_READY:
+            return { ...state, isConfigFetched: true };
         default:
             return state;
     }
