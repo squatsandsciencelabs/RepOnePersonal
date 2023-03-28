@@ -5,32 +5,6 @@ import * as Progress from 'react-native-progress';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAInstallingPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            spinValue: new Animated.Value(0),
-        };
-    }
-
-    componentDidMount = () => {
-        this.startImageRotateFunction();
-    };
-
-    componentWillUnmount = () => {
-        this.state.spinValue.stopAnimation();
-    };
-
-    startImageRotateFunction = () => {
-        Animated.loop(
-            Animated.timing(this.state.spinValue, {
-                toValue: 1,
-                duration: 1000,
-                easing: Easing.linear,
-                useNativeDriver: false,
-            }),
-        ).start();
-    };
-
     render() {
         return (
             <View style={SETTINGS_PANEL_STYLES.footer}>
@@ -41,19 +15,14 @@ class SettingsOTAInstallingPanel extends Component {
                     ]}>
                     Version {this.props.firmwareVersion} installing update...
                 </Text>
-                <Animated.Image
-                    style={{
-                        margin: 16,
-                        transform: [
-                            {
-                                rotate: this.state.spinValue.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: ['0deg', '360deg'],
-                                }),
-                            },
-                        ],
-                    }}
-                    source={require('app/appearance/images/ellipse_install_firmware.png')}
+                <Progress.Circle
+                    style={{ marginTop: 10, marginBottom: 10 }}
+                    size={50}
+                    progress={this.props.progress}
+                    showsText={true}
+                    formatText={() => `${this.props.progress * 100}%`}
+                    borderWidth={0}
+                    unfilledColor={'#D4D4D4'}
                 />
                 <Text
                     style={[

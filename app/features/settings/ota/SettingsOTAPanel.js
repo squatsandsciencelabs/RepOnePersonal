@@ -59,6 +59,7 @@ class SettingsOTAPanel extends Component {
                     <SettingsOTAInstallingPanel
                         firmwareVersion={this.props.firmwareVersion}
                         connectedDevice={this.props.connectedDevice}
+                        progress={this.props.progress}
                     />
                 );
             case OTAStatus.INSTALL_FAILED:
