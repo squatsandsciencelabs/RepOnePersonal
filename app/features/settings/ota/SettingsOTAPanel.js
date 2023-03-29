@@ -33,6 +33,7 @@ class SettingsOTAPanel extends Component {
                 return (
                     <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
+                        firmwareDescription={this.props.firmwareDescription}
                         firmwareVersion={this.props.firmwareVersion}
                         download={this.props.download}
                     />
