@@ -6,8 +6,8 @@ class SettingsOTAAvailablePanel extends Component {
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
-                {this.props.firmwareDescription}. The connected RepOne hardware
-                is version {this.props.deviceFirmwareVersion}.
+                {this.props.firmwareDescription}. The connected hardware is
+                version {this.props.deviceFirmwareVersion}.
             </Text>
         );
 

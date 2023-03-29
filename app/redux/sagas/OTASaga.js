@@ -12,6 +12,7 @@ import {
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
     CANCEL_OTA_DOWNLOAD,
+    REMOVE_OTA_CACHE,
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
@@ -42,6 +43,7 @@ export default function* OTASaga(dispatch) {
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
+        takeEvery(REMOVE_OTA_CACHE, removeCache),
         takeEvery(RETRY_INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(OTA_DOWNLOAD_SUCCEEDED, startInstall),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
@@ -228,6 +230,14 @@ function* deleteDownload(action) {
     }
 }
 
+function* removeCache(action) {
+    try {
+        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
+    } catch (err) {
+        console.tron.log(`failed to remove download cache ${err}`);
+    }
+}
+
 function* startInstall(action) {
     const state = yield select();
     const deviceIdentifier =
@@ -302,6 +312,11 @@ function* startInstall(action) {
 function* reboot(action) {
     const state = yield select();
     const progress = OTASelectors.getProgress(state);
+
+    yield put({
+        type: REMOVE_OTA_CACHE,
+    });
+
     if (progress === 100 && action.state === 'DEVICE_DISCONNECTING') {
         // success
 
