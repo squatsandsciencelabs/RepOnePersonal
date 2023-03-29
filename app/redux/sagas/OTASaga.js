@@ -21,7 +21,6 @@ import {
     CANCEL_INSTALL_OTA,
     OTA_INSTALL_FAILED,
     OTA_INSTALL_SUCCEEDED,
-    CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
