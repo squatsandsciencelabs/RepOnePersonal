@@ -10,7 +10,6 @@ import SettingsApplicationScreen from './application/SettingsApplicationScreen';
 import SettingsFeedbackScreen from './feedback/SettingsFeedbackScreen';
 import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 import SettingsRepOnePanel from './sensor/repone/SettingsRepOnePanel';
-import firebase from 'app/services/Firebase';
 import SettingsKratosScreen from 'app/features/settings/sensor/kratos/SettingsKratosScreen';
 
 class SettingsTab extends Component {
