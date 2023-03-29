@@ -23,7 +23,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.tappableText,
                         { fontWeight: '500' },
                     ]}
-                    onPress={this.props.install.bind(this)}>
+                    onPress={this.props.retryInstall.bind(this)}>
                     Retry
                 </Text>
                 <Text

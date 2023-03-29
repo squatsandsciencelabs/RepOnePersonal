@@ -26,8 +26,8 @@ class SettingsOTAReadyPanel extends Component {
                             marginTop: 30,
                         },
                     ]}>
-                    The connected device is up to date. To update another RepOne
-                    unit, connect to it below.
+                    The connected device is up to date. To update another unit,
+                    connect to it below.
                 </Text>
             </View>
         );

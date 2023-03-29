@@ -65,7 +65,7 @@ class SettingsOTAPanel extends Component {
             case OTAStatus.INSTALL_FAILED:
                 return (
                     <SettingsOTAInstallationFailedPanel
-                        install={this.props.install}
+                        retryInstall={this.props.retryInstall}
                         cancelInstall={this.props.cancelInstall}
                         firmwareVersion={this.props.firmwareVersion}
                     />

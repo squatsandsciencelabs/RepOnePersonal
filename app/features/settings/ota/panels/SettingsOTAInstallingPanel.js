@@ -29,7 +29,7 @@ class SettingsOTAInstallingPanel extends Component {
                         SETTINGS_PANEL_STYLES.subtitleText,
                         { paddingBottom: 42 },
                     ]}>
-                    Installing on RepOne{' '}
+                    Installing on{' '}
                     {this.props.connectedDevice &&
                         `#${this.props.connectedDevice}`}
                 </Text>

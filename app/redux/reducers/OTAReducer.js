@@ -9,7 +9,7 @@ import {
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
-    INSTALL_OTA_ATTEMPT,
+    RETRY_INSTALL_OTA_ATTEMPT,
     CANCEL_INSTALL_OTA,
     INSTALL_OTA_PROGRESS,
     CONNECTED_TO_DEVICE,
@@ -85,7 +85,7 @@ const OTAReducer = (state = defaultState, action) => {
                 ...state,
                 status: OTAStatus.AVAILABLE,
             };
-        case INSTALL_OTA_ATTEMPT:
+        case RETRY_INSTALL_OTA_ATTEMPT:
             return {
                 ...state,
                 status: OTAStatus.INSTALLING,

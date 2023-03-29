@@ -54,7 +54,7 @@ class SettingsOTADownloadingPanel extends Component {
                     source={require('app/appearance/images/ellipse_install_firmware.png')}
                 />
                 <Text style={[SETTINGS_PANEL_STYLES.subtitleText]}>
-                    Installing on RepOne{' '}
+                    Installing on{' '}
                     {this.props.connectedDevice &&
                         `#${this.props.connectedDevice}`}
                 </Text>

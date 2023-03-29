@@ -16,7 +16,7 @@ import {
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
     INSTALL_OTA_PROGRESS,
-    INSTALL_OTA_ATTEMPT,
+    RETRY_INSTALL_OTA_ATTEMPT,
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
     OTA_INSTALL_FAILED,
@@ -44,7 +44,7 @@ export default function* OTASaga(dispatch) {
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
-        takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
+        takeEvery(RETRY_INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(OTA_DOWNLOAD_SUCCEEDED, startInstall),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);

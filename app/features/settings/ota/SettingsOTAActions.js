@@ -2,7 +2,7 @@ import {
     OTA_DOWNLOAD_ATTEMPT,
     CANCEL_OTA_DOWNLOAD,
     DELETE_OTA_DOWNLOAD,
-    INSTALL_OTA_ATTEMPT,
+    RETRY_INSTALL_OTA_ATTEMPT,
     CANCEL_INSTALL_OTA,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
@@ -27,10 +27,10 @@ export const deleteDownload = () => (dispatch, getState) => {
     dispatch({ type: DELETE_OTA_DOWNLOAD });
 };
 
-export const install = () => (dispatch, getState) => {
+export const retryInstall = () => (dispatch, getState) => {
     const state = getState();
     logOTAAnalytics(state, 'install_firmware');
-    dispatch({ type: INSTALL_OTA_ATTEMPT });
+    dispatch({ type: RETRY_INSTALL_OTA_ATTEMPT });
 };
 
 export const cancelInstall = () => (dispatch, getState) => {

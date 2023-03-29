@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => {
             download: Actions.download,
             cancelDownload: Actions.cancelDownload,
             deleteDownload: Actions.deleteDownload,
-            install: Actions.install,
+            retryInstall: Actions.retryInstall,
             cancelInstall: Actions.cancelInstall,
         },
         dispatch,
