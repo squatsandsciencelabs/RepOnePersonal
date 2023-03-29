@@ -97,8 +97,17 @@ const OTAReducer = (state = defaultState, action) => {
                 progress: action.progress,
             };
         case CONNECTED_TO_DEVICE:
+            // if device has the latest firmware version, don't install the firmware
+            const isSameVersion =
+                action.firmwareVersion === state.firmwareVersion;
+
+            const status = isSameVersion
+                ? OTAStatus.INSTALL_READY
+                : state.status;
+
             return {
                 ...state,
+                status,
                 progress: 0,
             };
         case OTA_INSTALL_FAILED:

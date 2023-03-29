@@ -39,7 +39,6 @@ const filePath = `${FileSystem.documentDirectory}firmware.zip`;
 export default function* OTASaga(dispatch) {
     yield all([
         takeEvery(STORE_INITIALIZED, dispatch, checkOTA),
-        takeEvery(CONNECTED_TO_DEVICE, connectedToDevice),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
@@ -166,17 +165,6 @@ function* checkOTA(dispatch, action) {
         yield put({
             type: OTA_DOWNLOAD_AVAILABLE,
             firmwareVersion,
-        });
-    }
-}
-
-function* connectedToDevice(action) {
-    // if device has the latest firmware version don't install the firmware
-    const currentVersion = yield select(OTASelectors.getFirmwareVersion);
-
-    if (action.firmwareVersion === currentVersion) {
-        yield put({
-            type: OTA_INSTALL_SUCCEEDED,
         });
     }
 }
