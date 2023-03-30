@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Animated, Easing, Text, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
@@ -11,9 +11,9 @@ class SettingsOTAInstallingPanel extends Component {
                 <Text
                     style={[
                         SETTINGS_PANEL_STYLES.subtitleText,
-                        { fontWeight: 'bold' },
+                        { fontWeight: '500', marginTop: 10 },
                     ]}>
-                    Version {this.props.firmwareVersion} files downloaded
+                    Version {this.props.firmwareVersion} installing update...
                 </Text>
                 <Progress.Circle
                     style={{ marginTop: 10, marginBottom: 10 }}
@@ -23,12 +23,15 @@ class SettingsOTAInstallingPanel extends Component {
                     borderWidth={0}
                     unfilledColor={'#D4D4D4'}
                 />
-                <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
-                    Installing on RepOne {this.props.connectedDevice}
+                <Text
+                    style={[
+                        SETTINGS_PANEL_STYLES.subtitleText,
+                        { paddingBottom: 42 },
+                    ]}>
+                    Installing on{' '}
+                    {this.props.connectedDevice &&
+                        `#${this.props.connectedDevice}`}
                 </Text>
-                {/* <Text style={[SETTINGS_PANEL_STYLES.footerCancelText, {fontWeight: 'bold', paddingTop: 25, paddingBottom: 10}]} onPress={this.props.cancelInstall.bind(this)}>
-                    Cancel
-                </Text> */}
             </View>
         );
     }

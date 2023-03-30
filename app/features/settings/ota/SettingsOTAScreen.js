@@ -16,6 +16,8 @@ const mapStateToProps = state => {
         firmwareDescription: OTASelectors.getFirmwareDescription(state),
         status: OTASelectors.getStatus(state),
         progress: OTASelectors.getProgressDividedBy100(state),
+        connectedDeviceStatus:
+            ConnectedDeviceStatusSelectors.getConnectedDeviceStatus(state),
     };
 };
 
@@ -25,7 +27,7 @@ const mapDispatchToProps = dispatch => {
             download: Actions.download,
             cancelDownload: Actions.cancelDownload,
             deleteDownload: Actions.deleteDownload,
-            install: Actions.install,
+            retryInstall: Actions.retryInstall,
             cancelInstall: Actions.cancelInstall,
         },
         dispatch,

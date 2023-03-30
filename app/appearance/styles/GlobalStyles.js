@@ -8,9 +8,9 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     panel: {
         marginTop: 10,
         marginBottom: 0,
-        marginLeft: 13,
-        marginRight: 13,
-        padding: 20,
+        marginHorizontal: 16,
+        paddingHorizontal: 25,
+        paddingVertical: 30,
         backgroundColor: 'white',
         borderColor: '#e0e0e0',
         borderWidth: 1,
@@ -29,12 +29,12 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
         color: 'rgba(77, 77, 77, 1)',
     },
     headerText: {
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        color: 'rgba(77, 77, 77, 1)',
+        color: 'rgba(79, 79, 79, 1)',
     },
     tappableText: {
         fontSize: 16,
@@ -66,20 +66,20 @@ export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     },
     footerCancelText: {
         textAlign: 'center',
-        color: 'crimson',
+        color: '#EB5757',
     },
     blueButton: {
         backgroundColor: 'rgba(47, 128, 237, 1)',
-        borderRadius: 3,
-        borderWidth: 3,
-        borderColor: 'rgba(47, 128, 237, 1)',
+        borderRadius: 4,
         justifyContent: 'center',
         alignItems: 'center',
+        fontSize: 14,
     },
     buttonText: {
         textAlign: 'center',
         color: 'white',
     },
+    redText: { color: '#EB5757' },
 });
 
 export const HISTORY_STYLES = StyleSheet.create({

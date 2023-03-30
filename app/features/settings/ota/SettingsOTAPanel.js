@@ -11,9 +11,15 @@ import SettingsOTADownloadFailedPanel from './panels/SettingsOTADownloadFailedPa
 import SettingsOTADownloadingPanel from './panels/SettingsOTADownloadingPanel';
 import SettingsOTAInstallingPanel from './panels/SettingsOTAInstallingPanel';
 import SettingsOTAReadyPanel from './panels/SettingsOTAReadyPanel';
+import SettingsOTADeviceNotConnected from './panels/SettingsOTADeviceNotConnected';
+import SettingsOTAInstallationFailedPanel from './panels/SettingsOTAInstallationFailedPanel';
+import * as SensorStatus from 'app/configs+constants/SensorStatus';
 
 class SettingsOTAPanel extends Component {
     _renderContents() {
+        if (this.props.connectedDeviceStatus !== SensorStatus.CONNECTED) {
+            return <SettingsOTADeviceNotConnected />;
+        }
         switch (this.props.status) {
             case OTAStatus.UPDATE_APP:
                 return (
@@ -27,15 +33,15 @@ class SettingsOTAPanel extends Component {
                 return (
                     <SettingsOTAAvailablePanel
                         deviceFirmwareVersion={this.props.deviceFirmwareVersion}
-                        firmwareVersion={this.props.firmwareVersion}
                         firmwareDescription={this.props.firmwareDescription}
+                        firmwareVersion={this.props.firmwareVersion}
                         download={this.props.download}
                     />
                 );
             case OTAStatus.DOWNLOADING:
                 return (
                     <SettingsOTADownloadingPanel
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
+                        connectedDevice={this.props.connectedDevice}
                         firmwareVersion={this.props.firmwareVersion}
                         cancelDownload={this.props.cancelDownload}
                     />
@@ -43,31 +49,32 @@ class SettingsOTAPanel extends Component {
             case OTAStatus.DOWNLOAD_FAILED:
                 return (
                     <SettingsOTADownloadFailedPanel
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         download={this.props.download}
                         cancelDownload={this.props.cancelDownload}
                     />
                 );
-            case OTAStatus.READY:
-                return (
-                    <SettingsOTAReadyPanel
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
-                        firmwareVersion={this.props.firmwareVersion}
-                        connectedDevice={this.props.connectedDevice}
-                        deleteDownload={this.props.deleteDownload}
-                        install={this.props.install}
-                    />
-                );
             case OTAStatus.INSTALLING:
+            case OTAStatus.DOWNLOAD_READY:
                 return (
                     <SettingsOTAInstallingPanel
-                        deviceFirmwareVersion={this.props.deviceFirmwareVersion}
                         firmwareVersion={this.props.firmwareVersion}
                         connectedDevice={this.props.connectedDevice}
-                        deleteDownload={this.props.deleteDownload}
-                        cancelInstall={this.props.cancelInstall}
                         progress={this.props.progress}
+                    />
+                );
+            case OTAStatus.INSTALL_FAILED:
+                return (
+                    <SettingsOTAInstallationFailedPanel
+                        retryInstall={this.props.retryInstall}
+                        cancelInstall={this.props.cancelInstall}
+                        firmwareVersion={this.props.firmwareVersion}
+                    />
+                );
+            case OTAStatus.INSTALL_READY:
+                return (
+                    <SettingsOTAReadyPanel
+                        firmwareVersion={this.props.firmwareVersion}
                     />
                 );
             default:

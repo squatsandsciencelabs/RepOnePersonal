@@ -12,13 +12,16 @@ import {
     OTA_DOWNLOAD_AVAILABLE,
     OTA_DOWNLOAD_ATTEMPT,
     CANCEL_OTA_DOWNLOAD,
+    REMOVE_OTA_CACHE,
     OTA_DOWNLOAD_SUCCEEDED,
     OTA_DOWNLOAD_FAILED,
     DELETE_OTA_DOWNLOAD,
     INSTALL_OTA_PROGRESS,
-    INSTALL_OTA_ATTEMPT,
+    RETRY_INSTALL_OTA_ATTEMPT,
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
+    OTA_INSTALL_FAILED,
+    OTA_INSTALL_SUCCEEDED,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
@@ -39,8 +42,10 @@ export default function* OTASaga(dispatch) {
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
-        takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
+        takeEvery(REMOVE_OTA_CACHE, removeCache),
+        takeEvery(RETRY_INSTALL_OTA_ATTEMPT, startInstall),
+        takeEvery(OTA_DOWNLOAD_SUCCEEDED, startInstall),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);
 }
@@ -167,7 +172,20 @@ function* checkOTA(dispatch, action) {
 
 function* startDownload(action) {
     try {
+        const firmwareInfo = yield apply(FileSystem, FileSystem.getInfoAsync, [
+            filePath,
+        ]);
+
         const currentVersion = yield select(OTASelectors.getFirmwareVersion);
+
+        // if already downloaded proceed to the installation process
+        if (firmwareInfo.exists) {
+            yield put({
+                type: OTA_DOWNLOAD_SUCCEEDED,
+            });
+            return;
+        }
+
         downloadTask = FileSystem.createDownloadResumable(
             `https://firmware.reponestrength.com/${currentVersion}.zip`,
             filePath,
@@ -212,6 +230,14 @@ function* deleteDownload(action) {
     }
 }
 
+function* removeCache(action) {
+    try {
+        yield apply(FileSystem, FileSystem.deleteAsync, [filePath]);
+    } catch (err) {
+        console.tron.log(`failed to remove download cache ${err}`);
+    }
+}
+
 function* startInstall(action) {
     const state = yield select();
     const deviceIdentifier =
@@ -244,6 +270,10 @@ function* startInstall(action) {
                 filePath: path,
             },
         ]);
+
+        yield put({
+            type: OTA_INSTALL_SUCCEEDED,
+        });
     } catch (err) {
         const state = yield select();
         if (OTASelectors.getProgress(state) !== 100) {
@@ -253,7 +283,7 @@ function* startInstall(action) {
             Alert.alert(`Error installing firmware on ${name}`);
             logOTAAnalytics(state, 'firmware_install_failed');
             yield put({
-                type: OTA_DOWNLOAD_READY,
+                type: OTA_INSTALL_FAILED,
             });
             try {
                 yield apply(BleManager, BleManager.startNotification, [
@@ -282,6 +312,11 @@ function* startInstall(action) {
 function* reboot(action) {
     const state = yield select();
     const progress = OTASelectors.getProgress(state);
+
+    yield put({
+        type: REMOVE_OTA_CACHE,
+    });
+
     if (progress === 100 && action.state === 'DEVICE_DISCONNECTING') {
         // success
 

@@ -12,8 +12,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.redText,
                         { fontWeight: '500' },
                     ]}>
-                    Version {this.props.firmwareVersion} files failed to
-                    download
+                    Version {this.props.firmwareVersion} installation failed
                 </Text>
                 <Image
                     style={{ marginVertical: 25 }}
@@ -24,7 +23,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.tappableText,
                         { fontWeight: '500' },
                     ]}
-                    onPress={this.props.download.bind(this)}>
+                    onPress={this.props.retryInstall.bind(this)}>
                     Retry
                 </Text>
                 <Text
@@ -36,7 +35,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                             fontWeight: '500',
                         },
                     ]}
-                    onPress={this.props.cancelDownload.bind(this)}>
+                    onPress={this.props.cancelInstall.bind(this)}>
                     Cancel
                 </Text>
             </View>
