@@ -20,7 +20,6 @@ class SettingsOTAInstallingPanel extends Component {
                     size={50}
                     progress={this.props.progress}
                     showsText={true}
-                    formatText={() => `${this.props.progress * 100}%`}
                     borderWidth={0}
                     unfilledColor={'#D4D4D4'}
                 />
