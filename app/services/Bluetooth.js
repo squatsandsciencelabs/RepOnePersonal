@@ -302,6 +302,43 @@ export default async function (store) {
         },
     );
 
+    Emitter.addListener(
+        'BleManagerCentralManagerWillRestoreState',
+        async args => {
+            for (let i = 0; i < peripherals.length; i++) {
+                const peripheral = peripherals[i];
+
+                try {
+                    // Connect to the peripheral
+                    await BleManager.connect(peripheral.id);
+
+                    // Discover services and characteristics
+                    const services = await BleManager.retrieveServices(
+                        peripheral.id,
+                    );
+
+                    const characteristics = services.characteristics;
+                    if (characteristics) {
+                        // Subscribe to the characteristics
+                        for (let k = 0; k < characteristics.length; k++) {
+                            await BleManager.startNotification(
+                                peripheral.id,
+                                characteristics[k].service,
+                                characteristics[k].characteristic,
+                            );
+                        }
+                    }
+                } catch (error) {
+                    console.log(
+                        'Error restoring peripheral:',
+                        peripheral.id,
+                        error,
+                    );
+                }
+            }
+        },
+    );
+
     try {
         if (Platform.OS !== 'ios') {
             const allBluetoothPermissionGranted =
