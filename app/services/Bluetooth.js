@@ -305,9 +305,7 @@ export default async function (store) {
     Emitter.addListener(
         'BleManagerCentralManagerWillRestoreState',
         async args => {
-            for (let i = 0; i < peripherals.length; i++) {
-                const peripheral = peripherals[i];
-
+            args.peripherals.forEach(async peripheral => {
                 try {
                     // Connect to the peripheral
                     await BleManager.connect(peripheral.id);
@@ -320,13 +318,13 @@ export default async function (store) {
                     const characteristics = services.characteristics;
                     if (characteristics) {
                         // Subscribe to the characteristics
-                        for (let k = 0; k < characteristics.length; k++) {
+                        characteristics.forEach(async characteristic => {
                             await BleManager.startNotification(
                                 peripheral.id,
-                                characteristics[k].service,
-                                characteristics[k].characteristic,
+                                characteristic.service,
+                                characteristic.characteristic,
                             );
-                        }
+                        });
                     }
                 } catch (error) {
                     console.log(
@@ -335,7 +333,7 @@ export default async function (store) {
                         error,
                     );
                 }
-            }
+            });
         },
     );
 
