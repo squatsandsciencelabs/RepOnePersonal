@@ -305,33 +305,39 @@ export default async function (store) {
     Emitter.addListener(
         'BleManagerCentralManagerWillRestoreState',
         async args => {
-            args.peripherals.forEach(async peripheral => {
-                try {
-                    // Connect to the peripheral
-                    await BleManager.connect(peripheral.id);
+            // BleManager.start({ showAlert: false });
 
-                    // Discover services and characteristics
-                    const services = await BleManager.retrieveServices(
-                        peripheral.id,
-                    );
+            // BleManager.checkState();
 
-                    const characteristics = services.characteristics;
-                    if (characteristics) {
-                        // Subscribe to the characteristics
-                        characteristics.forEach(async characteristic => {
-                            await BleManager.startNotification(
-                                peripheral.id,
-                                characteristic.service,
-                                characteristic.characteristic,
-                            );
-                        });
-                    }
-                } catch (error) {
-                    console.log(
-                        'Error restoring peripheral:',
-                        peripheral.id,
-                        error,
-                    );
+            // Restore the state of each connected peripheral
+            args.peripherals.forEach(peripheral => {
+                // Reconnect to the peripheral if necessary
+                if (peripheral.connected) {
+                    BleManager.connect(peripheral.id).then(() => {
+                        // Restore the state of each service, characteristic, and descriptor
+                        BleManager.retrieveServices(peripheral.id).then(
+                            servicesArray => {
+                                servicesArray.forEach(service => {
+                                    BleManager.retrieveCharacteristics(
+                                        peripheral.id,
+                                        service.uuid,
+                                    ).then(characteristicsArray => {
+                                        characteristicsArray.forEach(
+                                            characteristic => {
+                                                BleManager.startNotification(
+                                                    peripheral.id,
+                                                    service.uuid,
+                                                    characteristic.uuid,
+                                                ).then(() => {
+                                                    // Handle characteristic value notifications
+                                                });
+                                            },
+                                        );
+                                    });
+                                });
+                            },
+                        );
+                    });
                 }
             });
         },
