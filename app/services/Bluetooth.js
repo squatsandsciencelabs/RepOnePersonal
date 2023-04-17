@@ -305,39 +305,29 @@ export default async function (store) {
     Emitter.addListener(
         'BleManagerCentralManagerWillRestoreState',
         async args => {
-            // BleManager.start({ showAlert: false });
-
-            // BleManager.checkState();
-
             // Restore the state of each connected peripheral
-            args.peripherals.forEach(peripheral => {
-                // Reconnect to the peripheral if necessary
-                if (peripheral.connected) {
-                    BleManager.connect(peripheral.id).then(() => {
-                        // Restore the state of each service, characteristic, and descriptor
-                        BleManager.retrieveServices(peripheral.id).then(
-                            servicesArray => {
-                                servicesArray.forEach(service => {
-                                    BleManager.retrieveCharacteristics(
-                                        peripheral.id,
-                                        service.uuid,
-                                    ).then(characteristicsArray => {
-                                        characteristicsArray.forEach(
-                                            characteristic => {
-                                                BleManager.startNotification(
-                                                    peripheral.id,
-                                                    service.uuid,
-                                                    characteristic.uuid,
-                                                ).then(() => {
-                                                    // Handle characteristic value notifications
-                                                });
-                                            },
-                                        );
-                                    });
-                                });
-                            },
-                        );
-                    });
+            console.log();
+            args.peripherals.forEach(async peripheral => {
+                try {
+                    const isConnected = await BleManager.isPeripheralConnected(
+                        peripheral.id,
+                    );
+                    // TODO: connect, get dispatched info...
+
+                    // connect
+                    store.dispatch(
+                        DeviceActionCreators.connectDevice(
+                            peripheral.name,
+                            peripheral.id,
+                        ),
+                    );
+
+                    await BleManager.retrieveServices(peripheral.id);
+                } catch (err) {
+                    // TODO: add error logging here
+                    console.tron.log(
+                        `Error setting up service after connecting to peripheral ${err}`,
+                    );
                 }
             });
         },
@@ -356,7 +346,8 @@ export default async function (store) {
         await BleManager.start({
             showAlert: false,
             // disabled for now, more useful for individual mode not kiosk mode
-            // restoreIdentifierKey: 'RepOneKioskRestoreIdentifier',
+            restoreIdentifierKey: 'RepOneRestoreIdentifier',
+            // queueIdentifierKey: 'RepOneQueueIdentifier',
         });
         BluetoothUtils.setDidBleManagerStart(true);
     } catch (err) {
