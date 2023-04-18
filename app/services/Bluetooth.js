@@ -306,13 +306,11 @@ export default async function (store) {
         'BleManagerCentralManagerWillRestoreState',
         async args => {
             // Restore the state of each connected peripheral
-            console.log();
             args.peripherals.forEach(async peripheral => {
                 try {
-                    const isConnected = await BleManager.isPeripheralConnected(
-                        peripheral.id,
-                    );
-                    // TODO: connect, get dispatched info...
+                    // const isConnected = await BleManager.isPeripheralConnected(
+                    //     peripheral.id,
+                    // );
 
                     // connect
                     store.dispatch(
@@ -321,8 +319,47 @@ export default async function (store) {
                             peripheral.id,
                         ),
                     );
+                    const formatVersion = 2;
 
-                    await BleManager.retrieveServices(peripheral.id);
+                    store.dispatch(
+                        DeviceActionCreators.connectedToDevice(
+                            peripheral.id,
+                            formatVersion,
+                            // mock version
+                            `10.0.0`,
+                            null,
+                        ),
+                    );
+                    const characteristic = peripheral.characteristics.find(
+                        c =>
+                            c.characteristic.toUpperCase() ===
+                            'A5183278-CA65-45B7-B6C3-A68552F20273',
+                    );
+                    if (characteristic) {
+                        const typedArray = new Uint8Array(
+                            characteristic.value.bytes,
+                        );
+                        const data = new Uint16Array(typedArray.buffer);
+
+                        store.dispatch(
+                            DeviceActionCreators.receivedLiftData({
+                                isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
+                                deviceRepID: data[0],
+                                repNumber: data[1],
+                                averageVelocity: data[2],
+                                rom: data[3],
+                                peakVelocity: data[4],
+                                peakHeight: data[5],
+                                duration: data[6],
+                                totalSampleCount:
+                                    formatVersion === 1 ? null : data[7],
+                                linear3DAverageVelocity:
+                                    formatVersion === 1 ? null : data[8],
+                                linear3DROM:
+                                    formatVersion === 1 ? null : data[9],
+                            }),
+                        );
+                    }
                 } catch (err) {
                     // TODO: add error logging here
                     console.tron.log(
