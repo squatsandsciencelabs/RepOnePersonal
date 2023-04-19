@@ -10,6 +10,7 @@ import {
     RECONNECTING_TO_DEVICE,
     END_WORKOUT,
     UPDATE_BATTERY_PERCENTAGE,
+    RESTORED_BLE_STATE,
 } from 'app/configs+constants/ActionTypes';
 import {
     DEVICE_BLUETOOTH_OFF,
@@ -32,6 +33,7 @@ const defaultState = {
     apiFormatVersion: null,
     firmwareVersion: null,
     batteryPercentage: null,
+    isStateRestored: false,
 };
 
 const ConnectedDeviceReducer = (state = defaultState, action) => {
@@ -58,6 +60,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 batteryPercentage: null,
+                isStateRestored: false,
             });
         case BLUETOOTH_OFF:
             return Object.assign({}, state, {
@@ -65,6 +68,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 batteryPercentage: null,
+                isStateRestored: false,
             });
         case DISCONNECTED_FROM_DEVICE:
             return Object.assign({}, state, {
@@ -77,6 +81,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 apiFormatVersion: null,
                 firmwareVersion: null,
                 batteryPercentage: null,
+                isStateRestored: false,
             });
         case STOP_RECONNECT:
             return Object.assign({}, state, {
@@ -85,6 +90,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceIdentifier: null,
                 isReconnecting: false,
                 batteryPercentage: null,
+                isStateRestored: false,
             });
         case CONNECTING_TO_DEVICE:
             return {
@@ -119,6 +125,11 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
             });
         case UPDATE_BATTERY_PERCENTAGE:
             return { ...state, batteryPercentage: action.percentage };
+        case RESTORED_BLE_STATE:
+            return {
+                ...state,
+                isStateRestored: true,
+            };
         default:
             return state;
     }
