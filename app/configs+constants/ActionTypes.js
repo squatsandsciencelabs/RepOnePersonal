@@ -20,6 +20,9 @@ export const ADD_KRATOS_REP_DATA = 'ADD_KRATOS_REP_DATA';
 export const DISCONNECT_DEVICE = 'DISCONNECT_DEVICE';
 export const UPDATE_BATTERY_PERCENTAGE = 'UPDATE_BATTERY_PERCENTAGE';
 
+// ble state restoration
+export const RESTORED_BLE_STATE = 'BLE_RESTORED_STATE';
+
 // auth
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

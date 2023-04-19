@@ -55,15 +55,26 @@ export default async function (store) {
             // should have sagas listening to it
             // note that this is basically the same code as the disconnect listener below
             const state = store.getState();
-            const name =
-                ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
-            const identifier =
-                ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(
-                    state,
+            const isBLEStateRestored =
+                ConnectedDeviceStatusSelectors.getIsBLEStateRestored(state);
+
+            // Don't disconnect from the device if the state is restored
+            if (!isBLEStateRestored) {
+                const name =
+                    ConnectedDeviceStatusSelectors.getConnectedDeviceName(
+                        state,
+                    );
+                const identifier =
+                    ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(
+                        state,
+                    );
+                store.dispatch(
+                    DeviceActionCreators.disconnectedFromDevice(
+                        name,
+                        identifier,
+                    ),
                 );
-            store.dispatch(
-                DeviceActionCreators.disconnectedFromDevice(name, identifier),
-            );
+            }
         }
     });
 
@@ -305,14 +316,11 @@ export default async function (store) {
     Emitter.addListener(
         'BleManagerCentralManagerWillRestoreState',
         async args => {
+            // updating connected device state so that other handler doesn't call `disconnectDevice` action
+            store.dispatch(DeviceActionCreators.restoringBLEState());
             // Restore the state of each connected peripheral
-            args.peripherals.forEach(async peripheral => {
+            for (const peripheral of args.peripherals) {
                 try {
-                    // const isConnected = await BleManager.isPeripheralConnected(
-                    //     peripheral.id,
-                    // );
-
-                    // connect
                     store.dispatch(
                         DeviceActionCreators.connectDevice(
                             peripheral.name,
@@ -320,16 +328,23 @@ export default async function (store) {
                         ),
                     );
                     const formatVersion = 2;
-
+                    // TODO: confirm this isn't needed
+                    // BleManager.startNotification(
+                    //     peripheral.id,
+                    //     'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    //     'A5183278-CA65-45B7-B6C3-A68552F20273',
+                    // );
                     store.dispatch(
                         DeviceActionCreators.connectedToDevice(
                             peripheral.id,
                             formatVersion,
-                            // mock version
-                            `10.0.0`,
+                            // TODO: change to real firmwareVersion
+                            '10.0.0',
                             null,
                         ),
                     );
+                    // searching for the rep data
+                    // TODO: add check for Kratos rep data
                     const characteristic = peripheral.characteristics.find(
                         c =>
                             c.characteristic.toUpperCase() ===
@@ -366,7 +381,7 @@ export default async function (store) {
                         `Error setting up service after connecting to peripheral ${err}`,
                     );
                 }
-            });
+            }
         },
     );
 

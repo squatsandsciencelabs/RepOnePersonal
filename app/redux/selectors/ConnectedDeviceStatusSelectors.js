@@ -49,3 +49,5 @@ export const getConnectedDeviceRepCharacteristic = state => {
 
 export const getConnectedDeviceBatteryPercentage = state =>
     stateRoot(state).batteryPercentage;
+
+export const getIsBLEStateRestored = state => stateRoot(state).isStateRestored;

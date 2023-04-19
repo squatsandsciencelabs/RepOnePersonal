@@ -20,6 +20,7 @@ import {
     VELOCITY_DROPPED,
     ADD_KRATOS_REP_DATA,
     UPDATE_BATTERY_PERCENTAGE,
+    RESTORED_BLE_STATE,
 } from 'app/configs+constants/ActionTypes';
 import {
     CONNECTING,
@@ -348,6 +349,12 @@ export const receivedKratosLiftData =
 
         dispatch(TimerActionCreators.startEndSetTimer());
     };
+
+export const restoringBLEState = () => (dispatch, getState) => {
+    dispatch({
+        type: RESTORED_BLE_STATE,
+    });
+};
 
 // ANALYTICS
 
