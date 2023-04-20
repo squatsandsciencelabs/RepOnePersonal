@@ -60,7 +60,6 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 batteryPercentage: null,
-                isStateRestored: false,
             });
         case BLUETOOTH_OFF:
             return Object.assign({}, state, {
@@ -68,7 +67,6 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceName: null,
                 deviceIdentifier: null,
                 batteryPercentage: null,
-                isStateRestored: false,
             });
         case DISCONNECTED_FROM_DEVICE:
             return Object.assign({}, state, {
@@ -90,7 +88,6 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 deviceIdentifier: null,
                 isReconnecting: false,
                 batteryPercentage: null,
-                isStateRestored: false,
             });
         case CONNECTING_TO_DEVICE:
             return {
