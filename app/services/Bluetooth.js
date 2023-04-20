@@ -34,6 +34,9 @@ export const BLE_BATTERY_SERVICE_UUID = '180F';
 // 2A19 - short
 export const BLE_BATTERY_CHARACTERISTIC_UUID = '2A19';
 
+const REP_ONE_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20273';
+const KRATOS_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20284';
+
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
 
@@ -174,7 +177,7 @@ export default async function (store) {
                         ),
                     );
                 } else if (
-                    characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20273'
+                    characteristic === REP_ONE_DATA_CHARACTERISTIC_UUID
                 ) {
                     // RepOne reps
 
@@ -202,7 +205,7 @@ export default async function (store) {
                     );
                 } else if (
                     getKratosEnabled() &&
-                    characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20284'
+                    characteristic === KRATOS_DATA_CHARACTERISTIC_UUID
                 ) {
                     // Kratos Reps
 
@@ -328,12 +331,7 @@ export default async function (store) {
                         ),
                     );
                     const formatVersion = 2;
-                    // TODO: confirm this isn't needed
-                    // BleManager.startNotification(
-                    //     peripheral.id,
-                    //     'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                    //     'A5183278-CA65-45B7-B6C3-A68552F20273',
-                    // );
+
                     store.dispatch(
                         DeviceActionCreators.connectedToDevice(
                             peripheral.id,
@@ -344,35 +342,76 @@ export default async function (store) {
                         ),
                     );
                     // searching for the rep data
-                    // TODO: add check for Kratos rep data
-                    const characteristic = peripheral.characteristics.find(
-                        c =>
-                            c.characteristic.toUpperCase() ===
-                            'A5183278-CA65-45B7-B6C3-A68552F20273',
-                    );
-                    if (characteristic) {
+                    const repOneCharacteristic =
+                        peripheral.characteristics.find(
+                            c =>
+                                c.characteristic.toUpperCase() ===
+                                REP_ONE_DATA_CHARACTERISTIC_UUID,
+                        );
+
+                    const kratosCharacteristic =
+                        peripheral.characteristics.find(
+                            c =>
+                                c.characteristic.toUpperCase() ===
+                                KRATOS_DATA_CHARACTERISTIC_UUID,
+                        );
+
+                    if (repOneCharacteristic) {
                         const typedArray = new Uint8Array(
-                            characteristic.value.bytes,
+                            repOneCharacteristic.value.bytes,
                         );
                         const data = new Uint16Array(typedArray.buffer);
 
+                        const json = {
+                            isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
+                            deviceRepID: data[0],
+                            repNumber: data[1],
+                            averageVelocity: data[2],
+                            rom: data[3],
+                            peakVelocity: data[4],
+                            peakHeight: data[5],
+                            duration: data[6],
+                            totalSampleCount:
+                                formatVersion === 1 ? null : data[7],
+                            linear3DAverageVelocity:
+                                formatVersion === 1 ? null : data[8],
+                            linear3DROM: formatVersion === 1 ? null : data[9],
+                        };
+
                         store.dispatch(
-                            DeviceActionCreators.receivedLiftData({
-                                isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
-                                deviceRepID: data[0],
-                                repNumber: data[1],
-                                averageVelocity: data[2],
-                                rom: data[3],
-                                peakVelocity: data[4],
-                                peakHeight: data[5],
-                                duration: data[6],
-                                totalSampleCount:
-                                    formatVersion === 1 ? null : data[7],
-                                linear3DAverageVelocity:
-                                    formatVersion === 1 ? null : data[8],
-                                linear3DROM:
-                                    formatVersion === 1 ? null : data[9],
-                            }),
+                            DeviceActionCreators.receivedLiftData(json),
+                        );
+                    }
+                    if (kratosCharacteristic) {
+                        const typedArray = new Uint8Array(
+                            kratosCharacteristic.value.bytes,
+                        );
+                        const data = new Uint16Array(typedArray.buffer);
+
+                        const json = {
+                            isValid: true,
+                            repId: data[0],
+                            repNumber: data[1],
+                            cRom: data[2],
+                            cAvgLinearVelocity: data[3],
+                            cPeakLinearVelocity: data[4],
+                            cPeakVelocityLocation: data[5],
+                            cDuration: data[6],
+                            cMeanAcceleration: data[7],
+                            cPeakLinearAcceleration: data[8],
+                            cPeakPower: data[9],
+                            eRom: data[10],
+                            eAvgLinearVelocity: data[11],
+                            ePeakLinearVelocity: data[12],
+                            ePeakVelocityLocation: data[13],
+                            eDuration: data[14],
+                            eMeanAcceleration: data[15],
+                            ePeakLinearAcceleration: data[16],
+                            ePeakPower: data[17],
+                        };
+
+                        store.dispatch(
+                            DeviceActionCreators.receivedKratosLiftData(json),
                         );
                     }
                 } catch (err) {
