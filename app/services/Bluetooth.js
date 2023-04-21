@@ -5,8 +5,8 @@ import BleManager from 'react-native-ble-manager';
 import {
     NativeModules,
     NativeEventEmitter,
-    Alert,
     Platform,
+    AppState,
 } from 'react-native';
 import {
     SAVE_WORKOUT_REP,
@@ -61,6 +61,7 @@ export default async function (store) {
             const isBLEStateRestored =
                 ConnectedDeviceStatusSelectors.getIsBLEStateRestored(state);
 
+            // TODO: fix check for isBLEStateRestored
             // Don't disconnect from the device if the state is restored
             if (!isBLEStateRestored) {
                 const name =
@@ -319,6 +320,11 @@ export default async function (store) {
     Emitter.addListener(
         'BleManagerCentralManagerWillRestoreState',
         async args => {
+            const appState = AppState.currentState;
+            // if the app is reopened by user don't restore state as it will add previous rep to the workout
+            if (appState === 'active') {
+                return;
+            }
             // updating connected device state so that other handler doesn't call `disconnectDevice` action
             store.dispatch(DeviceActionCreators.restoringBLEState());
             // Restore the state of each connected peripheral
@@ -331,13 +337,20 @@ export default async function (store) {
                         ),
                     );
                     const formatVersion = 2;
+                    const version = peripheral.characteristics.find(
+                        c =>
+                            c.characteristic.toUpperCase() ===
+                            'A5183278-CA65-45B7-B6C3-A68552F3026E',
+                    ).value.bytes;
+
+                    const typedArray = new Uint8Array(version);
+                    const data16 = new Uint16Array(typedArray.buffer);
 
                     store.dispatch(
                         DeviceActionCreators.connectedToDevice(
                             peripheral.id,
                             formatVersion,
-                            // TODO: change to real firmwareVersion
-                            '10.0.0',
+                            `${data16[1]}.${data16[2]}.${data16[3]}`,
                             null,
                         ),
                     );
@@ -415,10 +428,7 @@ export default async function (store) {
                         );
                     }
                 } catch (err) {
-                    // TODO: add error logging here
-                    console.tron.log(
-                        `Error setting up service after connecting to peripheral ${err}`,
-                    );
+                    console.tron.log(`Error while state restoration ${err}`);
                 }
             }
         },
