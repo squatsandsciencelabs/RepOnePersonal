@@ -37,6 +37,9 @@ export const BLE_BATTERY_CHARACTERISTIC_UUID = '2A19';
 const REP_ONE_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20273';
 const KRATOS_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20284';
 
+const FIRMWARE_VERSION_CHARACTERISTIC_UUID =
+    'A5183278-CA65-45B7-B6C3-A68552F3026E';
+
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
 
@@ -61,7 +64,6 @@ export default async function (store) {
             const isBLEStateRestored =
                 ConnectedDeviceStatusSelectors.getIsBLEStateRestored(state);
 
-            // TODO: fix check for isBLEStateRestored
             // Don't disconnect from the device if the state is restored
             if (!isBLEStateRestored) {
                 const name =
@@ -106,7 +108,7 @@ export default async function (store) {
             const response = await BleManager.read(
                 args.peripheral,
                 'A5183278-CA65-45B7-B6C3-A68552F3026D',
-                'A5183278-CA65-45B7-B6C3-A68552F3026E',
+                FIRMWARE_VERSION_CHARACTERISTIC_UUID,
             ); // get version info
             const batteryPercentageResponse = await BleManager.read(
                 args.peripheral,
@@ -186,24 +188,10 @@ export default async function (store) {
                     const typedArray = new Uint8Array(args.value);
                     const data = new Uint16Array(typedArray.buffer);
 
+                    const json = formConcentricRepDataJson(data, formatVersion);
+
                     // not sending valid until methods to determine invalid are determined
-                    store.dispatch(
-                        DeviceActionCreators.receivedLiftData({
-                            isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
-                            deviceRepID: data[0],
-                            repNumber: data[1],
-                            averageVelocity: data[2],
-                            rom: data[3],
-                            peakVelocity: data[4],
-                            peakHeight: data[5],
-                            duration: data[6],
-                            totalSampleCount:
-                                formatVersion === 1 ? null : data[7],
-                            linear3DAverageVelocity:
-                                formatVersion === 1 ? null : data[8],
-                            linear3DROM: formatVersion === 1 ? null : data[9],
-                        }),
-                    );
+                    store.dispatch(DeviceActionCreators.receivedLiftData(json));
                 } else if (
                     getKratosEnabled() &&
                     characteristic === KRATOS_DATA_CHARACTERISTIC_UUID
@@ -214,27 +202,7 @@ export default async function (store) {
                     const typedArray = new Uint8Array(args.value);
                     const data = new Uint16Array(typedArray.buffer);
 
-                    const json = {
-                        isValid: true,
-                        repId: data[0],
-                        repNumber: data[1],
-                        cRom: data[2],
-                        cAvgLinearVelocity: data[3],
-                        cPeakLinearVelocity: data[4],
-                        cPeakVelocityLocation: data[5],
-                        cDuration: data[6],
-                        cMeanAcceleration: data[7],
-                        cPeakLinearAcceleration: data[8],
-                        cPeakPower: data[9],
-                        eRom: data[10],
-                        eAvgLinearVelocity: data[11],
-                        ePeakLinearVelocity: data[12],
-                        ePeakVelocityLocation: data[13],
-                        eDuration: data[14],
-                        eMeanAcceleration: data[15],
-                        ePeakLinearAcceleration: data[16],
-                        ePeakPower: data[17],
-                    };
+                    const json = formConcentricEccentricRepDataJson(data);
 
                     store.dispatch(
                         DeviceActionCreators.receivedKratosLiftData(json),
@@ -326,7 +294,7 @@ export default async function (store) {
                 return;
             }
             // updating connected device state so that other handler doesn't call `disconnectDevice` action
-            store.dispatch(DeviceActionCreators.restoringBLEState());
+            store.dispatch(DeviceActionCreators.restoredBLEState());
             // Restore the state of each connected peripheral
             for (const peripheral of args.peripherals) {
                 try {
@@ -336,11 +304,13 @@ export default async function (store) {
                             peripheral.id,
                         ),
                     );
+
                     const formatVersion = 2;
+
                     const version = peripheral.characteristics.find(
                         c =>
                             c.characteristic.toUpperCase() ===
-                            'A5183278-CA65-45B7-B6C3-A68552F3026E',
+                            FIRMWARE_VERSION_CHARACTERISTIC_UUID,
                     ).value.bytes;
 
                     const typedArray = new Uint8Array(version);
@@ -375,53 +345,21 @@ export default async function (store) {
                         );
                         const data = new Uint16Array(typedArray.buffer);
 
-                        const json = {
-                            isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
-                            deviceRepID: data[0],
-                            repNumber: data[1],
-                            averageVelocity: data[2],
-                            rom: data[3],
-                            peakVelocity: data[4],
-                            peakHeight: data[5],
-                            duration: data[6],
-                            totalSampleCount:
-                                formatVersion === 1 ? null : data[7],
-                            linear3DAverageVelocity:
-                                formatVersion === 1 ? null : data[8],
-                            linear3DROM: formatVersion === 1 ? null : data[9],
-                        };
+                        const json = formConcentricRepDataJson(
+                            data,
+                            formatVersion,
+                        );
 
                         store.dispatch(
                             DeviceActionCreators.receivedLiftData(json),
                         );
-                    }
-                    if (kratosCharacteristic) {
+                    } else if (kratosCharacteristic) {
                         const typedArray = new Uint8Array(
                             kratosCharacteristic.value.bytes,
                         );
                         const data = new Uint16Array(typedArray.buffer);
 
-                        const json = {
-                            isValid: true,
-                            repId: data[0],
-                            repNumber: data[1],
-                            cRom: data[2],
-                            cAvgLinearVelocity: data[3],
-                            cPeakLinearVelocity: data[4],
-                            cPeakVelocityLocation: data[5],
-                            cDuration: data[6],
-                            cMeanAcceleration: data[7],
-                            cPeakLinearAcceleration: data[8],
-                            cPeakPower: data[9],
-                            eRom: data[10],
-                            eAvgLinearVelocity: data[11],
-                            ePeakLinearVelocity: data[12],
-                            ePeakVelocityLocation: data[13],
-                            eDuration: data[14],
-                            eMeanAcceleration: data[15],
-                            ePeakLinearAcceleration: data[16],
-                            ePeakPower: data[17],
-                        };
+                        const json = formConcentricEccentricRepDataJson(data);
 
                         store.dispatch(
                             DeviceActionCreators.receivedKratosLiftData(json),
@@ -446,9 +384,8 @@ export default async function (store) {
         // start the manager
         await BleManager.start({
             showAlert: false,
-            // disabled for now, more useful for individual mode not kiosk mode
+            // store restoration identifier
             restoreIdentifierKey: 'RepOneRestoreIdentifier',
-            // queueIdentifierKey: 'RepOneQueueIdentifier',
         });
         BluetoothUtils.setDidBleManagerStart(true);
     } catch (err) {
@@ -458,3 +395,41 @@ export default async function (store) {
         );
     }
 }
+
+// HELPERS
+
+const formConcentricRepDataJson = (data, formatVersion) => ({
+    isValid: true, // TODO: should actually calculate when data could be valid or not, leftover for OB which had clear invalid cases
+    deviceRepID: data[0],
+    repNumber: data[1],
+    averageVelocity: data[2],
+    rom: data[3],
+    peakVelocity: data[4],
+    peakHeight: data[5],
+    duration: data[6],
+    totalSampleCount: formatVersion === 1 ? null : data[7],
+    linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
+    linear3DROM: formatVersion === 1 ? null : data[9],
+});
+
+const formConcentricEccentricRepDataJson = data => ({
+    isValid: true,
+    repId: data[0],
+    repNumber: data[1],
+    cRom: data[2],
+    cAvgLinearVelocity: data[3],
+    cPeakLinearVelocity: data[4],
+    cPeakVelocityLocation: data[5],
+    cDuration: data[6],
+    cMeanAcceleration: data[7],
+    cPeakLinearAcceleration: data[8],
+    cPeakPower: data[9],
+    eRom: data[10],
+    eAvgLinearVelocity: data[11],
+    ePeakLinearVelocity: data[12],
+    ePeakVelocityLocation: data[13],
+    eDuration: data[14],
+    eMeanAcceleration: data[15],
+    ePeakLinearAcceleration: data[16],
+    ePeakPower: data[17],
+});
