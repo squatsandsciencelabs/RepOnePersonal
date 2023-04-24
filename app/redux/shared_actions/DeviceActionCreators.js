@@ -350,7 +350,7 @@ export const receivedKratosLiftData =
         dispatch(TimerActionCreators.startEndSetTimer());
     };
 
-export const restoringBLEState = () => (dispatch, getState) => {
+export const restoredBLEState = () => (dispatch, getState) => {
     dispatch({
         type: RESTORED_BLE_STATE,
     });
