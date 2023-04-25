@@ -7,6 +7,7 @@ import {
     NativeEventEmitter,
     Platform,
     AppState,
+    Alert,
 } from 'react-native';
 import {
     SAVE_WORKOUT_REP,
@@ -118,13 +119,15 @@ export default async function (store) {
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
 
-            // TODO: revert api format version
-            const apiFormatVersion = 2;
-            // const apiFormatVersion = data16[0];
-            // if (apiFormatVersion > maxFormatVersion) {
-            //     console.tron.log(`api version mismatch`);
-            //     Alert.alert(`Please update your RepOne app to use this device.`);
-            // }
+            const apiFormatVersion = data16[0];
+
+            if (apiFormatVersion > maxFormatVersion) {
+                console.tron.log(`api version mismatch`);
+                Alert.alert(
+                    `Please update your RepOne app to use this device.`,
+                );
+            }
+
             if (Platform.OS !== 'ios') {
                 try {
                     const mtu = BleManager.requestMTU(
@@ -305,8 +308,6 @@ export default async function (store) {
                         ),
                     );
 
-                    const formatVersion = 2;
-
                     const version = peripheral.characteristics.find(
                         c =>
                             c.characteristic.toUpperCase() ===
@@ -315,6 +316,8 @@ export default async function (store) {
 
                     const typedArray = new Uint8Array(version);
                     const data16 = new Uint16Array(typedArray.buffer);
+
+                    const formatVersion = data16[0];
 
                     store.dispatch(
                         DeviceActionCreators.connectedToDevice(
