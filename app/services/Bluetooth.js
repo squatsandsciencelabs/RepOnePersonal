@@ -292,7 +292,8 @@ export default async function (store) {
         'BleManagerCentralManagerWillRestoreState',
         async args => {
             const appState = AppState.currentState;
-            // if the app is reopened by user don't restore state as it will add previous rep to the workout
+            // if the app is in the background, restore the state - it means it was invoked by the peripheral sending data
+            // if the app is reopened by user - don't restore state as it will re-add rep to the workout (duplicate last received data)
             if (appState === 'active') {
                 return;
             }
