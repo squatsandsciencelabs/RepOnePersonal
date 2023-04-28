@@ -302,6 +302,59 @@ export default async function (store) {
             // Restore the state of each connected peripheral
             for (const peripheral of args.peripherals) {
                 try {
+                    // searching for the rep data
+                    const version = peripheral.characteristics.find(
+                        c =>
+                            c.characteristic.toUpperCase() ===
+                            FIRMWARE_VERSION_CHARACTERISTIC_UUID,
+                    ).value.bytes;
+
+                    const typedArray = new Uint8Array(version);
+                    const data16 = new Uint16Array(typedArray.buffer);
+
+                    const formatVersion = data16[0];
+
+                    const repOneCharacteristic =
+                        peripheral.characteristics.find(
+                            c =>
+                                c.characteristic.toUpperCase() ===
+                                REP_ONE_DATA_CHARACTERISTIC_UUID,
+                        );
+
+                    const kratosCharacteristic =
+                        peripheral.characteristics.find(
+                            c =>
+                                c.characteristic.toUpperCase() ===
+                                KRATOS_DATA_CHARACTERISTIC_UUID,
+                        );
+
+                    if (repOneCharacteristic) {
+                        const typedArray = new Uint8Array(
+                            repOneCharacteristic.value.bytes,
+                        );
+                        const data = new Uint16Array(typedArray.buffer);
+
+                        const json = formConcentricRepDataJson(
+                            data,
+                            formatVersion,
+                        );
+
+                        store.dispatch(
+                            DeviceActionCreators.receivedLiftData(json),
+                        );
+                    } else if (kratosCharacteristic) {
+                        const typedArray = new Uint8Array(
+                            kratosCharacteristic.value.bytes,
+                        );
+                        const data = new Uint16Array(typedArray.buffer);
+
+                        const json = formConcentricEccentricRepDataJson(data);
+
+                        store.dispatch(
+                            DeviceActionCreators.receivedKratosLiftData(json),
+                        );
+                    }
+
                     store.dispatch(
                         DeviceActionCreators.connectDevice(
                             peripheral.name,
@@ -313,17 +366,6 @@ export default async function (store) {
                         await BleManager.isPeripheralConnected(peripheral.id);
 
                     if (isPeripheralConnected) {
-                        const version = peripheral.characteristics.find(
-                            c =>
-                                c.characteristic.toUpperCase() ===
-                                FIRMWARE_VERSION_CHARACTERISTIC_UUID,
-                        ).value.bytes;
-
-                        const typedArray = new Uint8Array(version);
-                        const data16 = new Uint16Array(typedArray.buffer);
-
-                        const formatVersion = data16[0];
-
                         store.dispatch(
                             DeviceActionCreators.connectedToDevice(
                                 peripheral.id,
@@ -332,50 +374,6 @@ export default async function (store) {
                                 null,
                             ),
                         );
-                        // searching for the rep data
-                        const repOneCharacteristic =
-                            peripheral.characteristics.find(
-                                c =>
-                                    c.characteristic.toUpperCase() ===
-                                    REP_ONE_DATA_CHARACTERISTIC_UUID,
-                            );
-
-                        const kratosCharacteristic =
-                            peripheral.characteristics.find(
-                                c =>
-                                    c.characteristic.toUpperCase() ===
-                                    KRATOS_DATA_CHARACTERISTIC_UUID,
-                            );
-
-                        if (repOneCharacteristic) {
-                            const typedArray = new Uint8Array(
-                                repOneCharacteristic.value.bytes,
-                            );
-                            const data = new Uint16Array(typedArray.buffer);
-
-                            const json = formConcentricRepDataJson(
-                                data,
-                                formatVersion,
-                            );
-
-                            store.dispatch(
-                                DeviceActionCreators.receivedLiftData(json),
-                            );
-                        } else if (kratosCharacteristic) {
-                            const typedArray = new Uint8Array(
-                                kratosCharacteristic.value.bytes,
-                            );
-                            const data = new Uint16Array(typedArray.buffer);
-
-                            const json =
-                                formConcentricEccentricRepDataJson(data);
-
-                            store.dispatch(
-                                DeviceActionCreators.receivedKratosLiftData(
-                                    json,
-                                ),
-                            );
-                        }
                     } else {
                         store.dispatch(
                             DeviceActionCreators.disconnectedFromDevice(
