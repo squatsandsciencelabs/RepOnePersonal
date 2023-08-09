@@ -13,6 +13,7 @@ import {
     CANCEL_INSTALL_OTA,
     INSTALL_OTA_PROGRESS,
     CONNECTED_TO_DEVICE,
+    INSTALL_OTA_DFU_STATE_CHANGED,
 } from 'app/configs+constants/ActionTypes';
 
 export const OTAStatus = {
@@ -100,6 +101,14 @@ const OTAReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 progress: 0,
+            };
+        case INSTALL_OTA_DFU_STATE_CHANGED:
+            return {
+                ...state,
+                status:
+                    action.state === 'DFU_COMPLETED'
+                        ? OTAStatus.READY
+                        : state.status,
             };
         default:
             return state;
