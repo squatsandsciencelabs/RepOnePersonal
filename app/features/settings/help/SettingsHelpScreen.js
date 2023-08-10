@@ -5,7 +5,11 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 export default () => {
     return (
         <TouchableOpacity
-            onPress={() => Linking.openURL('https://reponestrength.com/help')}>
+            onPress={() =>
+                Linking.openURL(
+                    'https://www.reponestrength.com/help-and-tutorials',
+                )
+            }>
             <Text
                 style={[
                     SETTINGS_PANEL_STYLES.tappableText,
