@@ -5,6 +5,7 @@ import SettingsKratosAutoDeleteRepsScreen from './kratos_auto_delete_reps/Settin
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import SettingsKratosMetricsScreen from './metrics/SettingsKratosMetricsScreen';
 import SettingsKratosRepColumnsScreen from './rep_columns/SettingsKratosRepColumnsScreen';
+import TextLink from 'app/shared_features/text_link/TextLink';
 
 const sensorName = 'Kratos';
 
@@ -15,6 +16,10 @@ class SettingsKratosPanel extends Component {
         }
         return (
             <SensorSettingsCard sensorName={sensorName}>
+                <TextLink
+                    link="https://www.reponestrength.com/knowledge/kratos-metrics"
+                    text="What are these metrics?"
+                />
                 <SettingsKratosMetricsScreen sensorName={sensorName} />
                 <SettingsKratosRepColumnsScreen sensorName={sensorName} />
                 <SettingsKratosAutoDeleteRepsScreen />
