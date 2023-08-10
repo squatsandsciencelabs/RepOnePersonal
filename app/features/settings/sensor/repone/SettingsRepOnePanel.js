@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import SensorSettingsCard from 'app/features/settings/sensor/SensorSettingsCard';
 import SettingsRepOneMetricsScreen from './metrics/SettingsRepOneMetricsScreen';
 import SettingsRepOneRepColumnsScreen from './rep_columns/SettingsRepOneRepColumnsScreen';
-import TextLink from '../../../../shared_features/text_link/TextLink';
+import TextLink from 'app/shared_features/text_link/TextLink';
 
 const sensorName = 'RepOne Sensor';
 
