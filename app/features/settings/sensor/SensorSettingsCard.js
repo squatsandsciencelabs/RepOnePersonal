@@ -17,12 +17,13 @@ class SensorSettingsCard extends Component {
 
     render() {
         return (
-            <View style={SETTINGS_PANEL_STYLES.panel}>
+            <View style={[SETTINGS_PANEL_STYLES.panel, { padding: 22 }]}>
                 <TouchableOpacity onPress={this.handleHeaderPress}>
                     <View
                         style={[
                             SETTINGS_PANEL_STYLES.header,
                             {
+                                paddingBottom: 0,
                                 position: 'relative',
                             },
                         ]}>
