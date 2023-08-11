@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     labelText: {
         fontSize: 16,
         color: 'rgba(77, 77, 77, 1)',
-        marginTop: 35,
     },
     section: {
         marginTop: 35,

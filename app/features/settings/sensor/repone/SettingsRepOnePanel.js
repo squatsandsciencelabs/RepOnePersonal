@@ -12,6 +12,7 @@ class SettingsRepOnePanel extends Component {
         return (
             <SensorSettingsCard sensorName={sensorName}>
                 <TextLink
+                    style={{ paddingVertical: 17.5 }}
                     text="What are these metrics?"
                     link="https://www.reponestrength.com/knowledge/repone-set-metrics"
                 />
