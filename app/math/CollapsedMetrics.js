@@ -100,6 +100,7 @@ export const getPeakForces = set =>
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
 
+            // f = total inertial constant * partial peak force
             return mass && r.peakLinearAcceleration
                 ? r.peakLinearAcceleration * mass
                 : null;
@@ -129,11 +130,13 @@ export const getPeakPowers = set =>
         if (set.deviceType === 'Kratos') {
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
 
-            return r.peakPower && mass ? r.peakPower * mass : null;
+            return r.partialPeakPower && mass
+                ? r.partialPeakPower * mass
+                : null;
         }
 
-        return r.peakPower !== null && r.peakPower !== undefined
-            ? r.peakPower
+        return r.partialPeakPower !== null && r.partialPeakPower !== undefined
+            ? r.partialPeakPower
             : null;
     });
 

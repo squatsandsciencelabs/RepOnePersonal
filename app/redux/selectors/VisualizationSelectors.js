@@ -139,14 +139,14 @@ export const getRepPeakIndices = createSelector(getRep, rep => {
             peakVelocityIndex: null,
             peakAccelerationIndex: null,
             peakForceIndex: null,
-            peakPowerIndex: null,
+            partialPeakPowerIndex: null,
         };
     } else {
         return {
             peakVelocityIndex: rep.peakVelocityIndex,
             peakAccelerationIndex: rep.peakAccelerationIndex,
             peakForceIndex: rep.peakForceIndex,
-            peakPowerIndex: rep.peakPowerIndex,
+            partialPeakPowerIndex: rep.partialPeakPowerIndex,
         };
     }
 });
