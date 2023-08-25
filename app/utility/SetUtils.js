@@ -663,7 +663,7 @@ export const getAverageForce = (set, rep, forces = null) => {
     return sum / forces.length;
 };
 
-export const getPeakPowerIndex = (set, rep, powers = null) => {
+export const getpartialPeakPowerIndex = (set, rep, powers = null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
@@ -745,7 +745,9 @@ const _getDisplayMetric = (metric, rep, set = null) => {
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
-            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+            return rep.partialPeakPower
+                ? Number(rep.partialPeakPower).toFixed(2)
+                : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         default:
@@ -796,7 +798,9 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
             mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass ? Number(rep.peakPower * mass).toFixed(2) : EMPTY;
+            return mass
+                ? Number(rep.partialPeakPower * mass).toFixed(2)
+                : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case WORK_METRIC:
@@ -848,7 +852,7 @@ export const getRepHasBulkComputedProperties = r => {
     return (
         (r.peakForce !== null && r.peakForce !== undefined) ||
         (r.averageForce !== null && r.averageForce !== undefined) ||
-        (r.peakPower !== null && r.peakPower !== undefined) ||
+        (r.partialPeakPower !== null && r.partialPeakPower !== undefined) ||
         (r.averagePower !== null && r.averagePower !== undefined)
     );
 };

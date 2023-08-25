@@ -320,15 +320,15 @@ const saveWorkoutSet = (state, action) => {
                     rep,
                     forces,
                 );
-                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+                rep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
                     newSet,
                     rep,
                     powers,
                 );
-                rep.peakPower = powers[rep.peakPowerIndex];
+                rep.partialPeakPower = powers[rep.partialPeakPowerIndex];
                 rep.peakPowerHeight = SetUtils.getPeakHeight(
                     data,
-                    rep.peakPowerIndex,
+                    rep.partialPeakPowerIndex,
                 );
                 rep.averagePower = SetUtils.getAveragePower(
                     newSet,
@@ -353,8 +353,8 @@ const saveWorkoutSet = (state, action) => {
                         peakForce: null,
                         peakForceHeight: null,
                         averageForce: null,
-                        peakPowerIndex: null,
-                        peakPower: null,
+                        partialPeakPowerIndex: null,
+                        partialPeakPower: null,
                         peakPowerHeight: null,
                         averagePower: null,
                     };
@@ -540,15 +540,15 @@ const saveHistorySet = (state, action) => {
                     rep,
                     forces,
                 );
-                rep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+                rep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
                     newSet,
                     rep,
                     powers,
                 );
-                rep.peakPower = powers[rep.peakPowerIndex];
+                rep.partialPeakPower = powers[rep.partialPeakPowerIndex];
                 rep.peakPowerHeight = SetUtils.getPeakHeight(
                     data,
-                    rep.peakPowerIndex,
+                    rep.partialPeakPowerIndex,
                 );
                 rep.averagePower = SetUtils.getAveragePower(
                     newSet,
@@ -573,8 +573,8 @@ const saveHistorySet = (state, action) => {
                         peakForce: null,
                         peakForceHeight: null,
                         averageForce: null,
-                        peakPowerIndex: null,
-                        peakPower: null,
+                        partialPeakPowerIndex: null,
+                        partialPeakPower: null,
                         peakPowerHeight: null,
                         averagePower: null,
                     };
@@ -742,8 +742,8 @@ const addRepData = (state, action) => {
         rep.peakForceIndex = null;
         rep.peakForceHeight = null;
         rep.averageForce = null;
-        rep.peakPower = null;
-        rep.peakPowerIndex = null;
+        rep.partialPeakPower = null;
+        rep.partialPeakPowerIndex = null;
         rep.peakPowerHeight = null;
         rep.averagePower = null;
     }
@@ -787,7 +787,6 @@ const addKratosRepData = (state, action) => {
         cRom: action.cRom,
         cAvgLinearVelocity: action.cAvgLinearVelocity,
         cPeakLinearVelocity: action.cPeakLinearVelocity,
-        cPeakVelocityLocation: action.cPeakVelocityLocation,
         cDuration: action.cDuration,
         cMeanAcceleration: action.cMeanAcceleration,
         cPeakLinearAcceleration: action.cPeakLinearAcceleration,
@@ -919,8 +918,8 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
             newRep.peakForce = null;
             newRep.peakForceHeight = null;
             newRep.averageForce = null;
-            newRep.peakPowerIndex = null;
-            newRep.peakPower = null;
+            newRep.partialPeakPowerIndex = null;
+            newRep.partialPeakPower = null;
             newRep.peakPowerHeight = null;
             newRep.averagePower = null;
         } else {
@@ -962,15 +961,15 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
                 newRep.peakForceIndex,
             );
             newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
-            newRep.peakPowerIndex = SetUtils.getPeakPowerIndex(
+            newRep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
                 set,
                 newRep,
                 powers,
             );
-            newRep.peakPower = powers[newRep.peakPowerIndex];
+            newRep.partialPeakPower = powers[newRep.partialPeakPowerIndex];
             newRep.peakPowerHeight = SetUtils.getPeakHeight(
                 data,
-                newRep.peakPowerIndex,
+                newRep.partialPeakPowerIndex,
             );
             newRep.averagePower = SetUtils.getAveragePower(set, newRep, powers);
         }

@@ -8,6 +8,14 @@ export const kratosDiscWeights = {
     XL: 11.94,
 };
 
+export const kratosDiscInertialConstants = {
+    XS: 0.006666191,
+    S: 0.007476443,
+    M: 0.014907452,
+    L: 0.029741352,
+    XL: 0.061672442,
+};
+
 export const getTotalKratosDiscsWeights = kratosDiscs => {
     if (!kratosDiscs) {
         return null;
