@@ -32,7 +32,10 @@ import {
     POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
-import { getTotalKratosDiscsMass } from 'app/utility/KratosUtils';
+import {
+    getTotalKratosDiscsInertialConstant,
+    getTotalKratosDiscsMass,
+} from 'app/utility/KratosUtils';
 
 // unique metrics
 
@@ -98,11 +101,14 @@ export const getDurations = set => {
 export const getPeakForces = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
+            const totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
 
-            // f = total inertial constant * partial peak force
-            return mass && r.peakLinearAcceleration
-                ? r.peakLinearAcceleration * mass
+            return totalInertialConstant &&
+                r.peakForce !== null &&
+                r.peakForce !== undefined
+                ? r.peakForce * totalInertialConstant
                 : null;
         }
 
@@ -128,10 +134,14 @@ export const getAverageForces = set =>
 export const getPeakPowers = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
+            const totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
 
-            return r.partialPeakPower && mass
-                ? r.partialPeakPower * mass
+            return totalInertialConstant &&
+                r.partialPeakPower !== null &&
+                r.partialPeakPower !== undefined
+                ? r.partialPeakPower * totalInertialConstant
                 : null;
         }
 
@@ -162,6 +172,7 @@ export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 export const getWorks = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
+            // TODO: upd this formula
             const mass = getTotalKratosDiscsMass(set.kratosDiscs);
 
             return mass && r.peakLinearAcceleration
