@@ -430,6 +430,7 @@ const formConcentricRepDataJson = (data, formatVersion) => ({
 });
 
 const formConcentricEccentricRepDataJson = data => ({
+    // TODO: check order
     isValid: true,
     repId: data[0],
     repNumber: data[1],
@@ -438,15 +439,15 @@ const formConcentricEccentricRepDataJson = data => ({
     cPeakLinearVelocity: data[4],
     cPartialPeakForce: data[5],
     cDuration: data[6],
-    // cMeanAcceleration: data[7],
+    cMeanAcceleration: data[7],
     cPeakLinearAcceleration: data[8],
-    // cPeakPower: data[9],
-    // eRom: data[10],
-    // eAvgLinearVelocity: data[11],
-    // ePeakLinearVelocity: data[12],
+    cPartialPeakPower: data[9],
+    eRom: data[10],
+    eAvgLinearVelocity: data[11],
+    ePeakLinearVelocity: data[12],
     ePartialPeakForce: data[13],
-    // eDuration: data[14],
-    // eMeanAcceleration: data[15],
-    // ePeakLinearAcceleration: data[16],
-    // ePeakPower: data[17],
+    eDuration: data[14],
+    eMeanAcceleration: data[15],
+    ePeakLinearAcceleration: data[16],
+    ePartialPeakPower: data[17],
 });

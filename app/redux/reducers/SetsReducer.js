@@ -798,7 +798,7 @@ const addKratosRepData = (state, action) => {
         eDuration: action.eDuration,
         eMeanAcceleration: action.eMeanAcceleration,
         ePeakLinearAcceleration: action.ePeakLinearAcceleration,
-        ePeakPower: action.ePeakPower,
+        ePartialPeakPower: action.ePartialPeakPower,
         deviceFamily,
         removed,
         time: action.time,

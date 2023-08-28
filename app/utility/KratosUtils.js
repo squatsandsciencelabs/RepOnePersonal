@@ -34,3 +34,14 @@ export const getTotalKratosDiscsMass = kratosDiscs => {
         ? null
         : WeightConversion.weightInKGs('lbs', sum);
 };
+
+export const getTotalKratosDiscsInertialConstant = kratosDiscs => {
+    if (!kratosDiscs) {
+        return null;
+    }
+
+    return Object.entries(kratosDiscs)
+        .filter(disc => !!disc[1])
+        .map(disc => kratosDiscInertialConstants[disc[0]] * disc[1])
+        .reduce((acc, disc) => acc + disc, 0);
+};
