@@ -430,7 +430,6 @@ const formConcentricRepDataJson = (data, formatVersion) => ({
 });
 
 const formConcentricEccentricRepDataJson = data => ({
-    // TODO: check order
     isValid: true,
     repId: data[0],
     repNumber: data[1],

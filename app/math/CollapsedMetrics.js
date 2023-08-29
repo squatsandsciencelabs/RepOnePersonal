@@ -172,11 +172,11 @@ export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 export const getWorks = set =>
     getMetrics(set, r => {
         if (set.deviceType === 'Kratos') {
-            // TODO: upd this formula
-            const mass = getTotalKratosDiscsMass(set.kratosDiscs);
-
-            return mass && r.peakLinearAcceleration
-                ? r.peakLinearAcceleration * mass * r.rom
+            const totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant && r.peakLinearAcceleration
+                ? r.peakLinearAcceleration * totalInertialConstant * r.rom
                 : null;
         }
 
