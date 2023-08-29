@@ -320,7 +320,7 @@ const saveWorkoutSet = (state, action) => {
                     rep,
                     forces,
                 );
-                rep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
+                rep.partialPeakPowerIndex = SetUtils.getPartialPeakPowerIndex(
                     newSet,
                     rep,
                     powers,
@@ -540,7 +540,7 @@ const saveHistorySet = (state, action) => {
                     rep,
                     forces,
                 );
-                rep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
+                rep.partialPeakPowerIndex = SetUtils.getPartialPeakPowerIndex(
                     newSet,
                     rep,
                     powers,
@@ -961,7 +961,7 @@ const setWithUpdatedRep = (set, repIndex, removed, bulkData) => {
                 newRep.peakForceIndex,
             );
             newRep.averageForce = SetUtils.getAverageForce(set, newRep, forces);
-            newRep.partialPeakPowerIndex = SetUtils.getpartialPeakPowerIndex(
+            newRep.partialPeakPowerIndex = SetUtils.getPartialPeakPowerIndex(
                 set,
                 newRep,
                 powers,

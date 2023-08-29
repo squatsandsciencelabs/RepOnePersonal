@@ -663,7 +663,7 @@ export const getAverageForce = (set, rep, forces = null) => {
     return sum / forces.length;
 };
 
-export const getpartialPeakPowerIndex = (set, rep, powers = null) => {
+export const getPartialPeakPowerIndex = (set, rep, powers = null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
