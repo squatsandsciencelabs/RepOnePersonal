@@ -261,7 +261,7 @@ export default function App(props) {
                     zoomTo(props.peakIndices.peakForceIndex, true);
                     break;
                 case 2:
-                    zoomTo(props.peakIndices.partialPeakPowerIndex, true);
+                    zoomTo(props.peakIndices.peakPowerIndex, true);
                     break;
             }
         });

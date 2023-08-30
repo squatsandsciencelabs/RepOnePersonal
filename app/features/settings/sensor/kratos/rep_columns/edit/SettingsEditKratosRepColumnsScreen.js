@@ -7,7 +7,6 @@ import {
     AVG_VELOCITY_METRIC,
     DURATION_METRIC,
     ROM_METRIC,
-    PKH_METRIC,
     PKV_METRIC,
     WORK_METRIC,
     FORCE_METRIC,
@@ -27,7 +26,6 @@ const pickerItem = metric => ({
 const items = [
     pickerItem(AVG_VELOCITY_METRIC),
     pickerItem(PKV_METRIC),
-    pickerItem(PKH_METRIC),
     pickerItem(ROM_METRIC),
     pickerItem(DURATION_METRIC),
     pickerItem(WORK_METRIC),

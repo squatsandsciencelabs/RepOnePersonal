@@ -5,6 +5,7 @@ import * as DateUtils from 'app/utility/DateUtils';
 import * as SetUtils from 'app/utility/SetUtils';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getKratosRepRows } from 'app/utility/SetUtils';
+import { getTotalKratosDiscsInertialConstant } from './KratosUtils';
 
 // pass this the history sets as a sorted array
 // aka SetReducer's getHistorySets convenience function
@@ -92,22 +93,50 @@ export const convert = data => {
                 );
 
                 if (set.deviceType === 'Kratos') {
+                    const totalInertialConstant =
+                        getTotalKratosDiscsInertialConstant(set.kratosDiscs);
+                    let cPeakForce, ePeakForce, cPeakPower, ePeakPower;
+                    cPeakForce = ePeakForce = cPeakPower = ePeakPower = ',';
+
+                    if (totalInertialConstant) {
+                        cPeakForce =
+                            rep.cPartialPeakForce *
+                                totalInertialConstant *
+                                rep.rom +
+                            cPeakForce;
+                        ePeakForce =
+                            rep.ePartialPeakForce *
+                                totalInertialConstant *
+                                rep.rom +
+                            ePeakForce;
+                        cPeakPower =
+                            rep.cPartialPeakPower * totalInertialConstant +
+                            cPeakPower;
+                        ePeakPower =
+                            rep.ePartialPeakPower * totalInertialConstant +
+                            ePeakPower;
+                    }
+
                     // concentric metrics
                     output += (rep.cAvgLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.cRom + ',';
                     output += (rep.cPeakLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.cPartialPeakForce + ',';
                     output += rep.cDuration / 1000 + ',';
-                    // TODO: implement concentric force, force loc, power, power loc, work, work loc
-                    output += skipColumns(6);
+                    output += cPeakForce;
+                    output += skipColumns(1); // TODO: concentric force location
+                    output += cPeakPower;
+                    output += skipColumns(3); // TODO: implement concentric power loc, work, work loc
                     // eccentric metrics
                     output += (rep.eAvgLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.eRom + ',';
                     output += (rep.ePeakLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.ePartialPeakForce + ',';
                     output += rep.eDuration / 1000 + ',';
-                    // TODO: implement eccentric force, force loc, power, power loc, work, work loc
-                    output += skipColumns(6) + '\n';
+                    output += ePeakForce;
+                    output += skipColumns(1); // TODO: eccentric force location
+                    output += ePeakPower;
+                    output += skipColumns(3); // TODO: implement eccentric power loc, work, work loc
                 } else {
                     // concentric metrics
                     output += (rep.averageVelocity / 1000).toFixed(2) + ',';

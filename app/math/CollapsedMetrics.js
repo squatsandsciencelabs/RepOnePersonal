@@ -32,10 +32,7 @@ import {
     POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
-import {
-    getTotalKratosDiscsInertialConstant,
-    getTotalKratosDiscsMass,
-} from 'app/utility/KratosUtils';
+import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
 
 // unique metrics
 
@@ -63,7 +60,7 @@ export const getAvgVelocities = set => {
         set,
         r =>
             (set.deviceType === 'Kratos'
-                ? r.avgLinearVelocity
+                ? r.avgLinearVelocity // r.avgLinearVelocity is the selected eccentric or concentric average linear velocity
                 : r.averageVelocity) / 1000,
     );
 };
@@ -73,7 +70,7 @@ export const getPKVs = set => {
         set,
         r =>
             (set.deviceType === 'Kratos'
-                ? r.peakLinearVelocity
+                ? r.peakLinearVelocity // r.peakLinearVelocity is the selected eccentric or concentric peak linear velocity
                 : r.peakVelocity) / 1000,
     );
 };
@@ -82,11 +79,7 @@ export const getPKHs = set => {
     return getMetrics(
         set,
         r =>
-            (100 *
-                (set.deviceType === 'Kratos'
-                    ? r.peakVelocityLocation
-                    : r.peakHeight)) /
-            r.rom,
+            (100 * (set.deviceType === 'Kratos' ? null : r.peakHeight)) / r.rom,
     );
 };
 
@@ -104,11 +97,11 @@ export const getPeakForces = set =>
             const totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );
-
+            // r.partialPeakForce is the selected eccentric or concentric partial peak force
             return totalInertialConstant &&
-                r.peakForce !== null &&
-                r.peakForce !== undefined
-                ? r.peakForce * totalInertialConstant
+                r.partialPeakForce !== null &&
+                r.partialPeakForce !== undefined
+                ? r.partialPeakForce * totalInertialConstant
                 : null;
         }
 
@@ -138,6 +131,7 @@ export const getPeakPowers = set =>
                 set.kratosDiscs,
             );
 
+            // r.partialPeakPower is the selected eccentric or concentric partial peak power
             return totalInertialConstant &&
                 r.partialPeakPower !== null &&
                 r.partialPeakPower !== undefined
@@ -145,9 +139,7 @@ export const getPeakPowers = set =>
                 : null;
         }
 
-        return r.partialPeakPower !== null && r.partialPeakPower !== undefined
-            ? r.partialPeakPower
-            : null;
+        return null;
     });
 
 export const getPeakPowerHeights = set =>
@@ -175,8 +167,12 @@ export const getWorks = set =>
             const totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );
-            return totalInertialConstant && r.peakLinearAcceleration
-                ? r.peakLinearAcceleration * totalInertialConstant * r.rom
+
+            // r.partialPeakForce is the selected eccentric or concentric partial peak force
+            return totalInertialConstant &&
+                r.partialPeakForce !== null &&
+                r.partialPeakForce !== undefined
+                ? r.partialPeakForce * totalInertialConstant * r.rom
                 : null;
         }
 

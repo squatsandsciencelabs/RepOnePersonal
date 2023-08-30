@@ -7,16 +7,16 @@ import {
 import {
     AVG_VELOCITY_METRIC,
     PKV_METRIC,
-    PKH_METRIC,
     ROM_METRIC,
     DURATION_METRIC,
+    FORCE_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 const defaultState = {
     metrics: [
         AVG_VELOCITY_METRIC,
         PKV_METRIC,
-        PKH_METRIC,
+        FORCE_METRIC,
         ROM_METRIC,
         DURATION_METRIC,
     ],
