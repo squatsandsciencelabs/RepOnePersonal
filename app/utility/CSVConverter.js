@@ -121,7 +121,7 @@ export const convert = data => {
                     output += (rep.cAvgLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.cRom + ',';
                     output += (rep.cPeakLinearVelocity / 1000).toFixed(2) + ',';
-                    output += rep.cPartialPeakForce + ',';
+                    output += ',';
                     output += rep.cDuration / 1000 + ',';
                     output += cPeakForce;
                     output += skipColumns(1); // TODO: concentric force location
@@ -131,7 +131,7 @@ export const convert = data => {
                     output += (rep.eAvgLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.eRom + ',';
                     output += (rep.ePeakLinearVelocity / 1000).toFixed(2) + ',';
-                    output += rep.ePartialPeakForce + ',';
+                    output += ',';
                     output += rep.eDuration / 1000 + ',';
                     output += ePeakForce;
                     output += skipColumns(1); // TODO: eccentric force location
