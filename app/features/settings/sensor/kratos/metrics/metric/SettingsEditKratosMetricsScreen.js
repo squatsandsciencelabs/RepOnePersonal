@@ -9,19 +9,13 @@ import {
     AVG_VELOCITY_METRIC,
     DURATION_METRIC,
     ROM_METRIC,
-    PKH_METRIC,
     PKV_METRIC,
-    AVG_QUANTIFIER,
     MAX_EVER_QUANTIFIER,
     MIN_EVER_QUANTIFIER,
-    ABS_LOSS_QUANTIFIER,
-    PERCENT_LOSS_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
     FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
     POWER_METRIC,
-    POWER_HEIGHT_METRIC,
     WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
@@ -70,7 +64,6 @@ const generateItems = rollup => {
                 pickerItem(WORK_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
-                pickerItem(PKH_METRIC),
                 // pickerItem(FORCE_HEIGHT_METRIC),
                 // pickerItem(POWER_HEIGHT_METRIC),
             ];

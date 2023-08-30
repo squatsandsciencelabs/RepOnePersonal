@@ -21,10 +21,14 @@ export const getTotalKratosDiscsWeights = kratosDiscs => {
         return null;
     }
 
-    return Object.entries(kratosDiscs)
-        .filter(disc => !!disc[1])
-        .map(disc => kratosDiscWeights[disc[0]] * disc[1])
-        .reduce((acc, disc) => acc + disc, 0);
+    return (
+        Object.entries(kratosDiscs)
+            .filter(disc => !!disc[1])
+            // The Kratos disk object consists of a key (disk type) and a value (number of disks), e.g. { S: 2, M: 1 }
+            // Calculate the weight of each disk by multiplying the weight by the number of disks
+            .map(disc => kratosDiscWeights[disc[0]] * disc[1])
+            .reduce((acc, disc) => acc + disc, 0)
+    );
 };
 
 export const getTotalKratosDiscsMass = kratosDiscs => {
@@ -40,8 +44,12 @@ export const getTotalKratosDiscsInertialConstant = kratosDiscs => {
         return null;
     }
 
-    return Object.entries(kratosDiscs)
-        .filter(disc => !!disc[1])
-        .map(disc => kratosDiscInertialConstants[disc[0]] * disc[1])
-        .reduce((acc, disc) => acc + disc, 0);
+    return (
+        Object.entries(kratosDiscs)
+            .filter(disc => !!disc[1])
+            // The Kratos disk object consists of a key (disk type) and a value (number of disks), e.g. { S: 2, M: 1 }
+            // Calculate the total inertial constant of each disk by multiplying the inertial constant by the number of disks
+            .map(disc => kratosDiscInertialConstants[disc[0]] * disc[1])
+            .reduce((acc, disc) => acc + disc, 0)
+    );
 };

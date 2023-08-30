@@ -17,9 +17,13 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 import THREE from 'three';
 import {
-    getTotalKratosDiscsMass,
+    getTotalKratosDiscsInertialConstant,
     getTotalKratosDiscsWeights,
 } from 'app/utility/KratosUtils';
+
+// TODO: Update the functions to no longer calculate power and force via bulk data.
+//  For context, we were originally going to calculate power and force via bulk data
+//  for repone sensor, but this will no longer be the case.
 
 export const isDeleted = set => {
     if (set.hasOwnProperty('deleted')) {
@@ -663,7 +667,7 @@ export const getAverageForce = (set, rep, forces = null) => {
     return sum / forces.length;
 };
 
-export const getPartialPeakPowerIndex = (set, rep, powers = null) => {
+export const getPeakPowerIndex = (set, rep, powers = null) => {
     // get powers if needed
     if (powers === null || powers === undefined) {
         powers = getPowers(set, rep);
@@ -745,9 +749,7 @@ const _getDisplayMetric = (metric, rep, set = null) => {
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
-            return rep.partialPeakPower
-                ? Number(rep.partialPeakPower).toFixed(2)
-                : EMPTY;
+            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         default:
@@ -763,6 +765,7 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
     }
 
     let mass = null;
+    let totalInertialConstant = null;
 
     switch (metric) {
         case AVG_VELOCITY_METRIC:
@@ -777,10 +780,6 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
             return rep.peakLinearVelocity
                 ? rep.peakLinearVelocity / 1000
                 : INVALID;
-        case PKH_METRIC:
-            return rep.peakVelocityLocation && rep.rom
-                ? Math.round((rep.peakVelocityLocation / rep.rom) * 100)
-                : INVALID;
         case ROM_METRIC:
             return rep.rom ? rep.rom : INVALID;
         case LINEAR_3D_ROM_METRIC:
@@ -790,23 +789,35 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
         case FORCE_METRIC:
-            mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass
-                ? Number(rep.peakLinearAcceleration * mass).toFixed(2)
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant
+                ? Number(rep.partialPeakForce * totalInertialConstant).toFixed(
+                      2,
+                  )
                 : EMPTY;
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
-            mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass
-                ? Number(rep.partialPeakPower * mass).toFixed(2)
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant
+                ? Number(rep.partialPeakPower * totalInertialConstant).toFixed(
+                      2,
+                  )
                 : EMPTY;
         case POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case WORK_METRIC:
-            mass = getTotalKratosDiscsMass(set.kratosDiscs);
-            return mass
-                ? Number(rep.peakLinearAcceleration * mass * rep.rom).toFixed(2)
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant
+                ? Number(
+                      rep.partialPeakForce * totalInertialConstant * rep.rom,
+                  ).toFixed(2)
                 : EMPTY;
         default:
             return INVALID;
@@ -852,7 +863,7 @@ export const getRepHasBulkComputedProperties = r => {
     return (
         (r.peakForce !== null && r.peakForce !== undefined) ||
         (r.averageForce !== null && r.averageForce !== undefined) ||
-        (r.partialPeakPower !== null && r.partialPeakPower !== undefined) ||
+        (r.peakPower !== null && r.peakPower !== undefined) ||
         (r.averagePower !== null && r.averagePower !== undefined)
     );
 };
