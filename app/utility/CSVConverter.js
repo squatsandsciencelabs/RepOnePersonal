@@ -5,7 +5,7 @@ import * as DateUtils from 'app/utility/DateUtils';
 import * as SetUtils from 'app/utility/SetUtils';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getKratosRepRows } from 'app/utility/SetUtils';
-import { getTotalKratosDiscsInertialConstant } from './KratosUtils';
+import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
 
 // pass this the history sets as a sorted array
 // aka SetReducer's getHistorySets convenience function
@@ -95,26 +95,50 @@ export const convert = data => {
                 if (set.deviceType === 'Kratos') {
                     const totalInertialConstant =
                         getTotalKratosDiscsInertialConstant(set.kratosDiscs);
-                    let cPeakForce, ePeakForce, cPeakPower, ePeakPower;
-                    cPeakForce = ePeakForce = cPeakPower = ePeakPower = ',';
+                    let cPeakForce,
+                        ePeakForce,
+                        cPeakPower,
+                        ePeakPower,
+                        cWork,
+                        eWork;
+
+                    cPeakForce =
+                        ePeakForce =
+                        cPeakPower =
+                        ePeakPower =
+                        cWork =
+                        eWork =
+                            ',';
 
                     if (totalInertialConstant) {
                         cPeakForce =
                             rep.cPartialPeakForce *
                                 totalInertialConstant *
-                                rep.rom +
+                                rep.cRom +
                             cPeakForce;
                         ePeakForce =
                             rep.ePartialPeakForce *
                                 totalInertialConstant *
-                                rep.rom +
+                                rep.eRom +
                             ePeakForce;
+
                         cPeakPower =
                             rep.cPartialPeakPower * totalInertialConstant +
                             cPeakPower;
                         ePeakPower =
                             rep.ePartialPeakPower * totalInertialConstant +
                             ePeakPower;
+
+                        cWork =
+                            rep.cPartialPeakForce *
+                                totalInertialConstant *
+                                rep.cRom +
+                            cWork;
+                        eWork =
+                            rep.ePartialPeakForce *
+                                totalInertialConstant *
+                                rep.eRom +
+                            eWork;
                     }
 
                     // concentric metrics
@@ -126,7 +150,9 @@ export const convert = data => {
                     output += cPeakForce;
                     output += skipColumns(1); // TODO: concentric force location
                     output += cPeakPower;
-                    output += skipColumns(3); // TODO: implement concentric power loc, work, work loc
+                    output += skipColumns(1); // TODO: implement concentric power loc
+                    output += cWork;
+                    output += skipColumns(1); // TODO: implement concentric  work loc
                     // eccentric metrics
                     output += (rep.eAvgLinearVelocity / 1000).toFixed(2) + ',';
                     output += rep.eRom + ',';
@@ -136,7 +162,9 @@ export const convert = data => {
                     output += ePeakForce;
                     output += skipColumns(1); // TODO: eccentric force location
                     output += ePeakPower;
-                    output += skipColumns(3); // TODO: implement eccentric power loc, work, work loc
+                    output += skipColumns(1); // TODO: implement eccentric power loc
+                    output += eWork;
+                    output += skipColumns(1); // TODO: implement eccentric work loc
                 } else {
                     // concentric metrics
                     output += (rep.averageVelocity / 1000).toFixed(2) + ',';
