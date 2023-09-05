@@ -8,8 +8,8 @@ import {
     AVG_VELOCITY_METRIC,
     PKV_METRIC,
     ROM_METRIC,
-    DURATION_METRIC,
     FORCE_METRIC,
+    POWER_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
 const defaultState = {
@@ -17,8 +17,8 @@ const defaultState = {
         AVG_VELOCITY_METRIC,
         PKV_METRIC,
         FORCE_METRIC,
+        POWER_METRIC,
         ROM_METRIC,
-        DURATION_METRIC,
     ],
     kratosEditingMetricRank: null, // should be 1-5 if editing, null otherwise
 };
