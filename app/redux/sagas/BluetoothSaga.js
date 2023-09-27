@@ -19,11 +19,17 @@ export default function* BluetoothSaga() {
 function* setupServices(action) {
     try {
         // listen for battery changes
-        yield apply(BleManager, BleManager.startNotification, [
-            action.deviceIdentifier,
-            BLE_BATTERY_SERVICE_UUID,
-            BLE_BATTERY_CHARACTERISTIC_UUID,
-        ]);
+        try {
+            yield apply(BleManager, BleManager.startNotification, [
+                action.deviceIdentifier,
+                BLE_BATTERY_SERVICE_UUID,
+                BLE_BATTERY_CHARACTERISTIC_UUID,
+            ]);
+        } catch (err) {
+            console.tron.log(
+                `listening for battery failed, might be older firmware that lacks it ${err}`,
+            );
+        }
 
         // listen for reps
         const repCharacteristic = yield select(

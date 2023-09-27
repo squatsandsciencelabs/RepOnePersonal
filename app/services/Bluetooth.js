@@ -110,12 +110,21 @@ export default async function (store) {
                 args.peripheral,
                 'A5183278-CA65-45B7-B6C3-A68552F3026D',
                 FIRMWARE_VERSION_CHARACTERISTIC_UUID,
-            ); // get version info
-            const batteryPercentageResponse = await BleManager.read(
-                args.peripheral,
-                BLE_BATTERY_SERVICE_UUID,
-                BLE_BATTERY_CHARACTERISTIC_UUID,
-            ); // get initial battery percentage
+            );
+
+            // get initial battery percentage
+            let batteryPercentageResponse = null;
+            try {
+                batteryPercentageResponse = await BleManager.read(
+                    args.peripheral,
+                    BLE_BATTERY_SERVICE_UUID,
+                    BLE_BATTERY_CHARACTERISTIC_UUID,
+                );
+            } catch (err) {
+                console.tron.log(
+                    `battery read failed, ignoring as may be older sensor ${err}`,
+                );
+            }
             const typedArray = new Uint8Array(response);
             const data16 = new Uint16Array(typedArray.buffer);
 
@@ -146,7 +155,11 @@ export default async function (store) {
                     args.peripheral,
                     apiFormatVersion,
                     `${data16[1]}.${data16[2]}.${data16[3]}`,
-                    batteryPercentageResponse[0] ?? null,
+                    (batteryPercentageResponse &&
+                        batteryPercentageResponse.length &&
+                        batteryPercentageResponse.length > 0 &&
+                        batteryPercentageResponse[0]) ??
+                        null,
                 ),
             );
         } catch (err) {
