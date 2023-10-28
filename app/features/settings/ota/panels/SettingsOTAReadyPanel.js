@@ -4,6 +4,7 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAReadyPanel extends Component {
     render() {
+        // TODO: show kratos or repone then #
         const install =
             this.props.connectedDevice && this.props.deviceFirmwareVersion ? (
                 <View>
@@ -22,7 +23,7 @@ class SettingsOTAReadyPanel extends Component {
                             SETTINGS_PANEL_STYLES.subtitleText,
                             { textAlign: 'left' },
                         ]}>
-                        The connected RepOne Sensor is{' '}
+                        The connected RepOne Device is{' '}
                         <Text style={{ fontWeight: 'bold', fontSize: 13 }}>
                             Version {this.props.deviceFirmwareVersion}
                         </Text>
@@ -37,7 +38,7 @@ class SettingsOTAReadyPanel extends Component {
                                 marginTop: 3,
                             },
                         ]}>
-                        To install on another RepOne Sensor, connect to it
+                        To install on another RepOne Device, connect to it
                         below.
                     </Text>
                 </View>
@@ -53,7 +54,7 @@ class SettingsOTAReadyPanel extends Component {
                             paddingBottom: 15,
                         },
                     ]}>
-                    To install on a RepOne Sensor, connect to it below.
+                    To install on a RepOne Device, connect to it below.
                 </Text>
             );
 
