@@ -169,7 +169,7 @@ class SettingsDevicePanelDisconnected extends Component {
     _renderScanningMessage() {
         return (
             <Text style={styles.centeredText}>
-                Scanning for RepOne Sensors...
+                Scanning for RepOne Devices...
             </Text>
         );
     }

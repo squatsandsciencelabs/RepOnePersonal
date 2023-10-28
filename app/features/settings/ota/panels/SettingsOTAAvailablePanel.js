@@ -6,13 +6,13 @@ class SettingsOTAAvailablePanel extends Component {
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
-                Connect a RepOne Sensor to compare versions.
+                Connect a RepOne Device to compare versions.
             </Text>
         );
         if (this.props.deviceFirmwareVersion) {
             deviceFirmwareText = (
                 <Text style={styles.description}>
-                    The connected RepOne Sensor is{' '}
+                    The connected RepOne Device is{' '}
                     <Text style={{ fontWeight: 'bold' }}>
                         Version {this.props.deviceFirmwareVersion}
                     </Text>
