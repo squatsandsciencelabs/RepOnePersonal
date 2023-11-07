@@ -21,6 +21,7 @@ import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDe
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import * as BluetoothUtils from 'app/utility/BluetoothUtils';
+import { getDeviceDisplayName } from 'app/utility/SensorUtils';
 
 // https://btprodspecificationrefs.blob.core.windows.net/assigned-numbers/Assigned%20Number%20Types/Assigned%20Numbers.pdf
 // BATTERY UUIDs
@@ -50,7 +51,12 @@ export default async function (store) {
 
     // scanning
     Emitter.addListener('BleManagerDiscoverPeripheral', args => {
-        store.dispatch(DeviceActionCreators.foundDevice(args.name, args.id));
+        store.dispatch(
+            DeviceActionCreators.foundDevice(
+                getDeviceDisplayName(args.name),
+                args.id,
+            ),
+        );
     });
 
     // connection status
@@ -370,7 +376,7 @@ export default async function (store) {
 
                     store.dispatch(
                         DeviceActionCreators.connectDevice(
-                            peripheral.name,
+                            getDeviceDisplayName(peripheral.name),
                             peripheral.id,
                         ),
                     );
@@ -390,7 +396,7 @@ export default async function (store) {
                     } else {
                         store.dispatch(
                             DeviceActionCreators.disconnectedFromDevice(
-                                peripheral.name,
+                                getDeviceDisplayName(peripheral.name),
                                 peripheral.id,
                             ),
                         );

@@ -28,7 +28,6 @@ class SettingsDevicePanelConnected extends Component {
             </View>
         );
 
-        // TODO: Connected To {this.props.device} is missing the #
         return (
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
                 <View style={SETTINGS_PANEL_STYLES.header}>

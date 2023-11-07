@@ -4,7 +4,6 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class SettingsOTAReadyPanel extends Component {
     render() {
-        // TODO: show kratos or repone then #
         const install =
             this.props.connectedDevice && this.props.deviceFirmwareVersion ? (
                 <View>
@@ -15,7 +14,7 @@ class SettingsOTAReadyPanel extends Component {
                         ]}
                         onPress={this.props.install.bind(this)}>
                         <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                            Install on RepOne #{this.props.connectedDevice}
+                            Install on {this.props.connectedDevice}
                         </Text>
                     </TouchableOpacity>
                     <Text
