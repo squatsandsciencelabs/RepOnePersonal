@@ -4,7 +4,6 @@ import * as Progress from 'react-native-progress';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
-// TODO: show kratos or repone then #
 class SettingsOTAInstallingPanel extends Component {
     render() {
         return (
@@ -25,7 +24,7 @@ class SettingsOTAInstallingPanel extends Component {
                     unfilledColor={'#D4D4D4'}
                 />
                 <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
-                    Installing on RepOne #{this.props.connectedDevice}
+                    Installing on {this.props.connectedDevice}
                 </Text>
                 {/* <Text style={[SETTINGS_PANEL_STYLES.footerCancelText, {fontWeight: 'bold', paddingTop: 25, paddingBottom: 10}]} onPress={this.props.cancelInstall.bind(this)}>
                     Cancel
