@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+
 const SCREEN_WIDTH = Dimensions.get('screen').width;
+const DATA_LABEL_ROW_OFFSET = 80;
 
 export default props => {
     return (
@@ -56,7 +58,8 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         paddingBottom: 15,
         height: 52,
-        minWidth: SCREEN_WIDTH - 80,
+        // adding minWidth prevents cropping columns from being cut off on large width devices
+        minWidth: SCREEN_WIDTH - DATA_LABEL_ROW_OFFSET,
     },
     border: {
         paddingTop: 10,
