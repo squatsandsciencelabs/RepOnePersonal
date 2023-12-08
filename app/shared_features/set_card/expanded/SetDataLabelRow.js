@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 
 export default props => {
     return (
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         paddingBottom: 15,
         height: 52,
+        minWidth: Dimensions.get('screen').width - 80,
     },
     border: {
         paddingTop: 10,
