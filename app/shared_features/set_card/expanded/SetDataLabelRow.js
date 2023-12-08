@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 export default props => {
     return (
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         paddingBottom: 15,
         height: 52,
-        minWidth: Dimensions.get('screen').width - 80,
+        minWidth: SCREEN_WIDTH - 80,
     },
     border: {
         paddingTop: 10,
