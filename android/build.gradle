@@ -3,9 +3,9 @@
 buildscript {
     ext {
         buildToolsVersion = "31.0.0"
-        minSdkVersion = 28 // react-native-ble-manager wants >= 19, unimodules wants >= 21
-        compileSdkVersion = 31
-        targetSdkVersion = 31
+        minSdkVersion = 28 // the "minimum" droid OS that can use this app. react-native-ble-manager wants >= 19, unimodules wants >= 21
+        compileSdkVersion = 33 // what compile with, which means "maximum" as well as you must compile against new features
+        targetSdkVersion = 33 // for forward compatibility, features in versions above this will be disabled
         googlePlayServicesAuthVersion = "19.2.0" // react-native-google-signin
         firebaseIidVersion = "19.0.1" // react-native-device-info
         kotlinVersion = '1.6.20' // expo needs this, https://github.com/expo/expo/issues/19338
