@@ -19,7 +19,6 @@ import OTASaga from './OTASaga';
 import BulkDataSaga from './BulkDataSaga';
 import CalibrationSaga from './CalibrationSaga';
 import ScalarSaga from './ScalarSaga';
-import KratosSaga from './KratosSaga';
 import WorkingSetDeviceSaga from './WorkingSetDeviceSaga';
 
 const Sagas = function* Sagas(dispatch) {
@@ -42,7 +41,6 @@ const Sagas = function* Sagas(dispatch) {
         BulkDataSaga(),
         CalibrationSaga(),
         ScalarSaga(),
-        KratosSaga(),
         WorkingSetDeviceSaga(),
         // VelocityThresholdSaga(),
     ]);
