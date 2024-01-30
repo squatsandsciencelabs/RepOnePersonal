@@ -42,7 +42,15 @@ function* logStart(action) {
         const formatVersion = yield select(
             ConnectedDeviceStatusSelectors.getAPIFormatVersion,
         );
-        if (deviceIdentifier && formatVersion && formatVersion >= 2) {
+        const deviceFamily = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+        );
+        if (
+            deviceIdentifier &&
+            formatVersion &&
+            formatVersion >= 2 &&
+            deviceFamily === 'REP_ONE'
+        ) {
             const response = yield apply(BleManager, BleManager.read, [
                 deviceIdentifier,
                 REP_ONE_TETHER_REP_SERVICE,
@@ -67,7 +75,7 @@ function* logStart(action) {
             }
         } else {
             console.tron.log(
-                `skipping get rep start format version ${formatVersion} is not >= 2`,
+                `skipping get rep start as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
             );
         }
     } catch (err) {
