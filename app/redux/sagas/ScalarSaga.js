@@ -1,3 +1,5 @@
+// NOTE: This only works with RepOne Tether
+
 import {
     take,
     takeEvery,
@@ -18,6 +20,10 @@ import {
     LOG_REP_END_POSITION,
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
+import {
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_SCALAR_TEST_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 export default function* ScalarSaga() {
     if (OpenBarbellConfig.scalarEnabled) {
@@ -39,8 +45,8 @@ function* logStart(action) {
         if (deviceIdentifier && formatVersion && formatVersion >= 2) {
             const response = yield apply(BleManager, BleManager.read, [
                 deviceIdentifier,
-                'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                'A5183278-CA65-45B7-B6C3-A68552F20282',
+                REP_ONE_TETHER_REP_SERVICE,
+                REP_ONE_TETHER_SCALAR_TEST_CHARACTERISTIC,
             ]);
 
             let responseString = bytesToString(response);
@@ -80,8 +86,8 @@ function* logEnd(action) {
         if (deviceIdentifier && formatVersion && formatVersion >= 2) {
             const response = yield apply(BleManager, BleManager.read, [
                 deviceIdentifier,
-                'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                'A5183278-CA65-45B7-B6C3-A68552F20282',
+                REP_ONE_TETHER_REP_SERVICE,
+                REP_ONE_TETHER_SCALAR_TEST_CHARACTERISTIC,
             ]);
 
             let responseString = bytesToString(response);

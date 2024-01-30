@@ -8,9 +8,13 @@ import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import { CONNECTED_TO_DEVICE } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import {
-    BLE_BATTERY_CHARACTERISTIC_UUID,
-    BLE_BATTERY_SERVICE_UUID,
-} from 'app/services/Bluetooth';
+    BLE_BATTERY_SERVICE,
+    BLE_BATTERY_CHARACTERISTIC,
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+    REP_ONE_TETHER_BULK_DATA_START_CHARACTERISTIC,
+    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 export default function* BluetoothSaga() {
     yield all([takeEvery(CONNECTED_TO_DEVICE, setupServices)]);
@@ -22,8 +26,8 @@ function* setupServices(action) {
         try {
             yield apply(BleManager, BleManager.startNotification, [
                 action.deviceIdentifier,
-                BLE_BATTERY_SERVICE_UUID,
-                BLE_BATTERY_CHARACTERISTIC_UUID,
+                BLE_BATTERY_SERVICE,
+                BLE_BATTERY_CHARACTERISTIC,
             ]);
         } catch (err) {
             console.tron.log(
@@ -31,13 +35,21 @@ function* setupServices(action) {
             );
         }
 
+        // get device fmaily
+        const deviceFamily = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+        );
+
         // listen for reps
+        const repService = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceRepService,
+        );
         const repCharacteristic = yield select(
             ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic,
         );
         yield apply(BleManager, BleManager.startNotification, [
             action.deviceIdentifier,
-            'A5183278-CA65-45B7-B6C3-A68552F2026D',
+            repService,
             repCharacteristic,
         ]);
 
@@ -47,12 +59,12 @@ function* setupServices(action) {
         }
 
         // bulk
-        if (OpenBarbellConfig.bulkEnabled) {
+        if (OpenBarbellConfig.bulkEnabled && deviceFamily === 'REP_ONE') {
             // listen for bulk data
             yield apply(BleManager, BleManager.startNotification, [
                 action.deviceIdentifier,
-                'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                'A5183278-CA65-45B7-B6C3-A68552F20274',
+                REP_ONE_TETHER_REP_SERVICE,
+                REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
             ]);
 
             // write 1 for bulk data
@@ -74,8 +86,8 @@ function* setupServices(action) {
                     // write
                     yield apply(BleManager, BleManager.write, [
                         deviceIdentifier,
-                        'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                        'A5183278-CA65-45B7-B6C3-A68552F20276',
+                        REP_ONE_TETHER_REP_SERVICE,
+                        REP_ONE_TETHER_BULK_DATA_START_CHARACTERISTIC,
                         writeData,
                     ]);
 
@@ -90,7 +102,10 @@ function* setupServices(action) {
         }
 
         // calibration
-        if (OpenBarbellConfig.calibrationEnabled) {
+        if (
+            OpenBarbellConfig.calibrationEnabled &&
+            deviceFamily === 'REP_ONE'
+        ) {
             // end cal on startup if it's format 2
             writeData = stringToBytes('endcal');
             while (true) {
@@ -109,8 +124,8 @@ function* setupServices(action) {
                     // write
                     yield apply(BleManager, BleManager.write, [
                         action.deviceIdentifier,
-                        'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                        'A5183278-CA65-45B7-B6C3-A68552F20281',
+                        REP_ONE_TETHER_REP_SERVICE,
+                        REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
                         writeData,
                     ]);
 

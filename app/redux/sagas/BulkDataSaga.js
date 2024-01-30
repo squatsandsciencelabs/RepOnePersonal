@@ -1,3 +1,6 @@
+// NOTE: This currently only works with RepOne Tether
+// If other devices need this, it will need to be modified
+
 import {
     take,
     takeEvery,
@@ -19,7 +22,10 @@ import {
     DISCONNECTED_FROM_DEVICE,
     LOGOUT,
 } from 'app/configs+constants/ActionTypes';
-
+import {
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 
@@ -29,7 +35,7 @@ var map = {};
 export default function* BulkDataSaga() {
     if (OpenBarbellConfig.bulkEnabled) {
         yield all([
-            takeEvery(ADD_REP_DATA, mapBulkData),
+            takeEvery(ADD_REP_DATA, mapBulkData), // REPONE TETHER ONLY ACTION
             takeEvery(SAVE_WORKOUT_REP, completeCheck),
             takeEvery(SAVE_HISTORY_REP, completeCheck),
             takeEvery(DISCONNECTED_FROM_DEVICE, clearAll),
@@ -110,6 +116,16 @@ function* completeCheck(action) {
         return;
     }
 
+    // check for tether rep
+    if (rep.deviceFamily !== 'RepOne') {
+        console.tron.log(
+            `Unable to send complete message for bulk data, device family "${
+                rep.deviceFamily
+            }" is not tether for action ${JSON.stringify(action)}`,
+        );
+        return;
+    }
+
     // get device rep id
     if (!rep.deviceRepID) {
         console.tron.log(
@@ -139,12 +155,21 @@ function* notifyBulkDataReceived(deviceRepID, completed = false) {
 
     while (true) {
         // fail out upon disconnect
-        let deviceIdentifier = yield select(
+        const deviceIdentifier = yield select(
             ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
         );
         if (!deviceIdentifier) {
             console.tron.log(
                 `not connected, ignoring notifying bulk data received`,
+            );
+            return;
+        }
+        const deviceFamily = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+        );
+        if (!deviceFamily || deviceFamily !== 'REP_ONE') {
+            console.tron.log(
+                `connected device is wrong faily ${deviceFamily}, ignoring notifying bulk data received`,
             );
             return;
         }
@@ -156,8 +181,8 @@ function* notifyBulkDataReceived(deviceRepID, completed = false) {
             );
             yield apply(BleManager, BleManager.write, [
                 deviceIdentifier,
-                'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                'A5183278-CA65-45B7-B6C3-A68552F20274',
+                REP_ONE_TETHER_REP_SERVICE,
+                REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
                 data,
             ]);
             console.tron.log(

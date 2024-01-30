@@ -1,5 +1,11 @@
 import { RECONNECTING } from 'app/configs+constants/SensorStatus';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import {
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
+    KRATOS_REP_SERVICE,
+    KRATOS_REP_SUMMARY_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 const stateRoot = state => state.connectedDevice;
 
@@ -34,17 +40,24 @@ export const getAPIFormatVersion = state => stateRoot(state).apiFormatVersion;
 
 export const getCan3D = state => true; // getConnectedDeviceStatus(state) === 'CONNECTED'; // TODO: have this actually be set properly based on sensor capabilities
 
-const RepOneCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20273';
-const KratosCharacteristic = 'A5183278-CA65-45B7-B6C3-A68552F20284';
+export const getConnectedDeviceRepService = state => {
+    if (getKratosEnabled()) {
+        return stateRoot(state).deviceFamily === 'KRATOS'
+            ? KRATOS_REP_SERVICE
+            : REP_ONE_TETHER_REP_SERVICE;
+    }
+
+    return REP_ONE_TETHER_REP_SERVICE;
+};
 
 export const getConnectedDeviceRepCharacteristic = state => {
     if (getKratosEnabled()) {
         return stateRoot(state).deviceFamily === 'KRATOS'
-            ? KratosCharacteristic
-            : RepOneCharacteristic;
+            ? KRATOS_REP_SUMMARY_CHARACTERISTIC
+            : REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC;
     }
 
-    return RepOneCharacteristic;
+    return REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC;
 };
 
 export const getConnectedDeviceBatteryPercentage = state =>
