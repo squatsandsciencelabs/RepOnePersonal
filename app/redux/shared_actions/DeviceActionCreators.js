@@ -41,6 +41,7 @@ import {
     requestMultiple,
 } from 'react-native-permissions';
 import * as BluetoothUtils from 'app/utility/BluetoothUtils';
+import { DEVICE_SERVICE } from 'app/configs+constants/BluetoothAPI';
 
 // SCANNING
 export const startDeviceScan =
@@ -122,9 +123,8 @@ export const startDeviceScan =
             const state = getState();
             logFailedAttemptScanAnalytics(state, isManualScan);
         } else {
-            // TODO: This was disabled as the kratos firmware was having issues with it. Re-enable this once new firmware fixes are out.
-            // BleManager.scan(['A5183278-CA65-45B7-B6C3-A68552F2026D', 'A5183278-CA65-45B7-B6C3-A68552F3026D'], 99999, false);
-            BleManager.scan([], 99999, false);
+            // scan for device service as all devices should have it
+            BleManager.scan([DEVICE_SERVICE], 99999, false);
             const state = getState();
             logAttemptScanAnalytics(state, isManualScan);
 

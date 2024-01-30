@@ -21,6 +21,10 @@ import {
 } from 'app/configs+constants/ActionTypes';
 import * as ConnectedDeviceStatusSelectors from 'app/redux/selectors/ConnectedDeviceStatusSelectors';
 import * as CalibrationSelectors from 'app/redux/selectors/CalibrationSelectors';
+import {
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 var calibrating = false;
 
@@ -50,8 +54,8 @@ function* startCalibration(action) {
                 const writeData = stringToBytes('startcal');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
-                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    REP_ONE_TETHER_REP_SERVICE,
+                    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
                     writeData,
                 ]);
             } else {
@@ -82,8 +86,8 @@ function* finishCalibration(action) {
                 const writeData = stringToBytes('endcal');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
-                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    REP_ONE_TETHER_REP_SERVICE,
+                    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
                     writeData,
                 ]);
                 toast(
@@ -130,8 +134,8 @@ function* resetCalibration(action) {
                 const writeData = stringToBytes('reset');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
-                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                    'A5183278-CA65-45B7-B6C3-A68552F20281',
+                    REP_ONE_TETHER_REP_SERVICE,
+                    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
                     writeData,
                 ]);
                 toast(

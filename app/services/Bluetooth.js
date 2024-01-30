@@ -22,25 +22,15 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import * as BluetoothUtils from 'app/utility/BluetoothUtils';
 import { getDeviceDisplayName } from 'app/utility/SensorUtils';
-
-// https://btprodspecificationrefs.blob.core.windows.net/assigned-numbers/Assigned%20Number%20Types/Assigned%20Numbers.pdf
-// BATTERY UUIDs
-
-// 0000180F-0000-1000-8000-00805f9b34fb - 128 bit
-// 0x180F - 16 bit
-// 180F - short
-export const BLE_BATTERY_SERVICE_UUID = '180F';
-
-// 00002a19-0000-1000-8000-00805f9b34fb - 128 bit
-// 0x2A19 - 16 bit
-// 2A19 - short
-export const BLE_BATTERY_CHARACTERISTIC_UUID = '2A19';
-
-const REP_ONE_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20273';
-const KRATOS_DATA_CHARACTERISTIC_UUID = 'A5183278-CA65-45B7-B6C3-A68552F20284';
-
-const FIRMWARE_VERSION_CHARACTERISTIC_UUID =
-    'A5183278-CA65-45B7-B6C3-A68552F3026E';
+import {
+    DEVICE_SERVICE,
+    DEVICE_INFO_CHARACTERISTIC,
+    BLE_BATTERY_SERVICE,
+    BLE_BATTERY_CHARACTERISTIC,
+    REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
+    REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+    KRATOS_REP_SUMMARY_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 const maxFormatVersion = 2;
 const MTU_SIZE = 185;
@@ -114,8 +104,8 @@ export default async function (store) {
             await BleManager.retrieveServices(args.peripheral);
             const response = await BleManager.read(
                 args.peripheral,
-                'A5183278-CA65-45B7-B6C3-A68552F3026D',
-                FIRMWARE_VERSION_CHARACTERISTIC_UUID,
+                DEVICE_SERVICE,
+                DEVICE_INFO_CHARACTERISTIC,
             );
 
             // get initial battery percentage
@@ -123,8 +113,8 @@ export default async function (store) {
             try {
                 batteryPercentageResponse = await BleManager.read(
                     args.peripheral,
-                    BLE_BATTERY_SERVICE_UUID,
-                    BLE_BATTERY_CHARACTERISTIC_UUID,
+                    BLE_BATTERY_SERVICE,
+                    BLE_BATTERY_CHARACTERISTIC,
                 );
             } catch (err) {
                 console.tron.log(
@@ -193,7 +183,7 @@ export default async function (store) {
                 // process it
                 // done here instead of actions to a saga to save on number of actions
                 // especially important for bulk data as it gets spammed
-                if (characteristic === BLE_BATTERY_CHARACTERISTIC_UUID) {
+                if (characteristic === BLE_BATTERY_CHARACTERISTIC) {
                     // Battery percentage changed
                     const batteryPercentage = args.value[0] ?? null;
                     store.dispatch(
@@ -202,7 +192,7 @@ export default async function (store) {
                         ),
                     );
                 } else if (
-                    characteristic === REP_ONE_DATA_CHARACTERISTIC_UUID
+                    characteristic === REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC
                 ) {
                     // RepOne reps
 
@@ -216,7 +206,7 @@ export default async function (store) {
                     store.dispatch(DeviceActionCreators.receivedLiftData(json));
                 } else if (
                     getKratosEnabled() &&
-                    characteristic === KRATOS_DATA_CHARACTERISTIC_UUID
+                    characteristic === KRATOS_REP_SUMMARY_CHARACTERISTIC
                 ) {
                     // Kratos Reps
 
@@ -233,7 +223,8 @@ export default async function (store) {
                     // TODO: Remove this logging statement once kratos reps are properly stored in the codebase
                     console.tron.log(`got kratos reps ${JSON.stringify(json)}`);
                 } else if (
-                    characteristic === 'A5183278-CA65-45B7-B6C3-A68552F20274' &&
+                    characteristic ===
+                        REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC &&
                     OpenBarbellConfig.bulkEnabled
                 ) {
                     // bulk data
@@ -325,7 +316,7 @@ export default async function (store) {
                     const version = peripheral.characteristics.find(
                         c =>
                             c.characteristic.toUpperCase() ===
-                            FIRMWARE_VERSION_CHARACTERISTIC_UUID,
+                            DEVICE_INFO_CHARACTERISTIC,
                     ).value.bytes;
 
                     const typedArray = new Uint8Array(version);
@@ -337,14 +328,14 @@ export default async function (store) {
                         peripheral.characteristics.find(
                             c =>
                                 c.characteristic.toUpperCase() ===
-                                REP_ONE_DATA_CHARACTERISTIC_UUID,
+                                REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
                         );
 
                     const kratosCharacteristic =
                         peripheral.characteristics.find(
                             c =>
                                 c.characteristic.toUpperCase() ===
-                                KRATOS_DATA_CHARACTERISTIC_UUID,
+                                KRATOS_REP_SUMMARY_CHARACTERISTIC,
                         );
 
                     if (repOneCharacteristic) {

@@ -28,6 +28,14 @@ import {
     isVersionLessThanOrEqual,
     isVersionGreaterThanOrEqual,
 } from 'app/math/VersionComparison';
+import {
+    BLE_BATTERY_SERVICE,
+    BLE_BATTERY_CHARACTERISTIC,
+    REP_ONE_TETHER_REP_SERVICE,
+    REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+    REP_ONE_TETHER_BULK_DATA_START_CHARACTERISTIC,
+    REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
+} from 'app/configs+constants/BluetoothAPI';
 
 let downloadTask = null;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
@@ -217,23 +225,39 @@ function* startInstall(action) {
     const deviceIdentifier =
         ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
     const name = ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
+    const repService =
+        ConnectedDeviceStatusSelectors.getConnectedDeviceRepService(state);
     const repCharacteristic =
         ConnectedDeviceStatusSelectors.getConnectedDeviceRepCharacteristic(
             state,
         );
+    const deviceFamily = yield select(
+        ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+    );
 
+    // disable notifications
     try {
+        // reps
         yield apply(BleManager, BleManager.stopNotification, [
             deviceIdentifier,
-            'A5183278-CA65-45B7-B6C3-A68552F2026D',
+            repService,
             repCharacteristic,
-        ]); // reps
-        if (OpenBarbellConfig.bulkEnabled) {
+        ]);
+
+        // battery
+        yield apply(BleManager, BleManager.stopNotification, [
+            deviceIdentifier,
+            BLE_BATTERY_SERVICE,
+            BLE_BATTERY_CHARACTERISTIC,
+        ]);
+
+        // bulk data
+        if (OpenBarbellConfig.bulkEnabled && deviceFamily === 'REP_ONE') {
             yield apply(BleManager, BleManager.stopNotification, [
                 deviceIdentifier,
-                'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                'A5183278-CA65-45B7-B6C3-A68552F20274',
-            ]); // bulk data
+                REP_ONE_TETHER_REP_SERVICE,
+                REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+            ]);
         }
         const path =
             Platform.OS === 'ios' ? filePath : filePath.replace('file://', '');
@@ -255,18 +279,33 @@ function* startInstall(action) {
             yield put({
                 type: OTA_DOWNLOAD_READY,
             });
+
+            // restart notifications
             try {
+                // rep summaries
                 yield apply(BleManager, BleManager.startNotification, [
                     deviceIdentifier,
-                    'A5183278-CA65-45B7-B6C3-A68552F2026D',
+                    repService,
                     repCharacteristic,
-                ]); // reps
-                if (OpenBarbellConfig.bulkEnabled) {
+                ]);
+
+                // battery
+                yield apply(BleManager, BleManager.startNotification, [
+                    deviceIdentifier,
+                    BLE_BATTERY_SERVICE,
+                    BLE_BATTERY_CHARACTERISTIC,
+                ]);
+
+                // bulk
+                if (
+                    OpenBarbellConfig.bulkEnabled &&
+                    deviceFamily === 'REP_ONE'
+                ) {
                     yield apply(BleManager, BleManager.startNotification, [
                         deviceIdentifier,
-                        'A5183278-CA65-45B7-B6C3-A68552F2026D',
-                        'A5183278-CA65-45B7-B6C3-A68552F20274',
-                    ]); // bulk data
+                        REP_ONE_TETHER_REP_SERVICE,
+                        REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
+                    ]);
                 }
             } catch (err) {
                 console.tron.log(

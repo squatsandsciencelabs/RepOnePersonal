@@ -105,7 +105,8 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                     ? action.deviceName.startsWith('Kratos')
                         ? 'KRATOS'
                         : 'REP_ONE'
-                    : 'REP_ONE', // TODO: have this be from device info instead of string parsing from the name
+                    : 'REP_ONE', // TODO: have this be from device info instead of string parsing from the name. Might be an integer so would have to convert to a constant locally
+                // TODO: store the constants properly, noting that deviceFamily in rep data will be diff
                 isReconnecting: false,
                 apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,
