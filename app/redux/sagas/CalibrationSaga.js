@@ -53,7 +53,15 @@ function* startCalibration(action) {
             const formatVersion = yield select(
                 ConnectedDeviceStatusSelectors.getAPIFormatVersion,
             );
-            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
+            const deviceFamily = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+            );
+            if (
+                deviceIdentifier &&
+                formatVersion &&
+                formatVersion >= 2 &&
+                deviceFamily === 'REP_ONE'
+            ) {
                 const writeData = stringToBytes('startcal');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
@@ -63,11 +71,11 @@ function* startCalibration(action) {
                 ]);
             } else {
                 console.tron.log(
-                    `skipping start calibration as format version ${formatVersion} is not >= 2`,
+                    `skipping get start calibration as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
                 );
             }
             calibrating = true;
-            break; // exit the loop due tosuccess
+            break; // exit the loop due to success
         } catch (err) {
             console.tron.log(
                 `failed to start calibration ${err.toString()}, trying again`,
@@ -85,7 +93,15 @@ function* finishCalibration(action) {
             const formatVersion = yield select(
                 ConnectedDeviceStatusSelectors.getAPIFormatVersion,
             );
-            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
+            const deviceFamily = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+            );
+            if (
+                deviceIdentifier &&
+                formatVersion &&
+                formatVersion >= 2 &&
+                deviceFamily === 'REP_ONE'
+            ) {
                 const writeData = stringToBytes('endcal');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
@@ -98,7 +114,7 @@ function* finishCalibration(action) {
                 );
             } else {
                 console.tron.log(
-                    `skipping finish calibration as format version ${formatVersion} is not >= 2`,
+                    `skipping finish calibration as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
                 );
             }
             calibrating = false;
@@ -133,7 +149,15 @@ function* resetCalibration(action) {
             const formatVersion = yield select(
                 ConnectedDeviceStatusSelectors.getAPIFormatVersion,
             );
-            if (deviceIdentifier && formatVersion && formatVersion >= 2) {
+            const deviceFamily = yield select(
+                ConnectedDeviceStatusSelectors.getConnectedDeviceFamily,
+            );
+            if (
+                deviceIdentifier &&
+                formatVersion &&
+                formatVersion >= 2 &&
+                deviceFamily === 'REP_ONE'
+            ) {
                 const writeData = stringToBytes('reset');
                 yield apply(BleManager, BleManager.write, [
                     deviceIdentifier,
@@ -146,7 +170,7 @@ function* resetCalibration(action) {
                 );
             } else {
                 console.tron.log(
-                    `skipping reset calibration as format version ${formatVersion} is not >= 2`,
+                    `skipping reset calibration as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
                 );
             }
             calibrating = false;
