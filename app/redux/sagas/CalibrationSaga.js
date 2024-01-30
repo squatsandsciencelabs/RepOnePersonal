@@ -1,3 +1,6 @@
+// NOTE: This only works for RepOne tether
+// If we want to calibrate other devices, this needs to be modified
+
 import {
     take,
     takeEvery,
