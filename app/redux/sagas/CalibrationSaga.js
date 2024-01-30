@@ -71,7 +71,7 @@ function* startCalibration(action) {
                 ]);
             } else {
                 console.tron.log(
-                    `skipping get start calibration as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
+                    `skipping start calibration as either not connected to ${deviceIdentifier}, format version ${formatVersion} is not >= 2, or device family ${deviceFamily} is wrong`,
                 );
             }
             calibrating = true;
