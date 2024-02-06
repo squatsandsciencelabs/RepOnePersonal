@@ -112,14 +112,10 @@ export const convert = data => {
 
                     if (totalInertialConstant) {
                         cPeakForce =
-                            rep.cPartialPeakForce *
-                                totalInertialConstant *
-                                rep.cRom +
+                            rep.cPartialPeakForce * totalInertialConstant +
                             cPeakForce;
                         ePeakForce =
-                            rep.ePartialPeakForce *
-                                totalInertialConstant *
-                                rep.eRom +
+                            rep.ePartialPeakForce * totalInertialConstant +
                             ePeakForce;
 
                         cPeakPower =
@@ -130,14 +126,10 @@ export const convert = data => {
                             ePeakPower;
 
                         cWork =
-                            rep.cPartialPeakForce *
-                                totalInertialConstant *
-                                rep.cRom +
+                            rep.cPartialPeakForce * totalInertialConstant +
                             cWork;
                         eWork =
-                            rep.ePartialPeakForce *
-                                totalInertialConstant *
-                                rep.eRom +
+                            rep.ePartialPeakForce * totalInertialConstant +
                             eWork;
                     }
 
