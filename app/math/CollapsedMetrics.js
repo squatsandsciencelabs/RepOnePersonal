@@ -1293,6 +1293,14 @@ export const quantifierAbbreviation = quantifier => {
             return 'SET LOSS';
         case PEAK_END_QUANTIFIER:
             return 'PEAK END';
+        case PEAK_FORCE_METRIC:
+            return 'PK FRC';
+        case PEAK_POWER_METRIC:
+            return 'PK PWR';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'PK HFRC';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'PK HPWR';
         default:
             return null;
     }
