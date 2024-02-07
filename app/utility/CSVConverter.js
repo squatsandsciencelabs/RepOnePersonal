@@ -99,8 +99,12 @@ export const convert = data => {
                         getTotalKratosDiscsInertialConstant(set.kratosDiscs);
                     let cPeakForce,
                         ePeakForce,
+                        cMeanForce,
+                        eMeanForce,
                         cPeakPower,
                         ePeakPower,
+                        cMeanPower,
+                        eMeanPower,
                         cWork,
                         eWork;
 
@@ -127,6 +131,24 @@ export const convert = data => {
                             rep.ePartialPeakPower * totalInertialConstant +
                             ePeakPower;
 
+                        cMeanForce =
+                            rep.cPartialMeanForce *
+                                totalInertialConstant *
+                                rep.cRom +
+                            cMeanForce;
+                        eMeanForce =
+                            rep.ePartialMeanForce *
+                                totalInertialConstant *
+                                rep.eRom +
+                            eMeanForce;
+
+                        cMeanPower =
+                            rep.cPartialMeanPower * totalInertialConstant +
+                            cMeanPower;
+                        eMeanPower =
+                            rep.ePartialMeanPower * totalInertialConstant +
+                            eMeanPower;
+
                         cWork =
                             rep.cPartialPeakForce *
                                 totalInertialConstant *
@@ -149,6 +171,10 @@ export const convert = data => {
                     output += skipColumns(1); // TODO: concentric force location
                     output += cPeakPower;
                     output += skipColumns(1); // TODO: implement concentric power loc
+                    output += cMeanPower;
+                    output += skipColumns(1); // TODO: implement concentric mean loc
+                    output += cMeanPower;
+                    output += skipColumns(1); // TODO: implement concentric mean loc
                     output += cWork;
                     output += skipColumns(1); // TODO: implement concentric  work loc
                     // eccentric metrics
@@ -161,6 +187,10 @@ export const convert = data => {
                     output += skipColumns(1); // TODO: eccentric force location
                     output += ePeakPower;
                     output += skipColumns(1); // TODO: implement eccentric power loc
+                    output += eMeanForce;
+                    output += skipColumns(1); // TODO: eccentric force location
+                    output += eMeanPower;
+                    output += skipColumns(1); // TODO: implement eccentric mean loc
                     output += eWork;
                     output += skipColumns(1); // TODO: implement eccentric work loc
                 } else {

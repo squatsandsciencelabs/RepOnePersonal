@@ -363,64 +363,64 @@ const metricValue = (set, allSets, quantifier, metric) => {
         case MEAN_FORCE_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFirstPeakForce(set);
+                    returnValue = CollapsedMetrics.getFirstMeanForce(set);
                     break;
                 case LAST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getLastPeakForce(set);
+                    returnValue = CollapsedMetrics.getLastMeanForce(set);
                     break;
                 case MIN_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMinPeakForce(set);
+                    returnValue = CollapsedMetrics.getMinMeanForce(set);
                     break;
                 case MAX_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMaxPeakForce(set);
+                    returnValue = CollapsedMetrics.getMaxMeanForce(set);
                     break;
                 case AVG_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAvgPeakForce(set);
+                    returnValue = CollapsedMetrics.getAvgMeanForce(set);
                     break;
                 case ABS_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAbsLossOfPeakForces(set);
+                    returnValue = CollapsedMetrics.getAbsLossOfMeanForces(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
                     returnValue =
-                        CollapsedMetrics.getPercentLossOfPeakForces(set);
+                        CollapsedMetrics.getPercentLossOfMeanForces(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSetLossOfPeakForces(set);
+                    returnValue = CollapsedMetrics.getSetLossOfMeanForces(set);
                     break;
                 case PEAK_END_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPeakEndOfPeakForces(set);
+                    returnValue = CollapsedMetrics.getPeakEndOfMeanForces(set);
                     break;
             }
             break;
         case MEAN_POWER_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getFirstPeakPower(set);
+                    returnValue = CollapsedMetrics.getFirstMeanPower(set);
                     break;
                 case LAST_REP_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getLastPeakPower(set);
+                    returnValue = CollapsedMetrics.getLastMeanPower(set);
                     break;
                 case MIN_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMinPeakPower(set);
+                    returnValue = CollapsedMetrics.getMinMeanPower(set);
                     break;
                 case MAX_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getMaxPeakPower(set);
+                    returnValue = CollapsedMetrics.getMaxMeanPower(set);
                     break;
                 case AVG_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAvgPeakPower(set);
+                    returnValue = CollapsedMetrics.getAvgMeanPower(set);
                     break;
                 case ABS_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getAbsLossOfPeakPowers(set);
+                    returnValue = CollapsedMetrics.getAbsLossOfMeanPowers(set);
                     break;
                 case PERCENT_LOSS_QUANTIFIER:
                     returnValue =
-                        CollapsedMetrics.getPercentLossOfPeakPowers(set);
+                        CollapsedMetrics.getPercentLossOfMeanPowers(set);
                     break;
                 case SET_LOSS_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getSetLossOfPeakPowers(set);
+                    returnValue = CollapsedMetrics.getSetLossOfMeanPowers(set);
                     break;
                 case PEAK_END_QUANTIFIER:
-                    returnValue = CollapsedMetrics.getPeakEndOfPeakPowers(set);
+                    returnValue = CollapsedMetrics.getPeakEndOfMeanPowers(set);
                     break;
             }
             break;

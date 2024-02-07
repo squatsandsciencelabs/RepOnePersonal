@@ -759,9 +759,13 @@ const _getDisplayMetric = (metric, rep, set = null) => {
         case PEAK_POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case MEAN_FORCE_METRIC:
-            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+            return rep.cPartialMeanForce
+                ? Number(rep.cPartialMeanForce).toFixed(2)
+                : EMPTY;
         case MEAN_POWER_METRIC:
-            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
+            return rep.cPartialMeanPower
+                ? Number(rep.cPartialMeanPower).toFixed(2)
+                : EMPTY;
         default:
             return INVALID;
     }
@@ -813,7 +817,7 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 set.kratosDiscs,
             );
             return totalInertialConstant
-                ? Number(rep.partialPeakForce * totalInertialConstant).toFixed(
+                ? Number(rep.cPartialMeanForce * totalInertialConstant).toFixed(
                       2,
                   )
                 : EMPTY;
@@ -833,7 +837,7 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 set.kratosDiscs,
             );
             return totalInertialConstant
-                ? Number(rep.partialPeakPower * totalInertialConstant).toFixed(
+                ? Number(rep.cPartialMeanPower * totalInertialConstant).toFixed(
                       2,
                   )
                 : EMPTY;
