@@ -16,6 +16,8 @@ import {
     PEAK_END_QUANTIFIER,
     PEAK_FORCE_METRIC,
     PEAK_POWER_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 
@@ -50,6 +52,8 @@ const generateItems = rollup => {
                 pickerItem(PKV_METRIC),
                 pickerItem(PEAK_FORCE_METRIC),
                 pickerItem(PEAK_POWER_METRIC),
+                pickerItem(MEAN_FORCE_METRIC),
+                pickerItem(MEAN_POWER_METRIC),
                 pickerItem(WORK_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
@@ -61,6 +65,8 @@ const generateItems = rollup => {
                 pickerItem(PKV_METRIC),
                 pickerItem(PEAK_FORCE_METRIC),
                 pickerItem(PEAK_POWER_METRIC),
+                pickerItem(MEAN_FORCE_METRIC),
+                pickerItem(MEAN_POWER_METRIC),
                 pickerItem(WORK_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),

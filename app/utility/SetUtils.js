@@ -10,6 +10,8 @@ import {
     PEAK_FORCE_METRIC,
     PEAK_FORCE_HEIGHT_METRIC,
     PEAK_POWER_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     PEAK_POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
@@ -756,6 +758,10 @@ const _getDisplayMetric = (metric, rep, set = null) => {
             return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
         case PEAK_POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
+        case MEAN_FORCE_METRIC:
+            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+        case MEAN_POWER_METRIC:
+            return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
         default:
             return INVALID;
     }
@@ -802,9 +808,27 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                           totalInertialConstant,
                   ).toFixed(2)
                 : EMPTY;
+        case MEAN_FORCE_METRIC:
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant
+                ? Number(rep.partialPeakForce * totalInertialConstant).toFixed(
+                      2,
+                  )
+                : EMPTY;
         case PEAK_FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case PEAK_POWER_METRIC:
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant
+                ? Number(rep.partialPeakPower * totalInertialConstant).toFixed(
+                      2,
+                  )
+                : EMPTY;
+        case MEAN_POWER_METRIC:
             totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );

@@ -10,6 +10,8 @@ import {
     PEAK_FORCE_HEIGHT_METRIC,
     PEAK_POWER_METRIC,
     PEAK_POWER_HEIGHT_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
@@ -1184,6 +1186,10 @@ export const metricAbbreviation = metric => {
             return 'PK PWR';
         case PEAK_POWER_HEIGHT_METRIC:
             return 'PK PH';
+        case MEAN_FORCE_METRIC:
+            return 'MN FRC';
+        case MEAN_POWER_METRIC:
+            return 'MN PWR';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'VEL³';
         case LINEAR_3D_ROM_METRIC:
@@ -1219,6 +1225,10 @@ export const metricString = metric => {
             return 'Peak Power';
         case PEAK_POWER_HEIGHT_METRIC:
             return 'Peak Power Height';
+        case MEAN_FORCE_METRIC:
+            return 'Mean Force';
+        case MEAN_POWER_METRIC:
+            return 'Mean Power';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'Average Velocity 3D';
         case LINEAR_3D_ROM_METRIC:
@@ -1262,6 +1272,10 @@ export const metricUnit = (metric, quantifier) => {
             return 'lb-f';
         case PEAK_POWER_METRIC:
             return 'W';
+        case MEAN_FORCE_METRIC:
+            return 'N';
+        case MEAN_POWER_METRIC:
+            return 'W';
         default:
             return null;
     }
@@ -1297,6 +1311,10 @@ export const quantifierAbbreviation = quantifier => {
             return 'PK FRC';
         case PEAK_POWER_METRIC:
             return 'PK PWR';
+        case MEAN_FORCE_METRIC:
+            return 'MN FRC';
+        case MEAN_POWER_METRIC:
+            return 'MN PWR';
         case PEAK_FORCE_HEIGHT_METRIC:
             return 'PK HFRC';
         case PEAK_POWER_HEIGHT_METRIC:

@@ -11,6 +11,7 @@ import {
     PEAK_FORCE_METRIC,
     PEAK_POWER_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
+import { MEAN_FORCE_METRIC } from '../../configs+constants/CollapsedMetricTypes';
 
 const defaultState = {
     metrics: [

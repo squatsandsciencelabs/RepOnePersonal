@@ -14,6 +14,8 @@ import {
     PEAK_FORCE_HEIGHT_METRIC,
     PEAK_POWER_METRIC,
     PEAK_POWER_HEIGHT_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
@@ -38,6 +40,8 @@ const items = OpenBarbellConfig.bulkMetricsEnabled
           pickerItem(PEAK_FORCE_HEIGHT_METRIC),
           pickerItem(PEAK_POWER_METRIC),
           pickerItem(PEAK_POWER_HEIGHT_METRIC),
+          pickerItem(MEAN_FORCE_METRIC),
+          pickerItem(MEAN_POWER_METRIC),
           pickerItem(ROM_METRIC),
           pickerItem(LINEAR_3D_ROM_METRIC),
           pickerItem(DURATION_METRIC),
