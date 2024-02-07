@@ -26,8 +26,8 @@ import {
     EMPTY_METRIC,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
-    FORCE_HEIGHT_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     MAX_EVER_QUANTIFIER,
     MIN_EVER_QUANTIFIER,
     LINEAR_3D_ROM_METRIC,
@@ -150,14 +150,15 @@ const shouldResetMetric = (rollup, metric) => {
     }
     if (
         (rollup === SET_LOSS_QUANTIFIER || rollup === PEAK_END_QUANTIFIER) &&
-        (metric === FORCE_HEIGHT_METRIC || metric === POWER_HEIGHT_METRIC)
+        (metric === PEAK_FORCE_HEIGHT_METRIC ||
+            metric === PEAK_POWER_HEIGHT_METRIC)
     ) {
         return true;
     }
     return (
         (rollup === MAX_EVER_QUANTIFIER || rollup === MIN_EVER_QUANTIFIER) &&
-        (metric === FORCE_HEIGHT_METRIC ||
-            metric === POWER_HEIGHT_METRIC ||
+        (metric === PEAK_FORCE_HEIGHT_METRIC ||
+            metric === PEAK_POWER_HEIGHT_METRIC ||
             metric === ROM_METRIC ||
             metric === LINEAR_3D_ROM_METRIC)
     );

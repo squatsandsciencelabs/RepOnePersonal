@@ -6,10 +6,10 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
-    FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
@@ -1176,14 +1176,14 @@ export const metricAbbreviation = metric => {
             return 'PK VEL LOC';
         case PKV_METRIC:
             return 'PK VEL';
-        case FORCE_METRIC:
-            return 'FRC';
-        case FORCE_HEIGHT_METRIC:
-            return 'FH';
-        case POWER_METRIC:
-            return 'PWR';
-        case POWER_HEIGHT_METRIC:
-            return 'PH';
+        case PEAK_FORCE_METRIC:
+            return 'PK FRC';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'PK FH';
+        case PEAK_POWER_METRIC:
+            return 'PK PWR';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'PK PH';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'VEL³';
         case LINEAR_3D_ROM_METRIC:
@@ -1211,14 +1211,14 @@ export const metricString = metric => {
             return 'Peak Height';
         case PKV_METRIC:
             return 'Peak Velocity';
-        case FORCE_METRIC:
-            return 'Force';
-        case FORCE_HEIGHT_METRIC:
-            return 'Force Height';
-        case POWER_METRIC:
-            return 'Power';
-        case POWER_HEIGHT_METRIC:
-            return 'Power Height';
+        case PEAK_FORCE_METRIC:
+            return 'Peak Force';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'Peak Force Height';
+        case PEAK_POWER_METRIC:
+            return 'Peak Power';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'Peak Power Height';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'Average Velocity 3D';
         case LINEAR_3D_ROM_METRIC:
@@ -1255,12 +1255,12 @@ export const metricUnit = (metric, quantifier) => {
         case ROM_METRIC:
             return 'mm';
         case PKH_METRIC:
-        case FORCE_HEIGHT_METRIC:
-        case POWER_HEIGHT_METRIC:
+        case PEAK_FORCE_HEIGHT_METRIC:
+        case PEAK_POWER_HEIGHT_METRIC:
             return '%';
-        case FORCE_METRIC:
+        case PEAK_FORCE_METRIC:
             return 'lb-f';
-        case POWER_METRIC:
+        case PEAK_POWER_METRIC:
             return 'W';
         default:
             return null;

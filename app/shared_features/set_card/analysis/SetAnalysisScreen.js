@@ -8,10 +8,10 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
-    FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     WORK_METRIC,
@@ -240,7 +240,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
         case RPE_METRIC:
             returnValue = CollapsedMetrics.getRPE1RM(set);
             break;
-        case FORCE_METRIC:
+        case PEAK_FORCE_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFirstPeakForce(set);
@@ -272,7 +272,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
             }
             break;
-        case FORCE_HEIGHT_METRIC:
+        case PEAK_FORCE_HEIGHT_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFirstPeakForceHeight(set);
@@ -299,7 +299,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
             }
             break;
-        case POWER_METRIC:
+        case PEAK_POWER_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFirstPeakPower(set);
@@ -331,7 +331,7 @@ const metricValue = (set, allSets, quantifier, metric) => {
                     break;
             }
             break;
-        case POWER_HEIGHT_METRIC:
+        case PEAK_POWER_HEIGHT_METRIC:
             switch (quantifier) {
                 case FIRST_REP_QUANTIFIER:
                     returnValue = CollapsedMetrics.getFirstPeakPowerHeight(set);

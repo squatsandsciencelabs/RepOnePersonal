@@ -27,8 +27,8 @@ import {
     PKH_METRIC,
     PKV_METRIC,
     LINEAR_3D_ROM_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     EMPTY_QUANTIFIER,
     FIRST_REP_QUANTIFIER,
     LAST_REP_QUANTIFIER,
@@ -253,8 +253,8 @@ const shouldResetMetric = (quantifier, metric) => {
         (quantifier === SET_LOSS_QUANTIFIER ||
             quantifier === PEAK_END_QUANTIFIER) &&
         (metric === PKH_METRIC ||
-            metric === FORCE_HEIGHT_METRIC ||
-            metric === POWER_HEIGHT_METRIC)
+            metric === PEAK_FORCE_HEIGHT_METRIC ||
+            metric === PEAK_POWER_HEIGHT_METRIC)
     ) {
         return true;
     }
@@ -262,8 +262,8 @@ const shouldResetMetric = (quantifier, metric) => {
         (quantifier === MAX_EVER_QUANTIFIER ||
             quantifier === MIN_EVER_QUANTIFIER) &&
         (metric === PKH_METRIC ||
-            metric === FORCE_HEIGHT_METRIC ||
-            metric === POWER_HEIGHT_METRIC ||
+            metric === PEAK_FORCE_HEIGHT_METRIC ||
+            metric === PEAK_POWER_HEIGHT_METRIC ||
             metric === ROM_METRIC ||
             metric === LINEAR_3D_ROM_METRIC)
     ) {
