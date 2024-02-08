@@ -120,7 +120,7 @@ export const getMeanForces = set =>
             const totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );
-            // r.cPartialMeanForce is the selected eccentric or concentric partial peak force
+            // r.partialMeanForce is the selected eccentric or concentric partial mean force
             return totalInertialConstant &&
                 r.partialMeanForce !== null &&
                 r.partialMeanForce !== undefined

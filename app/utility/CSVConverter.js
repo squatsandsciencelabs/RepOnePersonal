@@ -110,8 +110,12 @@ export const convert = data => {
 
                     cPeakForce =
                         ePeakForce =
+                        cMeanForce =
+                        eMeanForce =
                         cPeakPower =
                         ePeakPower =
+                        cMeanPower =
+                        eMeanPower =
                         cWork =
                         eWork =
                             ',';
@@ -131,23 +135,37 @@ export const convert = data => {
                             rep.ePartialPeakPower * totalInertialConstant +
                             ePeakPower;
 
-                        cMeanForce =
-                            rep.cPartialMeanForce *
-                                totalInertialConstant *
-                                rep.cRom +
-                            cMeanForce;
-                        eMeanForce =
-                            rep.ePartialMeanForce *
-                                totalInertialConstant *
-                                rep.eRom +
-                            eMeanForce;
+                        if (rep.cPartialMeanForce) {
+                            cMeanForce =
+                                rep.cPartialMeanForce * totalInertialConstant +
+                                cMeanForce;
+                        } else {
+                            cMeanForce = '-' + cMeanForce;
+                        }
 
-                        cMeanPower =
-                            rep.cPartialMeanPower * totalInertialConstant +
-                            cMeanPower;
-                        eMeanPower =
-                            rep.ePartialMeanPower * totalInertialConstant +
-                            eMeanPower;
+                        if (rep.ePartialMeanForce) {
+                            eMeanForce =
+                                rep.ePartialMeanForce * totalInertialConstant +
+                                eMeanForce;
+                        } else {
+                            eMeanForce = '-' + eMeanForce;
+                        }
+
+                        if (rep.cPartialMeanPower) {
+                            cMeanPower =
+                                rep.cPartialMeanPower * totalInertialConstant +
+                                cMeanPower;
+                        } else {
+                            cMeanPower = '-' + cMeanPower;
+                        }
+
+                        if (rep.ePartialMeanPower) {
+                            eMeanPower =
+                                rep.ePartialMeanPower * totalInertialConstant +
+                                eMeanPower;
+                        } else {
+                            eMeanPower = '-' + eMeanPower;
+                        }
 
                         cWork =
                             rep.cPartialPeakForce *
@@ -171,7 +189,7 @@ export const convert = data => {
                     output += skipColumns(1); // TODO: concentric force location
                     output += cPeakPower;
                     output += skipColumns(1); // TODO: implement concentric power loc
-                    output += cMeanPower;
+                    output += cMeanForce;
                     output += skipColumns(1); // TODO: implement concentric mean loc
                     output += cMeanPower;
                     output += skipColumns(1); // TODO: implement concentric mean loc
