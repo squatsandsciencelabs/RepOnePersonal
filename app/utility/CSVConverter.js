@@ -126,10 +126,14 @@ export const convert = data => {
                             ePeakPower;
 
                         cWork =
-                            rep.cPartialPeakForce * totalInertialConstant +
+                            rep.cPartialPeakForce *
+                                totalInertialConstant *
+                                rep.cRom +
                             cWork;
                         eWork =
-                            rep.ePartialPeakForce * totalInertialConstant +
+                            rep.ePartialPeakForce *
+                                totalInertialConstant *
+                                rep.eRom +
                             eWork;
                     }
 
