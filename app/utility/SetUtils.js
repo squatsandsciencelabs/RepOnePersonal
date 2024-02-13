@@ -20,6 +20,7 @@ import {
     getTotalKratosDiscsInertialConstant,
     getTotalKratosDiscsWeights,
 } from 'app/utility/KratosUtils';
+import { millimetersToMeters } from 'app/utility/DistanceConversion';
 
 // TODO: Update the functions to no longer calculate power and force via bulk data.
 //  For context, we were originally going to calculate power and force via bulk data
@@ -816,7 +817,9 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
             );
             return totalInertialConstant
                 ? Number(
-                      rep.partialPeakForce * totalInertialConstant * rep.rom,
+                      rep.partialPeakForce *
+                          totalInertialConstant *
+                          millimetersToMeters(rep.rom),
                   ).toFixed(2)
                 : EMPTY;
         default:

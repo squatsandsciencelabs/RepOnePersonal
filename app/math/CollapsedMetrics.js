@@ -33,6 +33,7 @@ import {
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
 import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
+import { millimetersToMeters } from 'app/utility/DistanceConversion';
 
 // unique metrics
 
@@ -163,6 +164,8 @@ export const getLinear3DROMs = set => getMetrics(set, r => r.linear3DROM);
 
 export const getWorks = set =>
     getMetrics(set, r => {
+        const convertedRom = millimetersToMeters(r.rom);
+
         if (set.deviceType === 'Kratos') {
             const totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
@@ -172,12 +175,12 @@ export const getWorks = set =>
             return totalInertialConstant &&
                 r.partialPeakForce !== null &&
                 r.partialPeakForce !== undefined
-                ? r.partialPeakForce * totalInertialConstant * r.rom
+                ? r.partialPeakForce * totalInertialConstant * convertedRom
                 : null;
         }
 
         return r.peakForce !== null && r.peakForce !== undefined
-            ? r.peakForce * r.rom
+            ? r.peakForce * convertedRom
             : null;
     });
 
