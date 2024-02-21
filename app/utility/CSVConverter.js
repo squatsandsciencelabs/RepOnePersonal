@@ -6,6 +6,7 @@ import * as SetUtils from 'app/utility/SetUtils';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getKratosRepRows } from 'app/utility/SetUtils';
 import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
+import { millimetersToMeters } from 'app/utility/DistanceConversion';
 
 // pass this the history sets as a sorted array
 // aka SetReducer's getHistorySets convenience function
@@ -128,12 +129,12 @@ export const convert = data => {
                         cWork =
                             rep.cPartialPeakForce *
                                 totalInertialConstant *
-                                rep.cRom +
+                                millimetersToMeters(rep.cRom) +
                             cWork;
                         eWork =
                             rep.ePartialPeakForce *
                                 totalInertialConstant *
-                                rep.eRom +
+                                millimetersToMeters(rep.eRom) +
                             eWork;
                     }
 
