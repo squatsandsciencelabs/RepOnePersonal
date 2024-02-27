@@ -21,6 +21,7 @@ import {
     getTotalKratosDiscsWeights,
 } from 'app/utility/KratosUtils';
 import { millimetersToMeters } from 'app/utility/DistanceConversion';
+import { newtonsToPounds } from 'app/utility/ForceConversion';
 
 // TODO: Update the functions to no longer calculate power and force via bulk data.
 //  For context, we were originally going to calculate power and force via bulk data
@@ -746,7 +747,9 @@ const _getDisplayMetric = (metric, rep, set = null) => {
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
         case FORCE_METRIC:
-            return rep.peakForce ? Number(rep.peakForce).toFixed(2) : EMPTY;
+            return rep.peakForce
+                ? Number(newtonsToPounds(rep.peakForce)).toFixed(2)
+                : EMPTY;
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
         case POWER_METRIC:
@@ -794,9 +797,10 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                 set.kratosDiscs,
             );
             return totalInertialConstant
-                ? Number(rep.partialPeakForce * totalInertialConstant).toFixed(
-                      2,
-                  )
+                ? Number(
+                      newtonsToPounds(rep.partialPeakForce) *
+                          totalInertialConstant,
+                  ).toFixed(2)
                 : EMPTY;
         case FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
