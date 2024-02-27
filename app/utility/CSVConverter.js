@@ -7,6 +7,7 @@ import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 import { getKratosRepRows } from 'app/utility/SetUtils';
 import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
 import { millimetersToMeters } from 'app/utility/DistanceConversion';
+import { newtonsToPounds } from 'app/utility/ForceConversion';
 
 // pass this the history sets as a sorted array
 // aka SetReducer's getHistorySets convenience function
@@ -114,10 +115,10 @@ export const convert = data => {
                     if (totalInertialConstant) {
                         cPeakForce =
                             rep.cPartialPeakForce * totalInertialConstant +
-                            cPeakForce;
+                            newtonsToPounds(cPeakForce);
                         ePeakForce =
                             rep.ePartialPeakForce * totalInertialConstant +
-                            ePeakForce;
+                            newtonsToPounds(ePeakForce);
 
                         cPeakPower =
                             rep.cPartialPeakPower * totalInertialConstant +
