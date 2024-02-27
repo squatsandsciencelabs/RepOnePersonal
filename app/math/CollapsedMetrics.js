@@ -108,7 +108,7 @@ export const getPeakForces = set =>
         }
 
         return r.peakForce !== null && r.peakForce !== undefined
-            ? r.peakForce
+            ? newtonsToPounds(r.peakForce)
             : null;
     });
 
@@ -181,7 +181,7 @@ export const getWorks = set =>
         }
 
         return r.peakForce !== null && r.peakForce !== undefined
-            ? r.peakForce * convertedRom
+            ? newtonsToPounds(r.peakForce) * convertedRom
             : null;
     });
 
