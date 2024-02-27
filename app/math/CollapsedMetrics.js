@@ -34,6 +34,7 @@ import {
 import * as SetUtils from 'app/utility/SetUtils';
 import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
 import { millimetersToMeters } from 'app/utility/DistanceConversion';
+import { newtonsToPounds } from 'app/utility/ForceConversion';
 
 // unique metrics
 
@@ -102,7 +103,7 @@ export const getPeakForces = set =>
             return totalInertialConstant &&
                 r.partialPeakForce !== null &&
                 r.partialPeakForce !== undefined
-                ? r.partialPeakForce * totalInertialConstant
+                ? newtonsToPounds(r.partialPeakForce) * totalInertialConstant
                 : null;
         }
 
@@ -114,14 +115,14 @@ export const getPeakForces = set =>
 export const getPeakForceHeights = set =>
     getMetrics(set, r =>
         r.peakForceHeight !== null && r.peakForceHeight !== undefined
-            ? r.peakForceHeight
+            ? newtonsToPounds(r.peakForceHeight)
             : null,
     );
 
 export const getAverageForces = set =>
     getMetrics(set, r =>
         r.averageForce !== null && r.averageForce !== undefined
-            ? r.averageForce
+            ? newtonsToPounds(r.averageForce)
             : null,
     );
 
@@ -1258,7 +1259,7 @@ export const metricUnit = (metric, quantifier) => {
         case POWER_HEIGHT_METRIC:
             return '%';
         case FORCE_METRIC:
-            return 'N';
+            return 'lb-f';
         case POWER_METRIC:
             return 'W';
         default:
