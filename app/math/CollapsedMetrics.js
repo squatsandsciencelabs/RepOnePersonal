@@ -115,7 +115,7 @@ export const getPeakForces = set =>
 export const getPeakForceHeights = set =>
     getMetrics(set, r =>
         r.peakForceHeight !== null && r.peakForceHeight !== undefined
-            ? newtonsToPounds(r.peakForceHeight)
+            ? r.peakForceHeight
             : null,
     );
 
@@ -181,7 +181,7 @@ export const getWorks = set =>
         }
 
         return r.peakForce !== null && r.peakForce !== undefined
-            ? newtonsToPounds(r.peakForce) * convertedRom
+            ? r.peakForce * convertedRom
             : null;
     });
 
