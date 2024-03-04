@@ -138,7 +138,7 @@ export const convert = data => {
                         if (rep.cPartialMeanForce) {
                             cMeanForce =
                                 rep.cPartialMeanForce * totalInertialConstant +
-                                cMeanForce;
+                                newtonsToPounds(cMeanForce);
                         } else {
                             cMeanForce = '-' + cMeanForce;
                         }
@@ -146,7 +146,7 @@ export const convert = data => {
                         if (rep.ePartialMeanForce) {
                             eMeanForce =
                                 rep.ePartialMeanForce * totalInertialConstant +
-                                eMeanForce;
+                                newtonsToPounds(eMeanForce);
                         } else {
                             eMeanForce = '-' + eMeanForce;
                         }

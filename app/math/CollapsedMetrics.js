@@ -124,12 +124,12 @@ export const getMeanForces = set =>
             return totalInertialConstant &&
                 r.partialMeanForce !== null &&
                 r.partialMeanForce !== undefined
-                ? r.partialMeanForce * totalInertialConstant
+                ? newtonsToPounds(r.partialMeanForce) * totalInertialConstant
                 : null;
         }
 
         return r.peakForce !== null && r.peakForce !== undefined
-            ? r.peakForce
+            ? newtonsToPounds(r.peakForce)
             : null;
     });
 
@@ -1394,11 +1394,10 @@ export const metricUnit = (metric, quantifier) => {
         case PEAK_POWER_HEIGHT_METRIC:
             return '%';
         case PEAK_FORCE_METRIC:
+        case MEAN_FORCE_METRIC:
             return 'lb-f';
         case PEAK_POWER_METRIC:
             return 'W';
-        case MEAN_FORCE_METRIC:
-            return 'N';
         case MEAN_POWER_METRIC:
             return 'W';
         default:
