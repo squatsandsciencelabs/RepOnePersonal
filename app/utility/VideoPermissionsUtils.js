@@ -1,6 +1,17 @@
 import { Alert, Platform } from 'react-native';
 import { check, PERMISSIONS } from 'react-native-permissions';
 import * as Analytics from 'app/services/Analytics';
+import Device from 'react-native-device-info';
+
+const ANDROID_VERSION = Number(Device.getSystemVersion());
+
+const ANDROID_STORAGE_ACCESS_MAX_VERSION = 9;
+
+const requiresExternalStoragePermission = () => {
+    if (Number.isNaN(ANDROID_VERSION)) return true;
+
+    return ANDROID_VERSION <= ANDROID_STORAGE_ACCESS_MAX_VERSION;
+};
 
 export const checkWatchVideoPermissions = () => {
     return new Promise(async (resolve, reject) => {
@@ -9,9 +20,13 @@ export const checkWatchVideoPermissions = () => {
             if (Platform.OS === 'ios') {
                 response = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
             } else {
-                response = await check(
-                    PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-                );
+                if (!requiresExternalStoragePermission()) {
+                    response = 'granted';
+                } else {
+                    response = await check(
+                        PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+                    );
+                }
             }
 
             if (response === 'granted') {
@@ -65,7 +80,9 @@ export const checkRecordingPermissions = () => {
                     check(PERMISSIONS.ANDROID.CAMERA),
                 ]);
             }
-            const isStorageAuthorized = response[0] === 'granted';
+            const isStorageAuthorized = requiresExternalStoragePermission()
+                ? response[0] === 'granted'
+                : true;
             const isMicrophoneAuthorized = response[1] === 'granted';
             const isCameraAuthorized = response[2] === 'granted';
             if (
