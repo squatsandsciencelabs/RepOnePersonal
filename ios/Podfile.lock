@@ -482,7 +482,7 @@ PODS:
     - React-Core
   - react-native-blob-util (0.17.0):
     - React-Core
-  - react-native-cameraroll (5.2.0):
+  - react-native-cameraroll (5.2.4):
     - React-Core
   - react-native-charts-wrapper (0.5.11):
     - Charts (= 4.1.0)
@@ -1005,7 +1005,7 @@ SPEC CHECKSUMS:
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
   react-native-ble-manager: c5bf39fd1a41b26f7710d5920f0ec7b6f89fbb56
   react-native-blob-util: f9dfda9077e57129b444a33e3c51f7785b2a075f
-  react-native-cameraroll: 0ff04cc4e0ff5f19a94ff4313e5c8bc4503cd86d
+  react-native-cameraroll: cb752fda6d5268f1646b4390bd5be1f27706b9a0
   react-native-charts-wrapper: 4461b72f48e737a490e968bf2468cc0fd2281681
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-nordic-dfu: c65357a9802f28bd3bd85f7cb9f0cdf4e8280297
@@ -1051,4 +1051,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 16118d9b2c1de2405d87c13fe359c7bdf297c20a
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.3
