@@ -1,0 +1,39 @@
+diff --git a/node_modules/react-native-ble-manager/ios/BleManager.h b/node_modules/react-native-ble-manager/ios/BleManager.h
+index e823848..33a7523 100644
+--- a/node_modules/react-native-ble-manager/ios/BleManager.h
++++ b/node_modules/react-native-ble-manager/ios/BleManager.h
+@@ -1,5 +1,5 @@
+-#import "React/RCTBridgeModule.h"
+-#import "React/RCTEventEmitter.h"
++#import <React/RCTBridgeModule.h>
++#import <React/RCTEventEmitter.h>
+ #import <CoreBluetooth/CoreBluetooth.h>
+ 
+ 
+diff --git a/node_modules/react-native-ble-manager/ios/BleManager.m b/node_modules/react-native-ble-manager/ios/BleManager.m
+index 7f5ee89..52ee993 100644
+--- a/node_modules/react-native-ble-manager/ios/BleManager.m
++++ b/node_modules/react-native-ble-manager/ios/BleManager.m
+@@ -1,7 +1,7 @@
+ #import "BleManager.h"
+-#import "React/RCTBridge.h"
+-#import "React/RCTConvert.h"
+-#import "React/RCTEventDispatcher.h"
++#import <React/RCTBridge.h>
++#import <React/RCTConvert.h>
++#import <React/RCTEventDispatcher.h>
+ #import "NSData+Conversion.h"
+ #import "CBPeripheral+Extensions.h"
+ #import "BLECommandContext.h"
+@@ -517,6 +517,11 @@ - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeri
+             }
+         }
+         
++        if (peripheral.state == 0) {
++            // already disconnected, run the callback function for it
++            NSLog(@"Peripheral was already disconnected");
++            [self centralManager:[BleManager getCentralManager] didDisconnectPeripheral:peripheral error:nil];
++        }
+         [manager cancelPeripheralConnection:peripheral];
+         callback(@[]);
+         
