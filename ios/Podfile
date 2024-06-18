@@ -56,6 +56,30 @@ target 'RepOnePersonal' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+    installer.pods_project.targets.each do |target|
+      # Workaround the "no template named 'unary_function' in namespace 'std'" error while building on xCode 15
+      # TODO: revisit once we update to the latest RN version
+      # https://github.com/facebook/react-native/issues/37748#issuecomment-1580589448
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
+      end
+
+      # Workaround for "Called object type 'facebook::flipper::SocketCertificateProvider' (aka 'int') is not a function or function pointer"
+      # TODO: revisit once we update to the latest RN version
+      # https://github.com/facebook/react-native/issues/43335#issuecomment-1980708164
+      if target.name == 'Flipper'
+        file_path = 'Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h'
+        contents = File.read(file_path)
+        unless contents.include?('#include <functional>')
+          File.open(file_path, 'w') do |file|
+            file.puts('#include <functional>')
+            file.puts(contents)
+          end
+        end
+      end
+    end
+
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
     # https://github.com/expo/expo/blob/cfbf29525fa7b25bb80aa7ccb10a434551f1e423/templates/expo-template-bare-minimum/ios/Podfile#L40-L49
