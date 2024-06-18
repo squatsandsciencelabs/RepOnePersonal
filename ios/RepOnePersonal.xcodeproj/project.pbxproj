@@ -13,7 +13,6 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1645C531295D56CB00850EE4 /* foobar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645C530295D56CB00850EE4 /* foobar.swift */; };
 		1645C538295D578900850EE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1645C537295D578900850EE4 /* GoogleService-Info.plist */; };
 		2984226BE218D91684436A93 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3104256CFA66A1F962AFA5 /* ExpoModulesProvider.swift */; };
 		63869C6F9C6D46C0AE348382 /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B259ADA427C45208C4F594F /* RobotoCondensed-Regular.ttf */; };
@@ -42,9 +41,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RepOnePersonal/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RepOnePersonal/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RepOnePersonal/main.m; sourceTree = "<group>"; };
-		1645C530295D56CB00850EE4 /* foobar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = foobar.swift; sourceTree = "<group>"; };
 		1645C537295D578900850EE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		1645C53C295D589100850EE4 /* RepOnePersonal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RepOnePersonal-Bridging-Header.h"; sourceTree = "<group>"; };
 		1645C53D295D59B000850EE4 /* RepOnePersonal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RepOnePersonal.entitlements; path = RepOnePersonal/RepOnePersonal.entitlements; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-RepOnePersonal-RepOnePersonalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RepOnePersonal-RepOnePersonalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-RepOnePersonal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RepOnePersonal.debug.xcconfig"; path = "Target Support Files/Pods-RepOnePersonal/Pods-RepOnePersonal.debug.xcconfig"; sourceTree = "<group>"; };
@@ -105,9 +102,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				1645C53D295D59B000850EE4 /* RepOnePersonal.entitlements */,
-				1645C53C295D589100850EE4 /* RepOnePersonal-Bridging-Header.h */,
 				1645C537295D578900850EE4 /* GoogleService-Info.plist */,
-				1645C530295D56CB00850EE4 /* foobar.swift */,
 			);
 			name = RepOnePersonal;
 			sourceTree = "<group>";
@@ -495,7 +490,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1645C531295D56CB00850EE4 /* foobar.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				2984226BE218D91684436A93 /* ExpoModulesProvider.swift in Sources */,
@@ -591,7 +585,6 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength.personal.staging;
 				PRODUCT_NAME = RepOnePersonal;
-				SWIFT_OBJC_BRIDGING_HEADER = "RepOnePersonal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -620,7 +613,6 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reponestrength.personal.staging;
 				PRODUCT_NAME = RepOnePersonal;
-				SWIFT_OBJC_BRIDGING_HEADER = "RepOnePersonal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
