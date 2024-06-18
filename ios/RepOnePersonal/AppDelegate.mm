@@ -6,7 +6,7 @@
 
 #import <Firebase.h>
 #import "RNNordicDfu.h"
-#import "BleManager.h"
+#import "BleManager-Swift.h"
 
 #import <React/RCTAppSetupUtils.h>
 
