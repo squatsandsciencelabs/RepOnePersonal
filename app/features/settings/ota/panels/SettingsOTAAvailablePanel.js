@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsOTAAvailablePanel extends Component {
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
-                Connect a RepOne Device to compare versions.
+                {Localized('COMPARE_VERSIONS_LABEL')}
             </Text>
         );
         if (this.props.deviceFirmwareVersion) {
             deviceFirmwareText = (
                 <Text style={styles.description}>
-                    The connected RepOne Device is{' '}
+                    {Localized('CONNECTED_REPONE_DEVICE')}{' '}
                     <Text style={{ fontWeight: 'bold' }}>
-                        Version {this.props.deviceFirmwareVersion}
+                        {Localized('SENSOR_VERSION', {
+                            version: this.props.deviceFirmwareVersion,
+                        })}
                     </Text>
                 </Text>
             );
@@ -24,7 +27,9 @@ class SettingsOTAAvailablePanel extends Component {
                 <View style={{}}>
                     <Text style={styles.description}>
                         <Text style={{ fontWeight: 'bold' }}>
-                            Version {this.props.firmwareVersion}
+                            {Localized('SENSOR_VERSION', {
+                                version: this.props.firmwareVersion,
+                            })}
                         </Text>{' '}
                         {this.props.firmwareDescription}
                     </Text>
@@ -41,7 +46,9 @@ class SettingsOTAAvailablePanel extends Component {
                     ]}
                     onPress={this.props.download.bind(this)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        Download Version {this.props.firmwareVersion}
+                        {Localized('DOWNLOAD_VERSION', {
+                            version: this.props.firmwareVersion,
+                        })}
                     </Text>
                 </TouchableOpacity>
                 {deviceFirmwareText}

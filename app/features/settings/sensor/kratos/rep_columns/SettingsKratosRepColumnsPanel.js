@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import SettingsEditKratosRepColumnsScreen from './edit/SettingsEditKratosRepColumnsScreen';
+import Localized from 'app/services/Localization';
 
 class SettingsKratosRepColumnsPanel extends Component {
     handleColumnPress = row => {
@@ -46,7 +47,9 @@ class SettingsKratosRepColumnsPanel extends Component {
         return (
             <View style={styles.section}>
                 <Text style={styles.labelText}>
-                    {this.props.sensorName} rep columns
+                    {Localized('SENSOR_REP_COLUMNS', {
+                        sensor: this.props.sensorName,
+                    })}
                 </Text>
                 <View style={styles.columnsWrapper}>
                     {this.props.metrics.map((metric, index) => {

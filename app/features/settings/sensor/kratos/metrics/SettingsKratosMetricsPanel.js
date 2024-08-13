@@ -7,8 +7,13 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import SettingsEditKratosRollupsScreen from './rollup/SettingsEditKratosRollupsScreen';
 import SettingsEditKratosMetricsScreen from './metric/SettingsEditKratosMetricsScreen';
 import SetginsEditKratosPhasesScreen from './phase/SettingsEditKratosPhasesScreen';
+import Localized from 'app/services/Localization';
 
-const TABLE_HEADERS = ['REP METRIC', 'SET METRIC', 'PHASE'];
+const TABLE_HEADERS = [
+    Localized('REP_METRIC'),
+    Localized('SET_METRIC'),
+    Localized('PHASE'),
+];
 
 class SettingsKratosMetricsPanel extends Component {
     constructor(props) {
@@ -143,7 +148,9 @@ class SettingsKratosMetricsPanel extends Component {
         return (
             <View>
                 <Text style={styles.labelText}>
-                    {this.props.sensorName} set metrics
+                    {Localized('SENSOR_SET_METRICS', {
+                        sensor: this.props.sensorName,
+                    })}
                 </Text>
 
                 <ScrollView horizontal={true}>

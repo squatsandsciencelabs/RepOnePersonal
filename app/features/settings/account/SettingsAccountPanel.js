@@ -8,21 +8,22 @@ import {
 } from 'react-native';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsAccountPanel extends Component {
     _onPressSignOut() {
         if (this.props.hasChangesToSync) {
             Alert.alert(
-                'WARNING',
-                "You have changes that haven't been synced to the cloud! Logging out WILL cause you to lose some data stored on your phone.",
+                Localized('UNSYNCED_DATA_MODAL.TITLE'),
+                Localized('UNSYNCED_DATA_MODAL.MESSAGE'),
                 [
                     {
-                        text: 'Cancel',
+                        text: Localized('UNSYNCED_DATA_MODAL.CANCEL'),
                         onPress: () => this.props.cancelSignOut(),
                         style: 'cancel',
                     },
                     {
-                        text: 'Delete Data and Logout',
+                        text: Localized('UNSYNCED_DATA_MODAL.SUBMIT'),
                         onPress: () => this.props.signOut(),
                         style: 'destructive',
                     },
@@ -30,16 +31,16 @@ class SettingsAccountPanel extends Component {
             );
         } else {
             Alert.alert(
-                'Are you sure?',
-                "All your data is safely on the cloud, so when you log back in you'll get access to your old history again.",
+                Localized('SIGN_OUT_MODAL.TITLE'),
+                Localized('SIGN_OUT_MODAL.MESSAGE'),
                 [
                     {
-                        text: 'Cancel',
+                        text: Localized('SIGN_OUT_MODAL.CANCEL'),
                         onPress: () => this.props.cancelSignOut(),
                         style: 'cancel',
                     },
                     {
-                        text: 'Logout',
+                        text: Localized('SIGN_OUT_MODAL.SUBMIT'),
                         onPress: () => this.props.signOut(),
                         style: 'destructive',
                     },
@@ -63,7 +64,7 @@ class SettingsAccountPanel extends Component {
                         marginBottom: 15,
                         textAlign: 'center',
                     }}>
-                    Sign in to sync data to the cloud
+                    {Localized('SIGN_IN_TO_SYNC_DATA')}
                 </Text>
                 <GoogleSigninButton
                     style={{ width: 212, height: 48 }}
@@ -79,7 +80,7 @@ class SettingsAccountPanel extends Component {
     _renderLoggingIn() {
         return (
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
-                <Text>Logging in...</Text>
+                <Text>{Localized('LOGGING_IN')}</Text>
             </View>
         );
     }
@@ -106,7 +107,7 @@ class SettingsAccountPanel extends Component {
                         ]}
                         onPress={() => this._onPressCSV()}>
                         <Text style={[SETTINGS_PANEL_STYLES.buttonText]}>
-                            Download My Data
+                            {Localized('DOWNLOAD_MY_DATA')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -132,7 +133,7 @@ class SettingsAccountPanel extends Component {
                         marginBottom: 13,
                         color: 'rgba(77, 77, 77, 1)',
                     }}>
-                    Account
+                    {Localized('ACCOUNT')}
                 </Text>
 
                 <Text
@@ -142,7 +143,7 @@ class SettingsAccountPanel extends Component {
                         flex: 1,
                         marginBottom: 7,
                     }}>
-                    Logged in as{' '}
+                    {Localized('LOGGED_IN_AS')}{' '}
                     <Text
                         style={{
                             fontWeight: 'bold',
@@ -159,7 +160,7 @@ class SettingsAccountPanel extends Component {
                         flex: 1,
                         marginBottom: 20,
                     }}>
-                    Last data sync was {this.props.syncDate}
+                    {Localized('LAST_SYNC_WAS', { date: this.props.syncDate })}
                 </Text>
 
                 {this._renderExportCSV()}
@@ -172,7 +173,7 @@ class SettingsAccountPanel extends Component {
                         ]}
                         onPress={() => this._onPressSignOut()}>
                         <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                            Log Out
+                            {Localized('LOG_OUT')}
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import Localized from 'app/services/Localization';
 
 // displays connected device info, allows disconnect from device
 class SettingsDevicePanelConnected extends Component {
@@ -23,7 +24,7 @@ class SettingsDevicePanelConnected extends Component {
                 <Text
                     style={SETTINGS_PANEL_STYLES.footerCancelText}
                     onPress={() => this.props.disconnectDevice()}>
-                    DISCONNECT
+                    {Localized('DISCONNECT')}
                 </Text>
             </View>
         );
@@ -32,7 +33,9 @@ class SettingsDevicePanelConnected extends Component {
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
                 <View style={SETTINGS_PANEL_STYLES.header}>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Connected to {this.props.device}
+                        {Localized('CONNECTED_TO_DEVICE', {
+                            device: this.props.device,
+                        })}
                     </Text>
                 </View>
                 <View

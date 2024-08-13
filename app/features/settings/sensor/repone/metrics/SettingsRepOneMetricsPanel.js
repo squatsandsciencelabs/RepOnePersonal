@@ -6,8 +6,9 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersScreen';
 import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
+import Localized from 'app/services/Localization';
 
-const TABLE_HEADERS = ['REP METRIC', 'SET METRIC'];
+const TABLE_HEADERS = [Localized('REP_METRIC'), Localized('SET_METRIC')];
 
 class SettingsRepOneSensorSetMetrics extends Component {
     handleMetricPress = row => {
@@ -111,7 +112,9 @@ class SettingsRepOneSensorSetMetrics extends Component {
         return (
             <View>
                 <Text style={styles.labelText}>
-                    {this.props.sensorName} set metrics
+                    {Localized('SENSOR_SET_METRICS', {
+                        sensor: this.props.sensorName,
+                    })}
                 </Text>
 
                 <DataTable style={{ marginTop: 13 }}>

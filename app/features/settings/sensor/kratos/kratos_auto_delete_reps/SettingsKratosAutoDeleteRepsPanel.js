@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import SettingsKratosAutoDeleteRepsModalScreen from 'app/features/settings/sensor/kratos/kratos_auto_delete_reps_modal/SettingsKratosAutoDeleteRepsModalScreen';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsKratosAutoDeleteRepsPanel extends Component {
     _tapKratosAutoDeleteReps() {
@@ -23,7 +24,7 @@ class SettingsKratosAutoDeleteRepsPanel extends Component {
                     <View>
                         <View style={{ flexDirection: 'row', marginBottom: 2 }}>
                             <Text style={styles.labelText}>
-                                Auto-delete initial Kratos Flywheel reps
+                                {Localized('AUT_DELETE_KRATOS_REPS')}
                             </Text>
                         </View>
 
@@ -55,7 +56,7 @@ class SettingsKratosAutoDeleteRepsPanel extends Component {
                         marginBottom: -10,
                     }}>
                     <Text style={styles.labelText}>
-                        Auto-delete initial Kratos Flywheel reps
+                        {Localized('AUT_DELETE_KRATOS_REPS')}
                     </Text>
                 </View>
                 <SettingsKratosAutoDeleteRepsModalScreen />

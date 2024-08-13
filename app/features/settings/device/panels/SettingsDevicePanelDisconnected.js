@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 // TODO: move these into the config file
 const INITIAL_SCAN = 5 * 1000;
@@ -62,7 +63,7 @@ class SettingsDevicePanelDisconnected extends Component {
                             alignItems: 'center',
                         }}>
                         <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                            Tap Unit # to Connect
+                            {Localized('TAP_UNIT_TO_CONNECT')}
                         </Text>
                     </View>
                 </View>
@@ -99,7 +100,7 @@ class SettingsDevicePanelDisconnected extends Component {
                     disabled={this.props.scannedDevices.scanning}
                     onPress={() => this._scanForDevices(REFRESH_SCAN)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        REFRESH
+                        {Localized('REFRESH')}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -117,7 +118,7 @@ class SettingsDevicePanelDisconnected extends Component {
                             { textDecorationLine: 'underline' },
                             styles.centeredText,
                         ]}>
-                        Troubleshooting Tips
+                        {Localized('TROUBLESHOOTING_TIPS')}
                     </Text>
                 </TouchableOpacity>
             );
@@ -169,7 +170,7 @@ class SettingsDevicePanelDisconnected extends Component {
     _renderScanningMessage() {
         return (
             <Text style={styles.centeredText}>
-                Scanning for RepOne Devices...
+                {Localized('SCANNING_FOR_DEVICES')}
             </Text>
         );
     }

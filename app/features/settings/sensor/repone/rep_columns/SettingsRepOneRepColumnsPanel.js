@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import SettingsEditRepOneRepColumnsScreen from './edit/SettingsEditRepOneRepColumnsScreen';
+import Localized from 'app/services/Localization';
 
 class SettingsRepOneRepColumnsPanel extends Component {
     handleColumnPress = row => {
@@ -43,7 +44,9 @@ class SettingsRepOneRepColumnsPanel extends Component {
         return (
             <View style={styles.section}>
                 <Text style={styles.labelText}>
-                    {this.props.sensorName} rep columns
+                    {Localized('SENSOR_REP_COLUMNS', {
+                        sensor: this.props.sensorName,
+                    })}
                 </Text>
                 <View style={styles.columnsWrapper}>
                     {this.props.metrics.map((metric, index) => {

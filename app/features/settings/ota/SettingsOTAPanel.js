@@ -11,6 +11,7 @@ import SettingsOTADownloadFailedPanel from './panels/SettingsOTADownloadFailedPa
 import SettingsOTADownloadingPanel from './panels/SettingsOTADownloadingPanel';
 import SettingsOTAInstallingPanel from './panels/SettingsOTAInstallingPanel';
 import SettingsOTAReadyPanel from './panels/SettingsOTAReadyPanel';
+import Localized from 'app/services/Localization';
 
 class SettingsOTAPanel extends Component {
     _renderContents() {
@@ -81,7 +82,7 @@ class SettingsOTAPanel extends Component {
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
                 <View style={SETTINGS_PANEL_STYLES.header}>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Update Firmware
+                        {Localized('UPDATE_FIRMWARE')}
                     </Text>
                 </View>
                 {this._renderContents()}

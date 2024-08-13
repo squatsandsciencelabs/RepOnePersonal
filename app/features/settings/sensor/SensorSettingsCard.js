@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SensorSettingsCard extends Component {
     constructor(props) {
@@ -28,7 +29,9 @@ class SensorSettingsCard extends Component {
                             },
                         ]}>
                         <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                            {this.props.sensorName} Settings
+                            {Localized('SENSOR_SETTINGS', {
+                                sensor: this.props.sensorName,
+                            })}
                         </Text>
                         <Image
                             style={[
