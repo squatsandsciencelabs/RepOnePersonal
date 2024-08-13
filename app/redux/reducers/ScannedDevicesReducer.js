@@ -36,7 +36,8 @@ const ScannedDevicesReducer = (state = defaultState, action) => {
                     !(
                         getKratosEnabled() &&
                         action.deviceName.startsWith('Kratos')
-                    ))
+                    ) &&
+                    !action.deviceName.startsWith('Cormax'))
             ) {
                 //duplicate entry
                 return state;

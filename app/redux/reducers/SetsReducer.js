@@ -131,9 +131,7 @@ const connectedDisconnectedDevice = (state, action) => {
         let deviceType = 'RepOne';
 
         if (action.deviceName) {
-            deviceType = getKratosEnabled()
-                ? getDeviceType(action.deviceName)
-                : 'RepOne';
+            deviceType = getDeviceType(action.deviceName);
         }
 
         return { ...state, deviceType };
@@ -148,9 +146,7 @@ const setDeviceType = (state, action) => {
 
     let deviceType = 'RepOne';
     if (action.deviceName) {
-        deviceType = getKratosEnabled()
-            ? getDeviceType(action.deviceName)
-            : 'RepOne';
+        deviceType = getDeviceType(action.deviceName);
     }
 
     let kratosDiscs = null;

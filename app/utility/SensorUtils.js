@@ -1,9 +1,19 @@
+import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+
 export const getDeviceType = deviceName => {
-    return deviceName.startsWith('Kratos') ? 'Kratos' : 'RepOne';
+    if (getKratosEnabled() && deviceName.startsWith('Kratos')) {
+        return 'Kratos';
+    }
+
+    if (deviceName.startsWith('Cormax')) {
+        return 'Cormax';
+    }
+
+    return 'RepOne';
 };
 
 export const getDeviceDisplayName = deviceName => {
-    const deviceNameRe = /(RepOne|Kratos) \b[a-zA-Z0-9]+\b/;
+    const deviceNameRe = /(RepOne|Kratos|Cormax) \b[a-zA-Z0-9]+\b/;
     if (!deviceNameRe.test(deviceName)) {
         // fallback if we get a wrong string format for some reason
         return deviceName;
