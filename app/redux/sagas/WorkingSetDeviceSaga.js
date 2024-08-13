@@ -18,9 +18,7 @@ export default function* WorkingSetDeviceSaga() {
 
 function* connectedToDevice(action) {
     const workingSet = yield select(SetsSelectors.getWorkingSet);
-    const deviceType = getKratosEnabled()
-        ? getDeviceType(action.deviceName)
-        : 'RepOne';
+    const deviceType = getDeviceType(action.deviceName);
 
     if (deviceType !== workingSet.deviceType && workingSet.reps.length > 0) {
         const state = yield select();

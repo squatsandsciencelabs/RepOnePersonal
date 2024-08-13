@@ -101,11 +101,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 status: CONNECTED,
                 deviceName: action.deviceName,
                 deviceIdentifier: action.deviceIdentifier,
-                deviceFamily: getKratosEnabled()
-                    ? action.deviceName.startsWith('Kratos')
-                        ? 'KRATOS'
-                        : 'REP_ONE'
-                    : 'REP_ONE', // TODO: have this be from device info instead of string parsing from the name. Might be an integer so would have to convert to a constant locally
+                deviceFamily: getDeviceFamily(action.deviceName),
                 // TODO: store the constants properly, noting that deviceFamily in rep data will be diff
                 isReconnecting: false,
                 apiFormatVersion: action.apiFormatVersion,
@@ -132,5 +128,17 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
             return state;
     }
 };
+
+function getDeviceFamily(deviceName) {
+    if (getKratosEnabled() && deviceName.startsWith('Kratos')) {
+        return 'KRATOS';
+    }
+
+    if (deviceName.startsWith('Cormax')) {
+        return 'CORMAX';
+    }
+
+    return 'REP_ONE'; // TODO: have this be from device info instead of string parsing from the name. Might be an integer so would have to convert to a constant locally
+}
 
 export default ConnectedDeviceReducer;
