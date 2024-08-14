@@ -16,6 +16,7 @@ import * as Device from 'app/utility/Device';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 import Pill from 'app/shared_features/pill/Pill';
+import Localized from 'app/services/Localization';
 
 class SelectTagsModal extends Component {
     constructor(props) {
@@ -158,7 +159,8 @@ class SelectTagsModal extends Component {
                         height: 20,
                         width: 9001,
                         backgroundColor: 'black',
-                    }}></View>
+                    }}
+                />
             );
         } else {
             var statusBar = null;
@@ -172,7 +174,7 @@ class SelectTagsModal extends Component {
                     <TouchableOpacity onPress={() => this.props.cancelModal()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Cancel
+                                {Localized('CANCEL')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -188,7 +190,7 @@ class SelectTagsModal extends Component {
                     <TouchableOpacity onPress={() => this._tappedDone()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Done
+                                {Localized('DONE')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -246,7 +248,7 @@ class SelectTagsModal extends Component {
                         styles.addButton,
                         styles.disabled,
                     ]}>
-                    <Text style={styles.addText}>Add</Text>
+                    <Text style={styles.addText}>{Localized('ADD')}</Text>
                 </View>
             );
         } else {
@@ -257,7 +259,7 @@ class SelectTagsModal extends Component {
                             { width: 50, height: 50, marginRight: 10 },
                             styles.addButton,
                         ]}>
-                        <Text style={styles.addText}>Add</Text>
+                        <Text style={styles.addText}>{Localized('ADD')}</Text>
                     </View>
                 </TouchableOpacity>
             );
@@ -378,7 +380,8 @@ class SelectTagsModal extends Component {
                         marginHorizontal: 10,
                         backgroundColor: 'rgba(242, 242, 242, 1)',
                         height: 1,
-                    }}></View>
+                    }}
+                />
             </View>
         );
     }

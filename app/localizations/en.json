@@ -1,5 +1,7 @@
 {
     "CANCEL": "Cancel",
+    "DONE": "Done",
+    "ADD": "Add",
     "REFRESH": "REFRESH",
     "DISCONNECT": "DISCONNECT",
     "HELP_AND_TUTORIALS": "Help and Tutorials",
@@ -82,5 +84,37 @@
         "TEXT_2": "Continue to circle the nozzle until you ",
         "TEXT_2_HIGHLIGHT": "no longer see the numbers on the device’s screen changing.",
         "BUTTON_LABEL": "The numbers are no longer changing"
-    }
+    },
+    "ENABLE_DEBUG_DATA": "Enable Debug Data",
+    "TAGS": "Tags",
+    "TAGS_MUST_INCLUDE": "Tags Must Include:",
+    "TAGS_TO_INCLUDE": "Tags to Exclude:",
+    "DATE_RANGE": "Date Range",
+    "DAYS_COUNT": {
+        "zero": "0 days",
+        "one": "1 day",
+        "other": "{{count}} days"
+    },
+    "VELOCITY_AT_1RM": "Velocity at 1RM",
+    "METERS_PER_SECOND_COUNT": "{{mps}} m/s",
+    "METERS_PER_SECOND": "m/s",
+    "CALCULATE": "Calculate",
+    "ESTIMATED_ONE_REP_MAX": "Estimated One-Rep Max",
+    "R_SQUARED_IS_LOW": "R² is too low, please clean up or log more data",
+    "ONE_REP_MAX": "1 Rep Max",
+    "UNUSED_SETS": "Unused Sets",
+    "ERRORS": "Errors",
+    "ACTIVE_SETS": "Active Sets",
+    "REGRESSION": "Regression",
+    "RESULTS": "Results",
+    "ANALYTICS_RESULTS_VIEW": {
+        "EXPLANATORY_TEXT": "Tap a point to view and edit the data, then calculate again to see the updated 1RM",
+        "ALGORITHM_TEXT": "How does the algorithm work?",
+        "RESULTS_TEXT": "How can I get the best results?"
+    },
+    "ANALYTICS_PROTOCOL_VIEW": {
+        "TITLE": "How to Calculate 1RM from a Single Session",
+        "TEXT": "1. Do six of your chosen exercise, starting from the bar and ending at 90% of your previous 1RM (eg. bar, 20%, 40%, 60%, 80%, 90%)\n\n2. Log the RPE, the weight used, and the same exercise and tags for each set\n\n3. Go to the Analysis Tab, select the exercise and tags you used for the 6 sets, and set the date range to 1 day\n\n4. Set the velocity to the slowest you think can complete a 1RM and tap Calculate"
+    },
+    "ANALYTICS_LOGGED_OUT_MESSAGE": "You must be logged in for 1rm calculation."
 }

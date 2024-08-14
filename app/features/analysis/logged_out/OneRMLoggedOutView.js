@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import * as Device from 'app/utility/Device';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class OneRMLoggedOutView extends Component {
     render() {
@@ -14,10 +15,10 @@ class OneRMLoggedOutView extends Component {
                     { flexDirection: 'column', alignItems: 'center' },
                 ]}>
                 <Text style={[{ marginBottom: 15 }, styles.titleText]}>
-                    Estimated One-Rep Max
+                    {Localized('ESTIMATED_ONE_REP_MAX')}
                 </Text>
                 <Text style={styles.errorText}>
-                    You must be logged in for 1rm calculation.
+                    {Localized('ANALYTICS_LOGGED_OUT_MESSAGE')}
                 </Text>
                 <Image
                     style={{ width: size, height: size, marginTop: 20 }}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class OneRMDebugView extends Component {
     render() {
@@ -11,7 +12,7 @@ class OneRMDebugView extends Component {
                     style={[SETTINGS_PANEL_STYLES.blueButton]}
                     onPress={this.props.onPressButton}>
                     <Text style={[SETTINGS_PANEL_STYLES.buttonText]}>
-                        Enable Debug Data
+                        {Localized('ENABLE_DEBUG_DATA')}
                     </Text>
                 </TouchableOpacity>
             );

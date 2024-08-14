@@ -18,6 +18,7 @@ import {
 import * as Device from 'app/utility/Device';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import OneRMEditSetScreen from '../edit_set/OneRMEditSetScreen';
+import Localized from 'app/services/Localization';
 
 // TODO: confirm that this works on workout sets because workout sets dont have workoutIDs so wtf? but i saw it working so very confused
 
@@ -229,7 +230,7 @@ class OneRMChartView extends Component {
                                         {velocity}
                                     </Text>
                                     <Text style={styles.oneRMVelocityMetric}>
-                                        m/s
+                                        {Localized('METERS_PER_SECOND')}
                                     </Text>
                                 </Text>
                             </View>
@@ -244,7 +245,7 @@ class OneRMChartView extends Component {
             return (
                 <View>
                     <Text style={styles.errorText}>
-                        R² is too low, please clean up or log more data
+                        {Localized('R_SQUARED_IS_LOW')}
                     </Text>
                 </View>
             );
@@ -282,7 +283,7 @@ class OneRMChartView extends Component {
         if (this.props.e1RM) {
             data.scatterData.dataSets.push({
                 values: [{ x: this.props.e1RM, y: this.props.velocity }],
-                label: '1 Rep Max',
+                label: Localized('ONE_REP_MAX'),
 
                 config: {
                     drawValues: false,
@@ -300,7 +301,7 @@ class OneRMChartView extends Component {
         ) {
             data.scatterData.dataSets.push({
                 values: this.props.unusedChartData,
-                label: 'Unused Sets',
+                label: Localized('UNUSED_SETS'),
                 config: {
                     colors: [processColor('rgba(47, 128, 237, 0.2)')],
                     drawValues: false,
@@ -315,7 +316,7 @@ class OneRMChartView extends Component {
         if (this.props.errorChartData && this.props.errorChartData.length > 0) {
             data.scatterData.dataSets.push({
                 values: this.props.errorChartData,
-                label: 'Errors',
+                label: Localized('ERRORS'),
                 config: {
                     colors: [processColor('red')],
                     drawValues: false,
@@ -334,7 +335,7 @@ class OneRMChartView extends Component {
         ) {
             data.scatterData.dataSets.push({
                 values: this.props.activeChartData,
-                label: 'Active Sets',
+                label: Localized('ACTIVE_SETS'),
                 config: {
                     colors: [processColor('rgba(47, 128, 237, 1)')],
                     drawValues: false,
@@ -355,7 +356,7 @@ class OneRMChartView extends Component {
                             this.props.regLeftPoint,
                             this.props.regRightPoint,
                         ],
-                        label: 'Regression',
+                        label: Localized('REGRESSION'),
 
                         config: {
                             drawValues: false,
@@ -430,7 +431,7 @@ class OneRMChartView extends Component {
                     },
                 ]}>
                 <Text style={[styles.titleText, { marginBottom: 10 }]}>
-                    Results
+                    {Localized('RESULTS')}
                 </Text>
                 {this._render1RM(this.props.r2)}
                 <Text
@@ -439,8 +440,7 @@ class OneRMChartView extends Component {
                         color: 'rgba(77, 77, 77, 1)',
                         fontSize: 12,
                     }}>
-                    Tap a point to view and edit the data, then calculate again
-                    to see the updated 1RM
+                    {Localized('ANALYTICS_RESULTS_VIEW.EXPLANATORY_TEXT')}
                 </Text>
                 {this._renderChartArea()}
                 <TouchableOpacity
@@ -451,14 +451,14 @@ class OneRMChartView extends Component {
                     }}
                     onPress={() => this.props.presentAlgorithm()}>
                     <Text style={[SETTINGS_PANEL_STYLES.tappableText]}>
-                        How does the algorithm work?
+                        {Localized('ANALYTICS_RESULTS_VIEW.ALGORITHM_TEXT')}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ alignItems: 'center', marginBottom: 15 }}
                     onPress={() => this.props.presentBestResults()}>
                     <Text style={[SETTINGS_PANEL_STYLES.tappableText]}>
-                        How can I get the best results?
+                        {Localized('ANALYTICS_RESULTS_VIEW.RESULTS_TEXT')}
                     </Text>
                 </TouchableOpacity>
             </View>
