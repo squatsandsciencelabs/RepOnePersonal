@@ -168,5 +168,11 @@
     },
     "RECORD": "Record",
     "VIDEO": "Video",
-    "VIDEO_LOG": "Video Log"
+    "VIDEO_LOG": "Video Log",
+    "WORKOUT_LOGIN_BANNER_MESSAGE": "Don't lose all your data - tap to sign in and save it!",
+    "CREATE_NEW_SET": "CREATE NEW SET",
+    "CONNECTED_DEVICE_STATUS": {
+        "RECONNECTING": "RECONNECTING",
+        "NOT_CONNECTED": "NOT CONNECTED"
+    }
 }

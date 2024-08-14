@@ -27,6 +27,7 @@ import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import WorkoutLoginBannerView from './login_banner/WorkoutLoginBannerView';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 import EditWorkoutKratosDiscsScreen from './kratos_discs/EditWorkoutKratosDiscsScreen';
+import Localized from 'app/services/Localization';
 
 class WorkoutList extends Component {
     // UPDATE
@@ -86,7 +87,9 @@ class WorkoutList extends Component {
                             styles.disabledButton,
                             { marginTop: marginTop },
                         ]}>
-                        <Text style={styles.buttonText}>CREATE NEW SET</Text>
+                        <Text style={styles.buttonText}>
+                            {Localized('CREATE_NEW_SET')}
+                        </Text>
                     </View>
                 );
             } else {
@@ -94,7 +97,7 @@ class WorkoutList extends Component {
                     <View style={[styles.button, { marginTop: marginTop }]}>
                         <TouchableOpacity onPress={() => this.props.endSet()}>
                             <Text style={styles.buttonText}>
-                                CREATE NEW SET
+                                {Localized('CREATE_NEW_SET')}
                             </Text>
                         </TouchableOpacity>
                     </View>
