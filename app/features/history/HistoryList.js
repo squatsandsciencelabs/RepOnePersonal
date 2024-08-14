@@ -26,6 +26,7 @@ import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysis
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 import EditHistoryKratosDiscsScreen from './kratos_discs/EditHistoryKratosDiscsScreen';
+import Localized from 'app/services/Localization';
 
 class HistoryList extends Component {
     // UPDATE
@@ -269,8 +270,8 @@ class HistoryList extends Component {
 
     _renderFilterHeader() {
         const filterTitle = this.props.isFiltering
-            ? 'Edit Filters'
-            : 'Add Filters';
+            ? Localized('EDIT_FILTERS')
+            : Localized('ADD_FILTERS');
 
         return (
             <TouchableOpacity onPress={() => this.props.presentHistoryFilter()}>

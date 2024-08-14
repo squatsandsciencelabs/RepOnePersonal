@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import OutlineButton from 'app/shared_features/outline_button/OutlineButton';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
+import Localized from 'app/services/Localization';
 
 const image = require('app/appearance/images/3d.png');
 
@@ -39,7 +40,7 @@ export default props => {
             <TouchableOpacity
                 onPress={tappedDeleteButton}
                 style={styles.accessoryButton}>
-                <Text style={styles.deleteText}>Delete Set</Text>
+                <Text style={styles.deleteText}>{Localized('DELETE_SET')}</Text>
             </TouchableOpacity>
         );
     } else {

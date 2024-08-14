@@ -14,6 +14,7 @@ import {
 import * as Device from 'app/utility/Device';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 // EditKratosDiscsModal is basically a EditTextModal component, but without text input logic
 
@@ -222,7 +223,7 @@ class EditKratosDiscsModal extends Component {
                         }>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Cancel
+                                {Localized('CANCEL')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -238,7 +239,7 @@ class EditKratosDiscsModal extends Component {
                     <TouchableOpacity onPress={() => this._tappedDone()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Done
+                                {Localized('DONE')}
                             </Text>
                         </View>
                     </TouchableOpacity>

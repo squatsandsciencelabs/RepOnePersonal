@@ -13,6 +13,7 @@ import {
     generateThumbnail,
     waitUntilFileExists,
 } from 'app/utility/VideoThumbnailGenerator';
+import Localized from 'app/services/Localization';
 
 class VideoButton extends Component {
     constructor(props) {
@@ -87,8 +88,12 @@ class VideoButton extends Component {
                                 color="rgba(47, 128, 227, 1)"
                                 style={{ marginTop: 10, marginBottom: 5 }}
                             />
-                            <Text style={styles.activeText}>Record</Text>
-                            <Text style={styles.activeText}>Video</Text>
+                            <Text style={styles.activeText}>
+                                {Localized('RECORD')}
+                            </Text>
+                            <Text style={styles.activeText}>
+                                {Localized('VIDEO')}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 );
@@ -118,9 +123,11 @@ class VideoButton extends Component {
                                             marginBottom: 5,
                                         }}
                                     />
-                                    <Text style={styles.grayText}>Add</Text>
                                     <Text style={styles.grayText}>
-                                        Video Log
+                                        {Localized('ADD')}
+                                    </Text>
+                                    <Text style={styles.grayText}>
+                                        {Localized('VIDEO_LOG')}
                                     </Text>
                                 </View>
                             </TouchableHighlight>

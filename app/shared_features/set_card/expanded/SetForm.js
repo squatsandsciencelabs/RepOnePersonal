@@ -17,6 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Pill from 'app/shared_features/pill/Pill';
 import * as Analytics from 'app/services/Analytics';
+import Localized from 'app/services/Localization';
 
 class SetForm extends Component {
     constructor(props) {
@@ -100,8 +101,8 @@ class SetForm extends Component {
         // TODO: move this to actions, it doesn't belong here
         // doing it here right now for raw speed as no time
         Analytics.logEvent('old_rpe_alert', {});
-        Alert.alert('', 'It has been too long since this set to log RPE.', [
-            { text: 'Close', style: 'cancel' },
+        Alert.alert('', Localized('DISABLED_RPE_MESSAGE'), [
+            { text: Localized('CLOSE'), style: 'cancel' },
         ]);
     }
 
@@ -170,7 +171,7 @@ class SetForm extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Tags
+                    {Localized('TAGS')}
                 </Text>
             );
         }
@@ -249,7 +250,9 @@ class SetForm extends Component {
                             pointerEvents="none"
                         />
                         <View style={styles.fieldDetails} pointerEvents="none">
-                            <Text style={styles.detailText}>RPE</Text>
+                            <Text style={styles.detailText}>
+                                {Localized('RPE')}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -262,7 +265,7 @@ class SetForm extends Component {
                         keyboardType={'numeric'}
                         underlineColorAndroid={'transparent'}
                         editable={true}
-                        placeholder="RPE"
+                        placeholder={Localized('RPE')}
                         onEndEditing={() => this._onEndEditRPE()}
                         placeholderTextColor={'rgba(189, 189, 189, 1)'}
                         value={this.state.rpe}
@@ -270,7 +273,9 @@ class SetForm extends Component {
                         onChangeText={rpe => this._onChangeRPE(rpe)}
                     />
                     <View style={styles.fieldDetails} pointerEvents="none">
-                        <Text style={styles.detailText}>RPE</Text>
+                        <Text style={styles.detailText}>
+                            {Localized('RPE')}
+                        </Text>
                     </View>
                 </View>
             );
@@ -311,7 +316,7 @@ class SetForm extends Component {
                             )
                         }>
                         <Text style={[styles.tagText, styles.placeholderText]}>
-                            Discs
+                            {Localized('DISCS')}
                         </Text>
                     </TouchableOpacity>
                 </View>

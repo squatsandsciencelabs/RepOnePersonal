@@ -15,6 +15,7 @@ import {
 import * as Device from 'app/utility/Device';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class EditTextModal extends Component {
     constructor(props) {
@@ -199,7 +200,8 @@ class EditTextModal extends Component {
                         height: 20,
                         width: 9001,
                         backgroundColor: 'black',
-                    }}></View>
+                    }}
+                />
             );
         } else {
             var statusBar = null;
@@ -216,7 +218,7 @@ class EditTextModal extends Component {
                         }>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Cancel
+                                {Localized('CANCEL')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -232,7 +234,7 @@ class EditTextModal extends Component {
                     <TouchableOpacity onPress={() => this._tappedDone()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Done
+                                {Localized('DONE')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -294,7 +296,7 @@ class EditTextModal extends Component {
                             styles.addButton,
                             styles.disabled,
                         ]}>
-                        <Text style={styles.addText}>Add</Text>
+                        <Text style={styles.addText}>{Localized('ADD')}</Text>
                     </View>
                 );
             } else {
@@ -305,7 +307,9 @@ class EditTextModal extends Component {
                                 { width: 50, height: 50, marginRight: 10 },
                                 styles.addButton,
                             ]}>
-                            <Text style={styles.addText}>Add</Text>
+                            <Text style={styles.addText}>
+                                {Localized('ADD')}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 );
@@ -434,7 +438,8 @@ class EditTextModal extends Component {
                         marginHorizontal: 10,
                         backgroundColor: 'rgba(242, 242, 242, 1)',
                         height: 1,
-                    }}></View>
+                    }}
+                />
             </View>
         );
     }

@@ -8,13 +8,14 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
+import Localized from 'app/services/Localization';
 
 class SetTitleRowExpanded extends Component {
     _renderExercise() {
         if (this.props.exercise === null || this.props.exercise === '') {
             return (
                 <Text style={[styles.fieldText, styles.placeholderText]}>
-                    Exercise
+                    {Localized('EXERCISE')}
                 </Text>
             );
         }

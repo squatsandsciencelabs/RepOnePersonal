@@ -16,6 +16,7 @@ import HistoryList from './HistoryList';
 import * as ColumnsSettingsSelectors from 'app/redux/selectors/ColumnsSettingsSelectors';
 import * as HistoryCollapsedSelectors from 'app/redux/selectors/HistoryCollapsedSelectors';
 import * as KratosColumnsSettingsSelectors from 'app/redux/selectors/KratosColumnsSettingsSelectors';
+import Localized from 'app/services/Localization';
 
 // assumes chronological sets
 const createViewModels = (
@@ -217,7 +218,7 @@ const createRestoreViewModel = set => {
         exercise: set.exercise ? set.exercise.toLowerCase() : null,
         weight: set.weight ? set.weight : 0,
         rpe: set.rpe ? set.rpe : 0,
-        numReps: numReps ? numReps : '0 reps',
+        numReps: numReps ? numReps : Localized('REPS_COUNT', { count: 0 }),
         metric: set.metric,
         tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
         key: set.setID + 'restore',
@@ -278,7 +279,7 @@ const createSummaryViewModel = set => {
         type: 'summary',
         key: set.setID + 'summary',
         weight: set.weight ? set.weight : 0,
-        numReps: numReps ? numReps : '0 reps',
+        numReps: numReps ? numReps : Localized('REPS_COUNT', { count: 0 }),
         metric: set.metric,
         tags: set.tags ? set.tags.map(tag => tag.toLowerCase()) : [],
         kratosDiscs: set.kratosDiscs,

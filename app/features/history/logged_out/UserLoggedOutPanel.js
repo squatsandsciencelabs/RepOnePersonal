@@ -23,12 +23,12 @@ class UserLoggedOutPanel extends Component {
                 </View>
                 <View>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Sign in Required
+                        {Localized('LOGGED_OUT_PANEL.TITLE')}
                     </Text>
                 </View>
                 <View style={{ paddingTop: 20, paddingBottom: 50 }}>
                     <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
-                        {Localized('HISTORY_LOGGED_OUT_MESSAGE')}
+                        {Localized('LOGGED_OUT_PANEL.TEXT')}
                     </Text>
                 </View>
             </View>

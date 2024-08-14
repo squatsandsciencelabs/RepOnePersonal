@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import SetDataLabelRow from './SetDataLabelRow';
 import SetDataRow from './SetDataRow';
+import Localized from 'app/services/Localization';
 
 const SUBHEADER_HEIGHT = 52;
 // CE - both concentric and eccentric data
@@ -139,7 +140,9 @@ class SetData extends Component {
             : styles.removeRepButton;
 
         const content = this.props.selectedRowIsRemoved ? (
-            <Text style={styles.restoreRepButtonText}>RESTORE REP</Text>
+            <Text style={styles.restoreRepButtonText}>
+                {Localized('RESTORE_REP')}
+            </Text>
         ) : (
             <Image
                 source={require('app/appearance/images/cancel_set_row_selection.png')}

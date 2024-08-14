@@ -15,6 +15,7 @@ import {
     EDIT_MODAL_STYLES,
     HISTORY_STYLES,
 } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class EditFilterModal extends Component {
     constructor(props) {
@@ -136,7 +137,7 @@ class EditFilterModal extends Component {
                     <TouchableOpacity onPress={() => this.props.cancelModal()}>
                         <View style={styles.nav}>
                             <Text style={HISTORY_STYLES.tappableText}>
-                                Cancel
+                                {Localized('CANCEL')}
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -152,7 +153,7 @@ class EditFilterModal extends Component {
                     <TouchableOpacity onPress={() => this._tappedDone()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Done
+                                {Localized('DONE')}
                             </Text>
                         </View>
                     </TouchableOpacity>
