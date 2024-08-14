@@ -63,7 +63,9 @@ class SettingsApplicationPanel extends Component {
                                 {Localized('DEFAULT_UNITS')}
                             </Text>
                             <Text style={styles.linkText}>
-                                {this.props.defaultMetric}
+                                {Localized(
+                                    `DISPLAY_METRIC.${this.props.defaultMetric}`,
+                                )}
                             </Text>
                         </TouchableOpacity>
                     </View>

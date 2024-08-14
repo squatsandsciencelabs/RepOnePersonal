@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import Localized from 'app/services/Localization';
 
 class WhatIsOneRMView extends Component {
     _close() {
@@ -17,8 +18,7 @@ class WhatIsOneRMView extends Component {
     }
 
     render() {
-        const body =
-            'Estimated One-Rep Max is based on the fastest velocity of each set of a given exercise within a specified date range, extrapolated to the lowest velocity at which you think you can successfully complete a max lift attempt.\n\nThis estimate is provided with an r² based on how much exercise data is included and how well that data adheres to a general trend. While outliers sometimes occur naturally, the key to accurate estimation is recording set information as fully and carefully as possible.';
+        const body = Localized('WHAT_IS_ONE_RM_MODAL.BODY');
         const top = Platform.OS === 'ios' ? 0 : 5;
 
         return (
@@ -30,7 +30,9 @@ class WhatIsOneRMView extends Component {
                     transparent={true}>
                     <View style={styles.container}>
                         <View style={styles.bodyContainer}>
-                            <Text style={styles.titleText}>What is e1RM?</Text>
+                            <Text style={styles.titleText}>
+                                {Localized('WHAT_IS_ONE_RM_MODAL.TITLE')}
+                            </Text>
 
                             <View
                                 style={{ position: 'absolute', left: 0, top }}>
@@ -49,10 +51,12 @@ class WhatIsOneRMView extends Component {
                                 <View style={styles.kratosNote}>
                                     <Text>
                                         <Text style={styles.bold}>
-                                            Note:&nbsp;
+                                            {Localized('NOTE')}&nbsp;
                                         </Text>
                                         <Text>
-                                            e1RM is not compatible with Kratos
+                                            {Localized(
+                                                'WHAT_IS_ONE_RM_MODAL.KRATOS_NOT_COMPATIBLE_MESSAGE',
+                                            )}
                                         </Text>
                                     </Text>
                                 </View>
@@ -67,7 +71,9 @@ class WhatIsOneRMView extends Component {
                                     style={[
                                         SETTINGS_PANEL_STYLES.tappableText,
                                     ]}>
-                                    How does the algorithm work?
+                                    {Localized(
+                                        'WHAT_IS_ONE_RM_MODAL.ALGORITHM_BUTTON',
+                                    )}
                                 </Text>
                             </TouchableOpacity>
 
@@ -78,7 +84,9 @@ class WhatIsOneRMView extends Component {
                                     style={[
                                         SETTINGS_PANEL_STYLES.tappableText,
                                     ]}>
-                                    How can I get the best results?
+                                    {Localized(
+                                        'WHAT_IS_ONE_RM_MODAL.RESULTS_BUTTON',
+                                    )}
                                 </Text>
                             </TouchableOpacity>
                         </View>

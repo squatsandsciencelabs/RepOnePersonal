@@ -195,9 +195,9 @@ class SetForm extends Component {
 
     _displayMetric() {
         if (this.state.metric === 'kgs') {
-            return 'KGs';
+            return Localized('DISPLAY_METRIC.KGS');
         } else if (this.state.metric === 'lbs') {
-            return 'LBs';
+            return Localized('DISPLAY_METRIC.LBS');
         }
     }
 
@@ -209,7 +209,7 @@ class SetForm extends Component {
                     keyboardType={'numeric'}
                     underlineColorAndroid={'transparent'}
                     editable={true}
-                    placeholder="Weight"
+                    placeholder={Localized('WEIGHT')}
                     placeholderTextColor={'rgba(189, 189, 189, 1)'}
                     value={this.state.weight}
                     onEndEditing={() => this._onEndEditWeight()}

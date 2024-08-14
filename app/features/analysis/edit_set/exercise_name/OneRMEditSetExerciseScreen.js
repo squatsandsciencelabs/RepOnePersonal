@@ -5,9 +5,10 @@ import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
 import * as AnalysisSelectors from 'app/redux/selectors/AnalysisSelectors';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './OneRMEditSetExerciseActions';
+import Localized from 'app/services/Localization';
 
-const title = 'Edit Exercise';
-const placeholder = 'Enter Exercise';
+const title = Localized('EDIT_EXERCISE');
+const placeholder = Localized('ENTER_EXERCISE');
 
 const mapStateToProps = state => {
     const setID = AnalysisSelectors.getEditingExerciseSetID(state);

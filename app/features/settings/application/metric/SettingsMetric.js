@@ -5,10 +5,11 @@ import PickerModal from 'app/shared_features/picker/PickerModal';
 import * as Actions from './SettingsMetricActions';
 
 import * as SettingsSelectors from 'app/redux/selectors/SettingsSelectors';
+import Localized from 'app/services/Localization';
 
 const items = [
-    { label: 'kgs', value: 'kgs' },
-    { label: 'lbs', value: 'lbs' },
+    { label: Localized('DISPLAY_METRIC.kgs'), value: 'kgs' },
+    { label: Localized('DISPLAY_METRIC.lbs'), value: 'lbs' },
 ];
 
 const mapStateToProps = state => ({

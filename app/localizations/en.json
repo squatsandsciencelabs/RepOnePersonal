@@ -143,7 +143,9 @@
     "DATE_TO": "to",
     "DISPLAY_METRIC": {
         "KGS": "KGs",
-        "LBS": "LBs"
+        "LBS": "LBs",
+        "kgs": "kgs",
+        "lbs": "lbs"
     },
     "RANGE_PLACEHOLDER": {
         "MIN": "min",
@@ -174,5 +176,24 @@
     "CONNECTED_DEVICE_STATUS": {
         "RECONNECTING": "RECONNECTING",
         "NOT_CONNECTED": "NOT CONNECTED"
-    }
+    },
+    "WEIGHT": "Weight",
+    "EDIT_EXERCISE": "Edit Exercise",
+    "ENTER_EXERCISE": "Enter Exercise",
+    "NOTE": "Note:",
+    "WHAT_IS_ONE_RM_MODAL": {
+        "TITLE": "What is e1RM?",
+        "KRATOS_NOT_COMPATIBLE_MESSAGE": "e1RM is not compatible with Kratos",
+        "BODY": "Estimated One-Rep Max is based on the fastest velocity of each set of a given exercise within a specified date range, extrapolated to the lowest velocity at which you think you can successfully complete a max lift attempt.\n\nThis estimate is provided with an r² based on how much exercise data is included and how well that data adheres to a general trend. While outliers sometimes occur naturally, the key to accurate estimation is recording set information as fully and carefully as possible.",
+        "ALGORITHM_BUTTON": "How does the algorithm work?",
+        "RESULTS_BUTTON": "How can I get the best results?"
+    },
+    "FINISH_WORKOUT": "FINISH WORKOUT",
+    "DURATION_DESCRIPTION": {
+        "OFF": "Off",
+        "MIN_COUNT": "{{count}} min",
+        "SEC_COUNT": "{{count}} sec",
+        "MIN_SEC_COUNT": "{{min}} min {{sec}} sec"
+    },
+    "REST_DURATION_LABEL": "rest"
 }
