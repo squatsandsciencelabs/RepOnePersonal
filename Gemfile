@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # You may use http://rbenv.org/ or https://rvm.io/ to install and use this version
-ruby ">= 2.6.10"
+# older expo has a bug with File.exists? which was removed in Ruby 3.2, so temporarily limiting ruby versions
+ruby ">= 2.6.10", '< 3.2'
  
 # Cocoapods 1.15 introduced a bug which break the build. We will remove the upper
 # bound in the template on Cocoapods with next React Native release.
