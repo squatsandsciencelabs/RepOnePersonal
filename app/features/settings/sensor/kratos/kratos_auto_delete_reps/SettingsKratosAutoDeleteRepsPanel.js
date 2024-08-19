@@ -35,7 +35,9 @@ class SettingsKratosAutoDeleteRepsPanel extends Component {
                                     style={[
                                         SETTINGS_PANEL_STYLES.tappableText,
                                     ]}>
-                                    {this.props.kratosAutoDeleteReps} reps
+                                    {Localized('REPS_COUNT', {
+                                        count: this.props.kratosAutoDeleteReps,
+                                    })}
                                 </Text>
                                 <Image
                                     source={require('app/appearance/images/icon_rep_columns_arrow.png')}

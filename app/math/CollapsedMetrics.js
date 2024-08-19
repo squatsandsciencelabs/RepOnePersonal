@@ -1,7 +1,6 @@
 import {
     EMPTY_METRIC,
     AVG_VELOCITY_METRIC,
-    RPE_METRIC,
     DURATION_METRIC,
     ROM_METRIC,
     PKH_METRIC,
@@ -13,28 +12,13 @@ import {
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
-    FIRST_REP_QUANTIFIER,
-    LAST_REP_QUANTIFIER,
-    MIN_QUANTIFIER,
-    MAX_QUANTIFIER,
-    AVG_QUANTIFIER,
-    ABS_LOSS_QUANTIFIER,
     PERCENT_LOSS_QUANTIFIER,
-    MAX_EVER_QUANTIFIER,
-    MIN_EVER_QUANTIFIER,
-    SET_LOSS_QUANTIFIER,
-    PEAK_END_QUANTIFIER,
-    ECCENTRIC,
-    CONCENTRIC,
-    WORK_METRIC,
-    WORK_LOCATION_METRIC,
-    FORCE_LOCATION_METRIC,
-    POWER_LOCATION_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
 import * as SetUtils from 'app/utility/SetUtils';
 import { getTotalKratosDiscsInertialConstant } from 'app/utility/KratosUtils';
 import { millimetersToMeters } from 'app/utility/DistanceConversion';
 import { newtonsToPounds } from 'app/utility/ForceConversion';
+import Localized from 'app/services/Localization';
 
 // unique metrics
 
@@ -888,7 +872,9 @@ export const getSetLossOfWork = set => {
 
 export const canCalcRPE1RM = set => {
     let rpe = set.rpe;
-    if (!rpe) return false;
+    if (!rpe) {
+        return false;
+    }
 
     const rpeWithoutCommas = rpe.replace(',', '.');
     if (isNaN(rpeWithoutCommas)) {
@@ -1161,79 +1147,19 @@ export const getSlowestLinear3DAvgVelocityEver = (set, allSets) => {
 // To String
 
 export const metricAbbreviation = metric => {
-    switch (metric) {
-        case EMPTY_METRIC:
-            return '';
-        case AVG_VELOCITY_METRIC:
-            return 'VEL';
-        case RPE_METRIC:
-            return 'RPE e1rm';
-        case DURATION_METRIC:
-            return 'DUR';
-        case ROM_METRIC:
-            return 'ROM';
-        case PKH_METRIC:
-            return 'PK VEL LOC';
-        case PKV_METRIC:
-            return 'PK VEL';
-        case FORCE_METRIC:
-            return 'FRC';
-        case FORCE_HEIGHT_METRIC:
-            return 'FH';
-        case POWER_METRIC:
-            return 'PWR';
-        case POWER_HEIGHT_METRIC:
-            return 'PH';
-        case LINEAR_3D_AVG_VELOCITY_METRIC:
-            return 'VEL³';
-        case LINEAR_3D_ROM_METRIC:
-            return 'ROM³';
-        case WORK_METRIC:
-            return 'WRK';
-        default:
-            return null;
+    if (metric === EMPTY_METRIC) {
+        return '';
     }
+
+    return Localized(`METRIC_ABBREVIATION.${metric}`);
 };
 
 export const metricString = metric => {
-    switch (metric) {
-        case EMPTY_METRIC:
-            return '';
-        case AVG_VELOCITY_METRIC:
-            return 'Average Velocity';
-        case RPE_METRIC:
-            return 'RPE';
-        case DURATION_METRIC:
-            return 'Duration';
-        case ROM_METRIC:
-            return 'Range Of Motion';
-        case PKH_METRIC:
-            return 'Peak Height';
-        case PKV_METRIC:
-            return 'Peak Velocity';
-        case FORCE_METRIC:
-            return 'Force';
-        case FORCE_HEIGHT_METRIC:
-            return 'Force Height';
-        case POWER_METRIC:
-            return 'Power';
-        case POWER_HEIGHT_METRIC:
-            return 'Power Height';
-        case LINEAR_3D_AVG_VELOCITY_METRIC:
-            return 'Average Velocity 3D';
-        case LINEAR_3D_ROM_METRIC:
-            return 'Range Of Motion 3D';
-        case WORK_METRIC:
-            return 'Work';
-        case WORK_LOCATION_METRIC:
-            return 'Work Location';
-        case FORCE_LOCATION_METRIC:
-            return 'Force Location';
-        case POWER_LOCATION_METRIC:
-            return 'Power Location';
-        default:
-            return null;
+    if (metric === EMPTY_METRIC) {
+        return '';
     }
+
+    return Localized(`METRIC_STRING.${metric}`);
 };
 
 export const metricUnit = (metric, quantifier) => {
@@ -1248,105 +1174,45 @@ export const metricUnit = (metric, quantifier) => {
         case AVG_VELOCITY_METRIC:
         case LINEAR_3D_AVG_VELOCITY_METRIC:
         case PKV_METRIC:
-            return 'm/s';
+            return Localized('UNIT.MS');
         case DURATION_METRIC:
-            return 'sec';
+            return Localized('UNIT.SEC');
         case LINEAR_3D_ROM_METRIC:
         case ROM_METRIC:
-            return 'mm';
+            return Localized('UNIT.MM');
         case PKH_METRIC:
         case FORCE_HEIGHT_METRIC:
         case POWER_HEIGHT_METRIC:
             return '%';
         case FORCE_METRIC:
-            return 'lb-f';
+            return Localized('UNIT.LBF');
         case POWER_METRIC:
-            return 'W';
+            return Localized('UNIT.POWER');
         default:
             return null;
     }
 };
 
 export const quantifierAbbreviation = quantifier => {
-    switch (quantifier) {
-        case EMPTY_QUANTIFIER:
-            return '';
-        case FIRST_REP_QUANTIFIER:
-            return 'FRST';
-        case LAST_REP_QUANTIFIER:
-            return 'LAST';
-        case MIN_QUANTIFIER:
-            return 'MIN';
-        case MAX_QUANTIFIER:
-            return 'MAX';
-        case AVG_QUANTIFIER:
-            return 'MEAN';
-        case ABS_LOSS_QUANTIFIER:
-            return 'ABS LOSS';
-        case PERCENT_LOSS_QUANTIFIER:
-            return 'PCT LOSS';
-        case MAX_EVER_QUANTIFIER:
-            return 'MAXPR';
-        case MIN_EVER_QUANTIFIER:
-            return 'MINPR';
-        case SET_LOSS_QUANTIFIER:
-            return 'SET LOSS';
-        case PEAK_END_QUANTIFIER:
-            return 'PEAK END';
-        default:
-            return null;
+    if (quantifier === EMPTY_QUANTIFIER) {
+        return '';
     }
+
+    return Localized(`QUANTIFIER_ABBREVIATION.${quantifier}`);
 };
 
 export const quantifierString = quantifier => {
-    switch (quantifier) {
-        case EMPTY_QUANTIFIER:
-            return '';
-        case FIRST_REP_QUANTIFIER:
-            return 'First Rep';
-        case LAST_REP_QUANTIFIER:
-            return 'Last Rep';
-        case MIN_QUANTIFIER:
-            return 'Minimum Set';
-        case MAX_QUANTIFIER:
-            return 'Maximum Set';
-        case AVG_QUANTIFIER:
-            return 'Average Set';
-        case ABS_LOSS_QUANTIFIER:
-            return 'Absolute Loss';
-        case PERCENT_LOSS_QUANTIFIER:
-            return 'Percent Loss';
-        case MAX_EVER_QUANTIFIER:
-            return 'Maximum Ever';
-        case MIN_EVER_QUANTIFIER:
-            return 'Minimum Ever';
-        case SET_LOSS_QUANTIFIER:
-            return 'Set Loss';
-        case PEAK_END_QUANTIFIER:
-            return 'Peak-End';
-        default:
-            return null;
+    if (quantifier === EMPTY_QUANTIFIER) {
+        return '';
     }
+
+    return Localized(`QUANTIFIER_STRING.${quantifier}`);
 };
 
 export const getPhaseString = phase => {
-    switch (phase) {
-        case ECCENTRIC:
-            return 'Eccentric';
-        case CONCENTRIC:
-            return 'Concentric';
-        default:
-            return null;
-    }
+    return Localized(`PHASE_STRING.${phase}`);
 };
 
 export const phaseAbbreviation = phase => {
-    switch (phase) {
-        case ECCENTRIC:
-            return 'ECC';
-        case CONCENTRIC:
-            return 'CON';
-        default:
-            return null;
-    }
+    return Localized(`PHASE_ABBREVIATION.${phase}`);
 };

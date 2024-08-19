@@ -26,7 +26,7 @@ const pickerItem = rollup => ({
     value: rollup,
 });
 
-const items = [
+const getItems = () => [
     pickerItem(EMPTY_QUANTIFIER),
     pickerItem(AVG_QUANTIFIER),
     pickerItem(MAX_EVER_QUANTIFIER),
@@ -51,7 +51,7 @@ const mapStateToPropsiOS = state => {
 
     return {
         isModalShowing,
-        items,
+        items: getItems(),
         selectedValue,
     };
 };
@@ -63,7 +63,7 @@ const mapStateToPropsAndroid = (state, ownProps) => {
             ownProps.rank,
         );
     return {
-        items,
+        items: getItems(),
         selectedValue,
     };
 };

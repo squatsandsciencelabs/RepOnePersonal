@@ -100,7 +100,6 @@
     },
     "VELOCITY_AT_1RM": "Velocity at 1RM",
     "METERS_PER_SECOND_COUNT": "{{mps}} m/s",
-    "METERS_PER_SECOND": "m/s",
     "CALCULATE": "Calculate",
     "ESTIMATED_ONE_REP_MAX": "Estimated One-Rep Max",
     "R_SQUARED_IS_LOW": "R² is too low, please clean up or log more data",
@@ -191,9 +190,123 @@
     "FINISH_WORKOUT": "FINISH WORKOUT",
     "DURATION_DESCRIPTION": {
         "OFF": "Off",
-        "MIN_COUNT": "{{count}} min",
-        "SEC_COUNT": "{{count}} sec",
+        "MIN_COUNT": "{{min}} min",
+        "SEC_COUNT": "{{sec}} sec",
         "MIN_SEC_COUNT": "{{min}} min {{sec}} sec"
     },
-    "REST_DURATION_LABEL": "rest"
+    "REST_DURATION_LABEL": "rest",
+    "OUTDATED_APPLICATION_MODAL": {
+        "TITLE": "Application Outdated",
+        "MESSAGE": "Update to latest?",
+        "CANCEL": "Later",
+        "SUBMIT": "Update"
+    },
+    "UNSUPPORTED_VERSION_MESSAGE": "Please update to the latest version! This version is no longer supported.",
+    "SURVEY": "Survey",
+    "SURVEY_MODAL": {
+        "TITLE": "Finished taking our survey?",
+        "CANCEL": "Later",
+        "SUBMIT": "Finished",
+        "HATE_SUBMIT": "I Hate Data"
+    },
+    "TAB_BAR": {
+        "WORKOUT": "WORKOUT",
+        "SCALAR": "SCALAR",
+        "HISTORY": "HISTORY",
+        "ANALYSIS": "ANALYSIS",
+        "SETTINGS": "SETTINGS"
+    },
+    "PERMISSIONS_MODAL": {
+        "TITLE": "Additional Permissions Required",
+        "SUBMIT": "OK",
+        "PLAY_VIDEOS_PHOTO_MESSAGE": "RepOne needs Photo permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "PLAY_VIDEOS_STORAGE_MESSAGE": "RepOne needs Storage permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "PLAY_VIDEOS_ERROR_MESSAGE": "There was an error accessing your photo storage to play videos",
+        "STORE_VIDEOS_PHOTO_MESSAGE": "RepOne needs Photo permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "STORE_VIDEOS_STORAGE_MESSAGE": "RepOne needs Storage permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_VIDEOS_CAMERA_MESSAGE": "RepOne needs Camera permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_VIDEOS_MICROPHONE_MESSAGE": "RepOne needs Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_STORE_VIDEOS_MICROPHONE_PHOTOS_MESSAGE": "RepOne needs Microphone and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_STORE_VIDEOS_MICROPHONE_STORAGE_MESSAGE": "RepOne needs Microphone and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_STORE_VIDEOS_CAMERA_PHOTOS_MESSAGE": "RepOne needs Camera and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_STORE_VIDEOS_CAMERA_STORAGE_MESSAGE": "RepOne needs Camera and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings",
+        "RECORD_STORE_VIDEOS_CAMERA_MICROPHONE_MESSAGE": "RepOne needs Camera and Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings"
+    },
+    "INVALID_METRIC": "INV",
+    "METRIC_ABBREVIATION": {
+        "AVG_VELOCITY_METRIC": "VEL",
+        "RPE_METRIC": "RPE e1rm",
+        "DURATION_METRIC": "DUR",
+        "ROM_METRIC": "ROM",
+        "PKH_METRIC": "PK VEL LOC",
+        "PKV_METRIC": "PK VEL",
+        "FORCE_METRIC": "FRC",
+        "FORCE_HEIGHT_METRIC": "FH",
+        "POWER_METRIC": "PWR",
+        "POWER_HEIGHT_METRIC": "PH",
+        "LINEAR_3D_AVG_VELOCITY_METRIC": "VEL³",
+        "LINEAR_3D_ROM_METRIC": "ROM³",
+        "WORK_METRIC": "WRK"
+    },
+    "METRIC_STRING": {
+        "AVG_VELOCITY_METRIC": "Average Velocity",
+        "RPE_METRIC": "RPE",
+        "DURATION_METRIC": "Duration",
+        "ROM_METRIC": "Range Of Motion",
+        "PKH_METRIC": "Peak Height",
+        "PKV_METRIC": "Peak Velocity",
+        "FORCE_METRIC": "Force",
+        "FORCE_HEIGHT_METRIC": "Force Height",
+        "POWER_METRIC": "Power",
+        "POWER_HEIGHT_METRIC": "Power Height",
+        "LINEAR_3D_AVG_VELOCITY_METRIC": "Average Velocity 3D",
+        "LINEAR_3D_ROM_METRIC": "Range Of Motion 3D",
+        "WORK_METRIC": "Work",
+        "WORK_LOCATION_METRIC": "Work Location",
+        "FORCE_LOCATION_METRIC": "Force Location",
+        "POWER_LOCATION_METRIC": "Power Location"
+    },
+    "UNIT": {
+        "MS": "m/s",
+        "SEC": "sec",
+        "MM": "mm",
+        "LBF": "lb-f",
+        "POWER": "W"
+    },
+    "QUANTIFIER_ABBREVIATION": {
+        "FIRST_REP_QUANTIFIER": "FRST",
+        "LAST_REP_QUANTIFIER": "LAST",
+        "MIN_QUANTIFIER": "MIN",
+        "MAX_QUANTIFIER": "MAX",
+        "AVG_QUANTIFIER": "MEAN",
+        "ABS_LOSS_QUANTIFIER": "ABS LOSS",
+        "PERCENT_LOSS_QUANTIFIER": "PCT LOSS",
+        "MAX_EVER_QUANTIFIER": "MAXPR",
+        "MIN_EVER_QUANTIFIER": "MINPR",
+        "SET_LOSS_QUANTIFIER": "SET LOSS",
+        "PEAK_END_QUANTIFIER": "PEAK END"
+    },
+    "QUANTIFIER_STRING": {
+        "FIRST_REP_QUANTIFIER": "First Rep",
+        "LAST_REP_QUANTIFIER": "Last Rep",
+        "MIN_QUANTIFIER": "Minimum Set",
+        "MAX_QUANTIFIER": "Maximum Set",
+        "AVG_QUANTIFIER": "Average Set",
+        "ABS_LOSS_QUANTIFIER": "Absolute Loss",
+        "PERCENT_LOSS_QUANTIFIER": "Percent Loss",
+        "MAX_EVER_QUANTIFIER": "Maximum Ever",
+        "MIN_EVER_QUANTIFIER": "Minimum Ever",
+        "SET_LOSS_QUANTIFIER": "Set Loss",
+        "PEAK_END_QUANTIFIER": "Peak-End"
+    },
+    "PHASE_STRING": {
+        "ECCENTRIC": "Eccentric",
+        "CONCENTRIC": "Concentric"
+    },
+    "PHASE_ABBREVIATION": {
+        "ECCENTRIC": "ECC",
+        "CONCENTRIC": "CON"
+    },
+    "RPE_EMPTY_DESCRIPTION": "RPE e1RM",
+    "R1RM": "e1RM"
 }

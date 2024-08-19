@@ -230,7 +230,7 @@ class OneRMChartView extends Component {
                                         {velocity}
                                     </Text>
                                     <Text style={styles.oneRMVelocityMetric}>
-                                        {Localized('METERS_PER_SECOND')}
+                                        {Localized('UNIT.MS')}
                                     </Text>
                                 </Text>
                             </View>

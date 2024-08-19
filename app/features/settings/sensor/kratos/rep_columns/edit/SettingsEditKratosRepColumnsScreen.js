@@ -23,7 +23,7 @@ const pickerItem = metric => ({
     value: metric,
 });
 
-const items = [
+const getItems = () => [
     pickerItem(AVG_VELOCITY_METRIC),
     pickerItem(PKV_METRIC),
     pickerItem(ROM_METRIC),
@@ -33,11 +33,11 @@ const items = [
     pickerItem(POWER_METRIC),
 ];
 
-const mapStateToPropsiOS = state => {
+const mapStateToPropsIOS = state => {
     return {
         isModalShowing:
             KratosColumnsSettingsSelectors.getIsEditingMetric(state),
-        items,
+        items: getItems(),
         selectedValue: KratosColumnsSettingsSelectors.getCurrentMetric(state),
     };
 };
@@ -51,7 +51,7 @@ const makeAndroidSelector = () =>
                 `rank ${rank} should return value ${metrics[rank - 1]}`,
             );
             return {
-                items,
+                items: getItems(),
                 selectedValue: metrics[rank - 1],
             };
         },
@@ -66,7 +66,7 @@ const makeMapStateToPropsAndroid = () => {
 
 // this way only check OS once
 const mapStateToProps =
-    Platform.OS === 'ios' ? mapStateToPropsiOS : makeMapStateToPropsAndroid;
+    Platform.OS === 'ios' ? mapStateToPropsIOS : makeMapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {

@@ -8,8 +8,6 @@ import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersS
 import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
 import Localized from 'app/services/Localization';
 
-const TABLE_HEADERS = [Localized('REP_METRIC'), Localized('SET_METRIC')];
-
 class SettingsRepOneSensorSetMetrics extends Component {
     handleMetricPress = row => {
         this.props.tapMetric(row);
@@ -22,17 +20,19 @@ class SettingsRepOneSensorSetMetrics extends Component {
     renderTableHeaders = () => {
         return (
             <DataTable.Header style={styles.header}>
-                {TABLE_HEADERS.map((metric, index) => {
-                    return (
-                        <DataTable.Title
-                            key={`metric-${index}`}
-                            style={{
-                                paddingVertical: 0,
-                            }}>
-                            <Text style={styles.metric}>{metric}</Text>
-                        </DataTable.Title>
-                    );
-                })}
+                {[Localized('REP_METRIC'), Localized('SET_METRIC')].map(
+                    (metric, index) => {
+                        return (
+                            <DataTable.Title
+                                key={`metric-${index}`}
+                                style={{
+                                    paddingVertical: 0,
+                                }}>
+                                <Text style={styles.metric}>{metric}</Text>
+                            </DataTable.Title>
+                        );
+                    },
+                )}
             </DataTable.Header>
         );
     };

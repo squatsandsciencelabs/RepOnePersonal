@@ -26,7 +26,7 @@ const pickerItem = quantifier => ({
     value: quantifier,
 });
 
-const items = [
+const getItems = () => [
     pickerItem(EMPTY_QUANTIFIER),
     pickerItem(AVG_QUANTIFIER),
     pickerItem(MAX_EVER_QUANTIFIER),
@@ -45,7 +45,7 @@ const mapStateToPropsiOS = state => {
     return {
         isModalShowing:
             CollapsedSettingsSelectors.getIsEditingQuantifier(state),
-        items,
+        items: getItems(),
         selectedValue: CollapsedSettingsSelectors.getCurrentQuantifier(state),
     };
 };
@@ -57,27 +57,27 @@ const mapStateToPropsAndroid = (state, ownProps) => {
     switch (ownProps.rank) {
         case 1:
             return {
-                items,
+                items: getItems(),
                 selectedValue: CollapsedSettingsSelectors.getQuantifier1(state),
             };
         case 2:
             return {
-                items,
+                items: getItems(),
                 selectedValue: CollapsedSettingsSelectors.getQuantifier2(state),
             };
         case 3:
             return {
-                items,
+                items: getItems(),
                 selectedValue: CollapsedSettingsSelectors.getQuantifier3(state),
             };
         case 4:
             return {
-                items,
+                items: getItems(),
                 selectedValue: CollapsedSettingsSelectors.getQuantifier4(state),
             };
         case 5:
             return {
-                items,
+                items: getItems(),
                 selectedValue: CollapsedSettingsSelectors.getQuantifier5(state),
             };
         default:

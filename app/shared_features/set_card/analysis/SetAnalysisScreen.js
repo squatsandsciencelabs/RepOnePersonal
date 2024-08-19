@@ -37,6 +37,7 @@ import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 import * as DurationCalculator from 'app/utility/DurationCalculator';
 import * as SetUtils from 'app/utility/SetUtils';
 import _ from 'lodash';
+import Localized from 'app/services/Localization';
 
 const METRICS_NUMBER = 5;
 
@@ -500,10 +501,11 @@ const metricDescription = (
                 rpe +
                 ' ' +
                 CollapsedMetrics.metricAbbreviation(metric) +
-                '\ne1RM'
+                '\n' +
+                Localized('R1RM')
             );
         } else {
-            return 'RPE e1RM';
+            return Localized('RPE_EMPTY_DESCRIPTION');
         }
     }
 

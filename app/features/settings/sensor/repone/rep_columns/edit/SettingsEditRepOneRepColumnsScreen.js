@@ -28,32 +28,33 @@ const pickerItem = metric => ({
     value: metric,
 });
 
-const items = OpenBarbellConfig.bulkMetricsEnabled
-    ? [
-          pickerItem(AVG_VELOCITY_METRIC),
-          pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
-          pickerItem(PKV_METRIC),
-          pickerItem(PKH_METRIC),
-          pickerItem(FORCE_METRIC),
-          pickerItem(FORCE_HEIGHT_METRIC),
-          pickerItem(POWER_METRIC),
-          pickerItem(POWER_HEIGHT_METRIC),
-          pickerItem(ROM_METRIC),
-          pickerItem(LINEAR_3D_ROM_METRIC),
-          pickerItem(DURATION_METRIC),
-      ]
-    : [
-          pickerItem(AVG_VELOCITY_METRIC),
-          pickerItem(PKV_METRIC),
-          pickerItem(PKH_METRIC),
-          pickerItem(ROM_METRIC),
-          pickerItem(DURATION_METRIC),
-      ];
+const getItems = () =>
+    OpenBarbellConfig.bulkMetricsEnabled
+        ? [
+              pickerItem(AVG_VELOCITY_METRIC),
+              pickerItem(LINEAR_3D_AVG_VELOCITY_METRIC),
+              pickerItem(PKV_METRIC),
+              pickerItem(PKH_METRIC),
+              pickerItem(FORCE_METRIC),
+              pickerItem(FORCE_HEIGHT_METRIC),
+              pickerItem(POWER_METRIC),
+              pickerItem(POWER_HEIGHT_METRIC),
+              pickerItem(ROM_METRIC),
+              pickerItem(LINEAR_3D_ROM_METRIC),
+              pickerItem(DURATION_METRIC),
+          ]
+        : [
+              pickerItem(AVG_VELOCITY_METRIC),
+              pickerItem(PKV_METRIC),
+              pickerItem(PKH_METRIC),
+              pickerItem(ROM_METRIC),
+              pickerItem(DURATION_METRIC),
+          ];
 
-const mapStateToPropsiOS = state => {
+const mapStateToPropsIOS = state => {
     return {
         isModalShowing: ColumnsSettingsSelectors.getIsEditingMetric(state),
-        items,
+        items: getItems(),
         selectedValue: ColumnsSettingsSelectors.getCurrentMetric(state),
     };
 };
@@ -67,7 +68,7 @@ const makeAndroidSelector = () =>
                 `rank ${rank} should return value ${metrics[rank - 1]}`,
             );
             return {
-                items,
+                items: getItems(),
                 selectedValue: metrics[rank - 1],
             };
         },
@@ -82,7 +83,7 @@ const makeMapStateToPropsAndroid = () => {
 
 // this way only check OS once
 const mapStateToProps =
-    Platform.OS === 'ios' ? mapStateToPropsiOS : makeMapStateToPropsAndroid;
+    Platform.OS === 'ios' ? mapStateToPropsIOS : makeMapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {

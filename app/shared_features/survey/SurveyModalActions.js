@@ -5,6 +5,7 @@ import * as Analytics from 'app/services/Analytics';
 import * as SurveySelectors from 'app/redux/selectors/SurveySelectors';
 import * as AppStateSelectors from 'app/redux/selectors/AppStateSelectors';
 import * as SurveyActionCreators from 'app/redux/shared_actions/SurveyActionCreators';
+import Localized from 'app/services/Localization';
 
 export const closeSurvey = () => (dispatch, getState) => {
     // log analytics
@@ -12,21 +13,21 @@ export const closeSurvey = () => (dispatch, getState) => {
     logCloseSurveyAnalytics(state);
 
     // present
-    Alert.alert('Finished taking our survey?', null, [
+    Alert.alert(Localized('SURVEY_MODAL.TITLE'), null, [
         {
-            text: 'Later',
+            text: Localized('SURVEY_MODAL.CANCEL'),
             onPress: () => {
                 dispatch(later());
             },
         },
         {
-            text: 'Finished',
+            text: Localized('SURVEY_MODAL.SUBMIT'),
             onPress: () => {
                 dispatch(finish());
             },
         },
         {
-            text: 'I Hate Data',
+            text: Localized('SURVEY_MODAL.HATE_SUBMIT'),
             onPress: () => {
                 dispatch(optout());
             },
