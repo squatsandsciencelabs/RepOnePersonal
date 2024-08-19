@@ -59,6 +59,9 @@ target 'RepOnePersonal' do
 
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
+        # Disable bitcode for all pods to fix the following error
+        # Asset validation failed (90482) Invalid Executable. The executable 'RepOnePersonal.app/Frameworks/hermes.framework/hermes' contains bitcode
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
         # Workaround the "no template named 'unary_function' in namespace 'std'" error while building on xCode 15
         # TODO: revisit once we update to the latest RN version
         # https://github.com/facebook/react-native/issues/37748#issuecomment-1580589448
