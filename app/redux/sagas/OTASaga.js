@@ -1,4 +1,4 @@
-import { takeEvery, put, apply, all, select } from 'redux-saga/effects';
+import { takeEvery, put, apply, all, select, call } from 'redux-saga/effects';
 import * as FileSystem from 'expo-file-system';
 import { NordicDFU, DFUEmitter } from 'react-native-nordic-dfu';
 import { Alert, Platform } from 'react-native';
@@ -19,6 +19,7 @@ import {
     INSTALL_OTA_ATTEMPT,
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
+    CONNECTED_TO_DEVICE,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
@@ -50,9 +51,50 @@ export default function* OTASaga(dispatch) {
         takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
+        takeEvery(CONNECTED_TO_DEVICE, checkConnectedDeviceFirmware),
     ]);
 }
 
+function* checkConnectedDeviceFirmware(action) {
+    let json = null;
+    let firmwareDescription = null;
+
+    const deviceFirmwareVersion = action.firmwareVersion;
+    if (deviceFirmwareVersion === '0.7.4') {
+        try {
+            const response = yield fetch(OpenBarbellConfig.firmwareURL, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Cache-Control': 'no-store, no-cache, must-revalidate',
+                    Pragma: 'no-cache',
+                    Expires: '0',
+                },
+            });
+            json = yield response.json();
+            if (!json) {
+                console.tron.log(
+                    'json is empty in checkConnectedDeviceFirmware saga',
+                );
+                return;
+            }
+
+            firmwareDescription = json.firmware_descriptions['0.8.22'];
+        } catch (error) {
+            console.tron.log(
+                `Error while fetching firmwares description in checkConnectedDeviceFirmware saga ${error}`,
+            );
+            return;
+        }
+        yield call(deleteDownload);
+        yield put({
+            type: OTA_DOWNLOAD_AVAILABLE,
+            firmwareVersion: '0.8.22',
+            firmwareDescription,
+        });
+    }
+}
 function* checkOTA(dispatch, action) {
     // listen for dfu
     DFUEmitter.addListener('DFUProgress', ({ percent }) => {
@@ -109,6 +151,12 @@ function* checkOTA(dispatch, action) {
         } else {
             needsUpgrade = result.updateApp;
             firmwareVersion = result.firmwareVersion;
+            const connectedDeviceVersion = yield select(
+                ConnectedDeviceStatusSelectors.getFirmwareVersion,
+            );
+            if (connectedDeviceVersion === '0.7.4') {
+                firmwareVersion = '0.8.22';
+            }
             firmwareDescription = json.firmware_descriptions[firmwareVersion];
             console.tron.log(
                 `Received firmware check for app ${appVersion} os ${osVersion} as ${firmwareVersion} with description ${firmwareDescription} and upgrade ${needsUpgrade}`,
