@@ -63,28 +63,19 @@ function* checkConnectedDeviceFirmware(action) {
     const deviceFirmwareVersion = action.firmwareVersion;
 
     if (deviceFirmwareVersion === VIOLATED_PERIPHERAL_FIRMWARE_VERSIONS) {
-        try {
-            const versionsJson = yield call(
-                fetchOpenBarbellConfigFirmwareVersions,
-            );
+        const versionsJson = yield call(fetchOpenBarbellConfigFirmwareVersions);
 
-            if (!versionsJson) {
-                console.tron.log(
-                    'json is empty in checkConnectedDeviceFirmware saga',
-                );
-                return;
-            }
-
-            firmwareDescription =
-                versionsJson.firmware_descriptions[
-                    TEMPORAL_LATEST_FIRMWARE_VERSIONS
-                ];
-        } catch (error) {
+        if (!versionsJson) {
             console.tron.log(
-                `Error while fetching firmwares description in checkConnectedDeviceFirmware saga ${error}`,
+                'json is empty in checkConnectedDeviceFirmware saga',
             );
             return;
         }
+
+        firmwareDescription =
+            versionsJson.firmware_descriptions[
+                TEMPORAL_LATEST_FIRMWARE_VERSIONS
+            ];
 
         yield call(deleteDownload);
         yield put({
