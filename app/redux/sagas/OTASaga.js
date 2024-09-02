@@ -20,9 +20,12 @@ import {
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
     CONNECTED_TO_DEVICE,
+} from 'app/configs+constants/ActionTypes';
+
+import {
     VIOLATED_PERIPHERAL_FIRMWARE_VERSIONS,
     TEMPORAL_LATEST_FIRMWARE_VERSIONS,
-} from 'app/configs+constants/ActionTypes';
+} from 'app/configs+constants/FirmwareVersions';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
 import * as OTASelectors from 'app/redux/selectors/OTASelectors';
