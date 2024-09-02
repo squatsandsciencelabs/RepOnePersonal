@@ -20,6 +20,8 @@ import {
     INSTALL_OTA_DFU_STATE_CHANGED,
     CANCEL_INSTALL_OTA,
     CONNECTED_TO_DEVICE,
+    VIOLATED_PERIPHERAL_FIRMWARE_VERSIONS,
+    TEMPORAL_LATEST_FIRMWARE_VERSIONS,
 } from 'app/configs+constants/ActionTypes';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import * as Analytics from 'app/services/Analytics';
@@ -56,41 +58,38 @@ export default function* OTASaga(dispatch) {
 }
 
 function* checkConnectedDeviceFirmware(action) {
-    let json = null;
     let firmwareDescription = null;
 
     const deviceFirmwareVersion = action.firmwareVersion;
-    if (deviceFirmwareVersion === '0.7.4') {
+
+    if (deviceFirmwareVersion === VIOLATED_PERIPHERAL_FIRMWARE_VERSIONS) {
         try {
-            const response = yield fetch(OpenBarbellConfig.firmwareURL, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    'Cache-Control': 'no-store, no-cache, must-revalidate',
-                    Pragma: 'no-cache',
-                    Expires: '0',
-                },
-            });
-            json = yield response.json();
-            if (!json) {
+            const versionsJson = yield call(
+                fetchOpenBarbellConfigFirmwareVersions,
+            );
+
+            if (!versionsJson) {
                 console.tron.log(
                     'json is empty in checkConnectedDeviceFirmware saga',
                 );
                 return;
             }
 
-            firmwareDescription = json.firmware_descriptions['0.8.22'];
+            firmwareDescription =
+                versionsJson.firmware_descriptions[
+                    TEMPORAL_LATEST_FIRMWARE_VERSIONS
+                ];
         } catch (error) {
             console.tron.log(
                 `Error while fetching firmwares description in checkConnectedDeviceFirmware saga ${error}`,
             );
             return;
         }
+
         yield call(deleteDownload);
         yield put({
             type: OTA_DOWNLOAD_AVAILABLE,
-            firmwareVersion: '0.8.22',
+            firmwareVersion: TEMPORAL_LATEST_FIRMWARE_VERSIONS,
             firmwareDescription,
         });
     }
@@ -114,24 +113,14 @@ function* checkOTA(dispatch, action) {
     // get json from server
     let json = null;
     try {
-        const response = yield fetch(OpenBarbellConfig.firmwareURL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Cache-Control': 'no-store, no-cache, must-revalidate',
-                Pragma: 'no-cache',
-                Expires: '0',
-            },
-        });
-        json = yield response.json();
+        json = yield call(fetchOpenBarbellConfigFirmwareVersions);
         console.tron.log(`firmware url json ${JSON.stringify(json)}`);
     } catch (err) {
         console.tron.log(`DFU check failed ${err}`);
         return;
     }
     if (!json) {
-        console.tron.log(`DFU check had null json`);
+        console.tron.log('DFU check had null json');
         return;
     }
 
@@ -145,17 +134,21 @@ function* checkOTA(dispatch, action) {
         const result = checkFirmwareUpdates(appVersion, osVersion, json);
         if (result === null) {
             console.tron.log(
-                `Firmware version checked failed, result was null`,
+                'Firmware version checked failed, result was null',
             );
             return;
         } else {
             needsUpgrade = result.updateApp;
             firmwareVersion = result.firmwareVersion;
+
             const connectedDeviceVersion = yield select(
                 ConnectedDeviceStatusSelectors.getFirmwareVersion,
             );
-            if (connectedDeviceVersion === '0.7.4') {
-                firmwareVersion = '0.8.22';
+
+            if (
+                connectedDeviceVersion === VIOLATED_PERIPHERAL_FIRMWARE_VERSIONS
+            ) {
+                firmwareVersion = TEMPORAL_LATEST_FIRMWARE_VERSIONS;
             }
             firmwareDescription = json.firmware_descriptions[firmwareVersion];
             console.tron.log(
@@ -361,7 +354,7 @@ function* startInstall(action) {
                 );
             }
         } else {
-            console.tron.log(`ignore installation failure as this is a reboot`);
+            console.tron.log('ignore installation failure as this is a reboot');
         }
     }
 }
@@ -376,7 +369,7 @@ function* reboot(action) {
         logOTAAnalytics(state, 'firmware_install_reboot');
 
         // alert
-        Alert.alert(`Firmware uploaded, attempting to reboot device`);
+        Alert.alert('Firmware uploaded, attempting to reboot device');
 
         // TODO: problem, a disconnect is going to happen, this may cause a double alert because the reconnect checks for installing state, not download ready
         // change action
@@ -384,7 +377,7 @@ function* reboot(action) {
             type: OTA_DOWNLOAD_READY,
         });
     } else if (action.state === 'DFU_COMPLETED') {
-        console.tron.log(`Firmware install success`);
+        console.tron.log('Firmware install success');
         // Alert.alert(`Firmware successfully installed`);
         logOTAAnalytics(state, 'firmware_install_succeeded');
 
@@ -428,7 +421,7 @@ const compareFirmwareVersions = (appVersion, json) => {
             !firmware_config.max_app_version
         ) {
             console.tron.log(
-                `check firmware updates error, cannot process lack of min or max app version`,
+                'check firmware updates error, cannot process lack of min or max app version',
             );
             return null;
         }
@@ -498,7 +491,7 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
         for (let app_config of appUpdateArray) {
             if (!app_config.min_os_version && !app_config.max_os_version) {
                 console.tron.log(
-                    `check firmware updates error, cannot process lack of min and max os`,
+                    'check firmware updates error, cannot process lack of min and max os',
                 );
                 return null;
             }
@@ -549,3 +542,24 @@ const checkFirmwareUpdates = (appVersion, osVersion, json) => {
         }
     }
 };
+
+function* fetchOpenBarbellConfigFirmwareVersions() {
+    try {
+        const response = yield fetch(OpenBarbellConfig.firmwareURL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+                Pragma: 'no-cache',
+                Expires: '0',
+            },
+        });
+        return yield response.json();
+    } catch (error) {
+        console.tron.log(
+            `Error while fetching firmwares description: ${error}`,
+        );
+        return null;
+    }
+}
