@@ -10,9 +10,9 @@
     "endWorkoutTimer": 3600000,
     "obtainTokenTimer": 1800000,
     "apiWaitTimer": 1209600000,
-    "bulkEnabled": false,
-    "calibrationEnabled": false,
-    "bulkMetricsEnabled": false,
-    "scalarEnabled": false,
-    "visualizationEnabled": false
+    "bulkEnabled": true,
+    "calibrationEnabled": true,
+    "bulkMetricsEnabled": true,
+    "scalarEnabled": true,
+    "visualizationEnabled": true
 }
