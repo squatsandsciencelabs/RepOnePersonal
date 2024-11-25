@@ -36,7 +36,7 @@ export const getNumReconnects = state => stateRoot(state).numReconnects;
 
 export const getFirmwareVersion = state => stateRoot(state).firmwareVersion;
 
-export const getAPIFormatVersion = state => stateRoot(state).apiFormatVersion;
+export const getAPIFormatVersion = state => 2; // stateRoot(state).apiFormatVersion; // NOTE: Quick hack to test 3D
 
 export const getCan3D = state => true; // getConnectedDeviceStatus(state) === 'CONNECTED'; // TODO: have this actually be set properly based on sensor capabilities
 
