@@ -53,10 +53,11 @@ function* setupServices(action) {
             repCharacteristic,
         ]);
 
+        // NOTE: Disable this for testing purposes
         // api format 2 check
-        if (action.apiFormatVersion < 2) {
-            return;
-        }
+        // if (action.apiFormatVersion < 2) {
+        //     return;
+        // }
 
         // bulk
         if (OpenBarbellConfig.bulkEnabled && deviceFamily === 'REP_ONE') {
