@@ -23,28 +23,25 @@ import * as StoreActionCreators from 'app/redux/shared_actions/StoreActionCreato
 
 const initializeStore = () => {
     // create the store
-    // if (__DEV__) {
-    // reactotron development mode
-    const sagaMonitor = Reactotron.createSagaMonitor();
-    var sagaMiddleware = createSagaMiddleware({ sagaMonitor });
-    const middlewares = applyMiddleware(thunk, sagaMiddleware);
-    const enhancers = compose(
-        middlewares,
-        Reactotron.createEnhancer(),
-        autoRehydrate(),
-    );
-    var store = createStore(reducers, enhancers);
-    Reactotron.setReduxStore(store);
-    console.tron.log(
-        `reactotron store ${Reactotron.setReduxStore} should be set to ${store}`,
-    );
-    // } else {
-    //     // release mode
-    //     var sagaMiddleware = createSagaMiddleware();
-    //     const middlewares = applyMiddleware(thunk, sagaMiddleware);
-    //     const enhancers = compose(middlewares, autoRehydrate());
-    //     var store = createStore(reducers, enhancers);
-    // }
+    if (__DEV__) {
+        // reactotron development mode
+        const sagaMonitor = Reactotron.createSagaMonitor();
+        var sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+        const middlewares = applyMiddleware(thunk, sagaMiddleware);
+        const enhancers = compose(
+            middlewares,
+            Reactotron.createEnhancer(),
+            autoRehydrate(),
+        );
+        var store = createStore(reducers, enhancers);
+        Reactotron.setReduxStore(store);
+    } else {
+        // release mode
+        var sagaMiddleware = createSagaMiddleware();
+        const middlewares = applyMiddleware(thunk, sagaMiddleware);
+        const enhancers = compose(middlewares, autoRehydrate());
+        var store = createStore(reducers, enhancers);
+    }
 
     // run sagas
     sagaMiddleware.run(Sagas, store.dispatch);
