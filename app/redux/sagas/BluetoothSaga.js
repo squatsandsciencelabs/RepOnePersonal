@@ -60,7 +60,10 @@ function* setupServices(action) {
         // }
 
         // bulk
+        console.tron.log(`bulk enabled ${OpenBarbellConfig.bulkEnabled}`);
+        console.tron.log(`deviceFamily ${deviceFamily}`);
         if (OpenBarbellConfig.bulkEnabled && deviceFamily === 'REP_ONE') {
+            console.tron.log(`litsen for bulk`);
             // listen for bulk data
             yield apply(BleManager, BleManager.startNotification, [
                 action.deviceIdentifier,

@@ -35,6 +35,9 @@ const initializeStore = () => {
     );
     var store = createStore(reducers, enhancers);
     Reactotron.setReduxStore(store);
+    console.tron.log(
+        `reactotron store ${Reactotron.setReduxStore} should be set to ${store}`,
+    );
     // } else {
     //     // release mode
     //     var sagaMiddleware = createSagaMiddleware();
