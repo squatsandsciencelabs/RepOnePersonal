@@ -106,42 +106,42 @@ function* setupServices(action) {
         }
 
         // calibration
-        if (
-            OpenBarbellConfig.calibrationEnabled &&
-            deviceFamily === 'REP_ONE'
-        ) {
-            // end cal on startup if it's format 2
-            writeData = stringToBytes('endcal');
-            while (true) {
-                try {
-                    // fail out upon disconnect
-                    deviceIdentifier = yield select(
-                        ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
-                    );
-                    if (!deviceIdentifier) {
-                        console.tron.log(
-                            `not connected, giving up on sending endcal`,
-                        );
-                        return;
-                    }
+        // if (
+        //     OpenBarbellConfig.calibrationEnabled &&
+        //     deviceFamily === 'REP_ONE'
+        // ) {
+        //     // end cal on startup if it's format 2
+        //     writeData = stringToBytes('endcal');
+        //     while (true) {
+        //         try {
+        //             // fail out upon disconnect
+        //             deviceIdentifier = yield select(
+        //                 ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
+        //             );
+        //             if (!deviceIdentifier) {
+        //                 console.tron.log(
+        //                     `not connected, giving up on sending endcal`,
+        //                 );
+        //                 return;
+        //             }
 
-                    // write
-                    yield apply(BleManager, BleManager.write, [
-                        action.deviceIdentifier,
-                        REP_ONE_TETHER_REP_SERVICE,
-                        REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
-                        writeData,
-                    ]);
+        //             // write
+        //             yield apply(BleManager, BleManager.write, [
+        //                 action.deviceIdentifier,
+        //                 REP_ONE_TETHER_REP_SERVICE,
+        //                 REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
+        //                 writeData,
+        //             ]);
 
-                    // success, bail
-                    break;
-                } catch (err) {
-                    console.tron.log(
-                        `Error writing endcal, trying again ${err.toString()}`,
-                    );
-                }
-            }
-        }
+        //             // success, bail
+        //             break;
+        //         } catch (err) {
+        //             console.tron.log(
+        //                 `Error writing endcal, trying again ${err.toString()}`,
+        //             );
+        //         }
+        //     }
+        // }
     } catch (err) {
         console.tron.log(
             `Error setting up service after connecting to peripheral ${err}`,
