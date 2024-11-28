@@ -104,38 +104,6 @@ function* setupServices(action) {
             //         );
             //     }
             // }
-
-            // write 1 for bulk data
-            let deviceIdentifier = null;
-            while (true) {
-                try {
-                    // fail out upon disconnect
-                    deviceIdentifier = yield select(
-                        ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier,
-                    );
-                    if (!deviceIdentifier) {
-                        console.tron.log(
-                            `not connected, giving up on sending 1 to write data`,
-                        );
-                        return;
-                    }
-
-                    // write
-                    yield apply(BleManager, BleManager.write, [
-                        deviceIdentifier,
-                        REP_ONE_TETHER_REP_SERVICE,
-                        REP_ONE_TETHER_BULK_DATA_CONTROL_CHARACTERISTIC,
-                        1,
-                    ]);
-
-                    // success, bail
-                    break;
-                } catch (err) {
-                    console.tron.log(
-                        `Error writing integer 1, trying again ${err.toString()}`,
-                    );
-                }
-            }
         }
 
         // calibration
