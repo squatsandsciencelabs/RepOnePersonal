@@ -50,7 +50,7 @@ const AuthSaga = function* AuthSaga() {
             Analytics.setUserID();
             const isSignedIn = yield apply(
                 GoogleSignin,
-                GoogleSignin.isSignedIn,
+                GoogleSignin.hasPreviousSignIn,
             );
             if (isSignedIn) {
                 yield apply(GoogleSignin, GoogleSignin.revokeAccess);
@@ -105,7 +105,10 @@ function* executeInitialAuthentication() {
     }
 
     try {
-        const isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
+        const isSignedIn = yield apply(
+            GoogleSignin,
+            GoogleSignin.hasPreviousSignIn,
+        );
         if (isSignedIn) {
             // normal silent sign in
             yield apply(GoogleSignin, GoogleSignin.signInSilently);
@@ -208,7 +211,10 @@ function* executeReauthenticateLoggedInUser(manual = false) {
         if (manual) {
             userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
         } else {
-            isSignedIn = yield apply(GoogleSignin, GoogleSignin.isSignedIn);
+            isSignedIn = yield apply(
+                GoogleSignin,
+                GoogleSignin.hasPreviousSignIn,
+            );
             if (isSignedIn) {
                 userInfo = yield apply(
                     GoogleSignin,
