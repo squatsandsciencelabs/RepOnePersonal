@@ -66,8 +66,11 @@ export const startDeviceScan =
                 (isManualScan && allPermissionsGranted && !bleManagerStarted)
             ) {
                 try {
-                    await BleManager.start({ showAlert: false });
-                    BluetoothUtils.setDidBleManagerStart(true);
+                    const isStarted = await BleManager.isStarted();
+                    if (!isStarted) {
+                        await BleManager.start({ showAlert: false });
+                        BluetoothUtils.setDidBleManagerStart(true);
+                    }
                 } catch (err) {
                     console.tron.log(
                         `start device scan failed to start blemanager ${JSON.stringify(
@@ -104,8 +107,11 @@ export const startDeviceScan =
                     return;
                 } else {
                     try {
-                        await BleManager.start({ showAlert: false });
-                        BluetoothUtils.setDidBleManagerStart(true);
+                        const isStarted = await BleManager.isStarted();
+                        if (!isStarted) {
+                            await BleManager.start({ showAlert: false });
+                            BluetoothUtils.setDidBleManagerStart(true);
+                        }
                     } catch (err) {
                         console.tron.log(
                             `start device scan failed to start blemanager ${JSON.stringify(

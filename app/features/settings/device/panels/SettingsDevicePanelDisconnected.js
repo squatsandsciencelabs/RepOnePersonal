@@ -11,6 +11,7 @@ import {
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 // TODO: move these into the config file
+const INITIAL_SCAN_DELAY = 2 * 1000;
 const INITIAL_SCAN = 5 * 1000;
 const REFRESH_SCAN = 5 * 1000;
 
@@ -24,7 +25,9 @@ class SettingsDevicePanelDisconnected extends Component {
     componentDidMount() {
         // TODO: don't do this on mounting, do this on startup instead
         // reason is that switching from connected to disconnected will cause this to run unnecessarily
-        this._scanForDevices(INITIAL_SCAN, false);
+        setTimeout(() => {
+            this._scanForDevices(INITIAL_SCAN, false);
+        }, INITIAL_SCAN_DELAY);
     }
 
     componentWillUnmount() {
@@ -39,9 +42,10 @@ class SettingsDevicePanelDisconnected extends Component {
     _scanForDevices(time, isManualScan = true) {
         this.props.startDeviceScan(isManualScan);
 
+        const that = this;
         this.timer = setTimeout(() => {
-            this.props.stopDeviceScan();
-            this.timer = null;
+            that.props.stopDeviceScan();
+            that.timer = null;
         }, time);
     }
 
