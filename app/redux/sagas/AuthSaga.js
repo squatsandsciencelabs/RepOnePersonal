@@ -137,17 +137,17 @@ function* executeLogin() {
         const userInfo = yield apply(GoogleSignin, GoogleSignin.signIn);
 
         // sign into our servers
-        Analytics.setUserID(userInfo.user.id);
+        Analytics.setUserID(userInfo.data.user.id);
         state = yield select();
         logAttemptLoginOpenBarbellAnalytics(state);
-        let json = yield call(API.login, userInfo.idToken);
+        let json = yield call(API.login, userInfo.data.idToken);
 
         // success
         yield put(
             AuthActionCreators.loginSucceeded(
                 json.accessToken,
                 json.refreshToken,
-                userInfo.user.email,
+                userInfo.data.user.email,
                 new Date(),
                 json.revision,
                 json.sets,
@@ -226,20 +226,20 @@ function* executeReauthenticateLoggedInUser(manual = false) {
         }
 
         // sign into our servers
-        Analytics.setUserID(userInfo.user.id);
+        Analytics.setUserID(userInfo.data.user.id);
         state = yield select();
         logAttemptReauthenticateOpenBarbellAnalytics(state);
-        let json = yield call(API.login, userInfo.idToken);
+        let json = yield call(API.login, userInfo.data.idToken);
 
         const origEmail = yield select(AuthSelectors.getEmail);
-        const isDifferentUser = origEmail !== userInfo.user.email;
+        const isDifferentUser = origEmail !== userInfo.data.user.email;
         if (isDifferentUser) {
             // switch accounts, aka lose everything
             yield put(
                 AuthActionCreators.loginSucceeded(
                     json.accessToken,
                     json.refreshToken,
-                    userInfo.user.email,
+                    userInfo.data.user.email,
                     new Date(),
                     json.revision,
                     json.sets,
@@ -254,7 +254,7 @@ function* executeReauthenticateLoggedInUser(manual = false) {
                 AuthActionCreators.reauthenticateSucceeded(
                     json.accessToken,
                     json.refreshToken,
-                    userInfo.user.email,
+                    userInfo.data.user.email,
                     new Date(),
                 ),
             );
