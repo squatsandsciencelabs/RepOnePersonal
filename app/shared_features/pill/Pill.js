@@ -7,7 +7,7 @@ class Pill extends PureComponent {
         this.pillRef = React.createRef();
     }
 
-    setNativeProps(props: Object) {
+    setNativeProps(props) {
         this.pillRef.current?.setNativeProps(props);
     }
 
