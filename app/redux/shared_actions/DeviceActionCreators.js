@@ -125,7 +125,11 @@ export const startDeviceScan =
         } else {
             // scan for device service as all devices should have it
             // BleManager.scan([DEVICE_SERVICE], 99999, false);
-            BleManager.scan([], 99999, false, { scanMode: 2 });
+            BleManager.scan({
+                seconds: 0,
+                allowDuplicates: false,
+                scanMode: 2,
+            });
             const state = getState();
             logAttemptScanAnalytics(state, isManualScan);
 
