@@ -8,7 +8,7 @@ import {
     Alert,
     Platform,
 } from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
@@ -52,13 +52,16 @@ let timer = null;
 
 export default props => {
     const camera = useRef(null);
-    const wideAngleDevices = useCameraDevices(`wide-angle-camera`);
-    // We want the default to be wide-camera-angle but it's causing an android camera issue as
-    // not all devices have wide-camera-angle camera type.
-    const devices = useCameraDevices();
-    // If there is no wide-camera-angle, use the default one
-    const device =
-        wideAngleDevices[props.cameraType] || devices[props.cameraType];
+
+    // Try to use wide-angle camera first, fallback to default if not available
+    // In v4, useCameraDevice automatically handles device selection
+    const wideAngleDevice = useCameraDevice(props.cameraType, {
+        physicalDevices: ['wide-angle-camera'],
+    });
+    const defaultDevice = useCameraDevice(props.cameraType);
+
+    // If there is no wide-angle-camera, use the default one
+    const device = wideAngleDevice || defaultDevice;
 
     useEffect(() => {
         if (props.isRecording) {
