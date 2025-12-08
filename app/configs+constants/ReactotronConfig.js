@@ -1,6 +1,5 @@
 import Reactotron from 'reactotron-react-native';
 import { reactotronRedux } from 'reactotron-redux';
-import sagaPlugin from 'reactotron-redux-saga';
 
 if (__DEV__) {
     // development, enable reactotron
@@ -8,7 +7,6 @@ if (__DEV__) {
         name: 'RepOne',
         host: '192.168.1.198',
     }) // controls connection & communication settings
-        .use(sagaPlugin()) // add all built-in react native plugins
         .use(reactotronRedux()) // add all built-in react native plugins
         .connect(); // let's connect!
 

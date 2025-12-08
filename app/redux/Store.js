@@ -11,7 +11,7 @@ import _ from 'lodash';
 // store imports
 import FilesystemStorage from 'redux-persist-filesystem-storage';
 import { compose, createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import Sagas from 'app/redux/sagas/Sagas';
 import reducers from 'app/redux/reducers/Reducers';
@@ -25,8 +25,7 @@ const initializeStore = () => {
     // create the store
     if (__DEV__) {
         // reactotron development mode
-        const sagaMonitor = Reactotron.createSagaMonitor();
-        var sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+        var sagaMiddleware = createSagaMiddleware();
         const middlewares = applyMiddleware(thunk, sagaMiddleware);
         const enhancers = compose(
             middlewares,

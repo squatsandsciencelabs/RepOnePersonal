@@ -18,7 +18,7 @@ import EditHistoryFilterTagsToExcludeScreen from './tags/tagsToExclude/EditHisto
 import EditHistoryFilterExerciseScreen from './exercise_name/EditHistoryFilterExerciseScreen';
 import Pill from 'app/shared_features/pill/Pill';
 import * as Device from 'app/utility/Device';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import EditHistoryFilterStartDateScreen from './dateRange/startDate/EditHistoryFilterStartScreen';
 import EditHistoryFilterEndDateScreen from './dateRange/endDate/EditHistoryFilterEndScreen';
 import EditHistoryFilterDeviceScreen from './device/EditHistoryFilterDeviceScreen';
@@ -162,7 +162,11 @@ class EditHistoryFilterView extends Component {
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
-                            <Icon name="times-circle" size={15} color="gray" />
+                            <FontAwesome
+                                name="times-circle"
+                                size={15}
+                                color="gray"
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -187,7 +191,11 @@ class EditHistoryFilterView extends Component {
                                 flexDirection: 'row',
                                 alignItems: 'center',
                             }}>
-                            <Icon name="times-circle" size={15} color="gray" />
+                            <FontAwesome
+                                name="times-circle"
+                                size={15}
+                                color="gray"
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -269,7 +277,11 @@ class EditHistoryFilterView extends Component {
                             <Text style={styles.detailText}>
                                 {this._displayMetric(metric)}{' '}
                             </Text>
-                            <Icon name="refresh" size={10} color="gray" />
+                            <FontAwesome
+                                name="refresh"
+                                size={10}
+                                color="gray"
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>

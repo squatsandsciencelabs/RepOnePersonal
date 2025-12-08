@@ -2,13 +2,7 @@
 // leaving this here for dev speed purposes
 import BleManager from 'react-native-ble-manager';
 
-import {
-    NativeModules,
-    NativeEventEmitter,
-    Platform,
-    AppState,
-    Alert,
-} from 'react-native';
+import { Platform, AppState, Alert } from 'react-native';
 import {
     SAVE_WORKOUT_REP,
     SAVE_HISTORY_REP,
@@ -36,11 +30,8 @@ const maxFormatVersion = 2;
 const MTU_SIZE = 185;
 
 export default async function (store) {
-    //native bluetooth
-    const Emitter = new NativeEventEmitter(NativeModules.BleManager);
-
     // scanning
-    Emitter.addListener('BleManagerDiscoverPeripheral', args => {
+    BleManager.onDiscoverPeripheral(args => {
         store.dispatch(
             DeviceActionCreators.foundDevice(
                 getDeviceDisplayName(args.name),
@@ -50,7 +41,7 @@ export default async function (store) {
     });
 
     // connection status
-    Emitter.addListener('BleManagerDidUpdateState', args => {
+    BleManager.onDidUpdateState(args => {
         if (args.state !== 'on') {
             store.dispatch(DeviceActionCreators.bluetoothIsOff());
         } else {
@@ -81,7 +72,7 @@ export default async function (store) {
         }
     });
 
-    Emitter.addListener('BleManagerDisconnectPeripheral', args => {
+    BleManager.onDisconnectPeripheral(args => {
         const state = store.getState();
         const name =
             ConnectedDeviceStatusSelectors.getConnectedDeviceName(state);
@@ -97,7 +88,7 @@ export default async function (store) {
     //     store.dispatch(DeviceActionCreators.connectingToDevice(data.name, data.identifier));
     // });
 
-    Emitter.addListener('BleManagerConnectPeripheral', async args => {
+    BleManager.onConnectPeripheral(async args => {
         // observe reps
         try {
             // get version info
@@ -167,51 +158,176 @@ export default async function (store) {
     });
 
     // data
-    Emitter.addListener(
-        'BleManagerDidUpdateValueForCharacteristic',
-        async args => {
-            try {
-                // api version check
-                const state = store.getState();
-                const formatVersion =
-                    ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
-                if (formatVersion > maxFormatVersion) {
-                    return;
-                }
-                const characteristic = args.characteristic.toUpperCase();
+    BleManager.onDidUpdateValueForCharacteristic(async args => {
+        try {
+            // api version check
+            const state = store.getState();
+            const formatVersion =
+                ConnectedDeviceStatusSelectors.getAPIFormatVersion(state);
+            if (formatVersion > maxFormatVersion) {
+                return;
+            }
+            const characteristic = args.characteristic.toUpperCase();
 
-                // process it
-                // done here instead of actions to a saga to save on number of actions
-                // especially important for bulk data as it gets spammed
-                if (characteristic === BLE_BATTERY_CHARACTERISTIC) {
-                    // Battery percentage changed
-                    const batteryPercentage = args.value[0] ?? null;
-                    store.dispatch(
-                        DeviceActionCreators.updateBatteryPercentage(
-                            batteryPercentage,
-                        ),
-                    );
-                } else if (
-                    characteristic === REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC
-                ) {
-                    // RepOne reps
+            // process it
+            // done here instead of actions to a saga to save on number of actions
+            // especially important for bulk data as it gets spammed
+            if (characteristic === BLE_BATTERY_CHARACTERISTIC) {
+                // Battery percentage changed
+                const batteryPercentage = args.value[0] ?? null;
+                store.dispatch(
+                    DeviceActionCreators.updateBatteryPercentage(
+                        batteryPercentage,
+                    ),
+                );
+            } else if (
+                characteristic === REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC
+            ) {
+                // RepOne reps
 
-                    // variables
+                // variables
+                const typedArray = new Uint8Array(args.value);
+                const data = new Uint16Array(typedArray.buffer);
+
+                const json = formConcentricRepDataJson(data, formatVersion);
+
+                // not sending valid until methods to determine invalid are determined
+                store.dispatch(DeviceActionCreators.receivedLiftData(json));
+            } else if (
+                getKratosEnabled() &&
+                characteristic === KRATOS_REP_SUMMARY_CHARACTERISTIC
+            ) {
+                // Kratos Reps
+
+                // variables
+                const typedArray = new Uint8Array(args.value);
+                const data = new Uint16Array(typedArray.buffer);
+
+                const json = formConcentricEccentricRepDataJson(data);
+
+                store.dispatch(
+                    DeviceActionCreators.receivedKratosLiftData(json),
+                );
+
+                // TODO: Remove this logging statement once kratos reps are properly stored in the codebase
+                console.tron.log(`got kratos reps ${JSON.stringify(json)}`);
+            } else if (
+                characteristic === REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC &&
+                OpenBarbellConfig.bulkEnabled
+            ) {
+                // bulk data
+
+                try {
+                    // parse data
                     const typedArray = new Uint8Array(args.value);
+                    const data = new DataView(typedArray.buffer);
+                    const deviceRepID = data.getUint16(0, true);
+                    const sampleID = data.getUint16(2, true);
+                    const time = data.getUint32(4, true);
+                    const x = data.getInt16(8, true);
+                    const y = data.getInt16(10, true);
+                    const z = data.getInt16(12, true);
+
+                    // add bulk data
+                    addBulkData(
+                        typedArray,
+                        deviceRepID,
+                        sampleID,
+                        time,
+                        x,
+                        y,
+                        z,
+                    );
+
+                    // complete check
+                    const completedData = getBulkData(deviceRepID);
+                    if (completedData !== false && completedData !== true) {
+                        // has real object, save it
+                        const repIndex = completedData.repIndex;
+                        const setID = completedData.setID;
+                        const bulkData = completedData.bulkData;
+
+                        // save to store
+                        if (SetsSelectors.getHistorySet(state, setID)) {
+                            // history has it
+                            store.dispatch({
+                                type: SAVE_HISTORY_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else if (SetsSelectors.getWorkoutSet(state, setID)) {
+                            // workout has it
+                            store.dispatch({
+                                type: SAVE_WORKOUT_REP,
+                                setID,
+                                repIndex,
+                                bulkData,
+                            });
+                        } else {
+                            console.tron.log(
+                                `No set found for rep with device id ${deviceRepID}`,
+                            );
+                        }
+                    }
+                } catch (err) {
+                    console.tron.log(`Error dispatching add bulk data ${err}`);
+                }
+            }
+        } catch (err) {
+            console.tron.log(`Error processing stuff from bluetooth ${err}`);
+        }
+    });
+
+    BleManager.onCentralManagerWillRestoreState(async args => {
+        const appState = AppState.currentState;
+        // if the app is in the background, restore the state - it means it was invoked by the peripheral sending data
+        // if the app is reopened by user - don't restore state as it will re-add rep to the workout (duplicate last received data)
+        if (appState === 'active') {
+            return;
+        }
+        // updating connected device state so that other handler doesn't call `disconnectDevice` action
+        store.dispatch(DeviceActionCreators.restoredBLEState());
+        // Restore the state of each connected peripheral
+        for (const peripheral of args.peripherals) {
+            try {
+                // searching for the rep data
+                const version = peripheral.characteristics.find(
+                    c =>
+                        c.characteristic.toUpperCase() ===
+                        DEVICE_INFO_CHARACTERISTIC,
+                ).value.bytes;
+
+                const typedArray = new Uint8Array(version);
+                const data16 = new Uint16Array(typedArray.buffer);
+
+                const formatVersion = data16[0];
+
+                const repOneCharacteristic = peripheral.characteristics.find(
+                    c =>
+                        c.characteristic.toUpperCase() ===
+                        REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
+                );
+
+                const kratosCharacteristic = peripheral.characteristics.find(
+                    c =>
+                        c.characteristic.toUpperCase() ===
+                        KRATOS_REP_SUMMARY_CHARACTERISTIC,
+                );
+
+                if (repOneCharacteristic) {
+                    const typedArray = new Uint8Array(
+                        repOneCharacteristic.value.bytes,
+                    );
                     const data = new Uint16Array(typedArray.buffer);
 
                     const json = formConcentricRepDataJson(data, formatVersion);
 
-                    // not sending valid until methods to determine invalid are determined
                     store.dispatch(DeviceActionCreators.receivedLiftData(json));
-                } else if (
-                    getKratosEnabled() &&
-                    characteristic === KRATOS_REP_SUMMARY_CHARACTERISTIC
-                ) {
-                    // Kratos Reps
-
-                    // variables
-                    const typedArray = new Uint8Array(args.value);
+                } else if (kratosCharacteristic) {
+                    const typedArray = new Uint8Array(
+                        kratosCharacteristic.value.bytes,
+                    );
                     const data = new Uint16Array(typedArray.buffer);
 
                     const json = formConcentricEccentricRepDataJson(data);
@@ -219,185 +335,40 @@ export default async function (store) {
                     store.dispatch(
                         DeviceActionCreators.receivedKratosLiftData(json),
                     );
-
-                    // TODO: Remove this logging statement once kratos reps are properly stored in the codebase
-                    console.tron.log(`got kratos reps ${JSON.stringify(json)}`);
-                } else if (
-                    characteristic ===
-                        REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC &&
-                    OpenBarbellConfig.bulkEnabled
-                ) {
-                    // bulk data
-
-                    try {
-                        // parse data
-                        const typedArray = new Uint8Array(args.value);
-                        const data = new DataView(typedArray.buffer);
-                        const deviceRepID = data.getUint16(0, true);
-                        const sampleID = data.getUint16(2, true);
-                        const time = data.getUint32(4, true);
-                        const x = data.getInt16(8, true);
-                        const y = data.getInt16(10, true);
-                        const z = data.getInt16(12, true);
-
-                        // add bulk data
-                        addBulkData(
-                            typedArray,
-                            deviceRepID,
-                            sampleID,
-                            time,
-                            x,
-                            y,
-                            z,
-                        );
-
-                        // complete check
-                        const completedData = getBulkData(deviceRepID);
-                        if (completedData !== false && completedData !== true) {
-                            // has real object, save it
-                            const repIndex = completedData.repIndex;
-                            const setID = completedData.setID;
-                            const bulkData = completedData.bulkData;
-
-                            // save to store
-                            if (SetsSelectors.getHistorySet(state, setID)) {
-                                // history has it
-                                store.dispatch({
-                                    type: SAVE_HISTORY_REP,
-                                    setID,
-                                    repIndex,
-                                    bulkData,
-                                });
-                            } else if (
-                                SetsSelectors.getWorkoutSet(state, setID)
-                            ) {
-                                // workout has it
-                                store.dispatch({
-                                    type: SAVE_WORKOUT_REP,
-                                    setID,
-                                    repIndex,
-                                    bulkData,
-                                });
-                            } else {
-                                console.tron.log(
-                                    `No set found for rep with device id ${deviceRepID}`,
-                                );
-                            }
-                        }
-                    } catch (err) {
-                        console.tron.log(
-                            `Error dispatching add bulk data ${err}`,
-                        );
-                    }
                 }
-            } catch (err) {
-                console.tron.log(
-                    `Error processing stuff from bluetooth ${err}`,
+
+                store.dispatch(
+                    DeviceActionCreators.connectDevice(
+                        getDeviceDisplayName(peripheral.name),
+                        peripheral.id,
+                    ),
                 );
-            }
-        },
-    );
 
-    Emitter.addListener(
-        'BleManagerCentralManagerWillRestoreState',
-        async args => {
-            const appState = AppState.currentState;
-            // if the app is in the background, restore the state - it means it was invoked by the peripheral sending data
-            // if the app is reopened by user - don't restore state as it will re-add rep to the workout (duplicate last received data)
-            if (appState === 'active') {
-                return;
-            }
-            // updating connected device state so that other handler doesn't call `disconnectDevice` action
-            store.dispatch(DeviceActionCreators.restoredBLEState());
-            // Restore the state of each connected peripheral
-            for (const peripheral of args.peripherals) {
-                try {
-                    // searching for the rep data
-                    const version = peripheral.characteristics.find(
-                        c =>
-                            c.characteristic.toUpperCase() ===
-                            DEVICE_INFO_CHARACTERISTIC,
-                    ).value.bytes;
+                const isPeripheralConnected =
+                    await BleManager.isPeripheralConnected(peripheral.id);
 
-                    const typedArray = new Uint8Array(version);
-                    const data16 = new Uint16Array(typedArray.buffer);
-
-                    const formatVersion = data16[0];
-
-                    const repOneCharacteristic =
-                        peripheral.characteristics.find(
-                            c =>
-                                c.characteristic.toUpperCase() ===
-                                REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
-                        );
-
-                    const kratosCharacteristic =
-                        peripheral.characteristics.find(
-                            c =>
-                                c.characteristic.toUpperCase() ===
-                                KRATOS_REP_SUMMARY_CHARACTERISTIC,
-                        );
-
-                    if (repOneCharacteristic) {
-                        const typedArray = new Uint8Array(
-                            repOneCharacteristic.value.bytes,
-                        );
-                        const data = new Uint16Array(typedArray.buffer);
-
-                        const json = formConcentricRepDataJson(
-                            data,
-                            formatVersion,
-                        );
-
-                        store.dispatch(
-                            DeviceActionCreators.receivedLiftData(json),
-                        );
-                    } else if (kratosCharacteristic) {
-                        const typedArray = new Uint8Array(
-                            kratosCharacteristic.value.bytes,
-                        );
-                        const data = new Uint16Array(typedArray.buffer);
-
-                        const json = formConcentricEccentricRepDataJson(data);
-
-                        store.dispatch(
-                            DeviceActionCreators.receivedKratosLiftData(json),
-                        );
-                    }
-
+                if (isPeripheralConnected) {
                     store.dispatch(
-                        DeviceActionCreators.connectDevice(
+                        DeviceActionCreators.connectedToDevice(
+                            peripheral.id,
+                            formatVersion,
+                            `${data16[1]}.${data16[2]}.${data16[3]}`,
+                            null,
+                        ),
+                    );
+                } else {
+                    store.dispatch(
+                        DeviceActionCreators.disconnectedFromDevice(
                             getDeviceDisplayName(peripheral.name),
                             peripheral.id,
                         ),
                     );
-
-                    const isPeripheralConnected =
-                        await BleManager.isPeripheralConnected(peripheral.id);
-
-                    if (isPeripheralConnected) {
-                        store.dispatch(
-                            DeviceActionCreators.connectedToDevice(
-                                peripheral.id,
-                                formatVersion,
-                                `${data16[1]}.${data16[2]}.${data16[3]}`,
-                                null,
-                            ),
-                        );
-                    } else {
-                        store.dispatch(
-                            DeviceActionCreators.disconnectedFromDevice(
-                                getDeviceDisplayName(peripheral.name),
-                                peripheral.id,
-                            ),
-                        );
-                    }
-                } catch (err) {
-                    console.tron.log(`Error while state restoration ${err}`);
                 }
+            } catch (err) {
+                console.tron.log(`Error while state restoration ${err}`);
             }
-        },
-    );
+        }
+    });
 
     try {
         if (Platform.OS !== 'ios') {

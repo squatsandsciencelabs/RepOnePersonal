@@ -16,7 +16,7 @@ import EditAnalysisTagsToIncludeScreen from './tags/tagsToInclude/EditAnalysisTa
 import EditAnalysisTagsToExcludeScreen from './tags/tagsToExclude/EditAnalysisTagsToExcludeScreen';
 import Pill from 'app/shared_features/pill/Pill';
 import WhatIsOneRMScreen from './whatis/WhatIsOneRMScreen';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 
 class OneRMView extends Component {
     // using component level state vs redux here to avoid excessive dispatches for the sliders
@@ -151,7 +151,7 @@ class OneRMView extends Component {
                                 }}>
                                 {this.props.exercise}
                             </Text>
-                            <Icon
+                            <FontAwesome
                                 name="caret-down"
                                 size={10}
                                 color="white"
@@ -318,10 +318,10 @@ class OneRMView extends Component {
                             top: 0,
                         }}
                         onPress={() => this.props.presentInfoModal()}>
-                        <Icon
+                        <FontAwesome
                             name="question-circle"
                             size={20}
-                            color="rgba(47, 128, 237, 1)"></Icon>
+                            color="rgba(47, 128, 237, 1)"></FontAwesome>
                     </TouchableOpacity>
                     <WhatIsOneRMScreen />
                     {this._renderForms()}

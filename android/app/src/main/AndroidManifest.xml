@@ -1,6 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.reponestrength.personal.staging">
-    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="31" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
@@ -31,7 +29,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:requestLegacyExternalStorage="true"
-      android:theme="@style/AppTheme"> <!-- requestLegacyExternalStorage due to Android 11 scoped storage -->
+      android:theme="@style/AppTheme"
+      android:supportsRtl="true">
       <activity
         android:name=".MainActivity"
         android:screenOrientation="portrait"

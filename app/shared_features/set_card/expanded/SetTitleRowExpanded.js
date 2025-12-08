@@ -7,7 +7,7 @@ import {
     Platform,
     TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import { Entypo } from '@react-native-vector-icons/entypo';
 
 class SetTitleRowExpanded extends Component {
     _renderExercise() {
@@ -38,7 +38,7 @@ class SetTitleRowExpanded extends Component {
         if (this.props.isCollapsable) {
             return (
                 <View>
-                    <Icon
+                    <Entypo
                         name="chevron-with-circle-up"
                         size={20}
                         color="rgba(170, 170, 170, 1)"

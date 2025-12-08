@@ -8,7 +8,7 @@ import {
     Platform,
     TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import { Entypo } from '@react-native-vector-icons/entypo';
 import * as FileSystem from 'expo-file-system';
 import {
     generateThumbnail,
@@ -112,7 +112,7 @@ class SetTitleRowCollapsed extends Component {
                 style={styles.chevronContainer}
                 onPress={() => this.props.tappedExpand(this.props.setID)}>
                 <View>
-                    <Icon
+                    <Entypo
                         name="chevron-with-circle-down"
                         size={20}
                         color="rgba(170, 170, 170, 1)"

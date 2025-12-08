@@ -7,7 +7,7 @@ import {
     Platform,
     Modal,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
 
@@ -36,7 +36,7 @@ class WhatIsOneRMView extends Component {
                                 style={{ position: 'absolute', left: 0, top }}>
                                 <TouchableOpacity onPress={() => this._close()}>
                                     <View style={styles.nav}>
-                                        <Icon
+                                        <FontAwesome
                                             name="times-circle"
                                             size={20}
                                             color="red"

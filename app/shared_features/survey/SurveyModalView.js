@@ -9,7 +9,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import WebView from 'react-native-webview';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import * as Device from 'app/utility/Device';
 
 class SurveyModalView extends Component {
@@ -51,7 +51,11 @@ class SurveyModalView extends Component {
                 <View style={{ position: 'absolute', left: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this._close()}>
                         <View style={styles.nav}>
-                            <Icon name="times-circle" size={20} color="red" />
+                            <FontAwesome
+                                name="times-circle"
+                                size={20}
+                                color="red"
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>
