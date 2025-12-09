@@ -1,6 +1,5 @@
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/analytics';
-import '@react-native-firebase/messaging';
 import '@react-native-firebase/crashlytics';
 import '@react-native-firebase/remote-config';
 

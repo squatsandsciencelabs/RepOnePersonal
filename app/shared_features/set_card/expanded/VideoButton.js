@@ -8,7 +8,7 @@ import {
     Image,
     Platform,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import {
     generateThumbnail,
     waitUntilFileExists,
@@ -81,7 +81,7 @@ class VideoButton extends Component {
                                 styles.button,
                                 styles.activeButton,
                             ]}>
-                            <Icon
+                            <FontAwesome
                                 name="camera"
                                 size={20}
                                 color="rgba(47, 128, 227, 1)"
@@ -109,7 +109,7 @@ class VideoButton extends Component {
                                         styles.buttonContent,
                                         { flex: 1, flexDirection: 'column' },
                                     ]}>
-                                    <Icon
+                                    <FontAwesome
                                         name="camera"
                                         size={20}
                                         color="gray"

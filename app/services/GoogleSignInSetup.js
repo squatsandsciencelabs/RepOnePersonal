@@ -16,7 +16,7 @@ export const configure = async () => {
         await GoogleSignin.hasPlayServices(); // probably should do this every time to force the await
         const user = await GoogleSignin.getCurrentUser();
         if (user !== null) {
-            Analytics.setUserID(user.id);
+            Analytics.setUserID(user.user.id);
         } else {
             Analytics.setUserID();
         }

@@ -14,7 +14,7 @@ import {
     Platform,
     Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import Pill from 'app/shared_features/pill/Pill';
 import * as Analytics from 'app/services/Analytics';
 
@@ -225,7 +225,11 @@ class SetForm extends Component {
                             <Text style={styles.detailText}>
                                 {this._displayMetric()}{' '}
                             </Text>
-                            <Icon name="refresh" size={10} color="gray" />
+                            <FontAwesome
+                                name="refresh"
+                                size={10}
+                                color="gray"
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>

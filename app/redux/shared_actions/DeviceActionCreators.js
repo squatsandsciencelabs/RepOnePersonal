@@ -66,8 +66,11 @@ export const startDeviceScan =
                 (isManualScan && allPermissionsGranted && !bleManagerStarted)
             ) {
                 try {
-                    await BleManager.start({ showAlert: false });
-                    BluetoothUtils.setDidBleManagerStart(true);
+                    const isStarted = await BleManager.isStarted();
+                    if (!isStarted) {
+                        await BleManager.start({ showAlert: false });
+                        BluetoothUtils.setDidBleManagerStart(true);
+                    }
                 } catch (err) {
                     console.tron.log(
                         `start device scan failed to start blemanager ${JSON.stringify(
@@ -104,8 +107,11 @@ export const startDeviceScan =
                     return;
                 } else {
                     try {
-                        await BleManager.start({ showAlert: false });
-                        BluetoothUtils.setDidBleManagerStart(true);
+                        const isStarted = await BleManager.isStarted();
+                        if (!isStarted) {
+                            await BleManager.start({ showAlert: false });
+                            BluetoothUtils.setDidBleManagerStart(true);
+                        }
                     } catch (err) {
                         console.tron.log(
                             `start device scan failed to start blemanager ${JSON.stringify(
@@ -125,7 +131,11 @@ export const startDeviceScan =
         } else {
             // scan for device service as all devices should have it
             // BleManager.scan([DEVICE_SERVICE], 99999, false);
-            BleManager.scan([], 99999, false, { scanMode: 2 });
+            BleManager.scan({
+                seconds: 0,
+                allowDuplicates: false,
+                scanMode: 2,
+            });
             const state = getState();
             logAttemptScanAnalytics(state, isManualScan);
 
