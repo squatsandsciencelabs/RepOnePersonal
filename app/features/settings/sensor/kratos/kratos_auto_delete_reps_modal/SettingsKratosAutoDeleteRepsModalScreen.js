@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import * as Actions from 'app/features/settings/sensor/kratos/kratos_auto_delete_reps_modal/SettingsKratosAutoDeleteRepsModalActions';
 import { connect } from 'react-redux';
 import PickerModal from 'app/shared_features/picker/PickerModal';
+import Localized from 'app/services/Localization';
 
 const MIN_AUTO_DELETE_REPS = 0;
 const MAX_AUTO_DELETE_REPS = 5;
@@ -12,7 +13,7 @@ const buildKratosAutoDeleteItemsFromRange = (min = 0, max = 5) => {
 
     for (let i = min; i <= max; i++) {
         items.push({
-            label: `${i} reps`,
+            label: Localized('REPS_COUNT', { count: i }),
             value: i,
         });
     }

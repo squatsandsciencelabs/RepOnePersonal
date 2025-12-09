@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsOTAReadyPanel extends Component {
     render() {
@@ -14,7 +15,9 @@ class SettingsOTAReadyPanel extends Component {
                         ]}
                         onPress={this.props.install.bind(this)}>
                         <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                            Install on {this.props.connectedDevice}
+                            {Localized('INSTALL_ON_DEVICE', {
+                                device: this.props.connectedDevice,
+                            })}
                         </Text>
                     </TouchableOpacity>
                     <Text
@@ -22,9 +25,11 @@ class SettingsOTAReadyPanel extends Component {
                             SETTINGS_PANEL_STYLES.subtitleText,
                             { textAlign: 'left' },
                         ]}>
-                        The connected RepOne Device is{' '}
+                        {Localized('CONNECTED_REPONE_DEVICE')}{' '}
                         <Text style={{ fontWeight: 'bold', fontSize: 13 }}>
-                            Version {this.props.deviceFirmwareVersion}
+                            {Localized('SENSOR_VERSION', {
+                                version: this.props.deviceFirmwareVersion,
+                            })}
                         </Text>
                     </Text>
                     <Text
@@ -37,8 +42,7 @@ class SettingsOTAReadyPanel extends Component {
                                 marginTop: 3,
                             },
                         ]}>
-                        To install on another RepOne Device, connect to it
-                        below.
+                        {Localized('INSTALL_ON_ANOTHER_REPONE_DEVICE_MESSAGE')}
                     </Text>
                 </View>
             ) : (
@@ -53,7 +57,7 @@ class SettingsOTAReadyPanel extends Component {
                             paddingBottom: 15,
                         },
                     ]}>
-                    To install on a RepOne Device, connect to it below.
+                    {Localized('INSTALL_ON_REPONE_DEVICE_MESSAGE')}
                 </Text>
             );
 
@@ -64,7 +68,9 @@ class SettingsOTAReadyPanel extends Component {
                         SETTINGS_PANEL_STYLES.subtitleText,
                         { fontWeight: 'bold' },
                     ]}>
-                    Version {this.props.firmwareVersion} files downloaded
+                    {Localized('VERSION_FILES_DOWNLOADED', {
+                        version: this.props.firmwareVersion,
+                    })}
                 </Text>
 
                 {install}
@@ -78,7 +84,7 @@ class SettingsOTAReadyPanel extends Component {
                         },
                     ]}
                     onPress={this.props.deleteDownload.bind(this)}>
-                    I'm done, delete update files
+                    {Localized('DELETE_UPDATED_FILES')}
                 </Text>
             </View>
         );

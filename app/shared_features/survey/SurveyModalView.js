@@ -11,6 +11,7 @@ import {
 import WebView from 'react-native-webview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Device from 'app/utility/Device';
+import Localized from 'app/services/Localization';
 
 class SurveyModalView extends Component {
     _close() {
@@ -37,7 +38,8 @@ class SurveyModalView extends Component {
                         height: 20,
                         width: 9001,
                         backgroundColor: 'black',
-                    }}></View>
+                    }}
+                />
             );
         } else {
             var statusBar = null;
@@ -57,7 +59,9 @@ class SurveyModalView extends Component {
                 </View>
 
                 <View style={styles.navTitle}>
-                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>Survey</Text>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                        {Localized('SURVEY')}
+                    </Text>
                 </View>
             </View>
         );

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import * as Device from 'app/utility/Device';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 export default function (props) {
     return (
@@ -44,7 +45,8 @@ const renderNavigation = props => {
                     height: 20,
                     width: 9001,
                     backgroundColor: 'black',
-                }}></View>
+                }}
+            />
         );
     } else {
         var statusBar = null;
@@ -56,7 +58,7 @@ const renderNavigation = props => {
                 <TouchableOpacity onPress={() => props.cancelCalibration()}>
                     <View style={styles.nav}>
                         <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                            Cancel
+                            {Localized('CANCEL')}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -67,7 +69,7 @@ const renderNavigation = props => {
             <View style={{ position: 'absolute', left: 0, top: 3 }}>
                 <View style={styles.nav}>
                     <Text style={[{ color: 'rgba(130, 130, 130, 1)' }]}>
-                        Cancel
+                        {Localized('CANCEL')}
                     </Text>
                 </View>
             </View>
@@ -81,7 +83,9 @@ const renderNavigation = props => {
             {cancel}
 
             <View style={styles.navTitle}>
-                <Text style={styles.navTitleText}>3D Calibration</Text>
+                <Text style={styles.navTitleText}>
+                    {Localized('3D_CALIBRATION')}
+                </Text>
             </View>
         </View>
     );
@@ -99,12 +103,13 @@ const renderStep1 = props => {
                     SETTINGS_PANEL_STYLES.panel,
                     { padding: 20, flexDirection: 'column' },
                 ]}>
-                <Text style={styles.titleText}>Step 1</Text>
+                <Text style={styles.titleText}>
+                    {Localized('CALIBRATION_STEP_1.TITLE')}
+                </Text>
                 <Text style={styles.text}>
-                    Pull the tether out at least one foot, and make sure no
-                    objects (including your hand) are near the nozzle{' '}
+                    {Localized('CALIBRATION_STEP_1.TEXT_1')}
                     <Text style={styles.boldText}>
-                        before you begin calibration
+                        {Localized('CALIBRATION_STEP_1.TEXT_1_HIGHLIGHT')}
                     </Text>
                     .
                 </Text>
@@ -119,7 +124,7 @@ const renderStep1 = props => {
                     ]}
                     onPress={props.startCalibration.bind(this)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        I’m holding the tether, start calibration
+                        {Localized('CALIBRATION_STEP_1.BUTTON_LABEL')}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -139,10 +144,11 @@ const renderStep2 = props => {
                     SETTINGS_PANEL_STYLES.panel,
                     { padding: 20, flexDirection: 'column' },
                 ]}>
-                <Text style={styles.titleText}>Step 2</Text>
+                <Text style={styles.titleText}>
+                    {Localized('CALIBRATION_STEP_2.TITLE')}
+                </Text>
                 <Text style={styles.text}>
-                    Pull the tether to a sharp angle and move it in circles
-                    around the perimeter of the nozzle.
+                    {Localized('CALIBRATION_STEP_2.TEXT_1')}
                 </Text>
                 <View style={styles.doubleImageStyle}>
                     <Image
@@ -153,10 +159,9 @@ const renderStep2 = props => {
                     />
                 </View>
                 <Text style={styles.text}>
-                    Continue to circle the nozzle until you{' '}
+                    {Localized('CALIBRATION_STEP_2.TEXT_2')}
                     <Text style={styles.boldText}>
-                        no longer see the numbers on the device’s screen
-                        changing.
+                        {Localized('CALIBRATION_STEP_2.TEXT_2_HIGHLIGHT')}
                     </Text>
                 </Text>
                 <TouchableOpacity
@@ -166,7 +171,7 @@ const renderStep2 = props => {
                     ]}
                     onPress={props.finishCalibration.bind(this)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        The numbers are no longer changing
+                        {Localized('CALIBRATION_STEP_2.BUTTON_LABEL')}
                     </Text>
                 </TouchableOpacity>
             </View>

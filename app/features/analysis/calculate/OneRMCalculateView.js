@@ -17,6 +17,7 @@ import EditAnalysisTagsToExcludeScreen from './tags/tagsToExclude/EditAnalysisTa
 import Pill from 'app/shared_features/pill/Pill';
 import WhatIsOneRMScreen from './whatis/WhatIsOneRMScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Localized from 'app/services/Localization';
 
 class OneRMView extends Component {
     // using component level state vs redux here to avoid excessive dispatches for the sliders
@@ -60,7 +61,7 @@ class OneRMView extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Tags
+                    {Localized('TAGS')}
                 </Text>
             );
         }
@@ -100,7 +101,7 @@ class OneRMView extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Tags
+                    {Localized('TAGS')}
                 </Text>
             );
         }
@@ -158,11 +159,15 @@ class OneRMView extends Component {
                                 style={{ right: 5, position: 'absolute' }}
                             />
                         </TouchableOpacity>
-                        <Text style={styles.labelText}>Tags Must Include:</Text>
+                        <Text style={styles.labelText}>
+                            {Localized('TAGS_MUST_INCLUDE')}:
+                        </Text>
                         <View style={{ marginTop: 5, marginBottom: 10 }}>
                             {this._renderTagsToInclude()}
                         </View>
-                        <Text style={styles.labelText}>Tags to Exclude:</Text>
+                        <Text style={styles.labelText}>
+                            {Localized('TAGS_TO_INCLUDE')}:
+                        </Text>
                         <View style={{ marginTop: 5 }}>
                             {this._renderTagsToExclude()}
                         </View>
@@ -227,9 +232,13 @@ class OneRMView extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
-                    <Text style={styles.labelText}>Date Range</Text>
+                    <Text style={styles.labelText}>
+                        {Localized('DATE_RANGE')}
+                    </Text>
                     <Text style={styles.numberStyle}>
-                        {Math.abs(this.state.days)} days
+                        {Localized('DAYS_COUNT', {
+                            count: Math.abs(this.state.days),
+                        })}
                     </Text>
                 </View>
                 <Slider
@@ -256,9 +265,13 @@ class OneRMView extends Component {
                         justifyContent: 'space-between',
                         marginTop: 10,
                     }}>
-                    <Text style={styles.labelText}>Velocity at 1RM</Text>
+                    <Text style={styles.labelText}>
+                        {Localized('VELOCITY_AT_1RM')}
+                    </Text>
                     <Text style={styles.numberStyle}>
-                        {this.state.velocity} m/s
+                        {Localized('METERS_PER_SECOND_COUNT', {
+                            mps: this.state.velocity,
+                        })}
                     </Text>
                 </View>
                 <Slider
@@ -288,7 +301,9 @@ class OneRMView extends Component {
         return (
             <View style={[styles.button, { marginTop: 25 }]}>
                 <TouchableOpacity onPress={() => this.props.calcE1RM()}>
-                    <Text style={styles.buttonText}>Calculate</Text>
+                    <Text style={styles.buttonText}>
+                        {Localized('CALCULATE')}
+                    </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -308,7 +323,7 @@ class OneRMView extends Component {
                         justifyContent: 'center',
                     }}>
                     <Text style={[{ marginBottom: 25 }, styles.titleText]}>
-                        Estimated One-Rep Max
+                        {Localized('ESTIMATED_ONE_REP_MAX')}
                     </Text>
                     <TouchableOpacity
                         style={{
@@ -321,7 +336,8 @@ class OneRMView extends Component {
                         <Icon
                             name="question-circle"
                             size={20}
-                            color="rgba(47, 128, 237, 1)"></Icon>
+                            color="rgba(47, 128, 237, 1)"
+                        />
                     </TouchableOpacity>
                     <WhatIsOneRMScreen />
                     {this._renderForms()}

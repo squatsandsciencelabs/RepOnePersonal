@@ -3,6 +3,7 @@ import { Text, View, Image } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import Localized from 'app/services/Localization';
 
 // displays connecting device info
 class SettingsDevicePanelConnecting extends Component {
@@ -21,7 +22,9 @@ class SettingsDevicePanelConnecting extends Component {
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
                 <View style={SETTINGS_PANEL_STYLES.header}>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Connecting to {this.props.device}...
+                        {Localized('CONNECTING_TO_DEVICE', {
+                            device: this.props.device,
+                        })}
                     </Text>
                 </View>
                 <View style={SETTINGS_PANEL_STYLES.content}>

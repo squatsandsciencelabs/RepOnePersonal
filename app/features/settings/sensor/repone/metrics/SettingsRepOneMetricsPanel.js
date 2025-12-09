@@ -6,8 +6,7 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 import SettingsEditQuantifiersScreen from './quantifier/SettingsEditQuantifiersScreen';
 import SettingsEditMetricsScreen from './metric/SettingsEditMetricsScreen';
-
-const TABLE_HEADERS = ['REP METRIC', 'SET METRIC'];
+import Localized from 'app/services/Localization';
 
 class SettingsRepOneSensorSetMetrics extends Component {
     handleMetricPress = row => {
@@ -21,17 +20,19 @@ class SettingsRepOneSensorSetMetrics extends Component {
     renderTableHeaders = () => {
         return (
             <DataTable.Header style={styles.header}>
-                {TABLE_HEADERS.map((metric, index) => {
-                    return (
-                        <DataTable.Title
-                            key={`metric-${index}`}
-                            style={{
-                                paddingVertical: 0,
-                            }}>
-                            <Text style={styles.metric}>{metric}</Text>
-                        </DataTable.Title>
-                    );
-                })}
+                {[Localized('REP_METRIC'), Localized('SET_METRIC')].map(
+                    (metric, index) => {
+                        return (
+                            <DataTable.Title
+                                key={`metric-${index}`}
+                                style={{
+                                    paddingVertical: 0,
+                                }}>
+                                <Text style={styles.metric}>{metric}</Text>
+                            </DataTable.Title>
+                        );
+                    },
+                )}
             </DataTable.Header>
         );
     };
@@ -111,7 +112,9 @@ class SettingsRepOneSensorSetMetrics extends Component {
         return (
             <View>
                 <Text style={styles.labelText}>
-                    {this.props.sensorName} set metrics
+                    {Localized('SENSOR_SET_METRICS', {
+                        sensor: this.props.sensorName,
+                    })}
                 </Text>
 
                 <DataTable style={{ marginTop: 13 }}>

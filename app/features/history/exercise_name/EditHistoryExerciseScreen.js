@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditHistoryExerciseActions';
+import Localized from 'app/services/Localization';
 
-const title = 'Edit Exercise';
-const placeholder = 'Enter Exercise';
+const title = Localized('EDIT_EXERCISE');
+const placeholder = Localized('ENTER_EXERCISE');
 
 const mapStateToProps = state => ({
     title,

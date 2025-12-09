@@ -13,6 +13,7 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Localized from 'app/services/Localization';
 
 function record(props, camera) {
     camera.current.startRecording({
@@ -52,7 +53,7 @@ let timer = null;
 
 export default props => {
     const camera = useRef(null);
-    const wideAngleDevices = useCameraDevices(`wide-angle-camera`);
+    const wideAngleDevices = useCameraDevices('wide-angle-camera');
     // We want the default to be wide-camera-angle but it's causing an android camera issue as
     // not all devices have wide-camera-angle camera type.
     const devices = useCameraDevices();
@@ -87,7 +88,9 @@ export default props => {
             }
         };
     }, [props.isRecording]);
-    if (device == null) return null;
+    if (device == null) {
+        return null;
+    }
     return (
         <Modal visible={props.isModalShowing} animationType="fade">
             {renderCamera(props, camera, device)}
@@ -121,7 +124,9 @@ function renderCamera(props, camera, device) {
                             }
                         }}>
                         <View>
-                            <Text style={styles.cancelText}>Cancel</Text>
+                            <Text style={styles.cancelText}>
+                                {Localized('CANCEL')}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -147,14 +152,18 @@ function renderActionButton(props) {
     if (props.isSaving) {
         return (
             <View style={[styles.actionButton, styles.savingButton]}>
-                <Text style={styles.buttonText}>SAVING</Text>
+                <Text style={styles.buttonText}>
+                    {Localized('VIDEO_ACTION_BUTTON_LABEL.SAVING')}
+                </Text>
             </View>
         );
     } else if (props.isRecording) {
         return (
             <TouchableOpacity onPress={() => props.tappedStop()}>
                 <View style={[styles.actionButton, styles.stopButton]}>
-                    <Text style={styles.buttonText}>END</Text>
+                    <Text style={styles.buttonText}>
+                        {Localized('VIDEO_ACTION_BUTTON_LABEL.END')}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -162,7 +171,9 @@ function renderActionButton(props) {
         return (
             <TouchableOpacity onPress={() => props.tappedStart(props.setID)}>
                 <View style={[styles.actionButton, styles.startButton]}>
-                    <Text style={styles.buttonText}>START</Text>
+                    <Text style={styles.buttonText}>
+                        {Localized('VIDEO_ACTION_BUTTON_LABEL.START')}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -172,7 +183,7 @@ function renderActionButton(props) {
 function renderToggleCameraTypeButton(props) {
     // need to return empty view as button remains but is not clickable if not returning anything
     if (props.isRecording || props.isSaving) {
-        return <View></View>;
+        return <View />;
     } else {
         return (
             <View style={styles.flipButton}>

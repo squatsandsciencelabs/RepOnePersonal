@@ -22,6 +22,7 @@ import {
 } from 'app/utility/KratosUtils';
 import { millimetersToMeters } from 'app/utility/DistanceConversion';
 import { newtonsToPounds } from 'app/utility/ForceConversion';
+import Localized from 'app/services/Localization';
 
 // TODO: Update the functions to no longer calculate power and force via bulk data.
 //  For context, we were originally going to calculate power and force via bulk data
@@ -152,7 +153,7 @@ export const numFieldsEntered = set => {
     let num_fields_entered = 0;
 
     fields.forEach(field => {
-        if (Boolean(field)) {
+        if (field) {
             num_fields_entered++;
         }
     });
@@ -218,7 +219,7 @@ export const markerDisplayValue = (set, metric) => {
         metric +
         ', ' +
         getFastestUsableAvgVelocity(set) +
-        'm/s'
+        Localized('UNIT.MS')
     );
 };
 
@@ -708,7 +709,7 @@ export const getPeakHeight = (bulkDataArray, peakIndex) => {
 
 // display helpers, mayb should go into another file honestly
 
-const INVALID = 'INV';
+const INVALID = Localized('INVALID_METRIC');
 const EMPTY = '---';
 
 export const getDisplayMetric = (metric, rep, set = null) =>

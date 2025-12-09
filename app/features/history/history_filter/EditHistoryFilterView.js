@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import EditHistoryFilterStartDateScreen from './dateRange/startDate/EditHistoryFilterStartScreen';
 import EditHistoryFilterEndDateScreen from './dateRange/endDate/EditHistoryFilterEndScreen';
 import EditHistoryFilterDeviceScreen from './device/EditHistoryFilterDeviceScreen';
+import Localized from 'app/services/Localization';
 
 class EditHistoryFilterView extends Component {
     _close() {
@@ -38,7 +39,7 @@ class EditHistoryFilterView extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Tags
+                    {Localized('TAGS')}
                 </Text>
             );
         }
@@ -78,7 +79,7 @@ class EditHistoryFilterView extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Tags
+                    {Localized('TAGS')}
                 </Text>
             );
         }
@@ -114,7 +115,7 @@ class EditHistoryFilterView extends Component {
         if (this.props.exercise === null || this.props.exercise === '') {
             return (
                 <Text style={[styles.fieldText, styles.placeholderText]}>
-                    Exercise
+                    {Localized('EXERCISE')}
                 </Text>
             );
         }
@@ -125,7 +126,7 @@ class EditHistoryFilterView extends Component {
         if (this.props.startDate === null || this.props.startDate === '') {
             return (
                 <Text style={[styles.fieldText, styles.placeholderText]}>
-                    from
+                    {Localized('DATE_FROM')}
                 </Text>
             );
         }
@@ -137,7 +138,7 @@ class EditHistoryFilterView extends Component {
         if (this.props.endDate === null || this.props.endDate === '') {
             return (
                 <Text style={[styles.fieldText, styles.placeholderText]}>
-                    to
+                    {Localized('DATE_TO')}
                 </Text>
             );
         }
@@ -230,9 +231,9 @@ class EditHistoryFilterView extends Component {
 
     _displayMetric(metric) {
         if (metric === 'kgs') {
-            return 'KGs';
+            return Localized('DISPLAY_METRIC.KGS');
         } else if (metric === 'lbs') {
-            return 'LBs';
+            return Localized('DISPLAY_METRIC.LBS');
         }
     }
 
@@ -279,7 +280,7 @@ class EditHistoryFilterView extends Component {
 
     _renderStartingRepRange() {
         return this._renderTextField(
-            'min',
+            Localized('RANGE_PLACEHOLDER.MIN'),
             this.props.startingRepRange,
             this.props.updateStartingRepRange,
         );
@@ -287,7 +288,7 @@ class EditHistoryFilterView extends Component {
 
     _renderEndingRepRange() {
         return this._renderTextField(
-            'max',
+            Localized('RANGE_PLACEHOLDER.MAX'),
             this.props.endingRepRange,
             this.props.updateEndingRepRange,
         );
@@ -309,7 +310,7 @@ class EditHistoryFilterView extends Component {
 
     _renderStartingRPE() {
         return this._renderTextField(
-            'min',
+            Localized('RANGE_PLACEHOLDER.MIN'),
             this.props.startRPE,
             this.props.updateStartRPE,
         );
@@ -317,7 +318,7 @@ class EditHistoryFilterView extends Component {
 
     _renderEndingRPE() {
         return this._renderTextField(
-            'max',
+            Localized('RANGE_PLACEHOLDER.MAX'),
             this.props.endRPE,
             this.props.updateEndRPE,
         );
@@ -339,7 +340,7 @@ class EditHistoryFilterView extends Component {
 
     _renderStartWeight() {
         return this._renderWeightField(
-            'min',
+            Localized('RANGE_PLACEHOLDER.MIN'),
             this.props.startWeight,
             this.props.updateStartWeight,
             this.props.startWeightMetric,
@@ -348,7 +349,7 @@ class EditHistoryFilterView extends Component {
 
     _renderEndWeight() {
         return this._renderWeightField(
-            'max',
+            Localized('RANGE_PLACEHOLDER.MAX'),
             this.props.endWeight,
             this.props.updateEndWeight,
             this.props.endWeightMetric,
@@ -404,7 +405,7 @@ class EditHistoryFilterView extends Component {
         ) {
             return (
                 <Text style={[styles.tagText, styles.placeholderText]}>
-                    Devices
+                    {Localized('DEVICES')}
                 </Text>
             );
         }
@@ -440,7 +441,7 @@ class EditHistoryFilterView extends Component {
         return (
             <View style={{ marginBottom: 200 }}>
                 <Text style={[styles.labelText, { marginTop: 20 }]}>
-                    Exercise Names Containing
+                    {Localized('HISTORY_FILTER_FORM.TITLE')}
                 </Text>
                 <View style={{ padding: 5, paddingLeft: 20, paddingRight: 20 }}>
                     <View style={[styles.field, { flex: 1 }]}>
@@ -451,11 +452,15 @@ class EditHistoryFilterView extends Component {
                         </TouchableHighlight>
                     </View>
                 </View>
-                <Text style={styles.labelText}>Tags to Include:</Text>
+                <Text style={styles.labelText}>
+                    {Localized('HISTORY_FILTER_FORM.TAGS_TO_INCLUDE')}
+                </Text>
                 <View style={{ padding: 5, paddingLeft: 20, paddingRight: 20 }}>
                     {this._renderTagsToInclude()}
                 </View>
-                <Text style={styles.labelText}>Tags to Exclude:</Text>
+                <Text style={styles.labelText}>
+                    {Localized('HISTORY_FILTER_FORM.TAGS_TO_EXCLUDE')}
+                </Text>
                 <View style={{ padding: 5, paddingLeft: 18, paddingRight: 18 }}>
                     {this._renderTagsToExclude()}
                 </View>
@@ -463,28 +468,34 @@ class EditHistoryFilterView extends Component {
                 <View style={{ padding: 5, paddingLeft: 18, paddingRight: 18 }}>
                     {this._renderDevice()}
                 </View>
-                <Text style={styles.labelText}>Date Range:</Text>
+                <Text style={styles.labelText}>
+                    {Localized('HISTORY_FILTER_FORM.DATE_RANGE')}
+                </Text>
                 <View style={{ padding: 5 }}>{this._renderDateRange()}</View>
                 <Text style={[styles.labelText, { paddingTop: 10 }]}>
-                    Weight Range:
+                    {Localized('HISTORY_FILTER_FORM.WEIGHT_RANGE')}
                 </Text>
                 <View style={{ padding: 5 }}>{this._renderWeightRange()}</View>
                 <Text style={[styles.labelText, { paddingTop: 10 }]}>
-                    RPE Range:
+                    {Localized('HISTORY_FILTER_FORM.RPE_RANGE')}
                 </Text>
                 <View style={{ padding: 5 }}>{this._renderRPERange()}</View>
                 <Text style={[styles.labelText, { paddingTop: 10 }]}>
-                    Rep Range:
+                    {Localized('HISTORY_FILTER_FORM.REP_RANGE')}
                 </Text>
                 <View style={{ padding: 5 }}>{this._renderRepRange()}</View>
                 <Text style={[styles.labelText, { paddingTop: 10 }]}>
-                    Show deleted sets and reps
+                    {Localized(
+                        'HISTORY_FILTER_FORM.SHOW_DETAILED_SETS_AND_REPS',
+                    )}
                 </Text>
                 <View style={{ padding: 5 }}>
                     {this._renderRemovedSwitch()}
                 </View>
                 <TouchableOpacity onPress={() => this.props.clear()}>
-                    <Text style={styles.clearButton}>Clear all</Text>
+                    <Text style={styles.clearButton}>
+                        {Localized('HISTORY_FILTER_FORM.CLEAR_ALL')}
+                    </Text>
                 </TouchableOpacity>
                 <EditHistoryFilterExerciseScreen />
                 <EditHistoryFilterTagsToIncludeScreen />
@@ -513,7 +524,8 @@ class EditHistoryFilterView extends Component {
                         height: 20,
                         width: 9001,
                         backgroundColor: 'black',
-                    }}></View>
+                    }}
+                />
             );
         } else {
             var statusBar = null;
@@ -534,14 +546,14 @@ class EditHistoryFilterView extends Component {
                 </View>
 
                 <View style={styles.navTitle}>
-                    <Text style={styles.titleText}>FILTERS</Text>
+                    <Text style={styles.titleText}>{Localized('FILTERS')}</Text>
                 </View>
 
                 <View style={{ position: 'absolute', right: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this.props.save()}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Apply
+                                {Localized('APPLY')}
                             </Text>
                         </View>
                     </TouchableOpacity>

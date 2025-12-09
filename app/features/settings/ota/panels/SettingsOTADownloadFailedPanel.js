@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsOTADownloadFailedPanel extends Component {
     render() {
@@ -11,7 +12,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         SETTINGS_PANEL_STYLES.subtitleText,
                         { fontWeight: 'bold' },
                     ]}>
-                    Download Failed
+                    {Localized('DOWNLOAD_FAILED')}
                 </Text>
                 <Image
                     style={{ marginTop: 25, marginBottom: 25 }}
@@ -23,7 +24,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         { fontWeight: 'bold', paddingBottom: 7 },
                     ]}
                     onPress={this.props.download.bind(this)}>
-                    Retry download
+                    {Localized('RETRY_DOWNLOAD')}
                 </Text>
                 <Text
                     style={[
@@ -35,7 +36,7 @@ class SettingsOTADownloadFailedPanel extends Component {
                         },
                     ]}
                     onPress={this.props.cancelDownload.bind(this)}>
-                    Cancel
+                    {Localized('CANCEL')}
                 </Text>
             </View>
         );

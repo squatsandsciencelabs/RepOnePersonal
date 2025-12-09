@@ -14,6 +14,7 @@ import {
     generateThumbnail,
     waitUntilFileExists,
 } from 'app/utility/VideoThumbnailGenerator';
+import Localized from 'app/services/Localization';
 
 class SetTitleRowCollapsed extends Component {
     constructor(props) {
@@ -50,7 +51,7 @@ class SetTitleRowCollapsed extends Component {
         if (this.props.exercise === null || this.props.exercise === '') {
             return (
                 <Text style={[styles.fieldText, styles.placeholderText]}>
-                    Exercise
+                    {Localized('EXERCISE')}
                 </Text>
             );
         }
@@ -126,7 +127,9 @@ class SetTitleRowCollapsed extends Component {
         if (this.props.removed) {
             return (
                 <View style={[styles.container, styles.border]}>
-                    <Text style={styles.fieldText}>Deleted Set</Text>
+                    <Text style={styles.fieldText}>
+                        {Localized('DELETED_SET')}
+                    </Text>
                     {this._renderChevron()}
                 </View>
             );

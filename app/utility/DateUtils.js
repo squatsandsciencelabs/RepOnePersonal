@@ -1,6 +1,8 @@
+import Localized from 'app/services/Localization';
+
 export const timerDurationDescription = duration => {
     if (duration == null || duration <= 0) {
-        return 'Off';
+        return Localized('DURATION_DESCRIPTION.OFF');
     }
 
     var minutes = 0;
@@ -11,11 +13,18 @@ export const timerDurationDescription = duration => {
     }
 
     if (minutes > 0 && seconds > 0) {
-        return minutes + ' min ' + seconds + ' sec';
+        return Localized('DURATION_DESCRIPTION.MIN_SEC_COUNT', {
+            min: minutes,
+            sec: seconds,
+        });
     } else if (minutes > 0) {
-        return minutes + ' min';
+        return Localized('DURATION_DESCRIPTION.MIN_COUNT', {
+            min: minutes,
+        });
     } else {
-        return seconds + ' sec';
+        return Localized('DURATION_DESCRIPTION.SEC_COUNT', {
+            sec: seconds,
+        });
     }
 };
 
@@ -67,11 +76,30 @@ export const restInSentenceFormat = millis => {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
     if (minutes > 0 && seconds > 0) {
-        return minutes + ' min, ' + seconds + ' sec rest';
+        return (
+            Localized('DURATION_DESCRIPTION.MIN_SEC_COUNT', {
+                min: minutes,
+                sec: seconds,
+            }) +
+            ' ' +
+            Localized('REST_DURATION_LABEL')
+        );
     } else if (minutes > 0) {
-        return minutes + ' min rest';
+        return (
+            Localized('DURATION_DESCRIPTION.MIN_COUNT', {
+                min: minutes,
+            }) +
+            ' ' +
+            Localized('REST_DURATION_LABEL')
+        );
     } else {
-        return seconds + ' sec rest';
+        return (
+            Localized('DURATION_DESCRIPTION.SEC_COUNT', {
+                sec: seconds,
+            }) +
+            ' ' +
+            Localized('REST_DURATION_LABEL')
+        );
     }
 };
 

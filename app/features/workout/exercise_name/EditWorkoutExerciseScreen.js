@@ -5,9 +5,10 @@ import EditTextModal from 'app/shared_features/edit_set/EditTextModal';
 import * as WorkoutSelectors from 'app/redux/selectors/WorkoutSelectors';
 import * as SuggestionsSelectors from 'app/redux/selectors/SuggestionsSelectors';
 import * as Actions from './EditWorkoutExerciseActions';
+import Localized from 'app/services/Localization';
 
-const title = 'Edit Exercise';
-const placeholder = 'Enter Exercise';
+const title = Localized('EDIT_EXERCISE');
+const placeholder = Localized('ENTER_EXERCISE');
 
 const mapStateToProps = state => ({
     title,

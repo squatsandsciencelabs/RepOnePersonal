@@ -30,6 +30,8 @@ PODS:
     - React-Core
   - ExpoKeepAwake (11.0.1):
     - ExpoModulesCore
+  - ExpoLocalization (14.0.0):
+    - ExpoModulesCore
   - ExpoModulesCore (1.0.4):
     - React-Core
     - ReactCommon/turbomodule/core
@@ -652,6 +654,7 @@ DEPENDENCIES:
   - Expo (from `../node_modules/expo`)
   - "ExpoAdapterGoogleSignIn (from `../node_modules/@react-native-google-signin/google-signin/expo/ios`)"
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
+  - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - EXVideoThumbnails (from `../node_modules/expo-video-thumbnails/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -804,6 +807,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin/expo/ios"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
+  ExpoLocalization:
+    :path: "../node_modules/expo-localization/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
   EXVideoThumbnails:
@@ -949,6 +954,7 @@ SPEC CHECKSUMS:
   Expo: 5523a4835730104a301caeac1e68dad095a9dfff
   ExpoAdapterGoogleSignIn: b7792934ab1b5d559a3eee31334d752a73f0366e
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
+  ExpoLocalization: e202d1e2a4950df17ac8d0889d65a1ffd7532d7e
   ExpoModulesCore: 8211c89bcc3ba86e2d02c54b1d31f1fa81acb6de
   EXVideoThumbnails: 8b3e48f3716679dd0cbf949217a31eab5c555799
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsSurveyPanel extends Component {
     render() {
@@ -24,7 +25,7 @@ class SettingsSurveyPanel extends Component {
                         />
                         <View style={{ flex: 1, marginLeft: 20 }}>
                             <Text style={[styles.titleText]}>
-                                This is Adam, he does our data science.
+                                {Localized('SETTINGS_TUTORIAL.TITLE')}
                             </Text>
                         </View>
                     </View>
@@ -37,8 +38,7 @@ class SettingsSurveyPanel extends Component {
                                 SETTINGS_PANEL_STYLES.tappableText,
                                 { marginTop: 15 },
                             ]}>
-                            Take a quick survey so he can help us understand
-                            your data.
+                            {Localized('SETTINGS_TUTORIAL.BUTTON_LABEL')}
                         </Text>
                     </TouchableOpacity>
                 </View>

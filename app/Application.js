@@ -20,12 +20,17 @@ import AppState from 'app/services/AppState';
 import * as Analytics from 'app/services/Analytics';
 import Permissions from 'app/services/Permissions';
 import * as BluetoothUtils from 'app/utility/BluetoothUtils';
+import { setLocalizations } from 'app/services/Localization';
 
 // TODO: confirm font scaling disabled
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
 TextInput.defaultProps = TextInput.defaultProps || {};
 TextInput.defaultProps.allowFontScaling = false;
+
+setLocalizations({
+    en: () => require('app/localizations/en.json'),
+});
 
 // initialize the store
 var store = Store();

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import CalibrationModalScreen from './modal/CalibrationModalScreen';
+import Localized from 'app/services/Localization';
 
 export default function (props) {
     if (!props.isVisible) {
@@ -23,17 +24,20 @@ export default function (props) {
                     SETTINGS_PANEL_STYLES.panel,
                     { padding: 20, flexDirection: 'column' },
                 ]}>
-                <Text style={styles.titleText}>3D Calibration</Text>
+                <Text style={styles.titleText}>
+                    {Localized('3D_CALIBRATION')}
+                </Text>
                 <Text style={styles.text}>
-                    Caution: these functions can impair RepOne’s accuracy, do
-                    not use unless directed by support.
+                    {Localized('CALIBRATION_CAUTION')}
                 </Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                     <TouchableOpacity onPress={() => props.tappedCalibrate()}>
-                        <Text style={styles.option}>CALIBRATE</Text>
+                        <Text style={styles.option}>
+                            {Localized('CALIBRATE')}
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => props.tappedReset()}>
-                        <Text style={styles.option}>RESET</Text>
+                        <Text style={styles.option}>{Localized('RESET')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

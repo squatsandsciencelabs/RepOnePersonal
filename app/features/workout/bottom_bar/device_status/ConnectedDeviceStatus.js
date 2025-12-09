@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { CONNECTED, RECONNECTING } from 'app/configs+constants/SensorStatus';
 import * as Device from 'app/utility/Device';
 import { getKratosEnabled } from 'app/configs+constants/KratosConfig';
+import Localized from 'app/services/Localization';
 
 class ConnectedDeviceStatus extends Component {
     _renderConnectedIcon() {
@@ -48,7 +49,7 @@ class ConnectedDeviceStatus extends Component {
                         source={require('app/appearance/images/icon_disconnected.png')}
                     />
                     <Text style={[styles.textStyle, styles.pl7]}>
-                        RECONNECTING
+                        {Localized('CONNECTED_DEVICE_STATUS.RECONNECTING')}
                     </Text>
                 </View>
             );
@@ -60,7 +61,7 @@ class ConnectedDeviceStatus extends Component {
                         source={require('app/appearance/images/icon_disconnected.png')}
                     />
                     <Text style={[styles.textStyle, styles.pl7]}>
-                        NOT CONNECTED
+                        {Localized('CONNECTED_DEVICE_STATUS.NOT_CONNECTED')}
                     </Text>
                 </View>
             );

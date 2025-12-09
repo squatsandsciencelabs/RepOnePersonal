@@ -2,13 +2,16 @@ import { Alert, Platform } from 'react-native';
 import { check, PERMISSIONS } from 'react-native-permissions';
 import * as Analytics from 'app/services/Analytics';
 import Device from 'react-native-device-info';
+import Localized from 'app/services/Localization';
 
 const ANDROID_VERSION = Number(Device.getSystemVersion());
 
 const ANDROID_STORAGE_ACCESS_MAX_VERSION = 9;
 
 const requiresExternalStoragePermission = () => {
-    if (Number.isNaN(ANDROID_VERSION)) return true;
+    if (Number.isNaN(ANDROID_VERSION)) {
+        return true;
+    }
 
     return ANDROID_VERSION <= ANDROID_STORAGE_ACCESS_MAX_VERSION;
 };
@@ -30,20 +33,22 @@ export const checkWatchVideoPermissions = () => {
             }
 
             if (response === 'granted') {
-                console.tron.log(`granted watch video`);
+                console.tron.log('granted watch video');
                 resolve();
             } else {
                 if (Platform.OS === 'ios') {
-                    var message =
-                        'RepOne needs Photo permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+                    var message = Localized(
+                        'PERMISSIONS_MODAL.PLAY_VIDEOS_PHOTO_MESSAGE',
+                    );
                 } else {
-                    var message =
-                        'RepOne needs Storage permissions to play videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+                    var message = Localized(
+                        'PERMISSIONS_MODAL.PLAY_VIDEOS_STORAGE_MESSAGE',
+                    );
                 }
                 Alert.alert(
-                    'Additional Permissions Required',
+                    Localized('PERMISSIONS_MODAL.TITLE'),
                     message,
-                    [{ text: 'OK' }],
+                    [{ text: Localized('PERMISSIONS_MODAL.SUBMIT') }],
                     { cancelable: false },
                 );
                 Analytics.logEvent('watch_video_permissions_warning', {});
@@ -53,9 +58,9 @@ export const checkWatchVideoPermissions = () => {
             // TODO: proper analytics for straight up failure, might be crashlytics?
             console.tron.log(`Error checking storage permissions ${err}`);
             Alert.alert(
-                'Additional Permissions Required',
-                'There was an error accessing your photo storage to play videos',
-                [{ text: 'OK' }],
+                Localized('PERMISSIONS_MODAL.TITLE'),
+                Localized('PERMISSIONS_MODAL.PLAY_VIDEOS_ERROR_MESSAGE'),
+                [{ text: Localized('PERMISSIONS_MODAL.SUBMIT') }],
                 { cancelable: false },
             );
             reject();
@@ -90,18 +95,18 @@ export const checkRecordingPermissions = () => {
                 isMicrophoneAuthorized &&
                 isStorageAuthorized
             ) {
-                console.tron.log(`granted record`);
+                console.tron.log('granted record');
                 resolve();
             } else {
                 console.tron.log(`wtf ${JSON.stringify(response)}`);
                 Alert.alert(
-                    'Additional Permissions Required',
+                    Localized('PERMISSIONS_MODAL.TITLE'),
                     recordingPermissionsErrorMessage(
                         isCameraAuthorized,
                         isMicrophoneAuthorized,
                         isStorageAuthorized,
                     ),
-                    [{ text: 'OK' }],
+                    [{ text: Localized('PERMISSIONS_MODAL.SUBMIT') }],
                     { cancelable: false },
                 );
                 // TODO: should put it in the catch so can pass in state
@@ -126,33 +131,43 @@ const recordingPermissionsErrorMessage = (
     }
     if (isCameraAuthorized && isMicrophoneAuthorized) {
         if (Platform.OS === 'ios') {
-            return 'RepOne needs Photo permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized('PERMISSIONS_MODAL.STORE_VIDEOS_PHOTO_MESSAGE');
         } else {
-            return 'RepOne needs Storage permissions to store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized('PERMISSIONS_MODAL.STORE_VIDEOS_STORAGE_MESSAGE');
         }
     }
     if (isMicrophoneAuthorized && isStorageAuthorized) {
-        return 'RepOne needs Camera permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+        return Localized('PERMISSIONS_MODAL.RECORD_VIDEOS_CAMERA_MESSAGE');
     }
     if (isCameraAuthorized && isStorageAuthorized) {
-        return 'RepOne needs Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+        return Localized('PERMISSIONS_MODAL.RECORD_VIDEOS_MICROPHONE_MESSAGE');
     }
     if (isCameraAuthorized) {
         if (Platform.OS === 'ios') {
-            return 'RepOne needs Microphone and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized(
+                'PERMISSIONS_MODAL.RECORD_STORE_VIDEOS_MICROPHONE_PHOTOS_MESSAGE',
+            );
         } else {
-            return 'RepOne needs Microphone and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized(
+                'PERMISSIONS_MODAL.RECORD_STORE_VIDEOS_MICROPHONE_STORAGE_MESSAGE',
+            );
         }
     }
     if (isMicrophoneAuthorized) {
         if (Platform.OS === 'ios') {
-            return 'RepOne needs Camera and Photos permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized(
+                'PERMISSIONS_MODAL.RECORD_STORE_VIDEOS_CAMERA_PHOTOS_MESSAGE',
+            );
         } else {
-            return 'RepOne needs Camera and Storage permissions to record and store videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+            return Localized(
+                'PERMISSIONS_MODAL.RECORD_STORE_VIDEOS_CAMERA_STORAGE_MESSAGE',
+            );
         }
     }
     if (isStorageAuthorized) {
-        return 'RepOne needs Camera and Microphone permissions to record videos on your phone.\n\nPlease enable them for RepOne in your phone Settings';
+        return Localized(
+            'PERMISSIONS_MODAL.RECORD_STORE_VIDEOS_CAMERA_MICROPHONE_MESSAGE',
+        );
     }
     return null;
 };

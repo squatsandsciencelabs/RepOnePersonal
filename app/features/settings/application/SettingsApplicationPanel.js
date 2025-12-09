@@ -11,6 +11,7 @@ import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import * as DateUtils from 'app/utility/DateUtils';
 import SettingsEndSetTimerScreen from './timer/SettingsEndSetTimerScreen';
 import SettingsMetric from './metric/SettingsMetric';
+import Localized from 'app/services/Localization';
 
 class SettingsApplicationPanel extends Component {
     // ACTIONS
@@ -34,7 +35,7 @@ class SettingsApplicationPanel extends Component {
                         { flexDirection: 'column' },
                     ]}>
                     <Text style={[{ marginBottom: 20 }, styles.titleText]}>
-                        General App Settings
+                        {Localized('GENERAL_APP_SETTINGS')}
                     </Text>
 
                     <View>
@@ -42,7 +43,7 @@ class SettingsApplicationPanel extends Component {
                             onPress={() => this._tappedSetTimer()}>
                             <Text
                                 style={[{ marginBottom: 2 }, styles.labelText]}>
-                                Time to start new set
+                                {Localized('TIME_TO_START_NEW_SET')}
                             </Text>
                             <Text style={styles.linkText}>
                                 {DateUtils.timerDurationDescription(
@@ -59,10 +60,12 @@ class SettingsApplicationPanel extends Component {
                             onPress={() => this._tapDefaultMetric()}>
                             <Text
                                 style={[{ marginBottom: 2 }, styles.labelText]}>
-                                Default units
+                                {Localized('DEFAULT_UNITS')}
                             </Text>
                             <Text style={styles.linkText}>
-                                {this.props.defaultMetric}
+                                {Localized(
+                                    `DISPLAY_METRIC.${this.props.defaultMetric}`,
+                                )}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -77,7 +80,7 @@ class SettingsApplicationPanel extends Component {
                         { flexDirection: 'column' },
                     ]}>
                     <Text style={[{ marginBottom: 20 }, styles.titleText]}>
-                        Settings
+                        {Localized('SETTINGS')}
                     </Text>
 
                     <View>
@@ -86,7 +89,7 @@ class SettingsApplicationPanel extends Component {
                                 { marginLeft: 7, marginBottom: -10 },
                                 styles.labelText,
                             ]}>
-                            Time to start new set
+                            {Localized('TIME_TO_START_NEW_SET')}
                         </Text>
                     </View>
                     <SettingsEndSetTimerScreen />
@@ -97,7 +100,7 @@ class SettingsApplicationPanel extends Component {
                                 { marginLeft: 7, marginBottom: -10 },
                                 styles.labelText,
                             ]}>
-                            Set default metric
+                            {Localized('SET_DEFAULT_METRIC')}
                         </Text>
                     </View>
                     <SettingsMetric />

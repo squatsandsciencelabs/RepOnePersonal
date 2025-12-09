@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class SettingsOTADownloadingPanel extends Component {
     render() {
@@ -11,7 +12,9 @@ class SettingsOTADownloadingPanel extends Component {
                         SETTINGS_PANEL_STYLES.subtitleText,
                         { fontWeight: 'bold' },
                     ]}>
-                    Downloading Version {this.props.firmwareVersion}
+                    {Localized('DOWNLOADING_VERSION', {
+                        version: this.props.firmwareVersion,
+                    })}
                 </Text>
                 <ActivityIndicator
                     color="#4F4F4F"
@@ -24,7 +27,7 @@ class SettingsOTADownloadingPanel extends Component {
                         { fontWeight: 'bold' },
                     ]}
                     onPress={this.props.cancelDownload.bind(this)}>
-                    Cancel
+                    {Localized('CANCEL')}
                 </Text>
             </View>
         );

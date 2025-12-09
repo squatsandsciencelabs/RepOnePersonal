@@ -18,6 +18,7 @@ import * as Device from 'app/utility/Device';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
+import Localized from 'app/services/Localization';
 
 class ApplicationView extends Component {
     state = {
@@ -39,16 +40,20 @@ class ApplicationView extends Component {
 
     _checkIfOutdated() {
         if (this.props.killSwitch.status == 'OUTDATED') {
-            Alert.alert('Application Outdated', 'Update to latest?', [
-                {
-                    text: 'Later',
-                    onPress: () => console.tron.log("'Later' pressed"),
-                },
-                {
-                    text: 'Update',
-                    onPress: () => console.tron.log("'Update' Pressed"),
-                },
-            ]);
+            Alert.alert(
+                Localized('OUTDATED_APPLICATION_MODAL.TITLE'),
+                Localized('OUTDATED_APPLICATION_MODAL.MESSAGE'),
+                [
+                    {
+                        text: Localized('OUTDATED_APPLICATION_MODAL.CANCEL'),
+                        onPress: () => console.tron.log("'Later' pressed"),
+                    },
+                    {
+                        text: Localized('OUTDATED_APPLICATION_MODAL.SUBMIT'),
+                        onPress: () => console.tron.log("'Update' Pressed"),
+                    },
+                ],
+            );
         }
     }
 
@@ -77,8 +82,7 @@ class ApplicationView extends Component {
                         justifyContent: 'center',
                     }}>
                     <Text style={{ textAlign: 'center' }}>
-                        Please update to the latest version! This version is no
-                        longer supported.
+                        {Localized('UNSUPPORTED_VERSION_MESSAGE')}
                     </Text>
                 </View>
             </View>
@@ -101,7 +105,7 @@ class ApplicationView extends Component {
                     marginRight: 0,
                 }}>
                 {dot}
-                {route.title}
+                {Localized(route.titleKey)}
             </Text>
         );
     }

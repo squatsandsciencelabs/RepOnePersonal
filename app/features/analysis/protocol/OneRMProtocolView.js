@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Slider } from 'react-native';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class OneRMProtocoView extends Component {
     render() {
-        const title = 'How to Calculate 1RM from a Single Session';
-        const body =
-            '1. Do six of your chosen exercise, starting from the bar and ending at 90% of your previous 1RM (eg. bar, 20%, 40%, 60%, 80%, 90%)\n\n2. Log the RPE, the weight used, and the same exercise and tags for each set\n\n3. Go to the Analysis Tab, select the exercise and tags you used for the 6 sets, and set the date range to 1 day\n\n4. Set the velocity to the slowest you think can complete a 1RM and tap Calculate';
+        const title = Localized('ANALYTICS_PROTOCOL_VIEW.TITLE');
+        const body = Localized('ANALYTICS_PROTOCOL_VIEW.TEXT');
         return (
             <View
                 style={[

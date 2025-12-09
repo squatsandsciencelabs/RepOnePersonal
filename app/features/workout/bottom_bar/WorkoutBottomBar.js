@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ConnectedDeviceStatusScreen from './device_status/ConnectedDeviceStatusScreen';
 import * as Device from 'app/utility/Device';
+import Localized from 'app/services/Localization';
 
 class WorkoutBottomBar extends Component {
     _onPressEndWorkout() {
@@ -11,7 +12,7 @@ class WorkoutBottomBar extends Component {
     }
 
     render() {
-        const message = 'FINISH WORKOUT';
+        const message = Localized('FINISH_WORKOUT');
         return (
             <View style={styles.bar}>
                 <ConnectedDeviceStatusScreen />

@@ -16,9 +16,9 @@ const pickerItem = phase => ({
     value: phase,
 });
 
-const items = [pickerItem(CONCENTRIC), pickerItem(ECCENTRIC)];
+const getItems = () => [pickerItem(CONCENTRIC), pickerItem(ECCENTRIC)];
 
-const mapStateToPropsiOS = state => {
+const mapStateToPropsIOS = state => {
     const isModalShowing =
         KratosCollapsedSettingsSetMetricsSelectors.getIsEditingPhase(state);
 
@@ -27,7 +27,7 @@ const mapStateToPropsiOS = state => {
 
     return {
         isModalShowing,
-        items,
+        items: getItems(),
         selectedValue,
     };
 };
@@ -40,14 +40,14 @@ const mapStateToPropsAndroid = (state, ownProps) => {
         );
 
     return {
-        items,
+        items: getItems(),
         selectedValue,
     };
 };
 
 // this way only check OS once
 const mapStateToProps =
-    Platform.OS === 'ios' ? mapStateToPropsiOS : mapStateToPropsAndroid;
+    Platform.OS === 'ios' ? mapStateToPropsIOS : mapStateToPropsAndroid;
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     if (Platform.OS === 'ios') {

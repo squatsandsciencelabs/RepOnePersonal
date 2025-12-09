@@ -7,22 +7,23 @@ import SettingsTab from 'app/features/settings/SettingsTab';
 import AnalysisScreen from 'app/features/analysis/AnalysisScreen';
 import HistoryScreen from 'app/features/history/HistoryScreen';
 import ScalarScreen from '../features/scalar/ScalarScreen';
+import Localized from 'app/services/Localization';
 
 export const initialIndex = OpenBarbellConfig.scalarEnabled ? 4 : 3;
 
 export const routes = OpenBarbellConfig.scalarEnabled
     ? [
-          { key: '0', title: 'WORKOUT' },
-          { key: '1', title: 'SCALAR' },
-          { key: '2', title: 'HISTORY' },
-          { key: '3', title: 'ANALYSIS' },
-          { key: '4', title: 'SETTINGS', badge: true },
+          { key: '0', titleKey: 'TAB_BAR.WORKOUT' },
+          { key: '1', titleKey: 'TAB_BAR.SCALAR' },
+          { key: '2', titleKey: 'TAB_BAR.HISTORY' },
+          { key: '3', titleKey: 'TAB_BAR.ANALYSIS' },
+          { key: '4', titleKey: 'TAB_BAR.SETTINGS', badge: true },
       ]
     : [
-          { key: '0', title: 'WORKOUT' },
-          { key: '1', title: 'HISTORY' },
-          { key: '2', title: 'ANALYSIS' },
-          { key: '3', title: 'SETTINGS', badge: true },
+          { key: '0', titleKey: 'TAB_BAR.WORKOUT' },
+          { key: '1', titleKey: 'TAB_BAR.HISTORY' },
+          { key: '2', titleKey: 'TAB_BAR.ANALYSIS' },
+          { key: '3', titleKey: 'TAB_BAR.SETTINGS', badge: true },
       ];
 
 export const sceneMap = SceneMap(

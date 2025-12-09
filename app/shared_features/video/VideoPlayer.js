@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Device from 'app/utility/Device';
+import Localized from 'app/services/Localization';
 
 class VideoPlayer extends Component {
     _renderVideo() {
@@ -35,7 +36,9 @@ class VideoPlayer extends Component {
                             onPress={() =>
                                 this.props.closeModal(this.props.setID)
                             }>
-                            <Text style={styles.cancelText}>Cancel</Text>
+                            <Text style={styles.cancelText}>
+                                {Localized('CANCEL')}
+                            </Text>
                         </TouchableOpacity>
                     </View>
 
@@ -44,7 +47,9 @@ class VideoPlayer extends Component {
                             onPress={() =>
                                 this.props.deleteVideo(this.props.setID)
                             }>
-                            <Text style={styles.deleteText}>Delete</Text>
+                            <Text style={styles.deleteText}>
+                                {Localized('DELETE')}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -9,6 +9,7 @@ import {
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import VersionCheck from 'react-native-version-check';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
+import Localized from 'app/services/Localization';
 
 // "itms-apps://itunes.apple.com/us/app/repone-station/id1455246807?mt=8"
 
@@ -24,15 +25,17 @@ class SettingsOTAUpdateAppPanel extends Component {
     render() {
         let deviceFirmwareText = (
             <Text style={styles.description}>
-                Connect a RepOne Device to compare versions.
+                {Localized('COMPARE_VERSIONS_LABEL')}
             </Text>
         );
         if (this.props.deviceFirmwareVersion) {
             deviceFirmwareText = (
                 <Text style={styles.description}>
-                    The connected RepOne Device is{' '}
+                    {Localized('CONNECTED_REPONE_DEVICE')}{' '}
                     <Text style={{ fontWeight: 'bold' }}>
-                        Version {this.props.deviceFirmwareVersion}
+                        {Localized('SENSOR_VERSION', {
+                            version: this.props.deviceFirmwareVersion,
+                        })}
                     </Text>
                 </Text>
             );
@@ -42,14 +45,16 @@ class SettingsOTAUpdateAppPanel extends Component {
                 <View style={{}}>
                     <Text style={styles.description}>
                         <Text style={{ fontWeight: 'bold' }}>
-                            Version {this.props.firmwareVersion}
+                            {Localized('SENSOR_VERSION', {
+                                version: this.props.firmwareVersion,
+                            })}
                         </Text>{' '}
                         {this.props.firmwareDescription}
                     </Text>
                 </View>
                 {deviceFirmwareText}
                 <Text style={styles.upgradeDescription}>
-                    You must update your app before installing the new firmware.
+                    {Localized('UPDATE_REQUIRED_MESSAGE')}
                 </Text>
                 <TouchableOpacity
                     style={[
@@ -65,7 +70,7 @@ class SettingsOTAUpdateAppPanel extends Component {
                     ]}
                     onPress={this.openAppStore.bind(this)}>
                     <Text style={SETTINGS_PANEL_STYLES.buttonText}>
-                        Update mobile app
+                        {Localized('UPDATE_MOBILE_APP')}
                     </Text>
                 </TouchableOpacity>
             </View>

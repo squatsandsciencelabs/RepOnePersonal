@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 // displays connecting device info
 class SettingsDevicePanelReconnecting extends Component {
@@ -10,7 +11,7 @@ class SettingsDevicePanelReconnecting extends Component {
             <View style={[SETTINGS_PANEL_STYLES.panel, { flex: 1 }]}>
                 <View style={SETTINGS_PANEL_STYLES.header}>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Reconnecting...
+                        {Localized('RECONNECTING')}
                     </Text>
                 </View>
                 <View style={SETTINGS_PANEL_STYLES.content}>
@@ -20,9 +21,12 @@ class SettingsDevicePanelReconnecting extends Component {
                 </View>
                 <View style={SETTINGS_PANEL_STYLES.footer}>
                     <Text
-                        style={SETTINGS_PANEL_STYLES.footerCancelText}
+                        style={[
+                            SETTINGS_PANEL_STYLES.footerCancelText,
+                            { textTransform: 'uppercase' },
+                        ]}
                         onPress={() => this.props.stopReconnect()}>
-                        CANCEL
+                        {Localized('CANCEL')}
                     </Text>
                 </View>
             </View>

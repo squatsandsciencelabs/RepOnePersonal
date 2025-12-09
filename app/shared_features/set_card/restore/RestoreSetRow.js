@@ -7,6 +7,7 @@ import {
     ScrollView,
 } from 'react-native';
 import Pill from 'app/shared_features/pill/Pill';
+import Localized from 'app/services/Localization';
 
 class RestoreSetRow extends Component {
     _renderSummary() {
@@ -41,7 +42,7 @@ class RestoreSetRow extends Component {
                                 </Text>
                                 {this.props.weight}
                                 {this.props.metric} x {this.props.numReps} @{' '}
-                                {this.props.rpe}RPE
+                                {`${this.props.rpe}${Localized('RPE')}`}
                             </Text>
                         </View>
 
@@ -56,13 +57,17 @@ class RestoreSetRow extends Component {
         return (
             <View style={[styles.container, styles.border]}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Text style={styles.fieldText}>Deleted Set</Text>
+                    <Text style={styles.fieldText}>
+                        {Localized('DELETED_SET')}
+                    </Text>
                     <TouchableOpacity
                         style={styles.buttonContainer}
                         onPress={() =>
                             this.props.tappedRestore(this.props.setID)
                         }>
-                        <Text style={styles.restore}>Restore</Text>
+                        <Text style={styles.restore}>
+                            {Localized('RESTORE')}
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 <View>{this._renderSummary()}</View>

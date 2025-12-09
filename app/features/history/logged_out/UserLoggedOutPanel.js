@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
 
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
+import Localized from 'app/services/Localization';
 
 class UserLoggedOutPanel extends Component {
     render() {
@@ -22,14 +23,12 @@ class UserLoggedOutPanel extends Component {
                 </View>
                 <View>
                     <Text style={SETTINGS_PANEL_STYLES.headerText}>
-                        Sign in Required
+                        {Localized('LOGGED_OUT_PANEL.TITLE')}
                     </Text>
                 </View>
                 <View style={{ paddingTop: 20, paddingBottom: 50 }}>
                     <Text style={SETTINGS_PANEL_STYLES.subtitleText}>
-                        To access features like storing your data in the cloud,
-                        please go to Settings and log in with your Google
-                        account.
+                        {Localized('LOGGED_OUT_PANEL.TEXT')}
                     </Text>
                 </View>
             </View>
