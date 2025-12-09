@@ -20,17 +20,21 @@ class SettingsDevicePanelDisconnected extends Component {
     constructor(props) {
         super(props);
         this.timer = null;
+        this.initialDelayTimer = null;
     }
 
     componentDidMount() {
         // TODO: don't do this on mounting, do this on startup instead
         // reason is that switching from connected to disconnected will cause this to run unnecessarily
-        setTimeout(() => {
+        this.initialDelayTimer = setTimeout(() => {
             this._scanForDevices(INITIAL_SCAN, false);
         }, INITIAL_SCAN_DELAY);
     }
 
     componentWillUnmount() {
+        if (this.initialDelayTimer !== null) {
+            clearTimeout(this.initialDelayTimer);
+        }
         if (this.timer !== null) {
             clearTimeout(this.timer);
             this.props.stopDeviceScan();
