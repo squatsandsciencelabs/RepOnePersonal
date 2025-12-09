@@ -280,6 +280,7 @@ class OneRMView extends Component {
                     step={0.01}
                     thumbTintColor={thumbTintColor}
                     minimumTrackTintColor={'#368fff'}
+                    maximumTrackTintColor={maxTintColor}
                     animateTransitions={true}
                 />
             </View>
