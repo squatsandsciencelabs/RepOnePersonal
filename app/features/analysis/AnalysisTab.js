@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { ScrollView, Image, View, Text, findNodeHandle } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import OneRMDebugScreen from './debug/OneRMDebugScreen';
 import OneRMCalculateScreen from './calculate/OneRMCalculateScreen';
 import OneRMResultsScreen from './results/OneRMResultsScreen';
 import OneRMLoggedOutView from './logged_out/OneRMLoggedOutView';
 import OneRMProtocolView from './protocol/OneRMProtocolView';
-import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 class AnalysisTab extends Component {
     // separated Chart and Screen to ensure android hack works along with calculate button
@@ -14,8 +13,8 @@ class AnalysisTab extends Component {
         super(props);
 
         this.state = { lastScroll: false };
-        this.scrollView = React.createRef();
-        this.results = React.createRef();
+        this.scrollViewRef = React.createRef();
+        this.resultsRef = React.createRef();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,13 +25,11 @@ class AnalysisTab extends Component {
             });
 
             // scroll
-            const resultsHandle = findNodeHandle(this.results.current);
-            const scrollHandle = findNodeHandle(this.scrollView.current);
-            if (resultsHandle && scrollHandle) {
-                this.results.current.measureLayout(
-                    scrollHandle,
+            if (this.resultsRef.current && this.scrollViewRef.current) {
+                this.resultsRef.current.measureLayout(
+                    this.scrollViewRef.current,
                     (x, y, width, height, pageX, pageY) => {
-                        this.scrollView.current.scrollTo({
+                        this.scrollViewRef.current.scrollTo({
                             x: 0,
                             y: y,
                             animated: true,
@@ -52,11 +49,11 @@ class AnalysisTab extends Component {
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
                     onScrollBeginDrag={() => this.props.dragged()}
-                    ref={this.scrollView}>
+                    ref={this.scrollViewRef}>
                     <OneRMDebugScreen />
                     <OneRMCalculateScreen />
                     <View
-                        ref={this.results}
+                        ref={this.resultsRef}
                         onLayout={() => {}}
                         collapsable={false}>
                         <OneRMResultsScreen />
