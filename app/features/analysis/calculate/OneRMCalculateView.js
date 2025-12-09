@@ -217,6 +217,7 @@ class OneRMView extends Component {
             var thumbTintColor = '#ffffff';
         } else {
             var thumbTintColor = '#368fff';
+            var maxTintColor = '#ffffff';
         }
 
         return (
@@ -247,6 +248,7 @@ class OneRMView extends Component {
                     step={1}
                     thumbTintColor={thumbTintColor}
                     minimumTrackTintColor={'#368fff'}
+                    maximumTrackTintColor={maxTintColor}
                     animateTransitions={true}
                 />
                 <View

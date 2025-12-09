@@ -402,7 +402,7 @@ class EditHistoryFilterView extends Component {
                     value={this.props.showRemoved}
                     onValueChange={isSwitchOn => this.props.toggleShowRemoved()}
                     trackColor="rgba(47, 128, 237, 1)"
-                    thumbColor="#e0e0e0"
+                    thumbColor="rgba(47, 128, 237, 1)"
                 />
             );
         }
