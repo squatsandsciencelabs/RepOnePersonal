@@ -217,7 +217,7 @@ class OneRMView extends Component {
             var thumbTintColor = '#ffffff';
         } else {
             var thumbTintColor = '#368fff';
-            var maxTintColor = 'rgba(239, 239, 239, 1)';
+            var maxTintColor = 'gray';
         }
 
         return (
