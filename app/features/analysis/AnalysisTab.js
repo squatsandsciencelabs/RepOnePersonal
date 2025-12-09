@@ -26,9 +26,11 @@ class AnalysisTab extends Component {
             });
 
             // scroll
-            if (this.results.current && this.scrollView.current) {
+            const resultsHandle = findNodeHandle(this.results.current);
+            const scrollHandle = findNodeHandle(this.scrollView.current);
+            if (resultsHandle && scrollHandle) {
                 this.results.current.measureLayout(
-                    findNodeHandle(this.scrollView.current),
+                    scrollHandle,
                     (x, y, width, height, pageX, pageY) => {
                         this.scrollView.current.scrollTo({
                             x: 0,
