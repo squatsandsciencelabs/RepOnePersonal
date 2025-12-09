@@ -14,6 +14,8 @@ class AnalysisTab extends Component {
         super(props);
 
         this.state = { lastScroll: false };
+        this.scrollView = React.createRef();
+        this.results = React.createRef();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -24,11 +26,11 @@ class AnalysisTab extends Component {
             });
 
             // scroll
-            if (this.results && this.results.measureLayout) {
-                this.results.measureLayout(
-                    findNodeHandle(this.scrollView),
+            if (this.results.current && this.scrollView.current) {
+                this.results.current.measureLayout(
+                    findNodeHandle(this.scrollView.current),
                     (x, y, width, height, pageX, pageY) => {
-                        this.scrollView.scrollTo({
+                        this.scrollView.current.scrollTo({
                             x: 0,
                             y: y,
                             animated: true,
@@ -48,15 +50,11 @@ class AnalysisTab extends Component {
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
                     onScrollBeginDrag={() => this.props.dragged()}
-                    ref={ref => {
-                        this.scrollView = ref;
-                    }}>
+                    ref={this.scrollView}>
                     <OneRMDebugScreen />
                     <OneRMCalculateScreen />
                     <View
-                        ref={ref => {
-                            this.results = ref;
-                        }}
+                        ref={this.results}
                         onLayout={() => {}}
                         collapsable={false}>
                         <OneRMResultsScreen />
