@@ -35,7 +35,7 @@ export const stopReconnect = () => (dispatch, getState) => {
 };
 
 export const presentTroubleshootingTips = () => (dispatch, getState) => {
-    Linking.openURL('https://www.reponestrength.com/knowledge/troubleshooting');
+    Linking.openURL('https://www.reponestrength.com/knowledge#troubleshooting');
 
     const state = getState();
     logTroubleshootingTipsAnalytics(state);

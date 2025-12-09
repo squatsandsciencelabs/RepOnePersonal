@@ -18,7 +18,7 @@ class SettingsKratosPanel extends Component {
             <SensorSettingsCard sensorName={sensorName}>
                 <TextLink
                     style={{ paddingVertical: 17.5 }}
-                    link="https://www.reponestrength.com/knowledge/kratos-metrics"
+                    link="https://www.reponestrength.com/knowledge#kratos-metrics"
                     text="What are these metrics?"
                 />
                 <SettingsKratosMetricsScreen sensorName={sensorName} />

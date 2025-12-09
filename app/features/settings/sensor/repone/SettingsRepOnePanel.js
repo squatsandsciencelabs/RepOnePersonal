@@ -14,7 +14,7 @@ class SettingsRepOnePanel extends Component {
                 <TextLink
                     style={{ paddingVertical: 17.5 }}
                     text="What are these metrics?"
-                    link="https://www.reponestrength.com/knowledge/repone-set-metrics"
+                    link="https://www.reponestrength.com/knowledge#repone-set-metrics"
                 />
                 <SettingsRepOneMetricsScreen sensorName={sensorName} />
                 <SettingsRepOneRepColumnsScreen sensorName={sensorName} />
