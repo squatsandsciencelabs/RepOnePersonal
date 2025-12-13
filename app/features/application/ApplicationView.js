@@ -4,7 +4,7 @@
 // TODO: Kill switch should link to the app store to make it easier to update
 // TODO: recommended but NOT required update
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StatusBar,
@@ -14,31 +14,30 @@ import {
     Platform,
 } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
-import * as Device from 'app/utility/Device';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as NavigationConfig from 'app/configs+constants/NavigationConfig';
 import SurveyModalScreen from 'app/shared_features/survey/SurveyModalScreen';
 import Badge from './Badge';
 
-class ApplicationView extends Component {
-    state = {
-        index: NavigationConfig.initialIndex,
-        routes: NavigationConfig.routes,
-    };
+function ApplicationView(props) {
+    const insets = useSafeAreaInsets();
+    const [index, setIndex] = useState(NavigationConfig.initialIndex);
+    const [routes] = useState(NavigationConfig.routes);
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.tabIndex !== this.state.index) {
-            this.setState({ index: nextProps.tabIndex });
+    useEffect(() => {
+        if (props.tabIndex !== index) {
+            setIndex(props.tabIndex);
         }
-    }
+    }, [props.tabIndex, index]);
 
-    componentDidMount() {
-        this._checkIfOutdated();
-    }
+    useEffect(() => {
+        _checkIfOutdated();
+    }, []);
 
     // KILL SWITCH FUNCTIONS
 
-    _checkIfOutdated() {
-        if (this.props.killSwitch.status == 'OUTDATED') {
+    const _checkIfOutdated = () => {
+        if (props.killSwitch.status == 'OUTDATED') {
             Alert.alert('Application Outdated', 'Update to latest?', [
                 {
                     text: 'Later',
@@ -50,9 +49,9 @@ class ApplicationView extends Component {
                 },
             ]);
         }
-    }
+    };
 
-    _renderKillSwitch() {
+    const _renderKillSwitch = () => {
         return (
             <View
                 style={{
@@ -83,13 +82,13 @@ class ApplicationView extends Component {
                 </View>
             </View>
         );
-    }
+    };
 
     // TAB BAR FUNCTIONS
 
-    _renderLabel({ route, focused, color }) {
+    const _renderLabel = ({ route, focused, color }) => {
         const dot =
-            route.badge && this.props.isUpgradeAvailable ? <Badge /> : null;
+            route.badge && props.isUpgradeAvailable ? <Badge /> : null;
         return (
             <Text
                 style={{
@@ -104,9 +103,9 @@ class ApplicationView extends Component {
                 {route.title}
             </Text>
         );
-    }
+    };
 
-    _renderHeader = props => (
+    const _renderHeader = tabProps => (
         <TabBar
             indicatorStyle={{ backgroundColor: '#eb5757', height: 2 }}
             style={{ backgroundColor: '#333333' }}
@@ -117,56 +116,42 @@ class ApplicationView extends Component {
                 marginLeft: 0,
                 marginRight: 0,
             }}
-            renderLabel={this._renderLabel.bind(this)}
-            {...props}
+            renderLabel={_renderLabel}
+            {...tabProps}
         />
     );
 
-    _renderApplication() {
-        if (Platform.OS === 'ios') {
-            var statusBarBG = (
-                <View style={[{ width: 9001 }, styles.statusBar]} />
-            );
-        } else {
-            var statusBarBG = null;
-        }
-
+    const _renderApplication = () => {
         return (
             <View style={[{ flex: 1 }, styles.container]}>
                 <StatusBar backgroundColor="#333333" barStyle="light-content" />
-                {statusBarBG}
+                <View style={{ height: insets.top, backgroundColor: '#333333' }} />
                 <TabView
                     style={{ flex: 1 }}
-                    navigationState={this.state}
+                    navigationState={{ index, routes }}
                     renderScene={NavigationConfig.sceneMap}
-                    renderTabBar={this._renderHeader}
-                    onIndexChange={index => this.props.changeTab(index)}
+                    renderTabBar={_renderHeader}
+                    onIndexChange={newIndex => props.changeTab(newIndex)}
                 />
                 <SurveyModalScreen />
             </View>
         );
-    }
+    };
 
     // RENDER
 
-    render() {
-        var killSwitchStatus = this.props.killSwitch.status;
+    var killSwitchStatus = props.killSwitch.status;
 
-        if (killSwitchStatus == 'KILLED') {
-            return this._renderKillSwitch();
-        } else {
-            return this._renderApplication();
-        }
+    if (killSwitchStatus == 'KILLED') {
+        return _renderKillSwitch();
+    } else {
+        return _renderApplication();
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#f2f2f2',
-    },
-    statusBar: {
-        height: Device.hasDynamicIsland() ? 50 : Device.hasNotch() ? 30 : 20,
-        backgroundColor: Device.hasNotch() ? '#333333' : 'black',
     },
 });
 

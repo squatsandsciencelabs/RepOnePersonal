@@ -11,7 +11,6 @@ import {
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import * as Device from 'app/utility/Device';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 
 function record(props, camera) {
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         position: 'absolute',
-        top: Device.hasNotch() ? 50 : 30,
+        top: 10,
         left: 20,
         width: 100,
         backgroundColor: '#333333',

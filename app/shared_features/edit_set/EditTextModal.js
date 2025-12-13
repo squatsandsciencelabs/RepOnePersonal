@@ -1,6 +1,6 @@
 // TODO: consider splitting this component into two different ones rather than using if statements everywhere
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -12,250 +12,213 @@ import {
     FlatList,
     Platform,
 } from 'react-native';
-import * as Device from 'app/utility/Device';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
-class EditTextModal extends Component {
-    constructor(props) {
-        super(props);
+function EditTextModal(props) {
+    const [text, setText] = useState(props.text || '');
+    const [inputs, setInputs] = useState([]);
+    const [setID, setSetID] = useState(null);
+    const [suggestions, setSuggestions] = useState([]);
 
-        this.state = {
-            text: this.props.text,
-            inputs: [],
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const usesSetID = this.props.hasOwnProperty('setID');
-        if (usesSetID && nextProps.setID === this.props.setID) {
+    useEffect(() => {
+        const usesSetID = props.hasOwnProperty('setID');
+        if (usesSetID && props.setID === setID) {
             // wrong set, don't update
             return;
         }
 
-        if (!this.props.isModalShowing && !nextProps.isModalShowing) {
+        if (!props.isModalShowing) {
             // it's not showing, no point in updating it
             return;
         }
 
         // inputs
-        if (nextProps.inputs !== undefined) {
-            var inputs = [...nextProps.inputs];
+        if (props.inputs !== undefined) {
+            var newInputs = [...props.inputs];
         } else {
-            var inputs = [];
+            var newInputs = [];
         }
-        this.setState({ inputs: inputs });
+        setInputs(newInputs);
 
         // save set id
-        if (usesSetID && nextProps.setID !== null) {
-            this.setState({ setID: nextProps.setID });
+        if (usesSetID && props.setID !== null) {
+            setSetID(props.setID);
         }
 
         // set text
-        let text = nextProps.text;
-        if (text === null || text === undefined) {
-            text = '';
+        let newText = props.text;
+        if (newText === null || newText === undefined) {
+            newText = '';
         }
-        this._updateText(text, nextProps.bias);
+        setText(newText);
 
         // update suggestions
-        this._updateSuggestions(text, inputs, nextProps.bias);
-    }
+        _updateSuggestions(newText, newInputs, props.bias);
+    }, [props.isModalShowing, props.setID, props.text, props.inputs, props.bias]);
 
     // HELPERS
 
-    _addNewPill(input, resetText = false) {
+    const _addNewPill = (input, resetText = false) => {
         // valid check
-        if (this.state.inputs.includes(input) || input == '') {
+        if (inputs.includes(input) || input == '') {
             return;
         }
 
-        this.props.addPill(this.state.setID);
+        props.addPill(setID);
 
         if (resetText) {
-            var text = '';
-            this.setState({
-                text: text,
-            });
+            var newText = '';
+            setText(newText);
         } else {
-            var text = this.state.text;
+            var newText = text;
         }
 
-        let inputs = [...this.state.inputs, input];
-        this.setState({
-            inputs: inputs,
-        });
-        this._updateSuggestions(text, inputs);
-    }
+        let newInputs = [...inputs, input];
+        setInputs(newInputs);
+        _updateSuggestions(newText, newInputs);
+    };
 
-    _removePill(index) {
-        let inputsCopy = [...this.state.inputs];
+    const _removePill = (index) => {
+        let inputsCopy = [...inputs];
         inputsCopy.splice(index, 1);
-        this.setState({
-            inputs: inputsCopy,
-        });
-        this._updateSuggestions(this.state.text, inputsCopy);
-    }
+        setInputs(inputsCopy);
+        _updateSuggestions(text, inputsCopy);
+    };
 
-    _updateText(input, bias = this.props.bias) {
-        this.setState({
-            text: input,
-        });
-        this._updateSuggestions(input, bias);
-    }
+    const _updateText = (input, bias = props.bias) => {
+        setText(input);
+        _updateSuggestions(input, inputs, bias);
+    };
 
-    _updateSuggestions(
-        input = this.state.text,
-        inputs = this.state.inputs,
+    const _updateSuggestions = (
+        input = text,
+        inputsParam = inputs,
         bias = null,
-    ) {
-        if (this.props.multipleInput) {
-            var suggestions = this.props.generateMultipleInputSuggestions(
+    ) => {
+        if (props.multipleInput) {
+            var newSuggestions = props.generateMultipleInputSuggestions(
                 input,
-                inputs,
+                inputsParam,
             );
         } else {
-            var suggestions = this.props.generateSingleInputSuggestions(
+            var newSuggestions = props.generateSingleInputSuggestions(
                 input,
                 bias,
             );
         }
-        let suggestionsVM = suggestions.map(suggestion => {
+        let suggestionsVM = newSuggestions.map(suggestion => {
             return { key: suggestion };
         });
-        this.setState({
-            suggestions: suggestionsVM,
-        });
-    }
+        setSuggestions(suggestionsVM);
+    };
 
     // ACTIONS
 
-    _onChangeText(input) {
-        if (this.props.multipleInput && input.slice(-1) === '\n') {
+    const _onChangeText = (input) => {
+        if (props.multipleInput && input.slice(-1) === '\n') {
             // enter tapped in multiline mode, update accordingly
-            this._addNewPill(this.state.text, true);
+            _addNewPill(text, true);
         } else {
             // update the text
-            this._updateText(input);
+            _updateText(input);
         }
-    }
+    };
 
-    _tappedRow(input) {
-        if (this.props.multipleInput) {
-            this._addNewPill(input, true);
+    const _tappedRow = (input) => {
+        if (props.multipleInput) {
+            _addNewPill(input, true);
         } else {
             // TODO: find a way to not repeat _tappedDone logic
             // NOTE: This is repeating _tappedDone logic because setState doesn't update immediately
-            this.props.saveSetSingleInput(this.state.setID, input);
-            this.props.closeModal();
+            props.saveSetSingleInput(setID, input);
+            props.closeModal();
         }
-    }
+    };
 
-    _tappedDone() {
-        if (this.props.multipleInput) {
-            if (this.state.text) {
-                var inputs = [...this.state.inputs, this.state.text];
+    const _tappedDone = () => {
+        if (props.multipleInput) {
+            if (text) {
+                var finalInputs = [...inputs, text];
             } else {
-                var inputs = this.state.inputs;
+                var finalInputs = inputs;
             }
-            this.props.saveSetMultipleInput(this.state.setID, inputs);
+            props.saveSetMultipleInput(setID, finalInputs);
         } else {
-            this.props.saveSetSingleInput(this.state.setID, this.state.text);
+            props.saveSetSingleInput(setID, text);
         }
-        this.props.closeModal();
-    }
+        props.closeModal();
+    };
 
-    _tappedEnter() {
-        if (this.props.multipleInput) {
+    const _tappedEnter = () => {
+        if (props.multipleInput) {
             // this is android only, iOS instead uses the \n check in onChangeText
-            this._addNewPill(this.state.text, true);
+            _addNewPill(text, true);
         } else {
-            this._tappedDone();
+            _tappedDone();
         }
-    }
+    };
 
-    _tappedPill(index) {
-        this._removePill(index);
-        this.props.tappedPill(this.state.setID);
-    }
+    const _tappedPill = (index) => {
+        _removePill(index);
+        props.tappedPill(setID);
+    };
 
     // RENDER
 
     // TODO: grab the blue color for cancel from a global stylesheet
-    _renderNavigation() {
-        if (Device.hasNotch()) {
-            var statusBar = (
-                <View>
-                    <StatusBar
-                        backgroundColor="white"
-                        barStyle="dark-content"
-                    />
-                </View>
-            );
-        } else if (Platform.OS === 'ios') {
-            var statusBar = (
-                <View
-                    style={{
-                        height: 20,
-                        width: 9001,
-                        backgroundColor: 'black',
-                    }}></View>
-            );
-        } else {
-            var statusBar = null;
-        }
-
+    const _renderNavigation = () => {
         return (
-            <View style={styles.container}>
-                {statusBar}
+            <View style={{ backgroundColor: 'rgba(242, 242, 242, 1)' }}>
+                <View style={styles.container}>
+                    <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                        <TouchableOpacity
+                            onPress={() =>
+                                props.cancelModal(setID)
+                            }>
+                            <View style={styles.nav}>
+                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                    Cancel
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                    <TouchableOpacity
-                        onPress={() =>
-                            this.props.cancelModal(this.state.setID)
-                        }>
-                        <View style={styles.nav}>
-                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Cancel
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.navTitle}>
+                        <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                            {props.title}
+                        </Text>
+                    </View>
 
-                <View style={styles.navTitle}>
-                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
-                        {this.props.title}
-                    </Text>
-                </View>
-
-                <View style={{ position: 'absolute', right: 0, top: 0 }}>
-                    <TouchableOpacity onPress={() => this._tappedDone()}>
-                        <View style={styles.nav}>
-                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Done
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+                    <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                        <TouchableOpacity onPress={() => _tappedDone()}>
+                            <View style={styles.nav}>
+                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                    Done
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
-    }
+    };
 
-    _renderHeader() {
-        if (!this.props.multipleInput) {
+    const _renderHeader = () => {
+        if (!props.multipleInput) {
             return;
         }
 
         var pills = [];
-        this.state.inputs.map((input, index) => {
+        inputs.map((input, index) => {
             let position = pills.length;
-            let text = input;
+            let pillText = input;
             pills.push(
                 <TouchableOpacity
                     key={`pill-${index}`}
-                    onPress={() => this._tappedPill(position)}>
+                    onPress={() => _tappedPill(position)}>
                     <Pill
-                        text={text}
+                        text={pillText}
                         style={{ paddingRight: 5, paddingBottom: 3 }}
                     />
                 </TouchableOpacity>,
@@ -278,14 +241,14 @@ class EditTextModal extends Component {
                 </View>
             );
         }
-    }
+    };
 
-    _renderTextField() {
-        if (this.props.multipleInput) {
+    const _renderTextField = () => {
+        if (props.multipleInput) {
             var returnKeyType = 'go';
             if (
-                this.state.inputs.includes(this.state.text) ||
-                this.state.text == ''
+                inputs.includes(text) ||
+                text == ''
             ) {
                 var button = (
                     <View
@@ -299,7 +262,7 @@ class EditTextModal extends Component {
                 );
             } else {
                 var button = (
-                    <TouchableOpacity onPress={() => this._tappedEnter()}>
+                    <TouchableOpacity onPress={() => _tappedEnter()}>
                         <View
                             style={[
                                 { width: 50, height: 50, marginRight: 10 },
@@ -339,26 +302,26 @@ class EditTextModal extends Component {
                         editable={true}
                         autoFocus={true}
                         autoCapitalize={'none'}
-                        placeholder={this.props.placeholder}
+                        placeholder={props.placeholder}
                         returnKeyType={returnKeyType}
-                        value={this.state.text}
+                        value={text}
                         multiline={
                             Platform.os === 'ios'
-                                ? this.props.multipleInput
+                                ? props.multipleInput
                                 : false
                         } //Android multiline screws up spacing
-                        onSubmitEditing={() => this._tappedEnter()}
-                        onChangeText={text => this._onChangeText(text)}
+                        onSubmitEditing={() => _tappedEnter()}
+                        onChangeText={inputText => _onChangeText(inputText)}
                         clearButtonMode={'while-editing'}
                     />
                 </View>
                 {button}
             </View>
         );
-    }
+    };
 
-    _renderList() {
-        let data = this.state.suggestions;
+    const _renderList = () => {
+        let data = suggestions;
 
         if (data && data.length === 0) {
             return null;
@@ -371,20 +334,20 @@ class EditTextModal extends Component {
                 keyboardShouldPersistTaps="always"
                 initialNumToRender={13}
                 data={data}
-                ListHeaderComponent={this._renderTopBorder}
-                ListFooterComponent={this._renderBottomBorder}
-                renderItem={({ item }) => this._renderRow(item)}
-                ItemSeparatorComponent={this._renderSeparator}
+                ListHeaderComponent={_renderTopBorder}
+                ListFooterComponent={_renderBottomBorder}
+                renderItem={({ item }) => _renderRow(item)}
+                ItemSeparatorComponent={_renderSeparator}
             />
         );
-    }
+    };
 
-    _renderRow(item) {
+    const _renderRow = (item) => {
         if (item.key === 'bug') {
             // hack to get bug pill working
             // TODO: make this generic rather than specific so you can have multiple pill types
             return (
-                <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
+                <TouchableHighlight onPress={() => _tappedRow(item.key)}>
                     <View
                         style={[
                             {
@@ -402,7 +365,7 @@ class EditTextModal extends Component {
             );
         } else {
             return (
-                <TouchableHighlight onPress={() => this._tappedRow(item.key)}>
+                <TouchableHighlight onPress={() => _tappedRow(item.key)}>
                     <View
                         style={[
                             {
@@ -423,10 +386,10 @@ class EditTextModal extends Component {
                 </TouchableHighlight>
             );
         }
-    }
+    };
 
     // TODO: move 242 gray from global stylesheet
-    _renderSeparator() {
+    const _renderSeparator = () => {
         return (
             <View style={[{ backgroundColor: 'white' }, styles.rowBorders]}>
                 <View
@@ -437,15 +400,15 @@ class EditTextModal extends Component {
                     }}></View>
             </View>
         );
-    }
+    };
 
-    _renderTopBorder() {
+    const _renderTopBorder = () => {
         return (
             <View style={{ backgroundColor: '#e0e0e0', flex: 1, height: 1 }} />
         );
-    }
+    };
 
-    _renderBottomBorder() {
+    const _renderBottomBorder = () => {
         return (
             <View
                 style={{
@@ -456,27 +419,24 @@ class EditTextModal extends Component {
                 }}
             />
         );
-    }
+    };
 
     // TODO: move 242 gray from global stylesheet
-    render() {
-        return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
-                <View
-                    style={{
-                        flex: 1,
-                        paddingTop: Device.hasNotch() ? 40 : 0,
-                        flexDirection: 'column',
-                        backgroundColor: 'rgba(242, 242, 242, 1)',
-                    }}>
-                    {this._renderNavigation()}
-                    {this._renderHeader()}
-                    {this._renderTextField()}
-                    {this._renderList()}
-                </View>
-            </Modal>
-        );
-    }
+    return (
+        <Modal visible={props.isModalShowing} animationType="fade">
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    backgroundColor: 'rgba(242, 242, 242, 1)',
+                }}>
+                {_renderNavigation()}
+                {_renderHeader()}
+                {_renderTextField()}
+                {_renderList()}
+            </View>
+        </Modal>
+    );
 }
 
 const styles = EDIT_MODAL_STYLES;

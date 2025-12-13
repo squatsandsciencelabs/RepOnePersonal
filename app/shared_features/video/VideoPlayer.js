@@ -5,12 +5,12 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
-import * as Device from 'app/utility/Device';
 
 class VideoPlayer extends Component {
     _renderVideo() {
         if (this.props.isModalShowing) {
             activateKeepAwake();
+
             return (
                 <View style={[{ flex: 1 }, styles.container]}>
                     {this.props.video && (
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     cancelButton: {
         position: 'absolute',
         left: 20,
-        top: Device.hasNotch() ? 50 : 30,
         width: 100,
         backgroundColor: '#333333',
         justifyContent: 'center',
@@ -81,6 +80,7 @@ const styles = StyleSheet.create({
     cancelText: {
         color: 'white',
         fontWeight: 'bold',
+        top: 10,
         width: 50,
         height: 30,
         paddingTop: 5,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     deleteButton: {
         position: 'absolute',
         right: 20,
-        top: Device.hasNotch() ? 50 : 30,
+        top: 10,
         width: 100,
         backgroundColor: 'red',
         justifyContent: 'center',

@@ -2,7 +2,6 @@
 // TODO: organize this, this is poorly used throughout the application
 
 import { Platform, StyleSheet } from 'react-native';
-import * as Device from 'app/utility/Device';
 
 export const SETTINGS_PANEL_STYLES = StyleSheet.create({
     panel: {
@@ -100,11 +99,11 @@ export const EDIT_MODAL_STYLES = StyleSheet.create({
         paddingBottom: Platform.OS === 'ios' ? 0 : 10,
     },
     container: {
-        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
+        height: 50,
         alignItems: 'center',
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
+        paddingTop: 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10,

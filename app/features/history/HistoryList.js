@@ -296,6 +296,7 @@ class HistoryList extends Component {
     }
 
     render() {
+        const insets = this.props.insets;
         var list = null;
         if (this.props.sections.length > 0) {
             list = (
@@ -320,6 +321,7 @@ class HistoryList extends Component {
                     sections={this.props.sections}
                     onEndReached={() => this.props.finishLoading()}
                     style={{ padding: 16, backgroundColor: '#f2f2f2' }}
+                    contentContainerStyle={{ paddingBottom: insets.bottom }}
                 />
             );
         }
@@ -347,7 +349,10 @@ class HistoryList extends Component {
             return (
                 <ScrollView
                     style={{ flex: 1, backgroundColor: '#f2f2f2' }}
-                    contentContainerStyle={{ flexGrow: 1 }}>
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        paddingBottom: insets.bottom,
+                    }}>
                     <UserLoggedOutPanel />
                 </ScrollView>
             );

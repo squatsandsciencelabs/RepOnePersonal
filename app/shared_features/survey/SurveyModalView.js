@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import WebView from 'react-native-webview';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
-import * as Device from 'app/utility/Device';
 
 class SurveyModalView extends Component {
     _close() {
@@ -21,47 +20,25 @@ class SurveyModalView extends Component {
 
     // TODO: grab the blue color for cancel from a global stylesheet
     _renderNavigation() {
-        if (Device.hasNotch()) {
-            var statusBar = (
-                <View>
-                    <StatusBar
-                        backgroundColor="white"
-                        barStyle="dark-content"
-                    />
-                </View>
-            );
-        } else if (Platform.OS === 'ios') {
-            var statusBar = (
-                <View
-                    style={{
-                        height: 20,
-                        width: 9001,
-                        backgroundColor: 'black',
-                    }}></View>
-            );
-        } else {
-            var statusBar = null;
-        }
-
         // TODO: consider using close icon instead of X text
         return (
-            <View style={styles.container}>
-                {statusBar}
+            <View>
+                <View style={styles.container}>
+                    <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                        <TouchableOpacity onPress={() => this._close()}>
+                            <View style={styles.nav}>
+                                <FontAwesome
+                                    name="times-circle"
+                                    size={20}
+                                    color="red"
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                    <TouchableOpacity onPress={() => this._close()}>
-                        <View style={styles.nav}>
-                            <FontAwesome
-                                name="times-circle"
-                                size={20}
-                                color="red"
-                            />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.navTitle}>
-                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>Survey</Text>
+                    <View style={styles.navTitle}>
+                        <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>Survey</Text>
+                    </View>
                 </View>
             </View>
         );
@@ -76,7 +53,6 @@ class SurveyModalView extends Component {
                 <View
                     style={{
                         flex: 1,
-                        paddingTop: Device.hasNotch() ? 40 : 0,
                         flexDirection: 'column',
                         backgroundColor: 'rgba(242, 242, 242, 1)',
                     }}>
@@ -94,12 +70,12 @@ class SurveyModalView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: Platform.OS === 'ios' ? 70 : 50,
+        height: 50,
         alignItems: 'center',
         backgroundColor: 'white',
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' ? 35 : 15,
+        paddingTop: 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10,

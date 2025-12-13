@@ -11,7 +11,6 @@ import {
     ScrollView,
     Image,
 } from 'react-native';
-import * as Device from 'app/utility/Device';
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 export default function (props) {
@@ -30,25 +29,7 @@ export default function (props) {
     );
 }
 
-const renderNavigation = props => {
-    if (Device.hasNotch()) {
-        var statusBar = (
-            <View>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
-            </View>
-        );
-    } else if (Platform.OS === 'ios') {
-        var statusBar = (
-            <View
-                style={{
-                    height: 20,
-                    width: 9001,
-                    backgroundColor: 'black',
-                }}></View>
-        );
-    } else {
-        var statusBar = null;
-    }
+const renderNavigation = (props) => {
 
     if (props.isCancelEnabled) {
         var cancel = (
@@ -75,13 +56,13 @@ const renderNavigation = props => {
     }
 
     return (
-        <View style={styles.container}>
-            {statusBar}
+        <View>
+            <View style={styles.container}>
+                {cancel}
 
-            {cancel}
-
-            <View style={styles.navTitle}>
-                <Text style={styles.navTitleText}>3D Calibration</Text>
+                <View style={styles.navTitle}>
+                    <Text style={styles.navTitleText}>3D Calibration</Text>
+                </View>
             </View>
         </View>
     );
@@ -176,11 +157,11 @@ const renderStep2 = props => {
 
 const styles = StyleSheet.create({
     container: {
-        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
+        height: 50,
         alignItems: 'center',
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
+        paddingTop: 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10,

@@ -17,11 +17,11 @@ import EditHistoryFilterTagsToIncludeScreen from './tags/tagsToInclude/EditHisto
 import EditHistoryFilterTagsToExcludeScreen from './tags/tagsToExclude/EditHistoryFilterTagsToExcludeScreen';
 import EditHistoryFilterExerciseScreen from './exercise_name/EditHistoryFilterExerciseScreen';
 import Pill from 'app/shared_features/pill/Pill';
-import * as Device from 'app/utility/Device';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import EditHistoryFilterStartDateScreen from './dateRange/startDate/EditHistoryFilterStartScreen';
 import EditHistoryFilterEndDateScreen from './dateRange/endDate/EditHistoryFilterEndScreen';
 import EditHistoryFilterDeviceScreen from './device/EditHistoryFilterDeviceScreen';
+import * as Device from 'app/utility/Device';
 
 class EditHistoryFilterView extends Component {
     _close() {
@@ -515,54 +515,32 @@ class EditHistoryFilterView extends Component {
     }
 
     _renderNavigation() {
-        if (Device.hasNotch()) {
-            var statusBar = (
-                <View>
-                    <StatusBar
-                        backgroundColor="white"
-                        barStyle="dark-content"
-                    />
-                </View>
-            );
-        } else if (Platform.OS === 'ios') {
-            var statusBar = (
-                <View
-                    style={{
-                        height: 20,
-                        width: 9001,
-                        backgroundColor: 'black',
-                    }}></View>
-            );
-        } else {
-            var statusBar = null;
-        }
-
         return (
-            <View style={styles.container}>
-                {statusBar}
+            <View>
+                <View style={styles.container}>
+                    <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                        <TouchableOpacity onPress={() => this.props.closeModal()}>
+                            <View style={styles.nav}>
+                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                    X
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                    <TouchableOpacity onPress={() => this.props.closeModal()}>
-                        <View style={styles.nav}>
-                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                X
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.navTitle}>
+                        <Text style={styles.titleText}>FILTERS</Text>
+                    </View>
 
-                <View style={styles.navTitle}>
-                    <Text style={styles.titleText}>FILTERS</Text>
-                </View>
-
-                <View style={{ position: 'absolute', right: 0, top: 0 }}>
-                    <TouchableOpacity onPress={() => this.props.save()}>
-                        <View style={styles.nav}>
-                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                Apply
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+                    <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                        <TouchableOpacity onPress={() => this.props.save()}>
+                            <View style={styles.nav}>
+                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
@@ -574,7 +552,6 @@ class EditHistoryFilterView extends Component {
                 <View
                     style={{
                         flex: 1,
-                        paddingTop: Device.hasNotch() ? 40 : 0,
                         flexDirection: 'column',
                     }}>
                     {this._renderNavigation()}
@@ -602,11 +579,11 @@ const styles = StyleSheet.create({
         paddingBottom: Platform.os === 'ios' ? 0 : 10,
     },
     container: {
-        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
+        height: 50,
         alignItems: 'center',
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
+        paddingTop: 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10,
