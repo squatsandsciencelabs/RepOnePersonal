@@ -6,10 +6,12 @@ import {
     ROM_METRIC,
     PKH_METRIC,
     PKV_METRIC,
-    FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     EMPTY_QUANTIFIER,
@@ -112,6 +114,25 @@ export const getPeakForces = set =>
             : null;
     });
 
+export const getMeanForces = set =>
+    getMetrics(set, r => {
+        if (set.deviceType === 'Kratos') {
+            const totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            // r.partialMeanForce is the selected eccentric or concentric partial mean force
+            return totalInertialConstant &&
+                r.partialMeanForce !== null &&
+                r.partialMeanForce !== undefined
+                ? newtonsToPounds(r.partialMeanForce) * totalInertialConstant
+                : null;
+        }
+
+        return r.peakForce !== null && r.peakForce !== undefined
+            ? newtonsToPounds(r.peakForce)
+            : null;
+    });
+
 export const getPeakForceHeights = set =>
     getMetrics(set, r =>
         r.peakForceHeight !== null && r.peakForceHeight !== undefined
@@ -138,6 +159,24 @@ export const getPeakPowers = set =>
                 r.partialPeakPower !== null &&
                 r.partialPeakPower !== undefined
                 ? r.partialPeakPower * totalInertialConstant
+                : null;
+        }
+
+        return null;
+    });
+
+export const getMeanPowers = set =>
+    getMetrics(set, r => {
+        if (set.deviceType === 'Kratos') {
+            const totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+
+            // r.partialMeanPower is the selected eccentric or concentric partial peak power
+            return totalInertialConstant &&
+                r.partialMeanPower !== null &&
+                r.partialMeanPower !== undefined
+                ? r.partialMeanPower * totalInertialConstant
                 : null;
         }
 
@@ -221,6 +260,11 @@ export const getAvgPeakForce = set => {
     return getAvgOfMetrics(peakForces);
 };
 
+export const getAvgMeanForce = set => {
+    const meanForces = getMeanForces(set);
+    return getAvgOfMetrics(meanForces);
+};
+
 export const getAvgOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getAvgOfMetrics(averageForces);
@@ -229,6 +273,11 @@ export const getAvgOfAvgForces = set => {
 export const getAvgPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getAvgOfMetrics(peakPowers);
+};
+
+export const getAvgMeanPower = set => {
+    const meanPowers = getMeanPowers(set);
+    return getAvgOfMetrics(meanPowers);
 };
 
 export const getAvgOfAvgPowers = set => {
@@ -304,6 +353,11 @@ export const getAbsLossOfPeakForces = set => {
     return getAbsLossOfMetrics(peakForces);
 };
 
+export const getAbsLossOfMeanForces = set => {
+    const meanForces = getMeanForces(set);
+    return getAbsLossOfMetrics(meanForces);
+};
+
 export const getAbsLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getAbsLossOfMetrics(averageForces);
@@ -312,6 +366,11 @@ export const getAbsLossOfAvgForces = set => {
 export const getAbsLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getAbsLossOfMetrics(peakPowers);
+};
+
+export const getAbsLossOfMeanPowers = set => {
+    const meanPowers = getMeanPowers(set);
+    return getAbsLossOfMetrics(meanPowers);
 };
 
 export const getAbsLossOfAvgPowers = set => {
@@ -386,6 +445,11 @@ export const getPercentLossOfPeakForces = set => {
     return getPercentLossOfMetrics(peakForces);
 };
 
+export const getPercentLossOfMeanForces = set => {
+    const meanForces = getMeanForces(set);
+    return getPercentLossOfMetrics(meanForces);
+};
+
 export const getPercentLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getPercentLossOfMetrics(averageForces);
@@ -394,6 +458,11 @@ export const getPercentLossOfAvgForces = set => {
 export const getPercentLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getPercentLossOfMetrics(peakPowers);
+};
+
+export const getPercentLossOfMeanPowers = set => {
+    const meanPowers = getMeanPowers(set);
+    return getPercentLossOfMetrics(meanPowers);
 };
 
 export const getPercentLossOfAvgPowers = set => {
@@ -470,6 +539,11 @@ export const getFirstPeakForce = set => {
     return getFirstRepOfMetrics(peakForces);
 };
 
+export const getFirstMeanForce = set => {
+    const meanForces = getMeanForces(set);
+    return getFirstRepOfMetrics(meanForces);
+};
+
 export const getFirstPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getFirstRepOfMetrics(peakForceHeights);
@@ -483,6 +557,11 @@ export const getFirstAvgForce = set => {
 export const getFirstPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getFirstRepOfMetrics(peakPowers);
+};
+
+export const getFirstMeanPower = set => {
+    const meanPowers = getMeanPowers(set);
+    return getFirstRepOfMetrics(meanPowers);
 };
 
 export const getFirstPeakPowerHeight = set => {
@@ -550,6 +629,11 @@ export const getLastPeakForce = set => {
     return getLastRepMetrics(peakForces);
 };
 
+export const getLastMeanForce = set => {
+    const meanForces = getMeanForces(set);
+    return getLastRepMetrics(meanForces);
+};
+
 export const getLastPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getLastRepMetrics(peakForceHeights);
@@ -563,6 +647,10 @@ export const getLastAvgForce = set => {
 export const getLastPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getLastRepMetrics(peakPowers);
+};
+export const getLastMeanPower = set => {
+    const meanPowers = getMeanPowers(set);
+    return getLastRepMetrics(meanPowers);
 };
 
 export const getLastPeakPowerHeight = set => {
@@ -629,6 +717,11 @@ export const getMinPeakForce = set => {
     return getMinMetrics(peakForces);
 };
 
+export const getMinMeanForce = set => {
+    const meanForces = getMeanForces(set);
+    return getMinMetrics(meanForces);
+};
+
 export const getMinPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getMinMetrics(peakForceHeights);
@@ -642,6 +735,10 @@ export const getMinAvgForce = set => {
 export const getMinPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getMinMetrics(peakPowers);
+};
+export const getMinMeanPower = set => {
+    const meanPowers = getMeanPowers(set);
+    return getMinMetrics(meanPowers);
 };
 
 export const getMinPeakPowerHeight = set => {
@@ -709,6 +806,11 @@ export const getMaxPeakForce = set => {
     return getMaxMetrics(peakForces);
 };
 
+export const getMaxMeanForce = set => {
+    const meanForces = getMeanForces(set);
+    return getMaxMetrics(meanForces);
+};
+
 export const getMaxPeakForceHeight = set => {
     const peakForceHeights = getPeakForceHeights(set);
     return getMaxMetrics(peakForceHeights);
@@ -722,6 +824,11 @@ export const getMaxAvgForce = set => {
 export const getMaxPeakPower = set => {
     const peakPowers = getPeakPowers(set);
     return getMaxMetrics(peakPowers);
+};
+
+export const getMaxMeanPower = set => {
+    const meanPowers = getMeanPowers(set);
+    return getMaxMetrics(meanPowers);
 };
 
 export const getMaxPeakPowerHeight = set => {
@@ -786,6 +893,11 @@ export const getPeakEndOfPeakForces = set => {
     return getPeakEndMetrics(peakForces);
 };
 
+export const getPeakEndOfMeanForces = set => {
+    const meanForces = getMeanForces(set);
+    return getPeakEndMetrics(meanForces);
+};
+
 export const getPeakEndOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getPeakEndMetrics(averageForces);
@@ -794,6 +906,11 @@ export const getPeakEndOfAvgForces = set => {
 export const getPeakEndOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getPeakEndMetrics(peakPowers);
+};
+
+export const getPeakEndOfMeanPowers = set => {
+    const meanPowers = getMeanPowers(set);
+    return getPeakEndMetrics(meanPowers);
 };
 
 export const getPeakEndOfAvgPowers = set => {
@@ -854,6 +971,11 @@ export const getSetLossOfPeakForces = set => {
     return getSetLossMetrics(peakForces);
 };
 
+export const getSetLossOfMeanForces = set => {
+    const meanForces = getMeanForces(set);
+    return getSetLossMetrics(meanForces);
+};
+
 export const getSetLossOfAvgForces = set => {
     const averageForces = getAverageForces(set);
     return getSetLossMetrics(averageForces);
@@ -862,6 +984,11 @@ export const getSetLossOfAvgForces = set => {
 export const getSetLossOfPeakPowers = set => {
     const peakPowers = getPeakPowers(set);
     return getSetLossMetrics(peakPowers);
+};
+
+export const getSetLossOfMeanPowers = set => {
+    const meanPowers = getMeanPowers(set);
+    return getSetLossMetrics(meanPowers);
 };
 
 export const getSetLossOfAvgPowers = set => {
@@ -1176,14 +1303,18 @@ export const metricAbbreviation = metric => {
             return 'PK VEL LOC';
         case PKV_METRIC:
             return 'PK VEL';
-        case FORCE_METRIC:
-            return 'FRC';
-        case FORCE_HEIGHT_METRIC:
-            return 'FH';
-        case POWER_METRIC:
-            return 'PWR';
-        case POWER_HEIGHT_METRIC:
-            return 'PH';
+        case PEAK_FORCE_METRIC:
+            return 'PK FRC';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'PK FH';
+        case PEAK_POWER_METRIC:
+            return 'PK PWR';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'PK PH';
+        case MEAN_FORCE_METRIC:
+            return 'MN FRC';
+        case MEAN_POWER_METRIC:
+            return 'MN PWR';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'VEL³';
         case LINEAR_3D_ROM_METRIC:
@@ -1211,14 +1342,18 @@ export const metricString = metric => {
             return 'Peak Height';
         case PKV_METRIC:
             return 'Peak Velocity';
-        case FORCE_METRIC:
-            return 'Force';
-        case FORCE_HEIGHT_METRIC:
-            return 'Force Height';
-        case POWER_METRIC:
-            return 'Power';
-        case POWER_HEIGHT_METRIC:
-            return 'Power Height';
+        case PEAK_FORCE_METRIC:
+            return 'Peak Force';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'Peak Force Height';
+        case PEAK_POWER_METRIC:
+            return 'Peak Power';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'Peak Power Height';
+        case MEAN_FORCE_METRIC:
+            return 'Mean Force';
+        case MEAN_POWER_METRIC:
+            return 'Mean Power';
         case LINEAR_3D_AVG_VELOCITY_METRIC:
             return 'Average Velocity 3D';
         case LINEAR_3D_ROM_METRIC:
@@ -1255,12 +1390,15 @@ export const metricUnit = (metric, quantifier) => {
         case ROM_METRIC:
             return 'mm';
         case PKH_METRIC:
-        case FORCE_HEIGHT_METRIC:
-        case POWER_HEIGHT_METRIC:
+        case PEAK_FORCE_HEIGHT_METRIC:
+        case PEAK_POWER_HEIGHT_METRIC:
             return '%';
-        case FORCE_METRIC:
+        case PEAK_FORCE_METRIC:
+        case MEAN_FORCE_METRIC:
             return 'lb-f';
-        case POWER_METRIC:
+        case PEAK_POWER_METRIC:
+            return 'W';
+        case MEAN_POWER_METRIC:
             return 'W';
         default:
             return null;
@@ -1293,6 +1431,18 @@ export const quantifierAbbreviation = quantifier => {
             return 'SET LOSS';
         case PEAK_END_QUANTIFIER:
             return 'PEAK END';
+        case PEAK_FORCE_METRIC:
+            return 'PK FRC';
+        case PEAK_POWER_METRIC:
+            return 'PK PWR';
+        case MEAN_FORCE_METRIC:
+            return 'MN FRC';
+        case MEAN_POWER_METRIC:
+            return 'MN PWR';
+        case PEAK_FORCE_HEIGHT_METRIC:
+            return 'PK HFRC';
+        case PEAK_POWER_HEIGHT_METRIC:
+            return 'PK HPWR';
         default:
             return null;
     }

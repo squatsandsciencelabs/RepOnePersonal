@@ -14,5 +14,6 @@
     "calibrationEnabled": false,
     "bulkMetricsEnabled": false,
     "scalarEnabled": false,
-    "visualizationEnabled": false
+    "visualizationEnabled": false,
+    "kratosMeanForcePowerEnabled": false
 }

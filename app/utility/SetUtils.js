@@ -7,10 +7,12 @@ import {
     PKH_METRIC,
     ROM_METRIC,
     DURATION_METRIC,
-    FORCE_METRIC,
-    FORCE_HEIGHT_METRIC,
-    POWER_METRIC,
-    POWER_HEIGHT_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_FORCE_HEIGHT_METRIC,
+    PEAK_POWER_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
+    PEAK_POWER_HEIGHT_METRIC,
     LINEAR_3D_AVG_VELOCITY_METRIC,
     LINEAR_3D_ROM_METRIC,
     WORK_METRIC,
@@ -746,16 +748,22 @@ const _getDisplayMetric = (metric, rep, set = null) => {
             return rep.duration
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
-        case FORCE_METRIC:
+        case PEAK_FORCE_METRIC:
             return rep.peakForce
                 ? Number(newtonsToPounds(rep.peakForce)).toFixed(2)
                 : EMPTY;
-        case FORCE_HEIGHT_METRIC:
+        case PEAK_FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
-        case POWER_METRIC:
+        case PEAK_POWER_METRIC:
             return rep.peakPower ? Number(rep.peakPower).toFixed(2) : EMPTY;
-        case POWER_HEIGHT_METRIC:
+        case PEAK_POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
+        case MEAN_FORCE_METRIC:
+            return rep.meanForce
+                ? Number(newtonsToPounds(rep.meanForce)).toFixed(2)
+                : EMPTY;
+        case MEAN_POWER_METRIC:
+            return rep.meanPower ? Number(rep.meanPower).toFixed(2) : EMPTY;
         default:
             return INVALID;
     }
@@ -792,7 +800,7 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
             return rep.duration
                 ? DurationCalculator.displayDuration(rep.duration)
                 : INVALID;
-        case FORCE_METRIC:
+        case PEAK_FORCE_METRIC:
             totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );
@@ -802,9 +810,19 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                           totalInertialConstant,
                   ).toFixed(2)
                 : EMPTY;
-        case FORCE_HEIGHT_METRIC:
+        case MEAN_FORCE_METRIC:
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant && rep.partialMeanForce
+                ? Number(
+                      newtonsToPounds(rep.partialMeanForce) *
+                          totalInertialConstant,
+                  ).toFixed(2)
+                : EMPTY;
+        case PEAK_FORCE_HEIGHT_METRIC:
             return rep.peakForceHeight ? rep.peakForceHeight : EMPTY;
-        case POWER_METRIC:
+        case PEAK_POWER_METRIC:
             totalInertialConstant = getTotalKratosDiscsInertialConstant(
                 set.kratosDiscs,
             );
@@ -813,7 +831,16 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
                       2,
                   )
                 : EMPTY;
-        case POWER_HEIGHT_METRIC:
+        case MEAN_POWER_METRIC:
+            totalInertialConstant = getTotalKratosDiscsInertialConstant(
+                set.kratosDiscs,
+            );
+            return totalInertialConstant && rep.partialMeanPower
+                ? Number(rep.partialMeanPower * totalInertialConstant).toFixed(
+                      2,
+                  )
+                : EMPTY;
+        case PEAK_POWER_HEIGHT_METRIC:
             return rep.peakPowerHeight ? rep.peakPowerHeight : EMPTY;
         case WORK_METRIC:
             totalInertialConstant = getTotalKratosDiscsInertialConstant(

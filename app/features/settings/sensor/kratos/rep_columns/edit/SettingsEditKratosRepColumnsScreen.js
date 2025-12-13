@@ -9,9 +9,12 @@ import {
     ROM_METRIC,
     PKV_METRIC,
     WORK_METRIC,
-    FORCE_METRIC,
-    POWER_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import PickerModal from 'app/shared_features/picker/PickerModal';
 import * as Actions from './SettingsEditKratosRepColumnsActions';
@@ -29,9 +32,13 @@ const items = [
     pickerItem(ROM_METRIC),
     pickerItem(DURATION_METRIC),
     pickerItem(WORK_METRIC),
-    pickerItem(FORCE_METRIC),
-    pickerItem(POWER_METRIC),
+    pickerItem(PEAK_FORCE_METRIC),
+    pickerItem(PEAK_POWER_METRIC),
 ];
+
+if (OpenBarbellConfig.kratosMeanForcePowerEnabled) {
+    items.push(pickerItem(MEAN_FORCE_METRIC), pickerItem(MEAN_POWER_METRIC));
+}
 
 const mapStateToPropsiOS = state => {
     return {

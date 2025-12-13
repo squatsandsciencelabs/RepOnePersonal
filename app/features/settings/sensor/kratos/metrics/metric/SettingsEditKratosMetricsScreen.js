@@ -14,10 +14,13 @@ import {
     MIN_EVER_QUANTIFIER,
     SET_LOSS_QUANTIFIER,
     PEAK_END_QUANTIFIER,
-    FORCE_METRIC,
-    POWER_METRIC,
+    PEAK_FORCE_METRIC,
+    PEAK_POWER_METRIC,
+    MEAN_FORCE_METRIC,
+    MEAN_POWER_METRIC,
     WORK_METRIC,
 } from 'app/configs+constants/CollapsedMetricTypes';
+import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 import PickerModal from 'app/shared_features/picker/PickerModal';
 import * as Actions from './SettingsEditKratosMetricsActions';
@@ -31,7 +34,7 @@ const pickerItem = metric => ({
             : CollapsedMetricsUtility.metricAbbreviation(metric),
     value: metric,
 });
-// TODO: FORCE_HEIGHT_METRIC and POWER_HEIGHT_METRIC pickerItems should be added when Kratos has it
+// TODO: PEAK_FORCE_HEIGHT_METRIC and PEAK_POWER_HEIGHT_METRIC pickerItems should be added when Kratos has it
 const generateItems = rollup => {
     switch (rollup) {
         case MAX_EVER_QUANTIFIER:
@@ -43,30 +46,48 @@ const generateItems = rollup => {
                 pickerItem(PKV_METRIC),
             ];
         case SET_LOSS_QUANTIFIER:
-        case PEAK_END_QUANTIFIER:
-            return [
+        case PEAK_END_QUANTIFIER: {
+            const result = [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
                 pickerItem(WORK_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
             ];
-        default:
-            return [
+            if (OpenBarbellConfig.kratosMeanForcePowerEnabled) {
+                result.push(
+                    pickerItem(MEAN_FORCE_METRIC),
+                    pickerItem(MEAN_POWER_METRIC),
+                );
+            }
+
+            return result;
+        }
+        default: {
+            const result = [
                 pickerItem(EMPTY_METRIC),
                 pickerItem(AVG_VELOCITY_METRIC),
                 pickerItem(PKV_METRIC),
-                pickerItem(FORCE_METRIC),
-                pickerItem(POWER_METRIC),
+                pickerItem(PEAK_FORCE_METRIC),
+                pickerItem(PEAK_POWER_METRIC),
                 pickerItem(WORK_METRIC),
                 pickerItem(ROM_METRIC),
                 pickerItem(DURATION_METRIC),
-                // pickerItem(FORCE_HEIGHT_METRIC),
-                // pickerItem(POWER_HEIGHT_METRIC),
+                // pickerItem(PEAK_FORCE_HEIGHT_METRIC),
+                // pickerItem(PEAK_POWER_HEIGHT_METRIC),
             ];
+            if (OpenBarbellConfig.kratosMeanForcePowerEnabled) {
+                result.push(
+                    pickerItem(MEAN_FORCE_METRIC),
+                    pickerItem(MEAN_POWER_METRIC),
+                );
+            }
+
+            return result;
+        }
     }
 };
 

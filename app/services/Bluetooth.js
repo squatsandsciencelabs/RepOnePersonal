@@ -410,28 +410,35 @@ const formConcentricRepDataJson = (data, formatVersion) => ({
     linear3DROM: formatVersion === 1 ? null : data[9],
 });
 
-const formConcentricEccentricRepDataJson = data => ({
-    isValid: true,
-    repId: data[0],
-    repNumber: data[1],
-    cRom: data[2],
-    eRom: data[3],
-    cAvgLinearVelocity: data[4],
-    eAvgLinearVelocity: data[5],
-    cPeakLinearVelocity: data[6],
-    ePeakLinearVelocity: data[7],
-    cDuration: data[8],
-    eDuration: data[9],
-    cMeanAcceleration: data[10],
-    eMeanAcceleration: data[11],
-    cPeakLinearAcceleration: data[12],
-    ePeakLinearAcceleration: data[13],
-    cPartialPeakForce: data[14],
-    ePartialPeakForce: data[15],
-    cPartialPeakPower: data[16],
-    ePartialPeakPower: data[17],
-    cPartialMeanForce: data[18],
-    ePartialMeanForce: data[19],
-    cPartialMeanPower: data[20],
-    ePartialMeanPower: data[21],
-});
+const formConcentricEccentricRepDataJson = data => {
+    const result = {
+        isValid: true,
+        repId: data[0],
+        repNumber: data[1],
+        cRom: data[2],
+        eRom: data[3],
+        cAvgLinearVelocity: data[4],
+        eAvgLinearVelocity: data[5],
+        cPeakLinearVelocity: data[6],
+        ePeakLinearVelocity: data[7],
+        cDuration: data[8],
+        eDuration: data[9],
+        cMeanAcceleration: data[10],
+        eMeanAcceleration: data[11],
+        cPeakLinearAcceleration: data[12],
+        ePeakLinearAcceleration: data[13],
+        cPartialPeakForce: data[14],
+        ePartialPeakForce: data[15],
+        cPartialPeakPower: data[16],
+        ePartialPeakPower: data[17],
+    };
+
+    if (OpenBarbellConfig.kratosMeanForcePowerEnabled) {
+        result.cPartialMeanForce = data[18];
+        result.ePartialMeanForce = data[19];
+        result.cPartialMeanPower = data[20];
+        result.ePartialMeanPower = data[21];
+    }
+
+    return result;
+};
