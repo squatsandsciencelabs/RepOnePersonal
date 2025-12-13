@@ -516,31 +516,29 @@ class EditHistoryFilterView extends Component {
 
     _renderNavigation() {
         return (
-            <View>
-                <View style={styles.container}>
-                    <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                        <TouchableOpacity onPress={() => this.props.closeModal()}>
-                            <View style={styles.nav}>
-                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                    X
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.container}>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => this.props.closeModal()}>
+                        <View style={styles.nav}>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                X
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.navTitle}>
-                        <Text style={styles.titleText}>FILTERS</Text>
-                    </View>
+                <View style={styles.navTitle}>
+                    <Text style={styles.titleText}>FILTERS</Text>
+                </View>
 
-                    <View style={{ position: 'absolute', right: 0, top: 0 }}>
-                        <TouchableOpacity onPress={() => this.props.save()}>
-                            <View style={styles.nav}>
-                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                    Apply
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => this.props.save()}>
+                        <View style={styles.nav}>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Apply
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
