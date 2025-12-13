@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         position: 'absolute',
         left: 20,
+        top: 10,
         width: 100,
         backgroundColor: '#333333',
         justifyContent: 'center',
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
     cancelText: {
         color: 'white',
         fontWeight: 'bold',
-        top: 10,
         width: 50,
         height: 30,
         paddingTop: 5,
