@@ -21,37 +21,29 @@ function EditTextModal(props) {
     const [setID, setSetID] = useState(null);
     const [suggestions, setSuggestions] = useState([]);
 
+    // update values ONCE per setID change
     useEffect(() => {
-        const usesSetID = props.hasOwnProperty('setID');
-        if (usesSetID && props.setID === setID) {
-            // wrong set, don't update
+        // ignore changes if same setID
+        if (props.setID === setID) {
             return;
         }
+        setSetID(props.setID);
 
+        // it's not showing, no point in updating it
         if (!props.isModalShowing) {
-            // it's not showing, no point in updating it
             return;
         }
 
         // inputs
-        if (props.inputs !== undefined) {
-            var newInputs = [...props.inputs];
-        } else {
-            var newInputs = [];
-        }
+        const newInputs = Array.isArray(props.inputs) ? [...props.inputs] : [];
         setInputs(newInputs);
-
-        // save set id
-        if (usesSetID && props.setID !== null) {
-            setSetID(props.setID);
-        }
 
         // set text
         let newText = props.text;
         if (newText === null || newText === undefined) {
             newText = '';
         }
-        setText(newText);
+        _updateText(newText, props.bias);
 
         // update suggestions
         _updateSuggestions(newText, newInputs, props.bias);
