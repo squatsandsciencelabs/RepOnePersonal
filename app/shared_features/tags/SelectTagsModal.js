@@ -265,7 +265,7 @@ class SelectTagsModal extends Component {
                         placeholder={this.props.placeholder}
                         returnKeyType={returnKeyType}
                         value={this.state.text}
-                        multiline={Platform.os === 'ios' ? true : false} //Android multiline screws up spacing
+                        multiline={Platform.OS === 'ios' ? true : false} //Android multiline screws up spacing
                         onSubmitEditing={() => this._tappedEnter()}
                         onChangeText={text => this._onChangeText(text)}
                         clearButtonMode={'while-editing'}

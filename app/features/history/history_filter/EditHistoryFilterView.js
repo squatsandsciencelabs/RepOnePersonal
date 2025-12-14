@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
         margin: 10,
         color: 'rgba(77, 77, 77, 1)',
         fontSize: 14,
-        paddingBottom: Platform.os === 'ios' ? 0 : 10,
+        paddingBottom: Platform.OS === 'ios' ? 0 : 10,
     },
     container: {
         height: 50,

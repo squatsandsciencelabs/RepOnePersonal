@@ -298,7 +298,7 @@ function EditTextModal(props) {
                         returnKeyType={returnKeyType}
                         value={text}
                         multiline={
-                            Platform.os === 'ios'
+                            Platform.OS === 'ios'
                                 ? props.multipleInput
                                 : false
                         } //Android multiline screws up spacing
