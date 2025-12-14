@@ -4,13 +4,25 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
-import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 class VideoPlayer extends Component {
+    componentDidUpdate(prevProps) {
+        if (this.props.isModalShowing !== prevProps.isModalShowing) {
+            if (this.props.isModalShowing) {
+                activateKeepAwakeAsync();
+            } else {
+                deactivateKeepAwake();
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        deactivateKeepAwake();
+    }
+
     _renderVideo() {
         if (this.props.isModalShowing) {
-            activateKeepAwake();
-
             return (
                 <View style={[{ flex: 1 }, styles.container]}>
                     {this.props.video && (
@@ -50,7 +62,6 @@ class VideoPlayer extends Component {
                 </View>
             );
         } else {
-            deactivateKeepAwake();
             return null;
         }
     }

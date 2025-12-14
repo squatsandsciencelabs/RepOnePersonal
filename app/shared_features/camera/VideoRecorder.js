@@ -89,6 +89,18 @@ export default props => {
             }
         };
     }, [props.isRecording]);
+
+    useEffect(() => {
+        if (props.isModalShowing) {
+            activateKeepAwakeAsync();
+        } else {
+            deactivateKeepAwake();
+        }
+        return () => {
+            deactivateKeepAwake();
+        };
+    }, [props.isModalShowing]);
+
     if (device == null) return null;
     return (
         <Modal visible={props.isModalShowing} animationType="fade">
@@ -99,10 +111,8 @@ export default props => {
 
 function renderCamera(props, camera, device) {
     if (props.isModalShowing === false || !device) {
-        deactivateKeepAwake();
         return null;
     }
-    activateKeepAwakeAsync();
 
     return (
         <View style={[{ flex: 1 }, styles.container]}>
