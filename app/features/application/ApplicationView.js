@@ -142,7 +142,7 @@ function ApplicationView(props) {
 
     var killSwitchStatus = props.killSwitch.status;
 
-    if (killSwitchStatus == 'KILLED') {
+    if (killSwitchStatus === 'KILLED') {
         return _renderKillSwitch();
     } else {
         return _renderApplication();
