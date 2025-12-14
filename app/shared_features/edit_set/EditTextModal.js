@@ -161,36 +161,34 @@ function EditTextModal(props) {
     // TODO: grab the blue color for cancel from a global stylesheet
     const _renderNavigation = () => {
         return (
-            <View style={{ backgroundColor: 'rgba(242, 242, 242, 1)' }}>
-                <View style={styles.container}>
-                    <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                        <TouchableOpacity
-                            onPress={() =>
-                                props.cancelModal(setID)
-                            }>
-                            <View style={styles.nav}>
-                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                    Cancel
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.container}>
+                <View style={{ position: 'absolute', left: 0, top: 0 }}>
+                    <TouchableOpacity
+                        onPress={() =>
+                            props.cancelModal(setID)
+                        }>
+                        <View style={styles.nav}>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Cancel
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.navTitle}>
-                        <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
-                            {props.title}
-                        </Text>
-                    </View>
+                <View style={styles.navTitle}>
+                    <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                        {props.title}
+                    </Text>
+                </View>
 
-                    <View style={{ position: 'absolute', right: 0, top: 0 }}>
-                        <TouchableOpacity onPress={() => _tappedDone()}>
-                            <View style={styles.nav}>
-                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
-                                    Done
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{ position: 'absolute', right: 0, top: 0 }}>
+                    <TouchableOpacity onPress={() => _tappedDone()}>
+                        <View style={styles.nav}>
+                            <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                Done
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
