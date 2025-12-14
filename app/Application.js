@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 
 // NOTE: Somehow importing this later causes animations to fail
@@ -63,14 +64,16 @@ class RepOnePersonal extends Component {
 
     render() {
         return (
-            <ActionSheetProvider>
-                <RootSiblingParent>
-                    <Provider store={store}>
-                        <ApplicationScreen />
-                        {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
-                    </Provider>
-                </RootSiblingParent>
-            </ActionSheetProvider>
+            <SafeAreaProvider>
+                <ActionSheetProvider>
+                    <RootSiblingParent>
+                        <Provider store={store}>
+                            <ApplicationScreen />
+                            {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
+                        </Provider>
+                    </RootSiblingParent>
+                </ActionSheetProvider>
+            </SafeAreaProvider>
         );
     }
 }

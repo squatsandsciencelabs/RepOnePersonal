@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
 import SettingsHelpScreen from './help/SettingsHelpScreen';
 import SettingsSurveyScreen from './survey/SettingsSurveyScreen';
@@ -12,33 +13,35 @@ import SettingsCalibrationScreen from './calibration/SettingsCalibrationScreen';
 import SettingsRepOnePanel from './sensor/repone/SettingsRepOnePanel';
 import SettingsKratosScreen from 'app/features/settings/sensor/kratos/SettingsKratosScreen';
 
-class SettingsTab extends Component {
-    render() {
-        return (
-            <ScrollView style={{ flex: 1 }}>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        justifyContent: 'flex-start',
-                        marginBottom: 20,
-                    }}>
-                    <SettingsHelpScreen />
-                    <SettingsSurveyScreen />
-                    <SettingsOTAScreen />
-                    <SettingsDeviceScreen />
-                    <SettingsApplicationScreen />
-                    <SettingsAccountScreen />
-                    <SettingsRepOnePanel />
-                    <SettingsKratosScreen />
-                    <SettingsFeedbackScreen />
-                    {OpenBarbellConfig.calibrationEnabled ? (
-                        <SettingsCalibrationScreen />
-                    ) : null}
-                </View>
-            </ScrollView>
-        );
-    }
+function SettingsTab() {
+    const insets = useSafeAreaInsets();
+
+    return (
+        <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: insets.bottom }}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    marginBottom: 20,
+                }}>
+                <SettingsHelpScreen />
+                <SettingsSurveyScreen />
+                <SettingsOTAScreen />
+                <SettingsDeviceScreen />
+                <SettingsApplicationScreen />
+                <SettingsAccountScreen />
+                <SettingsRepOnePanel />
+                <SettingsKratosScreen />
+                <SettingsFeedbackScreen />
+                {OpenBarbellConfig.calibrationEnabled ? (
+                    <SettingsCalibrationScreen />
+                ) : null}
+            </View>
+        </ScrollView>
+    );
 }
 
 export default SettingsTab;

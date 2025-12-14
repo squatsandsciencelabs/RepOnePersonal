@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import OneRMDebugScreen from './debug/OneRMDebugScreen';
 import OneRMCalculateScreen from './calculate/OneRMCalculateScreen';
@@ -7,29 +8,21 @@ import OneRMResultsScreen from './results/OneRMResultsScreen';
 import OneRMLoggedOutView from './logged_out/OneRMLoggedOutView';
 import OneRMProtocolView from './protocol/OneRMProtocolView';
 
-class AnalysisTab extends Component {
-    // separated Chart and Screen to ensure android hack works along with calculate button
-    constructor(props) {
-        super(props);
+function AnalysisTab(props) {
+    const insets = useSafeAreaInsets();
+    const [lastScroll, setLastScroll] = useState(false);
+    const scrollViewRef = useRef(null);
+    const resultsRef = useRef(null);
 
-        this.state = { lastScroll: false };
-        this.scrollViewRef = React.createRef();
-        this.resultsRef = React.createRef();
-    }
+    useEffect(() => {
+        if (props.scroll !== lastScroll) {
+            setLastScroll(props.scroll);
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.scroll !== this.state.lastScroll) {
-            // save new props
-            this.setState({
-                lastScroll: nextProps.scroll,
-            });
-
-            // scroll
-            if (this.resultsRef.current && this.scrollViewRef.current) {
-                this.resultsRef.current.measureLayout(
-                    this.scrollViewRef.current,
+            if (resultsRef.current && scrollViewRef.current) {
+                resultsRef.current.measureLayout(
+                    scrollViewRef.current,
                     (x, y, width, height, pageX, pageY) => {
-                        this.scrollViewRef.current.scrollTo({
+                        scrollViewRef.current.scrollTo({
                             x: 0,
                             y: y,
                             animated: true,
@@ -38,32 +31,31 @@ class AnalysisTab extends Component {
                 );
             }
         }
-    }
+    }, [props.scroll, lastScroll]);
 
-    render() {
-        if (this.props.isLoggedIn) {
-            // TODO: test the hack still works on Android
-            return (
-                <ScrollView
-                    style={{ flex: 1 }}
-                    keyboardDismissMode="on-drag"
-                    keyboardShouldPersistTaps="always"
-                    onScrollBeginDrag={() => this.props.dragged()}
-                    ref={this.scrollViewRef}>
-                    <OneRMDebugScreen />
-                    <OneRMCalculateScreen />
-                    <View
-                        ref={this.resultsRef}
-                        onLayout={() => {}}
-                        collapsable={false}>
-                        <OneRMResultsScreen />
-                    </View>
-                    <OneRMProtocolView />
-                </ScrollView>
-            );
-        } else {
-            return <OneRMLoggedOutView />;
-        }
+    if (props.isLoggedIn) {
+        // TODO: test the hack still works on Android
+        return (
+            <ScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingBottom: insets.bottom }}
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps="always"
+                onScrollBeginDrag={() => props.dragged()}
+                ref={scrollViewRef}>
+                <OneRMDebugScreen />
+                <OneRMCalculateScreen />
+                <View
+                    ref={resultsRef}
+                    onLayout={() => {}}
+                    collapsable={false}>
+                    <OneRMResultsScreen />
+                </View>
+                <OneRMProtocolView />
+            </ScrollView>
+        );
+    } else {
+        return <OneRMLoggedOutView />;
     }
 }
 

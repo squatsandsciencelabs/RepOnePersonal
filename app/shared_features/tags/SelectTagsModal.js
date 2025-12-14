@@ -12,7 +12,6 @@ import {
     FlatList,
     Platform,
 } from 'react-native';
-import * as Device from 'app/utility/Device';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
 import Pill from 'app/shared_features/pill/Pill';
@@ -142,32 +141,8 @@ class SelectTagsModal extends Component {
 
     // TODO: grab the blue color for cancel from a global stylesheet
     _renderNavigation() {
-        if (Device.hasNotch()) {
-            var statusBar = (
-                <View>
-                    <StatusBar
-                        backgroundColor="white"
-                        barStyle="dark-content"
-                    />
-                </View>
-            );
-        } else if (Platform.OS === 'ios') {
-            var statusBar = (
-                <View
-                    style={{
-                        height: 20,
-                        width: 9001,
-                        backgroundColor: 'black',
-                    }}></View>
-            );
-        } else {
-            var statusBar = null;
-        }
-
         return (
             <View style={styles.container}>
-                {statusBar}
-
                 <View style={{ position: 'absolute', left: 0, top: 0 }}>
                     <TouchableOpacity onPress={() => this.props.cancelModal()}>
                         <View style={styles.nav}>
@@ -290,7 +265,7 @@ class SelectTagsModal extends Component {
                         placeholder={this.props.placeholder}
                         returnKeyType={returnKeyType}
                         value={this.state.text}
-                        multiline={Platform.os === 'ios' ? true : false} //Android multiline screws up spacing
+                        multiline={Platform.OS === 'ios' ? true : false} //Android multiline screws up spacing
                         onSubmitEditing={() => this._tappedEnter()}
                         onChangeText={text => this._onChangeText(text)}
                         clearButtonMode={'while-editing'}
@@ -409,7 +384,6 @@ class SelectTagsModal extends Component {
                 <View
                     style={{
                         flex: 1,
-                        paddingTop: Device.hasNotch() ? 40 : 0,
                         flexDirection: 'column',
                         backgroundColor: 'rgba(242, 242, 242, 1)',
                     }}>

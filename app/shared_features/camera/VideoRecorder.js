@@ -11,7 +11,6 @@ import {
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import * as Device from 'app/utility/Device';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 
 function record(props, camera) {
@@ -90,6 +89,18 @@ export default props => {
             }
         };
     }, [props.isRecording]);
+
+    useEffect(() => {
+        if (props.isModalShowing) {
+            activateKeepAwakeAsync();
+        } else {
+            deactivateKeepAwake();
+        }
+        return () => {
+            deactivateKeepAwake();
+        };
+    }, [props.isModalShowing]);
+
     if (device == null) return null;
     return (
         <Modal visible={props.isModalShowing} animationType="fade">
@@ -100,10 +111,8 @@ export default props => {
 
 function renderCamera(props, camera, device) {
     if (props.isModalShowing === false || !device) {
-        deactivateKeepAwake();
         return null;
     }
-    activateKeepAwakeAsync();
 
     return (
         <View style={[{ flex: 1 }, styles.container]}>
@@ -225,7 +234,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         position: 'absolute',
-        top: Device.hasNotch() ? 50 : 30,
+        top: 10,
         left: 20,
         width: 100,
         backgroundColor: '#333333',

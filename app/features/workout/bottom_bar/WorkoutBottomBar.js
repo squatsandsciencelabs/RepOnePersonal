@@ -1,28 +1,39 @@
 // TODO: disabled state for end workout
 
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ConnectedDeviceStatusScreen from './device_status/ConnectedDeviceStatusScreen';
-import * as Device from 'app/utility/Device';
 
-class WorkoutBottomBar extends Component {
-    _onPressEndWorkout() {
-        this.props.endWorkout();
-    }
+function WorkoutBottomBar(props) {
+    const insets = useSafeAreaInsets();
 
-    render() {
-        const message = 'FINISH WORKOUT';
-        return (
-            <View style={styles.bar}>
-                <ConnectedDeviceStatusScreen />
-                <TouchableOpacity
-                    style={{ justifyContent: 'center' }}
-                    onPress={() => this._onPressEndWorkout()}>
-                    <Text style={styles.buttonText}>{message}</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+    const _onPressEndWorkout = () => {
+        props.endWorkout();
+    };
+
+    const message = 'FINISH WORKOUT';
+
+    const barStyle = {
+        ...styles.bar,
+        height: 50 + insets.bottom,
+    };
+
+    const buttonTextStyle = {
+        ...styles.buttonText,
+        marginBottom: insets.bottom,
+    };
+
+    return (
+        <View style={barStyle}>
+            <ConnectedDeviceStatusScreen />
+            <TouchableOpacity
+                style={{ justifyContent: 'center' }}
+                onPress={_onPressEndWorkout}>
+                <Text style={buttonTextStyle}>{message}</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -36,13 +47,11 @@ const styles = StyleSheet.create({
         bottom: 0,
         backgroundColor: 'rgba(47, 128, 237, 1)',
         position: 'absolute',
-        height: Device.hasNotch() ? 70 : 50,
         padding: 0,
     },
     buttonText: {
         color: 'white',
         marginRight: 20,
-        marginBottom: Device.hasNotch() ? 25 : 0,
         fontSize: 14,
         fontWeight: '500',
     },

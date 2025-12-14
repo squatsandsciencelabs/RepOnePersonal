@@ -25,7 +25,6 @@ import SetAnalysisScreen from 'app/shared_features/set_card/analysis/SetAnalysis
 import RestoreSetRow from 'app/shared_features/set_card/restore/RestoreSetRow';
 import Open3DRow from 'app/shared_features/set_card/expanded/Open3DRow'; // TODO: wrap this in a screen? Or should this guy pass in the props itself? Leaning screen but just make it work for now
 
-import * as Device from 'app/utility/Device';
 import SetData from 'app/shared_features/set_card/expanded/SetData';
 
 // TODO: add a close button on this shit
@@ -43,32 +42,8 @@ class OneRMEditSetView extends Component {
     // RENDER
 
     _renderNavigation() {
-        if (Device.hasNotch()) {
-            var statusBar = (
-                <View>
-                    <StatusBar
-                        backgroundColor="white"
-                        barStyle="dark-content"
-                    />
-                </View>
-            );
-        } else if (Platform.OS === 'ios') {
-            var statusBar = (
-                <View
-                    style={{
-                        height: 20,
-                        width: 9001,
-                        backgroundColor: 'black',
-                    }}></View>
-            );
-        } else {
-            var statusBar = null;
-        }
-
         return (
             <View style={styles.container}>
-                {statusBar}
-
                 <View style={styles.navTitle}>
                     <Text
                         style={{
@@ -268,7 +243,6 @@ class OneRMEditSetView extends Component {
                 <View
                     style={{
                         flex: 1,
-                        paddingTop: Device.hasNotch() ? 40 : 0,
                         flexDirection: 'column',
                         backgroundColor: 'rgba(242, 242, 242, 1)',
                     }}>
@@ -289,13 +263,13 @@ class OneRMEditSetView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: Platform.OS === 'ios' && !Device.hasNotch() ? 70 : 50,
+        height: 50,
         alignItems: 'center',
         borderColor: '#e0e0e0',
         borderBottomWidth: 1,
     },
     nav: {
-        paddingTop: Platform.OS === 'ios' && !Device.hasNotch() ? 35 : 15,
+        paddingTop: 15,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 10,

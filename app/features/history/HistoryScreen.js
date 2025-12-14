@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import OpenBarbellConfig from 'app/configs+constants/OpenBarbellConfig.json';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 import * as CollapsedMetrics from 'app/math/CollapsedMetrics';
 
@@ -476,4 +477,4 @@ const mapDispatchToProps = dispatch => {
 
 const HistoryScreen = connect(mapStateToProps, mapDispatchToProps)(HistoryList);
 
-export default HistoryScreen;
+export default withSafeAreaInsets(HistoryScreen);
