@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { AppRegistry, Platform, Text, TextInput } from 'react-native';
+import { useFonts } from 'expo-font';
 import { Provider } from 'react-redux';
 import 'app/configs+constants/ReactotronConfig';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
@@ -44,38 +45,46 @@ Firebase.configure();
 AppState(store);
 
 // render
-class RepOnePersonal extends Component {
-    async componentDidMount() {
-        // request permissions
-        await Permissions();
+function RepOnePersonal() {
+    const [fontsLoaded, fontError] = useFonts({
+        'RobotoCondensed-Regular': require('../assets/fonts/RobotoCondensed-Regular.ttf'),
+    });
 
-        if (Platform.OS !== 'ios') {
-            let allPermissionsGranted =
-                await BluetoothUtils.checkBluetoothPermissionsAndroid();
+    useEffect(() => {
+        (async () => {
+            // request permissions
+            await Permissions();
 
-            if (allPermissionsGranted) {
+            if (Platform.OS !== 'ios') {
+                let allPermissionsGranted =
+                    await BluetoothUtils.checkBluetoothPermissionsAndroid();
+
+                if (allPermissionsGranted) {
+                    await Bluetooth(store);
+                }
+            } else {
+                // start the bluetooth
                 await Bluetooth(store);
             }
-        } else {
-            // start the bluetooth
-            await Bluetooth(store);
-        }
+        })();
+    }, []);
+
+    if (!fontsLoaded || fontError) {
+        return null;
     }
 
-    render() {
-        return (
-            <SafeAreaProvider>
-                <ActionSheetProvider>
-                    <RootSiblingParent>
-                        <Provider store={store}>
-                            <ApplicationScreen />
-                            {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
-                        </Provider>
-                    </RootSiblingParent>
-                </ActionSheetProvider>
-            </SafeAreaProvider>
-        );
-    }
+    return (
+        <SafeAreaProvider>
+            <ActionSheetProvider>
+                <RootSiblingParent>
+                    <Provider store={store}>
+                        <ApplicationScreen />
+                        {/* {OpenBarbellConfig.visualizationEnabled ? <VisualizationScreen /> : null} */}
+                    </Provider>
+                </RootSiblingParent>
+            </ActionSheetProvider>
+        </SafeAreaProvider>
+    );
 }
 
 // begin application
