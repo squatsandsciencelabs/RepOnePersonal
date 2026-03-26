@@ -86,18 +86,16 @@ function ApplicationView(props) {
 
     // TAB BAR FUNCTIONS
 
-    const _renderLabel = ({ route, focused, color }) => {
-        const dot =
-            route.badge && props.isUpgradeAvailable ? <Badge /> : null;
+    const _renderLabel = ({ route }) => {
+        const dot = route.badge && props.isUpgradeAvailable ? <Badge /> : null;
         return (
             <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
                 style={{
-                    color,
+                    color: 'white',
                     fontWeight: '500',
-                    fontSize: 10,
-                    padding: 0,
-                    marginLeft: 0,
-                    marginRight: 0,
+                    fontSize: 12,
                 }}>
                 {dot}
                 {route.title}
@@ -109,14 +107,6 @@ function ApplicationView(props) {
         <TabBar
             indicatorStyle={{ backgroundColor: '#eb5757', height: 2 }}
             style={{ backgroundColor: '#333333' }}
-            labelStyle={{
-                fontWeight: '500',
-                fontSize: 10,
-                padding: 0,
-                marginLeft: 0,
-                marginRight: 0,
-            }}
-            renderLabel={_renderLabel}
             {...tabProps}
         />
     );
@@ -125,13 +115,18 @@ function ApplicationView(props) {
         return (
             <View style={[{ flex: 1 }, styles.container]}>
                 <StatusBar backgroundColor="#333333" barStyle="light-content" />
-                <View style={{ height: insets.top, backgroundColor: '#333333' }} />
+                <View
+                    style={{ height: insets.top, backgroundColor: '#333333' }}
+                />
                 <TabView
                     style={{ flex: 1 }}
                     navigationState={{ index, routes }}
                     renderScene={NavigationConfig.sceneMap}
                     renderTabBar={_renderHeader}
                     onIndexChange={newIndex => props.changeTab(newIndex)}
+                    commonOptions={{
+                        label: _renderLabel,
+                    }}
                 />
                 <SurveyModalScreen />
             </View>
