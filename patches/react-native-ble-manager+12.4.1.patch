@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift b/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
+index 2eb9702..7051631 100644
+--- a/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
++++ b/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
+@@ -500,6 +500,11 @@ public class SwiftBleManager: NSObject, CBCentralManagerDelegate,
+                 }
+             }
+ 
++            if peripheral.instance.state == CBPeripheralState.disconnected {
++                // already disconnected, run the callback function for it
++                NSLog("Peripheral was already disconnected")
++                centralManager(getCentralManager(), didDisconnectPeripheral: peripheral, error: nil)
++            }
+             manager?.cancelPeripheralConnection(peripheral.instance)
+             callback([])
+ 

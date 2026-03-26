@@ -45,7 +45,7 @@
         "react-native-device-info": "^15.0.1",
         "react-native-get-random-values": "^1.11.0",
         "react-native-modal-datetime-picker": "^18.0.0",
-        "react-native-nordic-dfu": "git+https://github.com/Salt-PepperEngineering/react-native-nordic-dfu.git#9ca23e46b8570e42eb0e5d15791a855666fb9ddf",
+        "react-native-nordic-dfu": "git+https://github.com/Salt-PepperEngineering/react-native-nordic-dfu.git#089c16797485acea96e3a6b0c2dcb35cf0253e33",
         "react-native-pager-view": "^7.0.2",
         "react-native-paper": "^5.14.5",
         "react-native-permissions": "^5.4.2",
