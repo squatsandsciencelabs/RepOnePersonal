@@ -1,26 +1,88 @@
 diff --git a/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java b/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
-index 5d54214..997a271 100644
+index 39a0347..5dca337 100644
 --- a/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
 +++ b/node_modules/react-native-nordic-dfu/android/src/main/java/com/pilloxa/dfu/RNNordicDfuModule.java
-@@ -38,7 +38,7 @@ public class RNNordicDfuModule extends ReactContextBaseJavaModule implements Lif
+@@ -36,24 +36,24 @@ public class RNNordicDfuModule extends ReactContextBaseJavaModule implements Lif
+         final DfuServiceInitiator starter = new DfuServiceInitiator(address)
+                 .setKeepBond(false);
+                 
+-        if (options.hasKey("retries")) {
+-          int retries = options.getInt("retries");
+-          starter.setNumberOfRetries(retries);
+-        }
+-
+-        if (options.hasKey("maxMtu")) {
+-          int mtu = options.getInt("maxMtu");
+-          starter.setMtu(mtu);
+-        }
++        // if (options.hasKey("retries")) {
++        //     int retries = options.getInt("retries");
++        //     starter.setNumberOfRetries(retries);
++        // }
++
++        // if (options.hasKey("maxMtu")) {
++        //     int mtu = options.getInt("maxMtu");
++        //     starter.setMtu(mtu);
++        // }
          if (name != null) {
              starter.setDeviceName(name);
          }
--        starter.setPacketsReceiptNotificationsValue(1);
-+        // starter.setPacketsReceiptNotificationsValue(1);
+           // mimic behavior of iOSDFULibrary when packetReceiptNotificationParameter is set to `0` - see: https://github.com/NordicSemiconductor/IOS-Pods-DFU-Library/blob/master/iOSDFULibrary/Classes/Implementation/DFUServiceInitiator.swift#L115
+-        if (packetReceiptNotificationParameter > 0) {
+-          starter.setPacketsReceiptNotificationsValue(packetReceiptNotificationParameter);
+-        } else {
+-          starter.setPacketsReceiptNotificationsValue(1);
+-        }
++        // if (packetReceiptNotificationParameter > 0) {
++        //   starter.setPacketsReceiptNotificationsValue(packetReceiptNotificationParameter);
++        // } else {
++        //   starter.setPacketsReceiptNotificationsValue(1);
++        // }
          starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
-         starter.setZip(filePath);
-         final DfuServiceController controller = starter.start(this.reactContext, DfuService.class);
+         if (filePath.endsWith(".bin") || filePath.endsWith(".hex")) {
+             starter.setBinOrHex(DfuBaseService.TYPE_APPLICATION, filePath).setInitFile(null, null);
+diff --git a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.h b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.h
+index 8632a49..c1090f4 100644
+--- a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.h
++++ b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.h
+@@ -1,7 +1,7 @@
+ #import <CoreBluetooth/CoreBluetooth.h>
+ #import <React/RCTBridgeModule.h>
+ #import <React/RCTEventEmitter.h>
+-#import <iOSDFULibrary/iOSDFULibrary-Swift.h>
++#import <NordicDFU/NordicDFU-Swift.h>
+ 
+ @interface RNNordicDfu : RCTEventEmitter<RCTBridgeModule, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate>
+ 
 diff --git a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
-index dd68681..9e00fa8 100644
+index f389374..6526712 100644
 --- a/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
 +++ b/node_modules/react-native-nordic-dfu/ios/RNNordicDfu.m
-@@ -233,7 +233,7 @@ - (void)logWith:(enum LogLevel)level message:(NSString * _Nonnull)message
-         initiator.alternativeAdvertisingNameEnabled = alternativeAdvertisingNameEnabled;
+@@ -1,6 +1,6 @@
+ #import "RNNordicDfu.h"
+ #import <CoreBluetooth/CoreBluetooth.h>
+-#import <iOSDFULibrary/iOSDFULibrary-Swift.h>
++#import <NordicDFU/NordicDFU-Swift.h>
  
-         // Change for iOS 13
--        initiator.packetReceiptNotificationParameter = 1; //Rate limit the DFU using PRN.
-+        // initiator.packetReceiptNotificationParameter = 1; //Rate limit the DFU using PRN.
-         [NSThread sleepForTimeInterval: 2]; //Work around for being stuck in iOS 13
-         // End change for iOS 13
+ static CBCentralManager * (^getCentralManager)();
+ static void (^onDFUComplete)();
+@@ -244,7 +244,7 @@ - (void)logWith:(enum LogLevel)level message:(NSString * _Nonnull)message
+             initiator.alternativeAdvertisingNameEnabled = alternativeAdvertisingNameEnabled;
  
+             // Change for iOS 13
+-            initiator.packetReceiptNotificationParameter = 1; //Rate limit the DFU using PRN.
++            // initiator.packetReceiptNotificationParameter = 1; //Rate limit the DFU using PRN.
+             [NSThread sleepForTimeInterval: 2]; //Work around for being stuck in iOS 13
+             // End change for iOS 13
+ 
+diff --git a/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec b/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
+index 51e95c0..58d01eb 100644
+--- a/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
++++ b/node_modules/react-native-nordic-dfu/react-native-nordic-dfu.podspec
+@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
+   s.source_files  = "ios/**/*.{h,m}"
+ 
+   s.dependency "React-Core"
+-  s.dependency 'iOSDFULibrary', '~> 4.13.0'
++  s.dependency 'iOSDFULibrary', '~> 4.15.3'
+ end
