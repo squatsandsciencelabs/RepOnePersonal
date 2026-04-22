@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    StatusBar,
-    Modal,
     StyleSheet,
     TouchableOpacity,
     SectionList,
-    Platform,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import OneRMEditSetFormScreen from './form/OneRMEditSetFormScreen';
 import OneRMEditSetTitleScreen from './form/OneRMEditSetTitleScreen';
@@ -239,8 +238,8 @@ class OneRMEditSetView extends Component {
             );
         }
         return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
-                <View
+            <SafeModal visible={this.props.isModalShowing}>
+                <SafeAreaView
                     style={{
                         flex: 1,
                         flexDirection: 'column',
@@ -255,8 +254,8 @@ class OneRMEditSetView extends Component {
                     <View style={{ flex: 1, backgroundColor: 'white' }}>
                         {list}
                     </View>
-                </View>
-            </Modal>
+                </SafeAreaView>
+            </SafeModal>
         );
     }
 }

@@ -2,7 +2,15 @@
 // doing custom for now as some of the controls aren't working, specifically pause / play and I can't hide the full screen button
 
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    StatusBar,
+} from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Video from 'react-native-video';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
@@ -24,7 +32,7 @@ class VideoPlayer extends Component {
     _renderVideo() {
         if (this.props.isModalShowing) {
             return (
-                <View style={[{ flex: 1 }, styles.container]}>
+                <SafeAreaView style={[{ flex: 1 }, styles.container]}>
                     {this.props.video && (
                         <Video
                             ref={ref => {
@@ -59,7 +67,7 @@ class VideoPlayer extends Component {
                             <Text style={styles.deleteText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </SafeAreaView>
             );
         } else {
             return null;
@@ -68,9 +76,9 @@ class VideoPlayer extends Component {
 
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
+            <SafeModal visible={this.props.isModalShowing}>
                 {this._renderVideo()}
-            </Modal>
+            </SafeModal>
         );
     }
 }

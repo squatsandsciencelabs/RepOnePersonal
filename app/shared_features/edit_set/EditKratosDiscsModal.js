@@ -4,13 +4,12 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    StatusBar,
     TouchableHighlight,
     TouchableOpacity,
-    Modal,
     FlatList,
-    Platform,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
@@ -396,8 +395,8 @@ class EditKratosDiscsModal extends Component {
     // TODO: move 242 gray from global stylesheet
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
-                <View
+            <SafeModal visible={this.props.isModalShowing}>
+                <SafeAreaView
                     style={{
                         flex: 1,
                         flexDirection: 'column',
@@ -406,8 +405,8 @@ class EditKratosDiscsModal extends Component {
                     {this._renderNavigation()}
                     {this._renderHeader()}
                     {this._renderList()}
-                </View>
-            </Modal>
+                </SafeAreaView>
+            </SafeModal>
         );
     }
 }

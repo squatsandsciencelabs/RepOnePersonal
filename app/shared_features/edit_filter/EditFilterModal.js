@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    StatusBar,
     TouchableHighlight,
     TouchableOpacity,
-    Modal,
     FlatList,
-    Platform,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Pill from 'app/shared_features/pill/Pill';
 import {
     EDIT_MODAL_STYLES,
@@ -108,7 +107,8 @@ class EditFilterModal extends Component {
             <View>
                 <View style={styles.container}>
                     <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                        <TouchableOpacity onPress={() => this.props.cancelModal()}>
+                        <TouchableOpacity
+                            onPress={() => this.props.cancelModal()}>
                             <View style={styles.nav}>
                                 <Text style={HISTORY_STYLES.tappableText}>
                                     Cancel
@@ -126,7 +126,10 @@ class EditFilterModal extends Component {
                     <View style={{ position: 'absolute', right: 0, top: 0 }}>
                         <TouchableOpacity onPress={() => this._tappedDone()}>
                             <View style={styles.nav}>
-                                <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
+                                <Text
+                                    style={[
+                                        { color: 'rgba(47, 128, 237, 1)' },
+                                    ]}>
                                     Done
                                 </Text>
                             </View>
@@ -276,8 +279,8 @@ class EditFilterModal extends Component {
 
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
-                <View
+            <SafeModal visible={this.props.isModalShowing}>
+                <SafeAreaView
                     style={[
                         {
                             flex: 1,
@@ -288,8 +291,8 @@ class EditFilterModal extends Component {
                     {this._renderNavigation()}
                     {this._renderHeader()}
                     {this._renderList()}
-                </View>
-            </Modal>
+                </SafeAreaView>
+            </SafeModal>
         );
     }
 }

@@ -7,11 +7,12 @@ import {
     TouchableOpacity,
     Platform,
     TouchableHighlight,
-    Modal,
-    StatusBar,
     Switch,
     ScrollView,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { SETTINGS_PANEL_STYLES } from 'app/appearance/styles/GlobalStyles';
 import EditHistoryFilterTagsToIncludeScreen from './tags/tagsToInclude/EditHistoryFilterTagsToIncludeScreen';
 import EditHistoryFilterTagsToExcludeScreen from './tags/tagsToExclude/EditHistoryFilterTagsToExcludeScreen';
@@ -546,8 +547,8 @@ class EditHistoryFilterView extends Component {
 
     render() {
         return (
-            <Modal visible={this.props.isModalShowing} animationType="fade">
-                <View
+            <SafeModal visible={this.props.isModalShowing}>
+                <SafeAreaView
                     style={{
                         flex: 1,
                         flexDirection: 'column',
@@ -562,8 +563,8 @@ class EditHistoryFilterView extends Component {
                         }}>
                         {this._renderForms()}
                     </ScrollView>
-                </View>
-            </Modal>
+                </SafeAreaView>
+            </SafeModal>
         );
     }
 }

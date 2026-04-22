@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    StatusBar,
     TextInput,
     TouchableHighlight,
     TouchableOpacity,
-    Modal,
     FlatList,
     Platform,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
@@ -47,7 +47,13 @@ function EditTextModal(props) {
 
         // update suggestions
         _updateSuggestions(newText, newInputs, props.bias);
-    }, [props.isModalShowing, props.setID, props.text, props.inputs, props.bias]);
+    }, [
+        props.isModalShowing,
+        props.setID,
+        props.text,
+        props.inputs,
+        props.bias,
+    ]);
 
     // HELPERS
 
@@ -71,7 +77,7 @@ function EditTextModal(props) {
         _updateSuggestions(newText, newInputs);
     };
 
-    const _removePill = (index) => {
+    const _removePill = index => {
         let inputsCopy = [...inputs];
         inputsCopy.splice(index, 1);
         setInputs(inputsCopy);
@@ -107,7 +113,7 @@ function EditTextModal(props) {
 
     // ACTIONS
 
-    const _onChangeText = (input) => {
+    const _onChangeText = input => {
         if (props.multipleInput && input.slice(-1) === '\n') {
             // enter tapped in multiline mode, update accordingly
             _addNewPill(text, true);
@@ -117,7 +123,7 @@ function EditTextModal(props) {
         }
     };
 
-    const _tappedRow = (input) => {
+    const _tappedRow = input => {
         if (props.multipleInput) {
             _addNewPill(input, true);
         } else {
@@ -151,7 +157,7 @@ function EditTextModal(props) {
         }
     };
 
-    const _tappedPill = (index) => {
+    const _tappedPill = index => {
         _removePill(index);
         props.tappedPill(setID);
     };
@@ -163,10 +169,7 @@ function EditTextModal(props) {
         return (
             <View style={styles.container}>
                 <View style={{ position: 'absolute', left: 0, top: 0 }}>
-                    <TouchableOpacity
-                        onPress={() =>
-                            props.cancelModal(setID)
-                        }>
+                    <TouchableOpacity onPress={() => props.cancelModal(setID)}>
                         <View style={styles.nav}>
                             <Text style={[{ color: 'rgba(47, 128, 237, 1)' }]}>
                                 Cancel
@@ -236,10 +239,7 @@ function EditTextModal(props) {
     const _renderTextField = () => {
         if (props.multipleInput) {
             var returnKeyType = 'go';
-            if (
-                inputs.includes(text) ||
-                text == ''
-            ) {
+            if (inputs.includes(text) || text == '') {
                 var button = (
                     <View
                         style={[
@@ -296,9 +296,7 @@ function EditTextModal(props) {
                         returnKeyType={returnKeyType}
                         value={text}
                         multiline={
-                            Platform.OS === 'ios'
-                                ? props.multipleInput
-                                : false
+                            Platform.OS === 'ios' ? props.multipleInput : false
                         } //Android multiline screws up spacing
                         onSubmitEditing={() => _tappedEnter()}
                         onChangeText={inputText => _onChangeText(inputText)}
@@ -332,7 +330,7 @@ function EditTextModal(props) {
         );
     };
 
-    const _renderRow = (item) => {
+    const _renderRow = item => {
         if (item.key === 'bug') {
             // hack to get bug pill working
             // TODO: make this generic rather than specific so you can have multiple pill types
@@ -413,8 +411,8 @@ function EditTextModal(props) {
 
     // TODO: move 242 gray from global stylesheet
     return (
-        <Modal visible={props.isModalShowing} animationType="fade">
-            <View
+        <SafeModal visible={props.isModalShowing}>
+            <SafeAreaView
                 style={{
                     flex: 1,
                     flexDirection: 'column',
@@ -424,8 +422,8 @@ function EditTextModal(props) {
                 {_renderHeader()}
                 {_renderTextField()}
                 {_renderList()}
-            </View>
-        </Modal>
+            </SafeAreaView>
+        </SafeModal>
     );
 }
 
