@@ -3,11 +3,13 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Modal,
     StyleSheet,
     Alert,
     Platform,
+    StatusBar,
 } from 'react-native';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
@@ -103,9 +105,10 @@ export default props => {
 
     if (device == null) return null;
     return (
-        <Modal visible={props.isModalShowing} animationType="fade">
+        <SafeModal visible={props.isModalShowing}>
+            <StatusBar barStyle="light-content" />
             {renderCamera(props, camera, device)}
-        </Modal>
+        </SafeModal>
     );
 };
 
@@ -115,7 +118,7 @@ function renderCamera(props, camera, device) {
     }
 
     return (
-        <View style={[{ flex: 1 }, styles.container]}>
+        <SafeAreaView style={[{ flex: 1 }, styles.container]}>
             <Camera
                 ref={camera}
                 style={{ flex: 1 }}
@@ -151,7 +154,7 @@ function renderCamera(props, camera, device) {
             </View>
 
             {renderToggleCameraTypeButton(props)}
-        </View>
+        </SafeAreaView>
     );
 }
 

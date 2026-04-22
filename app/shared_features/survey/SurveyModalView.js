@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import {
-    View,
-    StatusBar,
-    Text,
-    Modal,
-    TouchableOpacity,
-    Platform,
-    StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class SurveyModalView extends Component {
     _close() {
@@ -37,7 +31,9 @@ class SurveyModalView extends Component {
                     </View>
 
                     <View style={styles.navTitle}>
-                        <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>Survey</Text>
+                        <Text style={{ color: 'rgba(77, 77, 77, 1)' }}>
+                            Survey
+                        </Text>
                     </View>
                 </View>
             </View>
@@ -46,11 +42,11 @@ class SurveyModalView extends Component {
 
     render() {
         return (
-            <Modal
+            <SafeModal
                 animationType={'slide'}
                 transparent={true}
                 visible={this.props.isModalShowing}>
-                <View
+                <SafeAreaView
                     style={{
                         flex: 1,
                         flexDirection: 'column',
@@ -62,8 +58,8 @@ class SurveyModalView extends Component {
                         source={{ uri: this.props.url }}
                         style={{ flex: 1 }}
                     />
-                </View>
-            </Modal>
+                </SafeAreaView>
+            </SafeModal>
         );
     }
 }
