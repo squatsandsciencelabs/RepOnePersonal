@@ -8,11 +8,11 @@ import {
     TextInput,
     TouchableHighlight,
     TouchableOpacity,
-    Modal,
     FlatList,
     Platform,
 } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import SafeModal from 'app/shared_features/safe_modal/SafeModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Pill from 'app/shared_features/pill/Pill';
 import { EDIT_MODAL_STYLES } from 'app/appearance/styles/GlobalStyles';
 
@@ -412,25 +412,19 @@ function EditTextModal(props) {
 
     // TODO: move 242 gray from global stylesheet
     return (
-        <Modal
-            visible={props.isModalShowing}
-            animationType="fade"
-            presentationStyle="overFullScreen">
-            <StatusBar barStyle="dark-content" />
-            <SafeAreaProvider>
-                <SafeAreaView
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        backgroundColor: 'rgba(242, 242, 242, 1)',
-                    }}>
-                    {_renderNavigation()}
-                    {_renderHeader()}
-                    {_renderTextField()}
-                    {_renderList()}
-                </SafeAreaView>
-            </SafeAreaProvider>
-        </Modal>
+        <SafeModal visible={props.isModalShowing}>
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    backgroundColor: 'rgba(242, 242, 242, 1)',
+                }}>
+                {_renderNavigation()}
+                {_renderHeader()}
+                {_renderTextField()}
+                {_renderList()}
+            </SafeAreaView>
+        </SafeModal>
     );
 }
 
