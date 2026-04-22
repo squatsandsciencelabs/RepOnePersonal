@@ -42,10 +42,7 @@ class SurveyModalView extends Component {
 
     render() {
         return (
-            <SafeModal
-                animationType={'slide'}
-                transparent={true}
-                visible={this.props.isModalShowing}>
+            <SafeModal visible={this.props.isModalShowing}>
                 <SafeAreaView
                     style={{
                         flex: 1,
