@@ -6,7 +6,6 @@ import {
     StyleSheet,
     Alert,
     Platform,
-    StatusBar,
 } from 'react-native';
 import SafeModal from 'app/shared_features/safe_modal/SafeModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -106,7 +105,6 @@ export default props => {
     if (device == null) return null;
     return (
         <SafeModal visible={props.isModalShowing}>
-            <StatusBar barStyle="light-content" />
             {renderCamera(props, camera, device)}
         </SafeModal>
     );

@@ -77,7 +77,6 @@ class VideoPlayer extends Component {
     render() {
         return (
             <SafeModal visible={this.props.isModalShowing}>
-                <StatusBar barStyle="light-content" />
                 {this._renderVideo()}
             </SafeModal>
         );
