@@ -6,8 +6,6 @@ import Video from 'react-native-video';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 export default function VideoPlayer(props) {
-    const insets = useSafeAreaInsets();
-
     useEffect(() => {
         if (props.isModalShowing) {
             activateKeepAwakeAsync();
@@ -19,44 +17,45 @@ export default function VideoPlayer(props) {
         };
     }, [props.isModalShowing]);
 
-    function renderVideo() {
-        if (!props.isModalShowing) return null;
-
-        const topOffset = insets.top + 10;
-
-        return (
-            <View style={[{ flex: 1 }, styles.container]}>
-                {props.video && (
-                    <Video
-                        style={{ flex: 1 }}
-                        source={{ uri: props.video }}
-                        paused={false}
-                        resizeMode="contain"
-                        repeat={true}
-                    />
-                )}
-
-                <View style={[styles.cancelButton, { top: topOffset }]}>
-                    <TouchableOpacity
-                        onPress={() => props.closeModal(props.setID)}>
-                        <Text style={styles.cancelText}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={[styles.deleteButton, { top: topOffset }]}>
-                    <TouchableOpacity
-                        onPress={() => props.deleteVideo(props.setID)}>
-                        <Text style={styles.deleteText}>Delete</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    }
-
     return (
         <SafeModal visible={props.isModalShowing} statusColor="black">
-            {renderVideo()}
+            <PlayerComponent {...props} />
         </SafeModal>
+    );
+}
+
+function PlayerComponent(props) {
+    const insets = useSafeAreaInsets();
+
+    if (!props.isModalShowing) return null;
+
+    const topOffset = insets.top + 10;
+
+    return (
+        <View style={[{ flex: 1 }, styles.container]}>
+            {props.video && (
+                <Video
+                    style={{ flex: 1 }}
+                    source={{ uri: props.video }}
+                    paused={false}
+                    resizeMode="contain"
+                    repeat={true}
+                />
+            )}
+
+            <View style={[styles.cancelButton, { top: topOffset }]}>
+                <TouchableOpacity onPress={() => props.closeModal(props.setID)}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={[styles.deleteButton, { top: topOffset }]}>
+                <TouchableOpacity
+                    onPress={() => props.deleteVideo(props.setID)}>
+                    <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 }
 
