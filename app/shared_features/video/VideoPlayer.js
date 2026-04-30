@@ -1,86 +1,62 @@
-// TODO: consider using react native video controls, which is already installed
-// doing custom for now as some of the controls aren't working, specifically pause / play and I can't hide the full screen button
-
-import React, { Component } from 'react';
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    StatusBar,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import SafeModal from 'app/shared_features/safe_modal/SafeModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Video from 'react-native-video';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
-class VideoPlayer extends Component {
-    componentDidUpdate(prevProps) {
-        if (this.props.isModalShowing !== prevProps.isModalShowing) {
-            if (this.props.isModalShowing) {
-                activateKeepAwakeAsync();
-            } else {
-                deactivateKeepAwake();
-            }
-        }
-    }
-
-    componentWillUnmount() {
-        deactivateKeepAwake();
-    }
-
-    _renderVideo() {
-        if (this.props.isModalShowing) {
-            return (
-                <SafeAreaView style={[{ flex: 1 }, styles.container]}>
-                    {this.props.video && (
-                        <Video
-                            ref={ref => {
-                                this.player = ref;
-                            }}
-                            style={[
-                                { flex: 1 },
-                                styles.button,
-                                styles.blackButton,
-                            ]}
-                            source={{ uri: this.props.video }}
-                            paused={false}
-                            resizeMode="contain"
-                            repeat={true}
-                        />
-                    )}
-
-                    <View style={styles.cancelButton}>
-                        <TouchableOpacity
-                            onPress={() =>
-                                this.props.closeModal(this.props.setID)
-                            }>
-                            <Text style={styles.cancelText}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.deleteButton}>
-                        <TouchableOpacity
-                            onPress={() =>
-                                this.props.deleteVideo(this.props.setID)
-                            }>
-                            <Text style={styles.deleteText}>Delete</Text>
-                        </TouchableOpacity>
-                    </View>
-                </SafeAreaView>
-            );
+export default function VideoPlayer(props) {
+    useEffect(() => {
+        if (props.isModalShowing) {
+            activateKeepAwakeAsync();
         } else {
-            return null;
+            deactivateKeepAwake();
         }
-    }
+        return () => {
+            deactivateKeepAwake();
+        };
+    }, [props.isModalShowing]);
 
-    render() {
-        return (
-            <SafeModal visible={this.props.isModalShowing}>
-                {this._renderVideo()}
-            </SafeModal>
-        );
-    }
+    return (
+        <SafeModal visible={props.isModalShowing} statusColor="black">
+            <PlayerComponent {...props} />
+        </SafeModal>
+    );
+}
+
+function PlayerComponent(props) {
+    const insets = useSafeAreaInsets();
+
+    if (!props.isModalShowing) return null;
+
+    const topOffset = insets.top + 10;
+
+    return (
+        <View style={[{ flex: 1 }, styles.container]}>
+            {props.video && (
+                <Video
+                    style={{ flex: 1 }}
+                    source={{ uri: props.video }}
+                    paused={false}
+                    resizeMode="contain"
+                    repeat={true}
+                />
+            )}
+
+            <View style={[styles.cancelButton, { top: topOffset }]}>
+                <TouchableOpacity onPress={() => props.closeModal(props.setID)}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={[styles.deleteButton, { top: topOffset }]}>
+                <TouchableOpacity
+                    onPress={() => props.deleteVideo(props.setID)}>
+                    <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -90,7 +66,6 @@ const styles = StyleSheet.create({
     cancelButton: {
         position: 'absolute',
         left: 20,
-        top: 10,
         width: 100,
         backgroundColor: '#333333',
         justifyContent: 'center',
@@ -108,7 +83,6 @@ const styles = StyleSheet.create({
     deleteButton: {
         position: 'absolute',
         right: 20,
-        top: 10,
         width: 100,
         backgroundColor: 'red',
         justifyContent: 'center',
@@ -124,5 +98,3 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-
-export default VideoPlayer;

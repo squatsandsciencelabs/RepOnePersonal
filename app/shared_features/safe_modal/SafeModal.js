@@ -5,12 +5,12 @@ import {
     useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-function SafeAreaBackground() {
+function SafeAreaBackground({ statusColor }) {
     const insets = useSafeAreaInsets();
     return (
         <View
             style={{
-                backgroundColor: '#333333',
+                backgroundColor: statusColor,
                 position: 'absolute',
                 width: '100%',
                 height: insets.top,
@@ -19,7 +19,7 @@ function SafeAreaBackground() {
     );
 }
 
-function SafeModal({ children, ...modalProps }) {
+function SafeModal({ children, statusColor = '#333333', ...modalProps }) {
     return (
         <Modal
             animationType="fade"
@@ -27,7 +27,7 @@ function SafeModal({ children, ...modalProps }) {
             {...modalProps}>
             <SafeAreaProvider>
                 {children}
-                <SafeAreaBackground />
+                <SafeAreaBackground statusColor={statusColor} />
             </SafeAreaProvider>
         </Modal>
     );
