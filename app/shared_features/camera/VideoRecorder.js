@@ -13,6 +13,7 @@ import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function record(props, camera) {
     camera.current.startRecording({
@@ -52,6 +53,7 @@ let timer = null;
 
 export default props => {
     const camera = useRef(null);
+    const insets = useSafeAreaInsets();
 
     // Try to use wide-angle camera first, fallback to default if not available
     // In v4, useCameraDevice automatically handles device selection
@@ -104,16 +106,18 @@ export default props => {
 
     if (device == null) return null;
     return (
-        <SafeModal visible={props.isModalShowing}>
-            {renderCamera(props, camera, device)}
+        <SafeModal visible={props.isModalShowing} statusColor="black">
+            {renderCamera(props, camera, device, insets)}
         </SafeModal>
     );
 };
 
-function renderCamera(props, camera, device) {
+function renderCamera(props, camera, device, insets) {
     if (props.isModalShowing === false || !device) {
         return null;
     }
+
+    const topOffset = insets.top + 10;
 
     return (
         <SafeAreaView style={[{ flex: 1 }, styles.container]}>
@@ -125,7 +129,7 @@ function renderCamera(props, camera, device) {
                 audio={true}
                 isActive={true}
             />
-            <View style={styles.cancelButton}>
+            <View style={[styles.cancelButton, { top: topOffset }]}>
                 <View>
                     <TouchableOpacity
                         onPress={() => {
@@ -235,7 +239,6 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         position: 'absolute',
-        top: 10,
         left: 20,
         width: 100,
         backgroundColor: '#333333',
