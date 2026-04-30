@@ -53,7 +53,6 @@ let timer = null;
 
 export default props => {
     const camera = useRef(null);
-    const insets = useSafeAreaInsets();
 
     // Try to use wide-angle camera first, fallback to default if not available
     // In v4, useCameraDevice automatically handles device selection
@@ -107,12 +106,14 @@ export default props => {
     if (device == null) return null;
     return (
         <SafeModal visible={props.isModalShowing} statusColor="black">
-            {renderCamera(props, camera, device, insets)}
+            <CameraComponent props={props} camera={camera} device={device} />
         </SafeModal>
     );
 };
 
-function renderCamera(props, camera, device, insets) {
+function CameraComponent({ props, camera, device }) {
+    const insets = useSafeAreaInsets();
+
     if (props.isModalShowing === false || !device) {
         return null;
     }
