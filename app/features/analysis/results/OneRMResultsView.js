@@ -367,6 +367,16 @@ class OneRMChartView extends Component {
                     },
                 ],
             };
+        } else {
+            // always render a line as otherwise going from no line to a line crashes on iOS
+            data.lineData = {
+                dataSets: [
+                    {
+                        values: [],
+                        label: 'Regression',
+                    },
+                ],
+            };
         }
 
         return (
