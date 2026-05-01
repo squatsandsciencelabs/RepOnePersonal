@@ -34,6 +34,7 @@ class PickerModal extends Component {
 
                         <Picker
                             style={{ backgroundColor: 'white' }}
+                            itemStyle={{ color: 'black' }}
                             selectedValue={this.props.selectedValue}
                             onValueChange={value => this._onValueChange(value)}>
                             {this._renderItems()}
