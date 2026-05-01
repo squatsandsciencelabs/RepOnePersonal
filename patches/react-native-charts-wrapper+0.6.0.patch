@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/RNBarLineChartViewBase.swift b/node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/RNBarLineChartViewBase.swift
+index a1fd7d5..8c590b2 100644
+--- a/node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/RNBarLineChartViewBase.swift
++++ b/node_modules/react-native-charts-wrapper/ios/ReactNativeCharts/RNBarLineChartViewBase.swift
+@@ -74,6 +74,11 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
+       }
+     }
+ 
++    override func layoutSubviews() {
++        super.layoutSubviews()
++        barLineChart.frame = self.bounds // Adjust the chart's frame to fill the entire component's bounds
++    }
++
+     func setMaxHighlightDistance(_  maxHighlightDistance: CGFloat) {
+         barLineChart.maxHighlightDistance = maxHighlightDistance;
+     }
