@@ -97,12 +97,21 @@ export default async function (store) {
             // android
             if (Platform.OS !== 'ios') {
                 // connection priority
-                await BleManager.requestConnectionPriority(args.peripheral, 1);
-                console.tron.log(`android connection priority set to high`);
+                try {
+                    await BleManager.requestConnectionPriority(
+                        args.peripheral,
+                        1,
+                    );
+                    console.tron.log(`android connection priority set to high`);
+                } catch (err) {
+                    console.tron.log(
+                        `Couldn't change android connection priority ${err}`,
+                    );
+                }
 
                 // mtu
                 try {
-                    const mtu = BleManager.requestMTU(
+                    const mtu = await BleManager.requestMTU(
                         args.peripheral,
                         MTU_SIZE,
                     );
