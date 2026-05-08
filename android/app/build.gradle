@@ -85,7 +85,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9
-        versionName "1.2.4"
+        versionName "1.2.5"
         multiDexEnabled true // keeping this one as I recall we had build issues with how big the app was
     }
     signingConfigs {
