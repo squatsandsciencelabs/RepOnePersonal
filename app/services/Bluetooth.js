@@ -111,7 +111,7 @@ export default async function (store) {
 
                 // mtu
                 try {
-                    const mtu = await BleManager.requestMTU(
+                    const mtu = BleManager.requestMTU(
                         args.peripheral,
                         MTU_SIZE,
                     );
