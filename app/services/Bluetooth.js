@@ -91,8 +91,28 @@ export default async function (store) {
     BleManager.onConnectPeripheral(async args => {
         // observe reps
         try {
-            // get version info
+            // retrieve services
             await BleManager.retrieveServices(args.peripheral);
+
+            // android
+            if (Platform.OS !== 'ios') {
+                // connection priority
+                await BleManager.requestConnectionPriority(args.peripheral, 1);
+                console.tron.log(`android connection priority set to high`);
+
+                // mtu
+                try {
+                    const mtu = BleManager.requestMTU(
+                        args.peripheral,
+                        MTU_SIZE,
+                    );
+                    console.tron.log(`MTU size changed to ${mtu} bytes`);
+                } catch (err) {
+                    console.tron.log(`Couldn't change MTU size ${err}`);
+                }
+            }
+
+            // get version info
             const response = await BleManager.read(
                 args.peripheral,
                 DEVICE_SERVICE,
@@ -122,18 +142,6 @@ export default async function (store) {
                 Alert.alert(
                     `Please update your RepOne app to use this device.`,
                 );
-            }
-
-            if (Platform.OS !== 'ios') {
-                try {
-                    const mtu = BleManager.requestMTU(
-                        args.peripheral,
-                        MTU_SIZE,
-                    );
-                    console.tron.log(`MTU size changed to ${mtu} bytes`);
-                } catch (err) {
-                    console.tron.log(`Couldn't change MTU size ${err}`);
-                }
             }
 
             // connected
