@@ -9,6 +9,7 @@ import {
     PRESENT_WORKOUT_VIDEO_PLAYER,
     DELETE_WORKOUT_VIDEO,
     PRESENT_WORKOUT_KRATOS_DISCS,
+    SAVE_WORKOUT_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
@@ -17,6 +18,7 @@ import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
 import { Alert } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
 
 export const toggleMetric = setID => (dispatch, getState) => {
     const state = getState();
@@ -111,20 +113,36 @@ export const presentRecordVideo = setID => async (dispatch, getState) => {
     }
 };
 
-export const presentRecordCommentary = setID => (dispatch, getState) => {
-    VideoPermissionsUtils.checkRecordingPermissions()
-        .then(() => {
-            const state = getState();
-            Analytics.setCurrentScreen('workout_record_video_log');
-            logVideoLogRecorderAnalytics(setID, state);
+export const presentRecordCommentary = setID => async (dispatch, getState) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+        Alert.alert(
+            'Additional Permissions Required',
+            'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
+            [{ text: 'OK' }],
+            { cancelable: false },
+        );
+        return;
+    }
 
-            dispatch({
-                type: PRESENT_WORKOUT_VIDEO_RECORDER,
-                setID: setID,
-                isCommentary: true,
-            });
-        })
-        .catch(() => {});
+    const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['videos'],
+        allowsEditing: false,
+        quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+        const state = getState();
+        Analytics.setCurrentScreen('workout');
+        logVideoLogRecorderAnalytics(setID, state);
+
+        dispatch({
+            type: SAVE_WORKOUT_VIDEO,
+            setID: setID,
+            videoFileURL: result.assets[0].uri,
+            videoType: 'commentary',
+        });
+    }
 };
 
 export const presentWatchVideo =

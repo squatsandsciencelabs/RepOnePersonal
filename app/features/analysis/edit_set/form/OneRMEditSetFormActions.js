@@ -9,12 +9,16 @@ import {
     END_EDITING_1RM_WEIGHT,
     EDIT_1RM_SET_WEIGHT,
     EDIT_1RM_SET_RPE,
+    SAVE_WORKOUT_VIDEO,
+    SAVE_HISTORY_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
+import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 export const toggleMetric = setID => (dispatch, getState) => {
     const state = getState();
@@ -100,20 +104,37 @@ export const presentRecordVideo = setID => (dispatch, getState) => {
         .catch(() => {});
 };
 
-export const presentRecordCommentary = setID => (dispatch, getState) => {
-    VideoPermissionsUtils.checkRecordingPermissions()
-        .then(() => {
-            const state = getState();
-            Analytics.setCurrentScreen('one_rm_edit_set_record_video_log');
-            logVideoLogRecorderAnalytics(setID, state);
+export const presentRecordCommentary = setID => async (dispatch, getState) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+        Alert.alert(
+            'Additional Permissions Required',
+            'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
+            [{ text: 'OK' }],
+            { cancelable: false },
+        );
+        return;
+    }
 
-            dispatch({
-                type: PRESENT_1RM_VIDEO_RECORDER,
-                setID: setID,
-                isCommentary: true,
-            });
-        })
-        .catch(() => {});
+    const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['videos'],
+        allowsEditing: false,
+        quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+        const state = getState();
+        Analytics.setCurrentScreen('analysis');
+        logVideoLogRecorderAnalytics(setID, state);
+
+        const isWorkoutSet = SetsSelectors.getIsWorkoutSet(state, setID);
+        dispatch({
+            type: isWorkoutSet ? SAVE_WORKOUT_VIDEO : SAVE_HISTORY_VIDEO,
+            setID: setID,
+            videoFileURL: result.assets[0].uri,
+            videoType: 'commentary',
+        });
+    }
 };
 
 export const presentWatchVideo =
