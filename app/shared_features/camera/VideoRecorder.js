@@ -40,9 +40,7 @@ function record(props, camera) {
             }
             console.tron.log(`onRecordingError ${JSON.stringify(error)}`);
             props.saveVideoError(props.setID, error);
-            Alert.alert(
-                'There was an issue saving your video. Please try again',
-            );
+            Alert.alert(`Error: ${JSON.stringify(error)}`);
         },
     });
 }
