@@ -7,6 +7,7 @@ import {
     TouchableHighlight,
     Image,
     Platform,
+    ActivityIndicator,
 } from 'react-native';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import {
@@ -68,6 +69,17 @@ class VideoButton extends Component {
     }
 
     render() {
+        if (this.props.isPickingVideo) {
+            return (
+                <View style={{ paddingLeft: 5 }}>
+                    <View
+                        style={[{ flex: 1 }, styles.button, styles.grayButton]}>
+                        <ActivityIndicator color="gray" />
+                    </View>
+                </View>
+            );
+        }
+
         switch (this.props.mode) {
             case 'record':
                 return (

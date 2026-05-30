@@ -13,6 +13,8 @@ import {
     DISMISS_HISTORY_VIDEO_PLAYER,
     DELETE_HISTORY_VIDEO,
     SAVE_HISTORY_VIDEO,
+    START_PICKING_HISTORY_VIDEO,
+    RESET_PICKING_HISTORY_VIDEO,
     END_WORKOUT,
     TOGGLE_HISTORY_CAMERA_TYPE,
     PRESENT_HISTORY_FILTER,
@@ -66,6 +68,7 @@ const defaultState = {
     cameraType: null,
     isRecording: false,
     isSavingVideo: false,
+    pickingVideoSetID: null,
     watchSetID: null,
     watchFileURL: null,
     viewedCounter: 0,
@@ -189,13 +192,19 @@ const HistoryReducer = (state = defaultState, action) => {
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
         }
+        case START_PICKING_HISTORY_VIDEO:
+            return Object.assign({}, state, {
+                pickingVideoSetID: action.setID,
+            });
         case SAVE_HISTORY_VIDEO:
         case DISMISS_HISTORY_VIDEO_RECORDER:
+        case RESET_PICKING_HISTORY_VIDEO:
             return Object.assign({}, state, {
                 recordingSetID: null,
                 recordingVideoType: null,
                 isRecording: false,
                 isSavingVideo: false,
+                pickingVideoSetID: null,
             });
         case START_RECORDING_HISTORY:
             return Object.assign({}, state, {

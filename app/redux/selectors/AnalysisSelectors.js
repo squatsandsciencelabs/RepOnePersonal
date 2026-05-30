@@ -121,6 +121,8 @@ export const getRecordingSetID = state => stateRoot(state).recordingSetID;
 
 export const getIsSavingVideo = state => stateRoot(state).isSavingVideo;
 
+export const getPickingVideoSetID = state => stateRoot(state).pickingVideoSetID;
+
 // analytics
 // not memoizing as it only happens once, not repeatedly on screens
 

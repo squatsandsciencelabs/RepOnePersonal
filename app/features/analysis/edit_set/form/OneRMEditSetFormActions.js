@@ -11,6 +11,8 @@ import {
     EDIT_1RM_SET_RPE,
     SAVE_WORKOUT_VIDEO,
     SAVE_HISTORY_VIDEO,
+    START_PICKING_1RM_VIDEO,
+    RESET_PICKING_1RM_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
@@ -105,10 +107,12 @@ export const presentRecordVideo = setID => (dispatch, getState) => {
 };
 
 export const presentRecordCommentary = setID => async (dispatch, getState) => {
+    dispatch({ type: START_PICKING_1RM_VIDEO, setID: setID });
     try {
         const { status } =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
+            dispatch({ type: RESET_PICKING_1RM_VIDEO });
             Alert.alert(
                 'Additional Permissions Required',
                 'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
@@ -136,8 +140,11 @@ export const presentRecordCommentary = setID => async (dispatch, getState) => {
                 videoFileURL: result.assets[0].uri,
                 videoType: 'commentary',
             });
+        } else {
+            dispatch({ type: RESET_PICKING_1RM_VIDEO });
         }
     } catch (err) {
+        dispatch({ type: RESET_PICKING_1RM_VIDEO });
         Alert.alert(
             `There was an error attaching your video, please try another`,
         );

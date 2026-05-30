@@ -10,6 +10,8 @@ import {
     DELETE_WORKOUT_VIDEO,
     PRESENT_WORKOUT_KRATOS_DISCS,
     SAVE_WORKOUT_VIDEO,
+    START_PICKING_WORKOUT_VIDEO,
+    RESET_PICKING_WORKOUT_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
@@ -114,10 +116,12 @@ export const presentRecordVideo = setID => async (dispatch, getState) => {
 };
 
 export const presentRecordCommentary = setID => async (dispatch, getState) => {
+    dispatch({ type: START_PICKING_WORKOUT_VIDEO, setID: setID });
     try {
         const { status } =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
+            dispatch({ type: RESET_PICKING_WORKOUT_VIDEO });
             Alert.alert(
                 'Additional Permissions Required',
                 'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
@@ -144,8 +148,11 @@ export const presentRecordCommentary = setID => async (dispatch, getState) => {
                 videoFileURL: result.assets[0].uri,
                 videoType: 'commentary',
             });
+        } else {
+            dispatch({ type: RESET_PICKING_WORKOUT_VIDEO });
         }
     } catch (err) {
+        dispatch({ type: RESET_PICKING_WORKOUT_VIDEO });
         Alert.alert(
             `There was an error attaching your video, please try another`,
         );
