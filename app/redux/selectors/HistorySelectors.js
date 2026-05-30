@@ -23,6 +23,8 @@ export const getRecordingSetID = state => stateRoot(state).recordingSetID;
 
 export const getIsSavingVideo = state => stateRoot(state).isSavingVideo;
 
+export const getPickingVideoSetID = state => stateRoot(state).pickingVideoSetID;
+
 // video player
 
 export const getWatchSetID = state => stateRoot(state).watchSetID;

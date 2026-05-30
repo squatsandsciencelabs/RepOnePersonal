@@ -7,6 +7,7 @@ import {
     TouchableHighlight,
     Image,
     Platform,
+    ActivityIndicator,
 } from 'react-native';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import {
@@ -28,7 +29,6 @@ class VideoButton extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (
-            this.props.isSaving !== prevProps.isSaving &&
             this.props.videoFileURL !== prevProps.videoFileURL &&
             this.props.videoFileURL &&
             !this.props.isSaving
@@ -69,6 +69,17 @@ class VideoButton extends Component {
     }
 
     render() {
+        if (this.props.isPickingVideo) {
+            return (
+                <View style={{ paddingLeft: 5 }}>
+                    <View
+                        style={[{ flex: 1 }, styles.button, styles.grayButton]}>
+                        <ActivityIndicator color="gray" />
+                    </View>
+                </View>
+            );
+        }
+
         switch (this.props.mode) {
             case 'record':
                 return (
@@ -110,7 +121,7 @@ class VideoButton extends Component {
                                         { flex: 1, flexDirection: 'column' },
                                     ]}>
                                     <FontAwesome
-                                        name="camera"
+                                        name="image"
                                         size={20}
                                         color="gray"
                                         style={{
@@ -118,10 +129,8 @@ class VideoButton extends Component {
                                             marginBottom: 5,
                                         }}
                                     />
-                                    <Text style={styles.grayText}>Add</Text>
-                                    <Text style={styles.grayText}>
-                                        Video Log
-                                    </Text>
+                                    <Text style={styles.grayText}>Attach</Text>
+                                    <Text style={styles.grayText}>Video</Text>
                                 </View>
                             </TouchableHighlight>
                         </View>

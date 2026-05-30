@@ -45,6 +45,8 @@ import {
     TOGGLE_1RM_VIDEO_RECORDER_CAMERA_TYPE,
     SELECT_1RM_REP_ROW,
     DESELECT_1RM_REP_ROW,
+    START_PICKING_1RM_VIDEO,
+    RESET_PICKING_1RM_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 
 const defaultState = {
@@ -90,6 +92,7 @@ const defaultState = {
     cameraType: null,
     isRecording: false,
     isSavingVideo: false,
+    pickingVideoSetID: null,
     watchSetID: null,
     watchFileURL: null,
 
@@ -297,14 +300,20 @@ const AnalysisReducer = (state = defaultState, action) => {
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
         }
+        case START_PICKING_1RM_VIDEO:
+            return Object.assign({}, state, {
+                pickingVideoSetID: action.setID,
+            });
         case SAVE_WORKOUT_VIDEO: // workout sets will use save workout video
         case SAVE_HISTORY_VIDEO: // history sets will use save history video
         case DISMISS_1RM_VIDEO_RECORDER:
+        case RESET_PICKING_1RM_VIDEO:
             return Object.assign({}, state, {
                 recordingSetID: null,
                 recordingVideoType: null,
                 isRecording: false,
                 isSavingVideo: false,
+                pickingVideoSetID: null,
             });
         case START_RECORDING_1RM:
             return Object.assign({}, state, {

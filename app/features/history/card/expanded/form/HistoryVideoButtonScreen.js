@@ -16,8 +16,10 @@ const mapDispatchToProps = dispatch => {
     );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     isSaving: HistorySelectors.getIsSavingVideo(state),
+    isPickingVideo:
+        HistorySelectors.getPickingVideoSetID(state) === ownProps.setID,
 });
 
 const HistoryVideoButtonScreen = connect(

@@ -16,8 +16,10 @@ const mapDispatchToProps = dispatch => {
     );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     isSaving: WorkoutSelectors.getIsSavingVideo(state),
+    isPickingVideo:
+        WorkoutSelectors.getPickingVideoSetID(state) === ownProps.setID,
 });
 
 const WorkoutVideoButtonScreen = connect(

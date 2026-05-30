@@ -15,6 +15,8 @@ import {
     DISMISS_WORKOUT_VIDEO_PLAYER,
     DELETE_WORKOUT_VIDEO,
     SAVE_WORKOUT_VIDEO,
+    START_PICKING_WORKOUT_VIDEO,
+    RESET_PICKING_WORKOUT_VIDEO,
     START_END_SET_TIMER,
     STOP_END_SET_TIMER,
     PAUSE_END_SET_TIMER,
@@ -45,6 +47,7 @@ const defaultState = {
     cameraType: null,
     isRecording: false,
     isSavingVideo: false,
+    pickingVideoSetID: null,
     watchSetID: null,
     watchFileURL: null,
 
@@ -122,13 +125,19 @@ const WorkoutReducer = (state = defaultState, action) => {
                 cameraType: cameraType === 'front' ? 'back' : 'front',
             };
         }
+        case START_PICKING_WORKOUT_VIDEO:
+            return Object.assign({}, state, {
+                pickingVideoSetID: action.setID,
+            });
         case SAVE_WORKOUT_VIDEO:
         case DISMISS_WORKOUT_VIDEO_RECORDER:
+        case RESET_PICKING_WORKOUT_VIDEO:
             return Object.assign({}, state, {
                 recordingSetID: null,
                 recordingVideoType: null,
                 isRecording: false,
                 isSavingVideo: false,
+                pickingVideoSetID: null,
                 isEditing: false,
             });
         case START_RECORDING_WORKOUT:

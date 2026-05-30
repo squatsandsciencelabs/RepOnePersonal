@@ -9,12 +9,18 @@ import {
     END_EDITING_1RM_WEIGHT,
     EDIT_1RM_SET_WEIGHT,
     EDIT_1RM_SET_RPE,
+    SAVE_WORKOUT_VIDEO,
+    SAVE_HISTORY_VIDEO,
+    START_PICKING_1RM_VIDEO,
+    RESET_PICKING_1RM_VIDEO,
 } from 'app/configs+constants/ActionTypes';
 import * as Analytics from 'app/services/Analytics';
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
 import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
+import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 export const toggleMetric = setID => (dispatch, getState) => {
     const state = getState();
@@ -100,20 +106,56 @@ export const presentRecordVideo = setID => (dispatch, getState) => {
         .catch(() => {});
 };
 
-export const presentRecordCommentary = setID => (dispatch, getState) => {
-    VideoPermissionsUtils.checkRecordingPermissions()
-        .then(() => {
+export const presentRecordCommentary = setID => async (dispatch, getState) => {
+    dispatch({ type: START_PICKING_1RM_VIDEO, setID: setID });
+    try {
+        const { status } =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            dispatch({ type: RESET_PICKING_1RM_VIDEO });
+            Alert.alert(
+                'Additional Permissions Required',
+                'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
+                [{ text: 'OK' }],
+                { cancelable: false },
+            );
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['videos'],
+            allowsEditing: false,
+            quality: 1,
+        });
+
+        if (!result.canceled && result.assets && result.assets.length > 0) {
             const state = getState();
-            Analytics.setCurrentScreen('one_rm_edit_set_record_video_log');
+            Analytics.setCurrentScreen('analysis');
             logVideoLogRecorderAnalytics(setID, state);
 
+            const isWorkoutSet = SetsSelectors.getIsWorkoutSet(state, setID);
             dispatch({
-                type: PRESENT_1RM_VIDEO_RECORDER,
+                type: isWorkoutSet ? SAVE_WORKOUT_VIDEO : SAVE_HISTORY_VIDEO,
                 setID: setID,
-                isCommentary: true,
+                videoFileURL: result.assets[0].uri,
+                videoType: 'commentary',
             });
-        })
-        .catch(() => {});
+        } else {
+            dispatch({ type: RESET_PICKING_1RM_VIDEO });
+        }
+    } catch (err) {
+        dispatch({ type: RESET_PICKING_1RM_VIDEO });
+        Alert.alert(
+            `There was an error attaching your video, please try another`,
+        );
+        const state = getState();
+        logAttachVideoErrorAnalytics(state, setID, err);
+        console.tron.log(
+            `unknown err presenting commentary ${err} ${
+                err.message
+            } ${JSON.stringify(err)}`,
+        );
+    }
 };
 
 export const presentWatchVideo =
@@ -249,6 +291,17 @@ const logWatchVideoAnalytics = (setID, state) => {
         {
             is_working_set: is_working_set,
             from_collapsed_card: false,
+        },
+        state,
+    );
+};
+
+const logAttachVideoErrorAnalytics = (state, setID, error) => {
+    Analytics.logErrorWithAppState(
+        error,
+        'attach_video_error',
+        {
+            set_id: setID,
         },
         state,
     );
