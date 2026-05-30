@@ -108,34 +108,48 @@ export const presentRecordVideo = setID => (dispatch, getState) => {
 };
 
 export const presentRecordCommentary = setID => async (dispatch, getState) => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-        Alert.alert(
-            'Additional Permissions Required',
-            'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
-            [{ text: 'OK' }],
-            { cancelable: false },
-        );
-        return;
-    }
+    try {
+        const { status } =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert(
+                'Additional Permissions Required',
+                'RepOne needs Photo Library permissions to attach videos.\n\nPlease enable them for RepOne in your phone Settings',
+                [{ text: 'OK' }],
+                { cancelable: false },
+            );
+            return;
+        }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['videos'],
-        allowsEditing: false,
-        quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-        const state = getState();
-        Analytics.setCurrentScreen('history');
-        logVideoLogRecorderAnalytics(setID, state);
-
-        dispatch({
-            type: SAVE_HISTORY_VIDEO,
-            setID: setID,
-            videoFileURL: result.assets[0].uri,
-            videoType: 'commentary',
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['videos'],
+            allowsEditing: false,
+            quality: 1,
         });
+
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+            const state = getState();
+            Analytics.setCurrentScreen('history');
+            logVideoLogRecorderAnalytics(setID, state);
+
+            dispatch({
+                type: SAVE_HISTORY_VIDEO,
+                setID: setID,
+                videoFileURL: result.assets[0].uri,
+                videoType: 'commentary',
+            });
+        }
+    } catch (err) {
+        Alert.alert(
+            `There was an error attaching your video, please try another`,
+        );
+        const state = getState();
+        logAttachVideoErrorAnalytics(state, setID, err);
+        console.tron.log(
+            `unknown err presenting commentary ${err} ${
+                err.message
+            } ${JSON.stringify(err)}`,
+        );
     }
 };
 
@@ -295,6 +309,17 @@ const logWatchVideoAnalytics = (setID, state) => {
         {
             is_working_set: false,
             from_collapsed_card: false,
+        },
+        state,
+    );
+};
+
+const logAttachVideoErrorAnalytics = (state, setID, error) => {
+    Analytics.logErrorWithAppState(
+        error,
+        'attach_video_error',
+        {
+            set_id: setID,
         },
         state,
     );
