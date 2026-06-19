@@ -38,6 +38,7 @@ import {
 } from 'app/configs+constants/BluetoothAPI';
 
 let downloadTask = null;
+let dfuListenersAdded = false;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 const filePath = `${FileSystem.documentDirectory}firmware.zip`;
 
@@ -54,21 +55,6 @@ export default function* OTASaga(dispatch) {
 }
 
 function* checkOTA(dispatch, action) {
-    // listen for dfu
-    DFUEmitter.addListener('DFUProgress', ({ percent }) => {
-        dispatch({
-            type: INSTALL_OTA_PROGRESS,
-            progress: percent,
-        });
-    });
-    DFUEmitter.addListener('DFUStateChanged', ({ state }) => {
-        console.tron.log(`DFU state: ${state}`);
-        dispatch({
-            type: INSTALL_OTA_DFU_STATE_CHANGED,
-            state,
-        });
-    });
-
     // get json from server
     let json = null;
     try {
@@ -221,6 +207,24 @@ function* deleteDownload(action) {
 }
 
 function* startInstall(action) {
+    // only register listeners once, even if startInstall fires again (e.g. a retry)
+    if (!dfuListenersAdded) {
+        dfuListenersAdded = true;
+        DFUEmitter.addListener('DFUProgress', ({ percent }) => {
+            dispatch({
+                type: INSTALL_OTA_PROGRESS,
+                progress: percent,
+            });
+        });
+        DFUEmitter.addListener('DFUStateChanged', ({ state }) => {
+            console.tron.log(`DFU state: ${state}`);
+            dispatch({
+                type: INSTALL_OTA_DFU_STATE_CHANGED,
+                state,
+            });
+        });
+    }
+
     const state = yield select();
     const deviceIdentifier =
         ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
