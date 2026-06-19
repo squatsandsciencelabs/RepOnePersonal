@@ -38,37 +38,23 @@ import {
 } from 'app/configs+constants/BluetoothAPI';
 
 let downloadTask = null;
+let dfuListenersAdded = false;
 // TODO: set the correct filepath for iOS and Android so it doesn't get killed by temp directory
 const filePath = `${FileSystem.documentDirectory}firmware.zip`;
 
 export default function* OTASaga(dispatch) {
     yield all([
-        takeEvery(STORE_INITIALIZED, dispatch, checkOTA),
+        takeEvery(STORE_INITIALIZED, checkOTA),
         takeEvery(OTA_DOWNLOAD_ATTEMPT, startDownload),
         takeEvery(CANCEL_OTA_DOWNLOAD, cancelDownload),
         takeEvery(DELETE_OTA_DOWNLOAD, deleteDownload),
-        takeEvery(INSTALL_OTA_ATTEMPT, startInstall),
+        takeEvery(INSTALL_OTA_ATTEMPT, dispatch, startInstall),
         takeEvery(INSTALL_OTA_DFU_STATE_CHANGED, reboot),
         takeEvery(CANCEL_INSTALL_OTA, cancelInstall),
     ]);
 }
 
-function* checkOTA(dispatch, action) {
-    // listen for dfu
-    DFUEmitter.addListener('DFUProgress', ({ percent }) => {
-        dispatch({
-            type: INSTALL_OTA_PROGRESS,
-            progress: percent,
-        });
-    });
-    DFUEmitter.addListener('DFUStateChanged', ({ state }) => {
-        console.tron.log(`DFU state: ${state}`);
-        dispatch({
-            type: INSTALL_OTA_DFU_STATE_CHANGED,
-            state,
-        });
-    });
-
+function* checkOTA() {
     // get json from server
     let json = null;
     try {
@@ -220,7 +206,25 @@ function* deleteDownload(action) {
     }
 }
 
-function* startInstall(action) {
+function* startInstall(dispatch, action) {
+    // only register listeners once, even if startInstall fires again (e.g. a retry)
+    if (!dfuListenersAdded) {
+        dfuListenersAdded = true;
+        DFUEmitter.addListener('DFUProgress', ({ percent }) => {
+            dispatch({
+                type: INSTALL_OTA_PROGRESS,
+                progress: percent,
+            });
+        });
+        DFUEmitter.addListener('DFUStateChanged', ({ state }) => {
+            console.tron.log(`DFU state: ${state}`);
+            dispatch({
+                type: INSTALL_OTA_DFU_STATE_CHANGED,
+                state,
+            });
+        });
+    }
+
     const state = yield select();
     const deviceIdentifier =
         ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state);
