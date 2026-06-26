@@ -55,6 +55,8 @@ export default function* OTASaga(dispatch) {
 }
 
 function* checkOTA() {
+    NordicDFU.ready();
+
     // get json from server
     let json = null;
     try {
