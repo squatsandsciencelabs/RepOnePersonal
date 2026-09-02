@@ -1,13 +1,13 @@
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
+        buildToolsVersion = "36.0.0"
         minSdkVersion = 28 // the "minimum" droid OS that can use this app. react-native-ble-manager wants >= 19, unimodules wants >= 21
-        compileSdkVersion = 35 // what compile with, which means "maximum" as well as you must compile against new features
-        targetSdkVersion = 35 // for forward compatibility, features in versions above this will be disabled
+        compileSdkVersion = 36 // what compile with, which means "maximum" as well as you must compile against new features
+        targetSdkVersion = 36 // for forward compatibility, features in versions above this will be disabled
         // googlePlayServicesAuthVersion = "19.2.0" // react-native-google-signin, unsure if this is still needed
         firebaseIidVersion = "19.0.1" // react-native-device-info
         ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.0.21"
+        kotlinVersion = "2.1.20"
     }
     repositories {
         google()
