@@ -12,6 +12,23 @@
 * react-native run-ios
 * react-native run-android
 
+# BRANCHES
+
+This repo contains code for two apps, RepOne US and RepOne international.
+
+## REPONE BRANCH
+
+* For US based customers
+* Uses Google Sign In for cloud storage to MongoDB server
+* Has analytics
+
+## INTERNATIONAL BRANCH
+
+* For outside the US based customers
+* Does not have cloud storage. This complies with privacy requirements like GDPR.
+* This branch contains 2 commits that are rebased on top of the `repone` branch. These 2 commits remove features like cloud sign in and analytics.
+* Features that are meant to be in both repositories should be pushed to `repone`. Then `international`'s 2 commits should be rebased atop that.
+
 # DEBUGGING TIPS
 
 * Install Reactotron https://github.com/infinitered/reactotron/blob/master/docs/installing.md which will allow you to sniff network requests and see the state of the Redux store. Note that you can modify ReactotronConfig.js to allow Reactotron debugging of an iPhone or Android device.
