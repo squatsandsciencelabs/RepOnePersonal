@@ -19,7 +19,7 @@ import * as SetsActionCreators from 'app/redux/shared_actions/SetsActionCreators
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as DurationsSelectors from 'app/redux/selectors/DurationsSelectors';
 import { Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 
 export const toggleMetric = setID => (dispatch, getState) => {
