@@ -23,7 +23,7 @@ import VisualizationReducer from './VisualizationReducer';
 import KratosCollapsedSettingsSetMetricsReducer from './KratosCollapsedSettingsSetMetricsReducer';
 import KratosColumnsSettingsReducer from './KratosColumnsSettingsReducer';
 
-export default reducers = combineReducers({
+const reducers = combineReducers({
     sets: SetsReducer,
     scannedDevices: ScannedDevicesReducer,
     connectedDevice: ConnectedDeviceReducer,
@@ -48,3 +48,5 @@ export default reducers = combineReducers({
     scalar: ScalarReducer,
     visualization: VisualizationReducer,
 });
+
+export default reducers;
