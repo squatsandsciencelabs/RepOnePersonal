@@ -83,6 +83,8 @@
 	<string>RepOne would like to save recorded videos to your Photos library</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>RepOne would like access to speech recognition</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
