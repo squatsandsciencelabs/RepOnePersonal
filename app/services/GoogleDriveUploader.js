@@ -43,7 +43,7 @@ const executeUpload = async (accessToken, name, content, completionHandler) => {
             headers: {
                 'Content-Type': 'application/json',
                 'X-Upload-Content-Type': 'text/csv',
-                'X-Upload-Content-Length': length,
+                'X-Upload-Content-Length': String(length),
                 Authorization: 'Bearer ' + accessToken,
             },
             body: JSON.stringify({
@@ -75,7 +75,7 @@ const executeUpload = async (accessToken, name, content, completionHandler) => {
     response = await fetch(location, {
         method: 'PUT',
         headers: {
-            'Content-Length': length,
+            'Content-Length': String(length),
             'Content-Type': 'text/csv',
         },
         body: content,
