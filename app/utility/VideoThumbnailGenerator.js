@@ -1,5 +1,5 @@
-import * as VideoThumbnails from 'expo-video-thumbnails';
-import * as FileSystem from 'expo-file-system';
+import * as VideoThumbnails from 'expo-video-thumbnails'; // TODO: move to expo-video as this is deprecated
+import * as FileSystem from 'expo-file-system/legacy';
 
 export const generateThumbnail = async videoPath => {
     try {

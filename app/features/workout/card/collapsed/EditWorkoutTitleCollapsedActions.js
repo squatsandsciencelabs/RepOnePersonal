@@ -8,7 +8,7 @@ import * as Analytics from 'app/services/Analytics';
 import * as SetsSelectors from 'app/redux/selectors/SetsSelectors';
 import * as CollapseExpandWorkoutActions from 'app/redux/shared_actions/CollapseExpandWorkoutActions';
 import { Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 export const expandCard = setID => (dispatch, getState) => {
     const state = getState();

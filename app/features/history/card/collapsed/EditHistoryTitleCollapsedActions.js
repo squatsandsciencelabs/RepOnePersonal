@@ -6,7 +6,7 @@ import {
 import * as VideoPermissionsUtils from 'app/utility/VideoPermissionsUtils';
 import * as Analytics from 'app/services/Analytics';
 import * as CollapseExpandHistoryActions from 'app/redux/shared_actions/CollapseExpandHistoryActions';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Alert } from 'react-native';
 
 export const expandCard = setID => (dispatch, getState) => {

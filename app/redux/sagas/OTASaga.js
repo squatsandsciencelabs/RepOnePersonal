@@ -1,5 +1,5 @@
 import { takeEvery, put, apply, all, select } from 'redux-saga/effects';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { NordicDFU, DFUEmitter } from 'react-native-nordic-dfu';
 import { Alert, Platform } from 'react-native';
 import BleManager from 'react-native-ble-manager';

@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { Entypo } from '@react-native-vector-icons/entypo';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import {
     generateThumbnail,
     waitUntilFileExists,

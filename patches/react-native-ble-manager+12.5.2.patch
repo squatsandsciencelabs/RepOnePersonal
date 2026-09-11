@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift b/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
-index 2eb9702..27f1106 100644
+index 2ce61f4..0a4d333 100644
 --- a/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
 +++ b/node_modules/react-native-ble-manager/ios/SwiftBleManager.swift
-@@ -500,6 +500,13 @@ public class SwiftBleManager: NSObject, CBCentralManagerDelegate,
+@@ -538,6 +538,13 @@ public class SwiftBleManager: NSObject, CBCentralManagerDelegate,
                  }
              }
  

@@ -1187,7 +1187,7 @@ const updateSetDataFromServer = (state, action) => {
     }
 
     let newHistoryData = {};
-    for (set of action.sets) {
+    for (let set of action.sets) {
         if (set.setID !== null) {
             // hack check against a bug that showed up in the development database
             newHistoryData[set.setID] = set;
@@ -1259,7 +1259,7 @@ const overrideWithTestData = (state, action) => {
                 set.endTime = addTime(set.endTime, dateDifference);
             }
             if (set.reps) {
-                for (rep of set.reps) {
+                for (let rep of set.reps) {
                     if (rep.time) {
                         rep.time = addTime(rep.time, dateDifference);
                     }

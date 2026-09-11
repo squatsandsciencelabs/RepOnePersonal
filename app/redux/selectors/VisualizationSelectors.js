@@ -284,7 +284,7 @@ export const getNextRepIndex = createSelector(
             const rep = reps[i];
             if (rep.isValid && !rep.removed) {
                 // confirming if it's last or not
-                for (j = i + 1; j < reps.length; j++) {
+                for (let j = i + 1; j < reps.length; j++) {
                     const rep = reps[j];
                     if (rep.isValid && !rep.removed) {
                         // found another rep that counts, return i as i is not the last possible
