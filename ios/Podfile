@@ -51,6 +51,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+$RNFirebaseDisableSPM = true
 target 'RepOnePersonal' do
   use_expo_modules!
  
@@ -70,7 +71,8 @@ target 'RepOnePersonal' do
   end
  
   config = use_native_modules!(config_command)
-  use_frameworks! :linkage => :dynamic
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
