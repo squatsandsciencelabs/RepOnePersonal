@@ -13,8 +13,14 @@ end
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
-platform :ios, min_ios_version_supported
+platform :ios, 16.4
 prepare_react_native_project!
+
+# react-native-firebase >= 26 resolves the Firebase iOS SDK via Swift Package
+# Manager by default, but SPM's static libraries collide at link time with
+# our `use_frameworks! :linkage => :static` setup. Fall back to the
+# CocoaPods-based resolution (as before) to keep static linkage working.
+# $RNFirebaseDisableSPM = true
 
 setup_permissions([
   # 'AppTrackingTransparency',
@@ -45,6 +51,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+$RNFirebaseDisableSPM = true
 target 'RepOnePersonal' do
   use_expo_modules!
  
