@@ -139,6 +139,7 @@ const createViewModels = (
                 subheader,
                 repsAreChronological: false,
                 deviceType: set.deviceType,
+                twoRowReps: SetUtils.isConEccTetherSet(set),
             });
         }
 
@@ -370,9 +371,9 @@ const createRowViewModels = (set, columnsModel, kratosColumnsModel) => {
             array.splice(0, 0, vm); // insert at beginning
         } else {
             // update vm
-            vm.columns = columnsModel.map(m =>
-                SetUtils.getDisplayMetric(m, rep, set),
-            );
+            vm.columns = SetUtils.isConEccTetherRep(rep)
+                ? SetUtils.getConEccTetherRepColumns(columnsModel, rep, set)
+                : columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set));
 
             // add obj
             array.splice(0, 0, vm); // insert at beginning

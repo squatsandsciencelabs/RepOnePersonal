@@ -24,6 +24,10 @@ import {
     REP_ONE_TETHER_REP_SUMMARY_CHARACTERISTIC,
     REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
     KRATOS_REP_SUMMARY_CHARACTERISTIC,
+    DEVICE_INFO_DEVICE_FAMILY_INDEX,
+    DEVICE_INFO_CAPABILITIES_INDEX,
+    DEVICE_FAMILY_REP_ONE,
+    CAPABILITY_CON_ECC_REPORT,
 } from 'app/configs+constants/BluetoothAPI';
 
 const maxFormatVersion = 2;
@@ -164,6 +168,7 @@ export default async function (store) {
                         batteryPercentageResponse.length > 0 &&
                         batteryPercentageResponse[0]) ??
                         null,
+                    getSupportsConEcc(data16),
                 ),
             );
         } catch (err) {
@@ -210,6 +215,23 @@ export default async function (store) {
 
                 // not sending valid until methods to determine invalid are determined
                 store.dispatch(DeviceActionCreators.receivedLiftData(json));
+            } else if (
+                characteristic === KRATOS_REP_SUMMARY_CHARACTERISTIC &&
+                ConnectedDeviceStatusSelectors.getConnectedDeviceFamily(
+                    state,
+                ) === 'REP_ONE'
+            ) {
+                // Tether con/ecc build: the eccentric of a rep that already came in on the RepOne report
+
+                // variables
+                const typedArray = new Uint8Array(args.value);
+                const data = new Uint16Array(typedArray.buffer);
+
+                store.dispatch(
+                    DeviceActionCreators.receivedTetherEccentricData(
+                        formTetherConEccRepDataJson(data),
+                    ),
+                );
             } else if (
                 getKratosEnabled() &&
                 characteristic === KRATOS_REP_SUMMARY_CHARACTERISTIC
@@ -371,6 +393,7 @@ export default async function (store) {
                             formatVersion,
                             `${data16[1]}.${data16[2]}.${data16[3]}`,
                             null,
+                            getSupportsConEcc(data16),
                         ),
                     );
                 } else {
@@ -425,6 +448,23 @@ const formConcentricRepDataJson = (data, formatVersion) => ({
     totalSampleCount: formatVersion === 1 ? null : data[7],
     linear3DAverageVelocity: formatVersion === 1 ? null : data[8],
     linear3DROM: formatVersion === 1 ? null : data[9],
+});
+
+// Device Information from a RepOne unit running the con/ecc firmware build has a tenth field with capability bits
+const getSupportsConEcc = data16 =>
+    data16.length > DEVICE_INFO_CAPABILITIES_INDEX &&
+    data16[DEVICE_INFO_DEVICE_FAMILY_INDEX] === DEVICE_FAMILY_REP_ONE &&
+    (data16[DEVICE_INFO_CAPABILITIES_INDEX] & CAPABILITY_CON_ECC_REPORT) !== 0;
+
+// Tether con/ecc report: the Kratos layout (fields 0-21), then flags, time to peak velocity and peak velocity location
+const formTetherConEccRepDataJson = data => ({
+    ...formConcentricEccentricRepDataJson(data),
+    hasEccentric: ((data[22] ?? 0) & 0x01) !== 0,
+    isEccentricFirst: ((data[22] ?? 0) & 0x02) !== 0,
+    cTimeToPeakVelocity: data[23] ?? null,
+    eTimeToPeakVelocity: data[24] ?? null,
+    cPeakVelocityLocation: data[25] ?? null,
+    ePeakVelocityLocation: data[26] ?? null,
 });
 
 const formConcentricEccentricRepDataJson = data => ({

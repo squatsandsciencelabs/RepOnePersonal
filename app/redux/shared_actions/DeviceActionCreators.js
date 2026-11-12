@@ -19,6 +19,7 @@ import {
     RECONNECT_DEVICE,
     VELOCITY_DROPPED,
     ADD_KRATOS_REP_DATA,
+    ADD_TETHER_ECCENTRIC_DATA,
     UPDATE_BATTERY_PERCENTAGE,
     RESTORED_BLE_STATE,
 } from 'app/configs+constants/ActionTypes';
@@ -268,6 +269,7 @@ export const connectedToDevice =
         apiFormatVersion,
         firmwareVersion,
         initialBatteryPercentage,
+        supportsConEcc = false,
     ) =>
     (dispatch, getState) => {
         // analytics
@@ -291,6 +293,7 @@ export const connectedToDevice =
             apiFormatVersion,
             firmwareVersion,
             initialBatteryPercentage,
+            supportsConEcc,
         });
     };
 
@@ -329,10 +332,25 @@ export const receivedLiftData =
                 ),
             firmwareVersion:
                 ConnectedDeviceStatusSelectors.getFirmwareVersion(state),
+            conEcc: ConnectedDeviceStatusSelectors.getConnectedDeviceSupportsConEcc(
+                state,
+            ),
             time: time,
         });
         dispatch(TimerActionCreators.startEndSetTimer());
     };
+
+// Tether con/ecc build: attaches the eccentric to the rep that already came in on the RepOne report (same rep ID)
+export const receivedTetherEccentricData = json => (dispatch, getState) => {
+    const state = getState();
+
+    dispatch({
+        ...json,
+        type: ADD_TETHER_ECCENTRIC_DATA,
+        deviceIdentifier:
+            ConnectedDeviceStatusSelectors.getConnectedDeviceIdentifier(state),
+    });
+};
 
 export const receivedKratosLiftData =
     (json, time = new Date()) =>

@@ -29,6 +29,7 @@ import {
     CONNECTED_TO_DEVICE,
     DISCONNECTED_FROM_DEVICE,
     ADD_KRATOS_REP_DATA,
+    ADD_TETHER_ECCENTRIC_DATA,
     SET_DEVICE_TYPE,
     SAVE_WORKOUT_SET_KRATOS_DISCS,
     SAVE_HISTORY_SET_KRATOS_DISCS,
@@ -76,6 +77,8 @@ const SetsReducer = (state = createDefaultState(), action) => {
             return addRepData(state, action);
         case ADD_KRATOS_REP_DATA:
             return addKratosRepData(state, action);
+        case ADD_TETHER_ECCENTRIC_DATA:
+            return addTetherEccentricData(state, action);
         case SAVE_WORKOUT_REP:
             return saveWorkoutRep(state, action);
         case SAVE_HISTORY_REP:
@@ -728,6 +731,11 @@ const addRepData = (state, action) => {
         deviceFamily,
     };
 
+    if (action.conEcc) {
+        // Tether con/ecc build: the eccentric arrives separately (ADD_TETHER_ECCENTRIC_DATA)
+        rep.conEcc = true;
+    }
+
     if (OpenBarbellConfig.bulkMetricsEnabled) {
         rep.linear3DAverageVelocity = action.linear3DAverageVelocity;
         rep.linear3DROM = action.linear3DROM;
@@ -819,6 +827,64 @@ const addKratosRepData = (state, action) => {
     return Object.assign({}, state, {
         workoutData: newWorkoutData,
     });
+};
+
+// ADD_TETHER_ECCENTRIC_DATA
+
+// Attaches the eccentric from a Tether con/ecc report to the RepOne rep with the same rep ID from the same device.
+// Field names follow the Kratos reps (e* for eccentric) so exports and the server see the same names.
+const addTetherEccentricData = (state, action) => {
+    const workoutData = state.workoutData;
+
+    for (let setIndex = workoutData.length - 1; setIndex >= 0; setIndex--) {
+        const set = workoutData[setIndex];
+        let repIndex = set.reps.length - 1;
+
+        while (
+            repIndex >= 0 &&
+            !(
+                set.reps[repIndex].conEcc === true &&
+                set.reps[repIndex].deviceRepID === action.repId &&
+                set.reps[repIndex].deviceIdentifier === action.deviceIdentifier
+            )
+        ) {
+            repIndex--;
+        }
+
+        if (repIndex === -1) {
+            continue;
+        }
+
+        const rep = {
+            ...set.reps[repIndex],
+            hasEccentric: action.hasEccentric,
+            isEccentricFirst: action.isEccentricFirst,
+            eRom: action.eRom,
+            eAvgLinearVelocity: action.eAvgLinearVelocity,
+            ePeakLinearVelocity: action.ePeakLinearVelocity,
+            eDuration: action.eDuration,
+            ePeakLinearAcceleration: action.ePeakLinearAcceleration,
+            eTimeToPeakVelocity: action.eTimeToPeakVelocity,
+            ePeakVelocityLocation: action.ePeakVelocityLocation,
+            cPeakLinearAcceleration: action.cPeakLinearAcceleration,
+        };
+
+        const reps = [
+            ...set.reps.slice(0, repIndex),
+            rep,
+            ...set.reps.slice(repIndex + 1),
+        ];
+
+        const newWorkoutData = [
+            ...workoutData.slice(0, setIndex),
+            { ...set, reps },
+            ...workoutData.slice(setIndex + 1),
+        ];
+
+        return { ...state, workoutData: newWorkoutData };
+    }
+
+    return state;
 };
 
 // SAVE_WORKOUT_REP

@@ -57,7 +57,7 @@ class SetData extends Component {
         let overlayStyles = styles.overlayHeight;
         let leftShadowStyles = styles.leftShadowHeight;
 
-        if (this.props.item.deviceType === 'Kratos') {
+        if (usesTwoRowReps(this.props.item)) {
             overlayStyles = styles.overlayHeightCE;
             leftShadowStyles = styles.leftShadowHeightCE;
         }
@@ -79,7 +79,7 @@ class SetData extends Component {
                                       this.props.item.data.length,
                                       this.props.selectedRowDisplayRep,
                                       this.props.item.repsAreChronological,
-                                      this.props.item.deviceType,
+                                      usesTwoRowReps(this.props.item),
                                   )
                                 : 0,
                         },
@@ -107,10 +107,9 @@ class SetData extends Component {
         if (!this.props.selectedRowOverlayNumbers) {
             return null;
         }
-        const overlayNumbersStyle =
-            this.props.item.deviceType === 'Kratos'
-                ? [styles.selectedData]
-                : [styles.selectedData, styles.selectedDataBigNumber];
+        const overlayNumbersStyle = usesTwoRowReps(this.props.item)
+            ? [styles.selectedData]
+            : [styles.selectedData, styles.selectedDataBigNumber];
 
         return (
             <View>
@@ -162,10 +161,9 @@ class SetData extends Component {
     }
 
     renderRowNumbers() {
-        const rowNumberWrapperStyles =
-            this.props.item.deviceType === 'Kratos'
-                ? styles.rowNumberWrapperCE
-                : styles.rowNumberWrapper;
+        const rowNumberWrapperStyles = usesTwoRowReps(this.props.item)
+            ? styles.rowNumberWrapperCE
+            : styles.rowNumberWrapper;
 
         return (
             <View style={styles.rowNumbersWrapper}>
@@ -193,10 +191,9 @@ class SetData extends Component {
     }
 
     render() {
-        const setDataRowWrapperStyles =
-            this.props.item.deviceType === 'Kratos'
-                ? styles.setDataRowWrapperCE
-                : styles.setDataRowWrapper;
+        const setDataRowWrapperStyles = usesTwoRowReps(this.props.item)
+            ? styles.setDataRowWrapperCE
+            : styles.setDataRowWrapper;
         return (
             <View style={styles.container}>
                 {this.renderRowOverlay()}
@@ -385,13 +382,17 @@ const styles = StyleSheet.create({
 
 const is2dArray = array => array.every(item => Array.isArray(item));
 
+// Kratos reps, and Tether con/ecc reps, take two rows: concentric and eccentric
+const usesTwoRowReps = item =>
+    item.deviceType === 'Kratos' || item.twoRowReps === true;
+
 const getOverlayTopPosition = (
     items,
     displayRep,
     isChronological,
-    deviceType,
+    twoRowReps,
 ) => {
-    const rowHeight = deviceType === 'Kratos' ? ROW_HEIGHT_C_E : ROW_HEIGHT;
+    const rowHeight = twoRowReps ? ROW_HEIGHT_C_E : ROW_HEIGHT;
     return isChronological
         ? (displayRep - 1) * rowHeight + SUBHEADER_HEIGHT
         : (items - displayRep) * rowHeight + SUBHEADER_HEIGHT;

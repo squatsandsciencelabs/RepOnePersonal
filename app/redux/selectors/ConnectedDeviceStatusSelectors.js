@@ -30,6 +30,10 @@ export const getConnectedDeviceIdentifier = state =>
 
 export const getConnectedDeviceFamily = state => stateRoot(state).deviceFamily;
 
+// A RepOne Tether running the con/ecc firmware build also sends each rep's eccentric
+export const getConnectedDeviceSupportsConEcc = state =>
+    !!stateRoot(state).supportsConEcc;
+
 export const getNumDisconnects = state => stateRoot(state).numDisconnects;
 
 export const getNumReconnects = state => stateRoot(state).numReconnects;

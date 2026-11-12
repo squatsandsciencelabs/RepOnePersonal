@@ -27,6 +27,7 @@ const defaultState = {
     deviceName: null,
     deviceIdentifier: null,
     deviceFamily: null,
+    supportsConEcc: false, // Tether con/ecc firmware build
     isReconnecting: false,
     numDisconnects: 0,
     numReconnects: 0,
@@ -80,6 +81,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 firmwareVersion: null,
                 batteryPercentage: null,
                 isStateRestored: false,
+                supportsConEcc: false,
             });
         case STOP_RECONNECT:
             return Object.assign({}, state, {
@@ -107,6 +109,7 @@ const ConnectedDeviceReducer = (state = defaultState, action) => {
                 apiFormatVersion: action.apiFormatVersion,
                 firmwareVersion: action.firmwareVersion,
                 batteryPercentage: action.initialBatteryPercentage,
+                supportsConEcc: !!action.supportsConEcc,
             });
         case RECONNECTING_TO_DEVICE:
             return Object.assign({}, state, {

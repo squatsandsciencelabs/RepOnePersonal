@@ -831,6 +831,55 @@ const _getKratosDisplayMetric = (metric, rep, set = null) => {
     }
 };
 
+// TETHER CONCENTRIC/ECCENTRIC
+// A Tether running the con/ecc firmware build sends each rep as a normal RepOne rep, then the rep's eccentric
+// (attached as e* fields by addTetherEccentricData). Such reps show as two rows: the RepOne columns for the
+// concentric, and the same columns for the eccentric.
+
+export const isConEccTetherRep = rep => !!rep && rep.conEcc === true;
+
+export const isConEccTetherSet = set =>
+    !!set &&
+    set.deviceType !== 'Kratos' &&
+    Array.isArray(set.reps) &&
+    set.reps.some(isConEccTetherRep);
+
+const getTetherEccentricDisplayMetric = (metric, rep, set = null) => {
+    if (!rep || !rep.isValid || rep.hasEccentric !== true) {
+        // not in yet, or the device found no eccentric for this rep
+        return EMPTY;
+    }
+
+    switch (metric) {
+        case AVG_VELOCITY_METRIC:
+        case PKV_METRIC:
+        case ROM_METRIC:
+        case DURATION_METRIC:
+            return getDisplayMetric(
+                metric,
+                {
+                    isValid: true,
+                    averageVelocity: rep.eAvgLinearVelocity,
+                    peakVelocity: rep.ePeakLinearVelocity,
+                    rom: rep.eRom,
+                    duration: rep.eDuration,
+                },
+                set,
+            );
+        default:
+            return EMPTY;
+    }
+};
+
+// Two rows for a con/ecc Tether rep; the last element of each row is its row type, like Kratos rows
+export const getConEccTetherRepColumns = (columnsModel, rep, set = null) => [
+    [...columnsModel.map(m => getDisplayMetric(m, rep, set)), 'concentric'],
+    [
+        ...columnsModel.map(m => getTetherEccentricDisplayMetric(m, rep, set)),
+        'eccentric',
+    ],
+];
+
 export const getKratosRepRows = rep => {
     let resultReps = { concentric: {}, eccentric: {} };
 

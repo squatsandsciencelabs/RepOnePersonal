@@ -14,6 +14,8 @@ import {
     REP_ONE_TETHER_BULK_DATA_CHARACTERISTIC,
     REP_ONE_TETHER_BULK_DATA_START_CHARACTERISTIC,
     REP_ONE_TETHER_CALIBRATION_CHARACTERISTIC,
+    KRATOS_REP_SERVICE,
+    KRATOS_REP_SUMMARY_CHARACTERISTIC,
 } from 'app/configs+constants/BluetoothAPI';
 
 export default function* BluetoothSaga() {
@@ -52,6 +54,24 @@ function* setupServices(action) {
             repService,
             repCharacteristic,
         ]);
+
+        // Tether con/ecc build: also listen for the eccentric of each rep
+        const supportsConEcc = yield select(
+            ConnectedDeviceStatusSelectors.getConnectedDeviceSupportsConEcc,
+        );
+        if (deviceFamily === 'REP_ONE' && supportsConEcc) {
+            try {
+                yield apply(BleManager, BleManager.startNotification, [
+                    action.deviceIdentifier,
+                    KRATOS_REP_SERVICE,
+                    KRATOS_REP_SUMMARY_CHARACTERISTIC,
+                ]);
+            } catch (err) {
+                console.tron.log(
+                    `listening for concentric/eccentric reps failed ${err}`,
+                );
+            }
+        }
 
         // api format 2 check
         if (action.apiFormatVersion < 2) {

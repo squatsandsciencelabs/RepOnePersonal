@@ -138,6 +138,7 @@ const createViewModels = (
                     subheader,
                     repsAreChronological: true,
                     deviceType: set.deviceType,
+                    twoRowReps: SetUtils.isConEccTetherSet(set),
                 });
 
                 array.push(
@@ -306,9 +307,9 @@ const createRowViewModels = (set, columnsModel, kratosColumnsModel) => {
             array.push(vm);
         } else {
             // update vm
-            vm.columns = columnsModel.map(m =>
-                SetUtils.getDisplayMetric(m, rep, set),
-            );
+            vm.columns = SetUtils.isConEccTetherRep(rep)
+                ? SetUtils.getConEccTetherRepColumns(columnsModel, rep, set)
+                : columnsModel.map(m => SetUtils.getDisplayMetric(m, rep, set));
 
             // add obj
             array.push(vm); // insert at beginning
